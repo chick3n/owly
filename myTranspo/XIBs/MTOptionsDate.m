@@ -8,13 +8,20 @@
 
 #import "MTOptionsDate.h"
 
+@interface MTOptionsDate()
+- (void)setupDateArray;
+@end
+
 @implementation MTOptionsDate
+@synthesize lastDate            = _lastDate;
+@synthesize selectedDate        = _selectedDate;
+@synthesize delegateOptions     = _delegateOptions;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+        
     }
     return self;
 }
@@ -33,11 +40,21 @@
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    //tableView
+    [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_background.png"]]];
+    [self.tableView setSeparatorColor:kMTNAVCELLSEPERATORCOLOR];
+    [self.tableView setTableFooterView:[[MTNavFooter alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 1)]];
+    
+    //dateformatter
+    _dateFormatter = [[NSDateFormatter alloc] init];
+    [_dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    [_dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    [_dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
+    
+    if(_lastDate != nil)
+    {
+        [self setupDateArray];
+    }
 }
 
 - (void)viewDidUnload
@@ -77,16 +94,14 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return (_data == nil) ? 0 : _data.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    return [(NSArray*)[_data objectAtIndex:section] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -96,11 +111,85 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        
+        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:16.];
+        cell.textLabel.textColor = [UIColor colorWithRed:230./250. green:230./250. blue:230./250. alpha:0.8];
+        cell.textLabel.shadowColor = [UIColor blackColor];
+        cell.textLabel.shadowOffset = CGSizeMake(0, 1);
+        cell.textLabel.textAlignment = UITextAlignmentRight;
+        cell.textLabel.backgroundColor = [UIColor clearColor];
+        
+        UIImageView *sep = [[UIImageView alloc] initWithFrame:CGRectMake(0, 42, 320, 2)];
+        [sep setImage:[UIImage imageNamed:@"menu_cell_bottom.png"]];
+        [cell.contentView addSubview:sep];
+        
+        UIImageView *sel = [[UIImageView alloc] initWithFrame:CGRectMake((cell.frame.size.width - 100) + 40, 20, 20, 20)];
+        [sel setImage:[UIImage imageNamed:@"route_cell_bus.png"]];
+        [sel setTag:101];
+        [cell.contentView addSubview:sel];
     }
     
-    // Configure the cell...
+    NSArray *month = [_data objectAtIndex:indexPath.section];
+    NSDate *date = [month objectAtIndex:indexPath.row];
+
+    if(_selectedDate != nil)
+    {
+        NSDateComponents* components = [[NSCalendar currentCalendar] components:NSDayCalendarUnit fromDate:date toDate:_selectedDate options:0];
+        UIImageView *sel = (UIImageView*)[cell.contentView viewWithTag:101];
+        if([components day] == 0)
+            sel.hidden = NO;
+        else sel.hidden = YES;
+    }
+    
+    cell.textLabel.text = [_dateFormatter stringFromDate:date];
     
     return cell;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    NSString* headerLabel = @"";
+    NSDateFormatter* monthFormatter = [[NSDateFormatter alloc] init];
+    monthFormatter.dateFormat = @"MMMM";
+    
+    NSArray* months = [_data objectAtIndex:section];
+    if(months != nil && months.count > 0)
+    {
+        NSDate* date = [months objectAtIndex:0];
+        headerLabel = [monthFormatter stringFromDate:date];
+    }
+    
+    UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 23)];
+    [header addSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_category_bar.png"]]];
+    UILabel *tableViewHeadlerLabel = [[UILabel alloc] initWithFrame:CGRectMake((header.frame.size.width - 100) + 8, 4, 312, 17)];
+    tableViewHeadlerLabel.tag = 100;
+    tableViewHeadlerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0];
+    tableViewHeadlerLabel.textColor = [UIColor whiteColor];
+    tableViewHeadlerLabel.backgroundColor = [UIColor clearColor];
+    tableViewHeadlerLabel.shadowColor = [UIColor colorWithRed:38./255. green:154./255. blue:201./255. alpha:1.0];
+    tableViewHeadlerLabel.shadowOffset = CGSizeMake(0, 1);
+    tableViewHeadlerLabel.textAlignment = UITextAlignmentLeft;
+    tableViewHeadlerLabel.text = headerLabel;
+    
+    [header addSubview:tableViewHeadlerLabel];
+    
+    return header;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    NSArray* months = [_data objectAtIndex:section];
+    if(months != nil && months.count > 0)
+    {
+        return 20;
+    }
+    
+    return 0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return kMTNAVCELLHEIGHT;
 }
 
 /*
@@ -146,13 +235,65 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    NSArray* months = [_data objectAtIndex:indexPath.section];
+    NSDate* date = [months objectAtIndex:indexPath.row];
+    _selectedDate = date;
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    [tableView reloadData];
+    
+    if([_delegateOptions conformsToProtocol:@protocol(MTOptionsDateProtocol)])
+        [_delegateOptions optionsDate:self dateHasChanged:date];
+    
+    //hide it
+    if([self.parentViewController class] == [ZUUIRevealController class])
+    {
+        ZUUIRevealController* revealController = (ZUUIRevealController*)self.parentViewController;
+        if(revealController != nil)
+        {
+            [revealController revealToggle:nil];
+        }
+    }
+}
+
+#pragma mark - DATE Helpers
+
+- (void)setupDateArray
+{
+    NSMutableArray* months = [[NSMutableArray alloc] init];
+    NSMutableArray* dates = [[NSMutableArray alloc] init];
+    NSDate* nextDate = [NSDate date];
+    BOOL newMonth = NO;
+    NSDateFormatter* monthValue = [[NSDateFormatter alloc] init];
+    int lastMonth = -1;
+    
+    [monthValue setDateFormat:@"MM"];
+    lastMonth = [[monthValue stringFromDate:nextDate] intValue];
+    [dates addObject:nextDate];
+    
+    while([nextDate compare:_lastDate] == NSOrderedAscending)
+    {
+        NSDate* newDate = [nextDate dateByAddingTimeInterval:60*60*24*1];
+        int newDateMonth = [[monthValue stringFromDate:newDate] intValue];
+        
+        if(lastMonth != newDateMonth)
+            newMonth = YES;
+        
+        if(newMonth)
+        {
+            newMonth = NO;
+            [months addObject:dates];
+            dates = [[NSMutableArray alloc] init];
+        }
+        
+        [dates addObject:newDate];
+        nextDate = newDate;
+    }
+    
+    if(dates != nil && dates.count > 0)
+        [months addObject:dates];
+    
+    _data = months;
 }
 
 @end

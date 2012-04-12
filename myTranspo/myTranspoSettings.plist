@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict/>
+<dict>
+	<key>FirstTimeUse</key>
+	<true/>
+	<key>InstalledVersion</key>
+	<integer>0</integer>
+	<key>DatabaseVersion</key>
+	<integer>0</integer>
+	<key>ConnectionWarningSent</key>
+	<false/>
+	<key>ConnectionAvailable</key>
+	<false/>
+	<key>SettingsVersion</key>
+	<integer>0</integer>
+	<key>HelperTripsShown</key>
+	<false/>
+	<key>HelperMyBusesShown</key>
+	<false/>
+	<key>HelperStopsShown</key>
+	<false/>
+	<key>Language</key>
+	<string>English</string>
+	<key>myCity</key>
+	<string>Ottawa</string>
+	<key>NotificationTime</key>
+	<integer>2</integer>
+	<key>NotificationUpdate</key>
+	<true/>
+	<key>StartupView</key>
+	<integer>1</integer>
+</dict>
 </plist>

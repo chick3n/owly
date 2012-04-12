@@ -7,7 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MapKit/MapKit.h>
 
-@interface MTBusAnnotation : NSObject
+@interface MTBusAnnotation : NSObject <MKAnnotation>
+{
+	CLLocationCoordinate2D 				_coordinates;
+}
 
-@end
+@property (nonatomic, strong) NSString*			busNumber;
+@property (nonatomic, strong) NSString*			busHeading;
+@property (nonatomic)         CLLocationCoordinate2D coordinates;
+
+- (id) initWithCoordinate:(CLLocationCoordinate2D)coordinate;
+
+- (NSString *)title;
+- (NSString *)subtitle;
+- (CLLocationCoordinate2D)coordinate;
+
+@end;

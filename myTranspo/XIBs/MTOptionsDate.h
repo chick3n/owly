@@ -7,7 +7,24 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MTNavCell.h"
+#import "MTNavFooter.h"
+#import "ZUUIRevealController.h"
+
+@protocol MTOptionsDateProtocol <NSObject>
+@required
+- (void)optionsDate:(id)options dateHasChanged:(NSDate*)newDate;
+@end
 
 @interface MTOptionsDate : UITableViewController
+{
+    NSArray*                _data;
+    NSDateFormatter*        _dateFormatter;
+}
+
+
+@property (nonatomic, strong)   NSDate*     lastDate;
+@property (nonatomic, strong)   NSDate*     selectedDate;
+@property (nonatomic, weak)     id<MTOptionsDateProtocol>       delegateOptions;
 
 @end

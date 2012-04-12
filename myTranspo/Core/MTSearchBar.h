@@ -9,5 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @interface MTSearchBar : UISearchBar
+{
+    UIActivityIndicatorView*        _loading;
+    UIView*                         _searchIcon;
+    UITextField*                    _mtSearchField;
+}
+
+- (void)startAnimating;
+- (void)stopAnimating;
 
 @end

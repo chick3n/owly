@@ -7,7 +7,34 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
 
-@interface StopsViewController : UIViewController
+#import "MTBaseViewController.h"
+#import "myTranspoOC.h"
+#import "MTIncludes.h"
+#import "MTBusAnnotation.h"
+#import "MTStopAnnotation.h"
+#import "MTSearchBar.h"
+#import "MTCardManager.h"
+#import "MTSearchCell.h"
+#import "MTOptionsDate.h"
 
+@interface StopsViewController : MTBaseViewController <MyTranspoDelegate, MTQueueSafe, MyTranspoDelegate, MKMapViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDataSource, UITableViewDelegate, MTCardManagerDelegate, MTOptionsDateProtocol>
+{
+    NSArray*                                _searchResults;
+    BOOL                                    _isSearchInProgress;
+    NSTimer*                                _searchRefresh;
+    BOOL                                    _mapAutomaticAnimation;
+    CLLocationCoordinate2D                  _mapLastSearchedCoordinate;
+    NSDate*                                 _chosenDate;
+    
+    //ui components
+    IBOutlet MTSearchBar*                   _searchBar;
+    IBOutlet MKMapView*                     _mapView;
+    MTCardManager*                          _cardManager;
+    UIBarButtonItem*                        _cardManagerFavorite;
+    UIBarButtonItem*                        _cardManagerFavoriteAlready;
+    UIBarButtonItem*                        _leftBarButton;
+    UIBarButtonItem*                        _resetMapLocationButton;
+}
 @end

@@ -10,4 +10,11 @@
 
 @implementation MTSettingsTableView
 
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [[self window] endEditing:YES];
+    
+    [super touchesEnded:touches withEvent:event];
+}
+
 @end

@@ -8,6 +8,26 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SettingsViewController : UITableViewController
+#import "ZUUIRevealController.h"
+#import "MTBaseViewController.h"
+#import "MTSettings.h"
+#import "SettingsType.h"
+#import "MTDefinitions.h"
+#import "SettingsListViewController.h"
+#import "MTSettingsTableView.h"
+#import "SettingsManageNotificationsViewController.h"
+
+#define kFullAppRefresh @"MTAPPREFRESH"
+
+@interface SettingsViewController : MTBaseViewController<UITableViewDataSource, UITableViewDelegate, SettingsTypeDelegate>
+{
+    MTSettings*                 _settings;
+    NSMutableArray*             _data;
+    
+    //ui compinents
+    IBOutlet UITextField*       _keyboardDismisser;
+}
+
+@property (nonatomic, weak)     IBOutlet MTSettingsTableView*            tableView;
 
 @end

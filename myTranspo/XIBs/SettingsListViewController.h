@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SettingsType.h"
+#import "MTBaseViewController.h"
 
-@interface SettingsListViewController : UIViewController
+@interface SettingsListViewController : MTBaseViewController <UITableViewDataSource, UITableViewDelegate>
+
+@property (nonatomic, weak)         IBOutlet UITableView*           tableView;
+@property (nonatomic, weak)         SettingsType*                   setting;
 
 @end

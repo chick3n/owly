@@ -7,7 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MapKit/MapKit.h>
 
-@interface MTStopAnnotation : NSObject
+#import "MTStop.h"
 
-@end
+@interface MTStopAnnotation : NSObject <MKAnnotation>
+{
+	CLLocationCoordinate2D 				_coordinates;
+}
+
+@property (nonatomic, strong) NSString*			stopCode;
+@property (nonatomic, strong) NSString*			stopStreetName;
+@property (nonatomic, copy) NSArray*			stopRoutes;
+@property (nonatomic, strong) MTStop*           stop;
+
+- (id) initWithCoordinate:(CLLocationCoordinate2D)coordinate;
+
+- (NSString *)title;
+- (NSString *)subtitle;
+- (CLLocationCoordinate2D)coordinate;
+
+@end;

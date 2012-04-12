@@ -10,4 +10,44 @@
 
 @implementation MTSearchBar
 
+- (void)layoutSubviews
+{    
+    for(UIView* view in self.subviews)
+    {
+        if([view isKindOfClass:[UITextField class]])
+        {
+            _mtSearchField = (UITextField*)view;
+            break;
+        }
+    }
+    
+    if(_mtSearchField != nil)
+    {
+        if(_loading == nil)
+        {
+            _loading = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        }
+        _searchIcon = _mtSearchField.leftView;
+        //_mtSearchField.leftView = _loading;
+    }
+    
+    [super layoutSubviews];
+}
+
+- (void)startAnimating
+{
+    if(_mtSearchField == nil)
+        return;
+    
+    _mtSearchField.leftView = _loading;
+    [_loading startAnimating];
+    
+}
+
+- (void)stopAnimating
+{
+    _mtSearchField.leftView = _searchIcon;
+    [_loading stopAnimating];
+}
+
 @end

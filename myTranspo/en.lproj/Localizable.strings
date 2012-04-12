@@ -5,3 +5,88 @@
   Created by Vincent Mancini on 12-04-10.
   Copyright (c) 2012 Vice Interactive. All rights reserved.
 */
+
+//
+//  MTDefinitions.h
+//  myTranspoOC
+//
+//  Created by Vincent Mancini on 12-03-10.
+//  Copyright (c) 2012 Vice Interactive. All rights reserved.
+//
+
+//STOPS & BUSES
+"MTDEF_STOPNAMEUNKNOWN" = "Unknown";
+"MTDEF_BUSNAMEUNKNOWN" = "Unknown";
+//DIRECTIIONS
+"MTDEF_DIRECTIONUNKNOWN" = "Unknown";
+"MTDEF_DIRECTIONNORTH" = "North";
+"MTDEF_DIRECTIONSOUTH" = "South";
+"MTDEF_DIRECTIONEAST" = "East";
+"MTDEF_DIRECTIONWEST" = "West";
+//OC Label for Descriptions as provided by them through their API
+"MTDEF_DIRECTIONUNKNOWNOC" = "Unknown";
+"MTDEF_DIRECTIONNORTHOC" = "Northbound";
+"MTDEF_DIRECTIONSOUTHOC" = "Southbound";
+"MTDEF_DIRECTIONEASTOC" = "Eastbound";
+"MTDEF_DIRECTIONWESTOC" = "Westbound";
+//UI ELEMENTS
+"MTDEF_CARDPREVIOUS" = "Previous";
+"MTDEF_CARDNEXT" = "Next";
+"MTDEF_CARDDISTANCE" = "Distance";
+"MTDEF_CARDDIRECTION" = "Direction";
+"MTDEF_CARDWEEKDAY" = "Weekday";
+"MTDEF_CARDSATURDAY" = "Saturday";
+"MTDEF_CARDSUNDAY" = "Sunday";
+"MTDEF_CARDNOTIME" = "No scheduled time available.";
+//View Controller Elements
+"MTDEF_MENUHEADERBUS" = "Menu";
+"MTDEF_VIEWCONTROLLERMYBUSES" = "My Buses";
+"MTDEF_VIEWCONTROLLERNOTICES" = "Noticies";
+"MTDEF_VIEWCONTROLLERTRIPPLAN" = "Trip Planner";
+"MTDEF_VIEWCONTROLLERTRAIN" = "Train";
+"MTDEF_EDIT" = "Edit";
+"MTDEF_DONE" = "Done";
+"MTDEF_PULLDOWNTOREFRESH" = "Pull down to refresh.";
+"MTDEF_RELEASETOREFRESH" = "Release to refresh.";  
+"MTDEF_LOADING" = "Loading...";
+"MTDEF_STOPS" = "Stops";
+"MTDEF_SEARCHPLANCEHOLDER" = "Search for a bus, stop number or street.";
+"MTDEF_SCHEDULEDTIME" = "Scheduled Time";
+"MTDEF_BUS" = "Bus";
+"MTDEF_STREET" = "Street Name";
+"MTDEF_NOTIFICATIONS" = "Notifications";
+"MTDEF_REMOVEALL" = "Remove All";
+"MTDEF_REMOVESELECTED" = "Remove Selected";
+//Dimanche, lundi, mardi, mercredi, jeudi, vendredi, samedi
+"MTDEF_MONDAY" = "Monday";
+"MTDEF_TUESDAY" = "Tuesday";
+"MTDEF_WEDNESDAY" = "Wednesday";
+"MTDEF_THURSDAY" = "Thursday";
+"MTDEF_FRIDAY" = "Friday";
+"MTDEF_SATURDAY" = "Saturday";
+"MTDEF_SUNDAY" = "Sunday";
+"MTDEF_REPEATS" = "repeats every ";
+
+//SETTINGS
+"MTDEF_ACCOUNTNAME" = "Account Name";
+"MTDEF_ACCOUNTPASSWORD" = "Password";
+"MTDEF_LANGUAGE" = "Language";
+"MTDEF_CITY" = "City";
+"MTDEF_HELPERCARDS" = "Display help notices";
+"MTDEF_ALERTSCHOICE" = "Notifications";
+"MTDEF_UPDATEALERT" = "Updates necessary alerts";
+"MTDEF_MANAGENOTIFICATIONS" = "Notifications";
+"MTDEF_ACCOUNTINFOHEADER" = "Account Integration";
+"MTDEF_APPSETTINGSHEADER" = "Application Settings";
+"MTDEF_MANAGEDATAHEADER" = "Data Management";
+"MTDEF_ACCOUNTINFOFOOTER" = "Add your facebook profile to get notified when friends are nearby.";
+"MTDEF_APPSETTINGSFOOTER" = "";
+"MTDEF_MANAGEDATAFOOTER" = "";
+"MTDEF_SETTINGSTITLE" = "Settings";
+"MTDEF_FIRSTLAUNCHSCREEN" = "First launch screen";
+
+//ALERTS
+"MTDEF_ALERTUPDATETITLE" = "Route Update";
+"MTDEF_ALERTUPDATEMESSAGE" = "locally stored time needs to be updated now.";
+"MTDEF_ALERTTIMEMESSAGE" = "is scheduled to arrive in";
+

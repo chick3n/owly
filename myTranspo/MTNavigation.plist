@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Navigation</key>
+	<array>
+		<dict>
+			<key>NavIcon</key>
+			<integer>1</integer>
+			<key>NavTitle</key>
+			<string>My Buses</string>
+			<key>NavTitleFrench</key>
+			<string>Mes bus</string>
+			<key>NotificationType</key>
+			<integer>0</integer>
+			<key>Selector</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>NavIcon</key>
+			<integer>4</integer>
+			<key>NavTitle</key>
+			<string>Stops</string>
+			<key>NavTitleFrench</key>
+			<string>Arrêts de Bus</string>
+			<key>NotificationType</key>
+			<integer>0</integer>
+			<key>Selector</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>NavIcon</key>
+			<integer>5</integer>
+			<key>NavTitle</key>
+			<string>Notices</string>
+			<key>NavTitleFrench</key>
+			<string>Avis</string>
+			<key>NotificationType</key>
+			<integer>1</integer>
+			<key>Selector</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>NavIcon</key>
+			<integer>6</integer>
+			<key>NavTitle</key>
+			<string>Trip Planner</string>
+			<key>NavTitleFrench</key>
+			<string>planificateur de voyage</string>
+			<key>NotificationType</key>
+			<integer>0</integer>
+			<key>Selector</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>NavIcon</key>
+			<integer>2</integer>
+			<key>NavTitle</key>
+			<string>Trains</string>
+			<key>NavTitleFrench</key>
+			<string>Trains</string>
+			<key>NotificationType</key>
+			<integer>0</integer>
+			<key>Selector</key>
+			<integer>4</integer>
+		</dict>
+		<dict>
+			<key>NavIcon</key>
+			<integer>0</integer>
+			<key>NavTitle</key>
+			<string>Settings</string>
+			<key>NavTitleFrench</key>
+			<string>Paramètres</string>
+			<key>NotificationType</key>
+			<integer>0</integer>
+			<key>Selector</key>
+			<integer>5</integer>
+		</dict>
+	</array>
+</dict>
+</plist>
