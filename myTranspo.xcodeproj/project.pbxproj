@@ -182,6 +182,7 @@
 		31DF2E341524B70E0035BE2F /* StopsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31DF2E321524B70D0035BE2F /* StopsViewController.m */; };
 		31DF2E351524B70E0035BE2F /* StopsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31DF2E331524B70E0035BE2F /* StopsViewController.xib */; };
 		31DF2E491524CD7A0035BE2F /* MTSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 31DF2E481524CD7A0035BE2F /* MTSearchBar.m */; };
+		31DFEA6D15372B6900682EB4 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 31DFEA6C15372B6900682EB4 /* .gitignore */; };
 		31EAED751522756200533AC6 /* TripViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31EAED731522756200533AC6 /* TripViewController.m */; };
 		31EAED761522756200533AC6 /* TripViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31EAED741522756200533AC6 /* TripViewController.xib */; };
 /* End PBXBuildFile section */
@@ -414,6 +415,7 @@
 		31DF2E331524B70E0035BE2F /* StopsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StopsViewController.xib; path = XIBs/StopsViewController.xib; sourceTree = "<group>"; };
 		31DF2E471524CD790035BE2F /* MTSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTSearchBar.h; path = Core/MTSearchBar.h; sourceTree = "<group>"; };
 		31DF2E481524CD7A0035BE2F /* MTSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTSearchBar.m; path = Core/MTSearchBar.m; sourceTree = "<group>"; };
+		31DFEA6C15372B6900682EB4 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		31EAED721522756200533AC6 /* TripViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripViewController.h; path = XIBs/TripViewController.h; sourceTree = "<group>"; };
 		31EAED731522756200533AC6 /* TripViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = TripViewController.m; path = XIBs/TripViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		31EAED741522756200533AC6 /* TripViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TripViewController.xib; path = XIBs/TripViewController.xib; sourceTree = "<group>"; };
@@ -740,6 +742,7 @@
 				31ADE8C8151FDFA30029C964 /* main.m */,
 				31ADE8CA151FDFA30029C964 /* myTranspo-Prefix.pch */,
 				319D779D1534E1E400542ED3 /* Localizable.strings */,
+				31DFEA6C15372B6900682EB4 /* .gitignore */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1011,6 +1014,7 @@
 				319D791015371B5B00542ED3 /* MTCardCell.xib in Resources */,
 				319D791515371B5B00542ED3 /* MTNavCell.xib in Resources */,
 				319D791915371B5B00542ED3 /* MTTripCell.xib in Resources */,
+				31DFEA6D15372B6900682EB4 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
