@@ -175,7 +175,6 @@
 		31ADEA3F151FE9720029C964 /* MyBusesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31ADEA3D151FE9710029C964 /* MyBusesViewController.xib */; };
 		31ADEA43152006E20029C964 /* MTBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31ADEA42152006E20029C964 /* MTBaseViewController.m */; };
 		31ADEA4C15212BBB0029C964 /* MTRefreshTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31ADEA4B15212BBA0029C964 /* MTRefreshTableView.m */; };
-		31ADEA4E15212CA80029C964 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 31ADEA4D15212CA80029C964 /* arrow.png */; };
 		31DF2E1E15228AD70035BE2F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31DF2E1D15228AD70035BE2F /* MapKit.framework */; };
 		31DF2E251523C4E20035BE2F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31DF2E241523C4E10035BE2F /* CoreLocation.framework */; };
 		31DF2E281523C6E80035BE2F /* MTBusAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 31DF2E271523C6E80035BE2F /* MTBusAnnotation.m */; };
@@ -404,7 +403,6 @@
 		31ADEA42152006E20029C964 /* MTBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBaseViewController.m; path = Core/MTBaseViewController.m; sourceTree = "<group>"; };
 		31ADEA4A15212BBA0029C964 /* MTRefreshTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTRefreshTableView.h; path = Core/MTRefreshTableView.h; sourceTree = "<group>"; };
 		31ADEA4B15212BBA0029C964 /* MTRefreshTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTRefreshTableView.m; path = Core/MTRefreshTableView.m; sourceTree = "<group>"; };
-		31ADEA4D15212CA80029C964 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
 		31DF2E1D15228AD70035BE2F /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		31DF2E241523C4E10035BE2F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		31DF2E261523C6E80035BE2F /* MTBusAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBusAnnotation.h; path = Core/Map/MTBusAnnotation.h; sourceTree = "<group>"; };
@@ -802,7 +800,6 @@
 				31ADEA4B15212BBA0029C964 /* MTRefreshTableView.m */,
 				31101F671530CABD001D220A /* MTSettingsTableView.h */,
 				31101F681530CABD001D220A /* MTSettingsTableView.m */,
-				31ADEA4D15212CA80029C964 /* arrow.png */,
 				31DF2E471524CD790035BE2F /* MTSearchBar.h */,
 				31DF2E481524CD7A0035BE2F /* MTSearchBar.m */,
 				318195A6152E0A1300B85129 /* MTSearchCell.h */,
@@ -892,7 +889,6 @@
 				31ADE8D8151FDFF80029C964 /* MTNavigation.plist in Resources */,
 				31ADEA30151FE2BD0029C964 /* MenuTableViewController.xib in Resources */,
 				31ADEA3F151FE9720029C964 /* MyBusesViewController.xib in Resources */,
-				31ADEA4E15212CA80029C964 /* arrow.png in Resources */,
 				31EAED761522756200533AC6 /* TripViewController.xib in Resources */,
 				31DF2E351524B70E0035BE2F /* StopsViewController.xib in Resources */,
 				318195B0152F53D700B85129 /* MTOptionsDate.xib in Resources */,
