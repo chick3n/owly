@@ -13,6 +13,11 @@
 - (void)swapRoutes:(id)sender;
 - (void)setTrainLocation:(id)sender;
 - (void)updateStopAnnotations:(id)senders;
+- (void)updateTrainAnnotationForPrevTrip:(MTTrip*)prevTrip NextTrip:(MTTrip*)nextTrip;
+- (void)getTrainLocation:(id)sender;
+- (void)startMonitor:(id)sender;
+- (void)stopMonitor:(id)sender;
+- (void)trainMonitorTick:(id)sender;
 @end
 
 @implementation OTrainViewController
@@ -24,6 +29,9 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        _trainAnnotation = [[MTBusAnnotation alloc] initWithCoordinate:CLLocationCoordinate2DMake(0, 0)];
+        _trainAnnotation.busNumber = @"OTrn";
+        _trainLastLocation = -1;
     }
     return self;
 }
@@ -50,7 +58,8 @@
     _stop.Longitude = -75.721931;
     MTBus* bus = [[MTBus alloc] initWithLanguage:_language];
     bus.BusId = @"750-125";
-    bus.BusNumber = @"OTrain";
+    bus.BusNumber = @"750";
+    bus.DisplayHeading = @"Bayview";
     [_stop.BusIds addObject:bus];
     
     _stop2 = [[MTStop alloc] initWithLanguage:_language];
@@ -60,7 +69,8 @@
     _stop2.Longitude = -75.659401;
     MTBus* bus2 = [[MTBus alloc] initWithLanguage:_language];
     bus2.BusId = @"750-125";
-    bus2.BusNumber = @"OTrain";
+    bus2.BusNumber = @"750";
+    bus2.DisplayHeading = @"Greenboro";
     [_stop2.BusIds addObject:bus2];
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"TEST" style:UIBarButtonItemStylePlain target:self action:@selector(swapRoutes:)];
@@ -93,6 +103,7 @@
     self.tableView.frame = tableViewFrame;
     
     //mapvoew
+    _mapView.delegate = self;
 }
 
 - (void)viewDidUnload
@@ -115,6 +126,7 @@
 {
     [super viewWillDisappear:animated];
     
+    [self stopMonitor:nil];    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -151,6 +163,7 @@
         cell.language = _language;
         cell.delegate = self;
         cell.alertSelected = NO;
+        cell.useForTrain = YES;
     }
     
     MTTrip* trip = [_trips objectAtIndex:indexPath.row];
@@ -163,6 +176,8 @@
     [cell updateCellDetails:trip];
     
     BOOL busHere = NO;
+    if(trip.StopNumber == _trainLastLocation)
+        busHere = YES;
     
     [cell updateBusImage:!busHere];
     
@@ -184,12 +199,20 @@
     UILabel* tableViewHeaderLabel = (UILabel*)[_tableViewHeader viewWithTag:100];
     if(tableViewHeaderLabel)
     {
+        if(_trips.count <= 0)
+            return _tableViewHeader;
+        
         MTTrip* trip = [_trips objectAtIndex:_trips.count - 1];
             
         NSString *headerTime = trip.StopName;
         if(headerTime == nil)
             headerTime = @"";
         tableViewHeaderLabel.text = headerTime;
+        
+        if(_trainAnnotation != nil)
+        {
+            _trainAnnotation.busHeading = trip.StopName;
+        }
     }
     
     return _tableViewHeader;
@@ -217,6 +240,7 @@
         {
             [_transpo getNewScheduleForStop:_stop2 WithRoute:_stop2.Bus];
         }
+        
         _swap = NO;
     }
     else
@@ -291,6 +315,9 @@
         _tableView.alpha = 1.0;
     
     [self setTrainLocation:nil];
+    [self updateStopAnnotations:nil];
+    [self getTrainLocation:nil];    
+    [self startMonitor:nil];
     [self performSelector:@selector(resizeTableAndMap) withObject:nil afterDelay:1.0];
     
     //[self resizeTableAndMap];
@@ -298,7 +325,44 @@
 
 - (void)myTranspo:(id)transpo State:(MTResultState)state finishedGettingNextLiveTimes:(NSArray*)times
 {
+    if(state == MTRESULTSTATE_FAILED) //get schedule time to determine where bus should be beacuse API failed
+    {
+        NSString* currentTime = [MTHelper CurrentTimeHHMMSS];
+        MTTrip *nextTrip = nil;
+        MTTrip *prevTrip = nil;
+        
+        for(MTTrip *trip in _trips)
+        {
+            if([trip.Time compareTimesHHMMSS:currentTime Ordering:1] > 0)
+            {
+                nextTrip = trip;
+                break;
+            }
+            prevTrip = trip;
+        }
+        
+        if(prevTrip == nil) //first Trip
+            prevTrip = nextTrip;
+        
+        if(nextTrip == nil) //last Trip shouldnt be on map anymore?
+        {
+            [self stopMonitor:nil];
+            return;
+        }
+        //nextTrip = prevTrip;
+        
+        if(nextTrip == nil && prevTrip == nil)//uhoh
+        {
+            [self stopMonitor:nil];
+            return;
+        }
+        
+        [self updateTrainAnnotationForPrevTrip:prevTrip NextTrip:nextTrip];
+        return;
+    }
     
+    MTTrip* prevTrip = [times objectAtIndex:0];
+    [self updateTrainAnnotationForPrevTrip:prevTrip NextTrip:nil];
 }
 
 - (void)myTranspo:(MTResultState)state newScheduleForStop:(MTStop*)stop AndRoute:(MTBus*)bus
@@ -370,6 +434,185 @@
 
 - (void)updateStopAnnotations:(id)senders
 {
+    for(id<MKAnnotation> annotation in _mapView.annotations)
+    {
+        if([annotation isKindOfClass:[MTStopAnnotation class]])
+            [_mapView removeAnnotation:annotation];
+    }
+    
+    for(MTTrip* trip in _trips)
+    {
+        MTStopAnnotation* stopAnnotation = [[MTStopAnnotation alloc] initWithCoordinate:CLLocationCoordinate2DMake(trip.Latitude, trip.Longitude)];
+        stopAnnotation.stopCode = [NSString stringWithFormat:@"%d", trip.StopNumber];
+        stopAnnotation.stopStreetName = trip.StopName;
+        
+        [_mapView addAnnotation:stopAnnotation];
+    }
+}
+
+- (void)updateTrainAnnotationForPrevTrip:(MTTrip*)prevTrip NextTrip:(MTTrip*)nextTrip;
+{
+#if 0
+    for(id<MKAnnotation> annotation in _mapView.annotations)
+    {
+        if([annotation isKindOfClass:[MTBusAnnotation class]])
+            [_mapView removeAnnotation:annotation];
+    }
+#endif
+    
+    //can be used to calculate distance and estimate where the bus should be along a path between point A and B???
+    //otherwise just show the bus at the previous stop
+    if(_trainAnnotation != nil)
+        [_mapView removeAnnotation:_trainAnnotation];
+    else
+    {
+        _trainAnnotation = [[MTBusAnnotation alloc] initWithCoordinate:CLLocationCoordinate2DMake(prevTrip.Latitude, prevTrip.Longitude)];
+    }    
+    
+    _trainAnnotation.coordinates = CLLocationCoordinate2DMake(prevTrip.Latitude, prevTrip.Longitude);
+    [_mapView addAnnotation:_trainAnnotation];
+    
+    _trainLastLocation = prevTrip.StopNumber;
+    [_tableView reloadData];
+    
+    MKCoordinateRegion mapRegion;
+    mapRegion.center = CLLocationCoordinate2DMake(prevTrip.Latitude - 0.001, prevTrip.Longitude);
+    mapRegion.span.latitudeDelta = 0.002;
+    mapRegion.span.longitudeDelta = 0.002;
+    [_mapView setRegion:mapRegion animated:YES];
+}
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation 
+{
+    if ([annotation isKindOfClass:[MTStopAnnotation class]]) 
+	{
+		static NSString *identifier = @"MTStopAnnotation";
+        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        
+		if (annotationView == nil) {
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+        } else {
+            annotationView.annotation = annotation;
+        }
+        
+        
+        annotationView.enabled = YES;
+        annotationView.canShowCallout = YES;
+        annotationView.image=[UIImage imageNamed:@"global_train_pin.png"];
+        
+        return annotationView;
+    }
+	else if([annotation isKindOfClass:[MTBusAnnotation class]]) 
+	{
+		static NSString *identifier = @"MTBusAnnotation";
+        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        
+		if (annotationView == nil) {
+            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+        } else {
+            annotationView.annotation = annotation;
+        }
+        
+        annotationView.enabled = YES;
+        annotationView.canShowCallout = YES;
+        annotationView.animatesDrop = YES;
+        annotationView.pinColor = MKPinAnnotationColorPurple;
+        //annotationView.image=[UIImage imageNamed:@""];
+        
+        return annotationView;
+    }
+    
+    return nil;    
+}
+
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
+{
+    MTLog(@"Show Card manager??"); //i dont think this is a good idea for this screen
+}
+
+- (void)getTrainLocation:(id)sender
+{
+    //For this we will have to determine the next stop in the sequence based on time, from there send that stop data and get where the bus
+    //currently is
+    NSString* currentTime = [MTHelper CurrentTimeHHMMSS];
+    MTTrip *nextTrip = nil;
+    MTTrip *prevTrip = nil;
+    
+    for(MTTrip *trip in _trips)
+    {
+        if([trip.Time compareTimesHHMMSS:currentTime Ordering:1] > 0)
+        {
+            nextTrip = trip;
+            break;
+        }
+        prevTrip = trip;
+    }
+    
+    if(prevTrip == nil) //first Trip
+        prevTrip = nextTrip;
+    
+    if(nextTrip == nil) //last Trip shouldnt be on map anymore?
+        return;
+    //nextTrip = prevTrip;
+    
+    if(nextTrip == nil && prevTrip == nil)//uhoh
+        return;
+    
+    if(![_transpo getLiveNextTripsForTrip:nextTrip WithRoute:(_swap == NO) ? _stop2.Bus : _stop.Bus])
+    {
+        [self updateTrainAnnotationForPrevTrip:prevTrip NextTrip:nextTrip];
+    }
+}
+
+#pragma mark - TRAIN MONITOR
+
+- (void)startMonitor:(id)sender
+{
+    if(_chosenDate != nil)
+    {
+        if(![MTHelper IsDateToday:_chosenDate])
+            return;
+    }
+    
+    if(_trainTimer == nil)
+    {
+        _trainTimer = [NSTimer scheduledTimerWithTimeInterval:kMTTrainTimerInterval target:self selector:@selector(trainMonitorTick:) userInfo:nil repeats:YES];
+    }
+    else if([_trainTimer isValid])
+    {
+        [self stopMonitor:nil];
+        _trainTimer = [NSTimer scheduledTimerWithTimeInterval:kMTTrainTimerInterval target:self selector:@selector(trainMonitorTick:) userInfo:nil repeats:YES];
+    }
+    else if(![_trainTimer isValid])
+    {
+        _trainTimer = [NSTimer scheduledTimerWithTimeInterval:kMTTrainTimerInterval target:self selector:@selector(trainMonitorTick:) userInfo:nil repeats:YES];
+    }
+}
+
+- (void)stopMonitor:(id)sender
+{
+    if(_trainTimer)
+    {
+        if([_trainTimer isValid])
+            [_trainTimer invalidate];
+    }
+    
+    _trainTimer = nil;
+}
+
+- (void)trainMonitorTick:(id)sender
+{
+    NSString* currentTime = [MTHelper CurrentTimeHHMMSS];
+    MTTrip* trip = [_trips objectAtIndex:_trips.count - 1];
+    if([trip.Time compareTimesHHMMSS:currentTime Ordering:1] < 0) //end of the trip
+    {
+        _swap = !_swap, [self swapRoutes:nil];
+        [self stopMonitor:nil];
+        return;
+    }
+    
+    //other wise update the train location
+    [self getTrainLocation:nil];
 }
 
 @end

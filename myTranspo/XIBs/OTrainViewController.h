@@ -16,6 +16,8 @@
 #import "MTBusAnnotation.h"
 #import "MTStopAnnotation.h"
 
+#define kMTTrainTimerInterval 60
+
 @interface OTrainViewController : MTBaseViewController<UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, MTQueueSafe, MyTranspoDelegate, MTTripCellDelegate, MKMapViewDelegate>
 {
     NSArray*                _trips;
@@ -23,6 +25,9 @@
     MTStop*                 _stop;
     MTStop*                 _stop2;
     BOOL                    _swap;
+    MTBusAnnotation*        _trainAnnotation;
+    NSTimer*                _trainTimer;
+    int                     _trainLastLocation;
     
     //ui components
     UIView*                             _tableViewHeader;

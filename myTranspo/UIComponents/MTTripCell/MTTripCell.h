@@ -48,6 +48,7 @@ typedef enum
 @property (nonatomic) MTLanguage                language;
 @property (nonatomic) BOOL                      alertSelected;
 @property (nonatomic, readonly) MTTrip*         trip;
+@property (nonatomic) BOOL                      useForTrain;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier WithLanguage:(MTLanguage)language AndOwner:(id)owner;
 

@@ -684,22 +684,17 @@ numberOfRowsInComponent:(NSInteger)component;
     if ([annotation isKindOfClass:[MTStopAnnotation class]]) 
 	{
 		static NSString *identifier = @"MTStopAnnotation";
-        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
         
 		if (annotationView == nil) {
-            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
         } else {
             annotationView.annotation = annotation;
         }
         
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-        button.frame = CGRectMake(0, 0, 23, 23);
-        
         annotationView.enabled = YES;
         annotationView.canShowCallout = YES;
-        annotationView.animatesDrop = YES;
-        annotationView.rightCalloutAccessoryView = button;
-        //annotationView.image=[UIImage imageNamed:@""];
+        annotationView.image=[UIImage imageNamed:@"global_bus_pin.png"];
         
         return annotationView;
     }

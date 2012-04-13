@@ -17,6 +17,7 @@
 @synthesize language =              _language;
 @synthesize alertSelected =         _alertSelected;
 @synthesize trip =                  _trip;
+@synthesize useForTrain =           _useForTrain;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier WithLanguage:(MTLanguage)language AndOwner:(id)owner
 {
@@ -45,6 +46,15 @@
         _alertImage.alpha = 1.0;
     else _alertImage.alpha = 0.5;
     _alertSelected = alertSelected;
+}
+
+- (void)setUseForTrain:(BOOL)useForTrain
+{
+    _useForTrain = useForTrain;
+    
+    if(_useForTrain == YES)
+        _busImage.image = [UIImage imageNamed:@"global_train_arrival.png"];
+    else _busImage.image = [UIImage imageNamed:@"route_cell_bus.png"];
 }
 
 - (void)initializeUI

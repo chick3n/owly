@@ -102,7 +102,7 @@
     {
         case MTTRANSPOTYPE_OC:
             _hasAPI = YES;
-            _ocApi = [[MTOCApi alloc] initWithLanguage:_language AndUrlPath:@"oc.com" UsingAPIKey:@"test"];
+            _ocApi = [[MTOCApi alloc] initWithLanguage:_language AndUrlPath:@"https://api.octranspo1.com/v1.0/" UsingAPIKey:@"2010d75153a9bbfd1d4db0a1db70fcd0" UsingApplicationID:@"4d8b9165"];
             return YES;
         default: break;
     }

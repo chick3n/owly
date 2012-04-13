@@ -22,7 +22,8 @@
 
 - (id)initWithLanguage:(MTLanguage)lang
             AndUrlPath:(NSString*)urlPath
-           UsingAPIKey:(NSString*)apiKey
+           UsingAPIKey:(NSString*)apiKey 
+    UsingApplicationID:(NSString*)appId
 {
     self = [super init];
     if(self)
@@ -32,6 +33,7 @@
         _url = [NSURL URLWithString:_urlPath];
         _isAvailable = NO;
         _apiKey = [NSString stringWithString:apiKey];
+        _applicationId = appId;
     }
     
     return self;
@@ -47,7 +49,7 @@
     "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" "
     "xmlns:soap=\"http://schema.xmlsoap.org/soap/envelope/\">"
      "<soap:Body>"];
-    [query appendFormat:@"<%@ xmlns=\"http://tempuri.org/\">", header];
+    [query appendFormat:@"<%@ xmlns=\"http://octranspo.com\">", header];
     
     for(NSString* key in [dic allKeys])
     {
@@ -70,11 +72,10 @@
     NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
     
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] init];
-    [request setURL:_url];
+    [request setURL:[_url URLByAppendingPathComponent:action]];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"text/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:[NSString stringWithFormat:@"http://tempuri.org/%@", action] forHTTPHeaderField:@"SOAPAction"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:postData];
     
     NSURLResponse* response;
@@ -83,11 +84,11 @@
     NSData* result = [NSURLConnection sendSynchronousRequest:request
                                            returningResponse:&response
                                                        error:&error];
-    
     if(result == nil)
     {
         MTLog(@"Soap Failed: %@", [error localizedDescription]);
     }
+    
     
     return result;    
 }
@@ -343,6 +344,14 @@
             {
                 if([(NSString*)[trip valueForKey:@"AdjustmentAge"] floatValue] >= 0.0)
                     newTrip.Time.IsLive = YES;
+                else
+                {
+                    return NO;
+                }
+            }
+            else
+            {
+                return NO;
             }
             
             newTrip.Destination = ([trip valueForKey:@"TripDestination"] != nil) ? [trip valueForKey:@"TripDestination"] : @"";
@@ -373,7 +382,7 @@
         //[bus addLiveTimes:_trips];
     }
     
-    return YES;
+    return (_trips.count);
 }
 
 - (BOOL)getTrips:(NSMutableArray*)trips 
@@ -397,24 +406,19 @@
     if(_trips == nil || stop == nil || bus == nil)
         return NO;
     
-    /* NSString *soapRequest = [self createSoapRequest:@"GetNextTripsForStop"
-     , @"routeNo"
-     , bus.BusNumber
-     , @"stopNo"
-     , [NSString stringWithFormat:@"%d", stop.StopNumber]
-     , @"apiKey"
-     , _apiKey];
-     
-     if(stop.cancelQueue || bus.cancelQueue)
+    if(stop.cancelQueue || bus.cancelQueue)
         return NO;
-     
-     NSData* xmlData = [self sendSoapRequest:soapRequest WithAction:@"GetNextTripsForStop"];
-     
-     if(xmlData == nil)
-     return NO;
-     */
     
-    NSData* xmlData = [[NSData alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"GetRouteStopsAPISample" ofType:@"xml"]];
+    NSData* xmlData = [self sendSoapRequest:[NSString stringWithFormat:@"appID=%@&apiKey=%@&routeNo=%@&stopNo=%d"
+                                             , _applicationId
+                                             , _apiKey
+                                             , bus.BusNumber
+                                             , stop.StopNumber]
+                                                            WithAction:@"GetNextTripsForStop"];
+    
+    if(xmlData == nil)
+        return NO;
+    
     NSDictionary *xmlDic = [XMLReader dictionaryForXMLData:xmlData error:nil];
     
     if(xmlDic == nil)
@@ -433,6 +437,7 @@
         }
     }
     
+    
     [bus clearLiveTimes];
     
     //we now have to determine which bus we want because you can only pass it a stop & a number, in most cases this will return 1 bus however
@@ -440,7 +445,7 @@
     //1 compare bus number and route label
     //2 compare bus number and direction if step 1 fails?
     
-    NSArray *routes = [xmlDic valueForKeyPath:@"StopInfoData.Route.RouteDirection"];
+    NSArray *routes = [xmlDic valueForKeyPath:@"GetNextTripsForStopResult.Route.RouteDirection.node"];
     NSArray *trips = nil; //trip match
     
     for(NSDictionary *routeDirection in routes)
@@ -465,7 +470,7 @@
         
         if([bus.BusNumber isEqualToString:routeNumber] && [bus.DisplayHeading isEqualToString:routeLabel])
         {
-            trips = [routeDirection valueForKeyPath:@"Trips.Trip"];
+            trips = [routeDirection valueForKeyPath:@"Trips.Trip.node"];
             if(trips != nil)
                 break;
         }
@@ -473,7 +478,7 @@
         //didnt break, didnt find it
         if([bus.BusNumber isEqualToString:routeNumber] && [[bus getBusHeadingOCStyle] isEqualToString:routeHeading])
         {
-            trips = [routeDirection valueForKeyPath:@"Trips.Trip"];
+            trips = [routeDirection valueForKeyPath:@"Trips.Trip.node"];
             if(trips != nil)
                 break;
         }
@@ -497,6 +502,12 @@
             {
                 if([(NSString*)[trip valueForKey:@"AdjustmentAge"] floatValue] >= 0.0)
                     newTrip.Time.IsLive = YES;
+                else
+                    return NO; //no API, why do we want this data than?
+            }
+            else
+            {
+                return NO; //no API, why do we want this data than?
             }
             
             newTrip.Destination = ([trip valueForKey:@"TripDestination"] != nil) ? [trip valueForKey:@"TripDestination"] : @"";

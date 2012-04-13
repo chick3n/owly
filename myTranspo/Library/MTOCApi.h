@@ -18,11 +18,12 @@
     MTLanguage          _language;
     BOOL                _isAvailable;
     NSString*           _apiKey;
+    NSString*           _applicationId;
 }
 
 @property (nonatomic, strong)   NSString*               UrlPath;
 
-- (id)initWithLanguage:(MTLanguage)lang AndUrlPath:(NSString*)urlPath UsingAPIKey:(NSString*)apiKey;
+- (id)initWithLanguage:(MTLanguage)lang AndUrlPath:(NSString*)urlPath UsingAPIKey:(NSString*)apiKey UsingApplicationID:(NSString*)appId;
 - (BOOL)getNextTrips:(NSMutableArray*)_trips ForTrip:(MTTrip*)stop ForRoute:(MTBus*)bus;
 
 @end
