@@ -32,6 +32,7 @@
         _trainAnnotation = [[MTBusAnnotation alloc] initWithCoordinate:CLLocationCoordinate2DMake(0, 0)];
         _trainAnnotation.busNumber = @"OTrn";
         _trainLastLocation = -1;
+        _chosenDate = [NSDate date];
     }
     return self;
 }
@@ -77,6 +78,7 @@
     
     //view
     _backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]];
+    self.title = @"OTrain";
     
     //setup tableview header
     _tableViewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, kMTTRIPHEADERHEIGHT)];
@@ -109,6 +111,8 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    
+    [self cancelQueues];
     
     _tableView = nil;
     _trips = nil;
@@ -161,7 +165,6 @@
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.language = _language;
-        cell.delegate = self;
         cell.alertSelected = NO;
         cell.useForTrain = YES;
     }
@@ -207,7 +210,7 @@
         NSString *headerTime = trip.StopName;
         if(headerTime == nil)
             headerTime = @"";
-        tableViewHeaderLabel.text = headerTime;
+        tableViewHeaderLabel.text = [NSString stringWithFormat:@"%@: %@", [MTHelper DateDashesYYYYMMDD:_chosenDate], headerTime];
         
         if(_trainAnnotation != nil)
         {
@@ -268,11 +271,13 @@
 {
     [_loadingIndicator stopAnimating];
     
+
+    
     if(state == MTRESULTSTATE_SUCCESS)
     {
         _trips = nil;
         _trips = trips;
-        [_tableView reloadData];
+        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
         
         //determine where to scroll too my fav stop
         for(int x=0; x<_trips.count; x++)
@@ -308,7 +313,7 @@
         
         _trips = nil;
         _trips = [NSArray arrayWithObject:trip];
-        [_tableView reloadData];
+        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     }
     
     if(_tableView.alpha != 1.0)
@@ -613,6 +618,17 @@
     
     //other wise update the train location
     [self getTrainLocation:nil];
+}
+
+#pragma mark - QUEUE SAFE
+
+- (void)cancelQueues
+{
+    _stop.cancelQueue = YES;
+    _stop2.cancelQueue = YES;
+    
+    [_stop cancelQueuesForBuses];
+    [_stop2 cancelQueuesForBuses];
 }
 
 @end

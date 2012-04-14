@@ -15,18 +15,24 @@
 #define kHiddenHeight 86
 #define kFullHeight 130
 #define kCellExpandSpacer 1
+#define kElementNextTimesCount 3
+#define kElementNextTimesElementCount 4
+#define kElementNextTimesSpacer (300 / kElementNextTimesCount) + 9 //300 is width of _dataScrollView
+#define kElementNextTimesImageRect CGRectMake(9, 10, 21, 22)
 
 @protocol MTCardCellDelegate <NSObject>
 @required
 - (void)mtCardCellnextTimeClickedForStop:(MTStop*)stop;
 @end
 
-@interface MTCardCell : UITableViewCell
+@interface MTCardCell : UITableViewCell //<UIScrollViewDelegate>
 {
     BOOL                            _modeLarge;
+    BOOL                            _remaingTimeShown;
     MTStop*                         _stop;
     id<MTCardCellDelegate> __weak   _delegate;
     MTLanguage                      _language;
+    NSString*                       _nextTimeValue;
     
     //UI Components
     IBOutlet UILabel*               _busNumber;
@@ -38,6 +44,7 @@
     IBOutlet UILabel*               _direction;
     IBOutlet UIView*                _titleView;
     IBOutlet UIView*                _detailsView;
+    IBOutlet UIScrollView*          _dataScrollView;
     IBOutlet UIActivityIndicatorView* _loadingAnimation;
     IBOutlet UIImageView*           _titleBackground;
     IBOutlet UIImageView*           _detailsBackground;
@@ -47,6 +54,8 @@
     IBOutlet UILabel*               _nextHeading;
     IBOutlet UILabel*               _distanceHeading;
     IBOutlet UILabel*               _directionHeading;
+    //page 1
+    NSMutableArray*                 _nextTimes;
 }
 
 @property (weak) id<MTCardCellDelegate>     delegate;

@@ -46,8 +46,6 @@
     
     _tableView.dataSource = self;
     _tableView.delegate = self;
-    
-    [self.view addGestureRecognizer:_panGesture];
 }
 
 - (void)viewDidUnload
@@ -60,6 +58,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self.view addGestureRecognizer:_panGesture];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -70,6 +70,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    [self.view removeGestureRecognizer:_panGesture];
 }
 
 - (void)viewDidDisappear:(BOOL)animated

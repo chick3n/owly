@@ -55,6 +55,7 @@
 - (NSArray*)getWeekdayTimesForDisplay;
 - (NSArray*)getSaturdayTimesForDisplay;
 - (NSArray*)getSundayTimesForDisplay;
+- (NSArray*)getNextTimesOfAmount:(int)count;
 
 //debug helper methods
 - (NSString *)description;

@@ -150,10 +150,6 @@
             break;
         case MTVCTRAIN:
             newView = [[OTrainViewController alloc] initWithNibName:@"OTrainViewController" bundle:nil];
-            optionsView = [[MTOptionsDate alloc] initWithNibName:@"MTOptionsDate" bundle:nil];
-            optionsView.lastDate = _lastDate;
-            optionsView.selectedDate = [NSDate date];
-            optionsView.delegateOptions = (OTrainViewController*)newView;
             break;
         case MTVCUNKNOWN:
         case MTVCNOTICIES:

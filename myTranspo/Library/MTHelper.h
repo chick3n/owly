@@ -15,8 +15,10 @@
 + (int)DayOfWeekForDate:(NSDate*)date;
 + (MTResultState)QuickResultState:(BOOL)status;
 + (NSString*)CurrentTimeHHMMSS;
++ (NSString*)DateDashesYYYYMMDD:(NSDate*)date;
 + (NSDateFormatter*)MTDateFormatterDashesYYYYMMDD;
 + (BOOL)IsDateToday:(NSDate*)date;
 + (MTTranspoTypes)transpoTypeBasedOnCity:(MTCity)city;
++ (NSString*)timeRemaingUntilTime:(NSString*)time;
 
 @end

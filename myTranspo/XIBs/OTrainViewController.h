@@ -18,7 +18,7 @@
 
 #define kMTTrainTimerInterval 60
 
-@interface OTrainViewController : MTBaseViewController<UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, MTQueueSafe, MyTranspoDelegate, MTTripCellDelegate, MKMapViewDelegate>
+@interface OTrainViewController : MTBaseViewController<UITableViewDelegate, UITableViewDataSource, MTQueueSafe, MyTranspoDelegate, MKMapViewDelegate>
 {
     NSArray*                _trips;
     MTTrip*                 _trip;

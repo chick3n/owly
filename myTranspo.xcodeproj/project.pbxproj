@@ -363,8 +363,8 @@
 		319D788115371B5A00542ED3 /* MTCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCard.m; sourceTree = "<group>"; };
 		319D788215371B5A00542ED3 /* MTCard.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTCard.xib; sourceTree = "<group>"; };
 		319D788415371B5A00542ED3 /* MTCardCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTCardCell.xib; sourceTree = "<group>"; };
-		319D788515371B5A00542ED3 /* MTCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCardCell.h; sourceTree = "<group>"; };
-		319D788615371B5A00542ED3 /* MTCardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCardCell.m; sourceTree = "<group>"; };
+		319D788515371B5A00542ED3 /* MTCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTCardCell.h; path = myTranspo/UIComponents/MTCardCell.h; sourceTree = SOURCE_ROOT; };
+		319D788615371B5A00542ED3 /* MTCardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTCardCell.m; path = myTranspo/UIComponents/MTCardCell.m; sourceTree = SOURCE_ROOT; };
 		319D788715371B5A00542ED3 /* MTCardManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCardManager.h; sourceTree = "<group>"; };
 		319D788815371B5A00542ED3 /* MTCardManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCardManager.m; sourceTree = "<group>"; };
 		319D788915371B5A00542ED3 /* MTCardManagerQuickSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCardManagerQuickSelect.h; sourceTree = "<group>"; };
@@ -511,8 +511,6 @@
 				319D781115371B5A00542ED3 /* Assets */,
 				319D787F15371B5A00542ED3 /* MTCard */,
 				319D788315371B5A00542ED3 /* MTCardCell */,
-				319D788515371B5A00542ED3 /* MTCardCell.h */,
-				319D788615371B5A00542ED3 /* MTCardCell.m */,
 				319D788715371B5A00542ED3 /* MTCardManager.h */,
 				319D788815371B5A00542ED3 /* MTCardManager.m */,
 				319D788915371B5A00542ED3 /* MTCardManagerQuickSelect.h */,
@@ -660,6 +658,8 @@
 		319D788315371B5A00542ED3 /* MTCardCell */ = {
 			isa = PBXGroup;
 			children = (
+				319D788515371B5A00542ED3 /* MTCardCell.h */,
+				319D788615371B5A00542ED3 /* MTCardCell.m */,
 				319D788415371B5A00542ED3 /* MTCardCell.xib */,
 			);
 			path = MTCardCell;

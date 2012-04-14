@@ -266,6 +266,11 @@
 
 - (NSArray*)getNextThreeTimes
 {
+    return [self getNextTimesOfAmount:3];
+}
+
+- (NSArray*)getNextTimesOfAmount:(int)count
+{
     NSArray* timesToParse = nil;
     NSMutableArray *foundTimes = nil;
     
@@ -294,15 +299,15 @@
     if(timesToParse == nil)
         return nil;
     
-    foundTimes = [[NSMutableArray alloc] initWithCapacity:3];
-    long compareTime = [[NSDate date] timeIntervalSince1970];
+    foundTimes = [[NSMutableArray alloc] initWithCapacity:count];
+    NSString* currentTime = [MTHelper CurrentTimeHHMMSS];
     
     for(MTTime *time in timesToParse)
     {
-        if(foundTimes.count >= 3)
+        if(foundTimes.count >= count)
             break;
         
-        if([time getTimeInSeconds] > compareTime)
+        if([time compareTimesHHMMSS:currentTime Ordering:1] > 0)
         {
             [foundTimes addObject:time];
         }

@@ -244,6 +244,8 @@
           Times:(NSDate*)date
         Results:(NSDictionary*)results
 {
+    return NO;
+    
     if(stop == nil || bus == nil)
         return NO;
     
@@ -531,6 +533,8 @@
             newTrip.BusSpeed = ([trip valueForKey:@"Speed"] != nil) ? [(NSString*)[trip valueForKey:@"Speed"] floatValue] : 0.0;
             newTrip.Latitude = ([trip valueForKey:@"Latitude"] != nil) ? [(NSString*)[trip valueForKey:@"Latitude"] doubleValue] : 0.0;
             newTrip.Longitude = ([trip valueForKey:@"Longitude"] != nil) ? [(NSString*)[trip valueForKey:@"Longitude"] doubleValue] : 0.0;
+            
+            MTLog(@"API: BusSpeed: %@ Lat: %@ Lon: %@ Time: %@", newTrip.BusSpeed, newTrip.Latitude, newTrip.Longitude, newTrip.Time.Time);
             
             [_trips addObject:newTrip];
         }

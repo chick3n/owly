@@ -52,6 +52,44 @@
     return [dateFormatter stringFromDate:[NSDate date]];
 }
 
++ (NSString*)timeRemaingUntilTime:(NSString*)time
+{
+    NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
+    [timeFormatter setDateFormat:@"HH:mm"];
+    [timeFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    [timeFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
+    [timeFormatter setDefaultDate:[NSDate date]];
+    
+    NSDate* chosenTime = [timeFormatter dateFromString:time];
+    
+    if(chosenTime == nil)
+        return time;
+    
+    NSDate* today = [NSDate date];
+    NSString* timeRemaining = @"";
+    
+    NSTimeInterval timeBetweenDates = [chosenTime timeIntervalSinceDate:today];
+    if(timeBetweenDates < 0)
+        return time;
+    
+    NSCalendar *sysCalendar = [NSCalendar currentCalendar];
+    unsigned int unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSDayCalendarUnit | NSMonthCalendarUnit;
+    NSDateComponents *conversionInfo = [sysCalendar components:unitFlags fromDate:today  toDate:chosenTime  options:0];
+    
+    timeRemaining = [NSString stringWithFormat:@"%dm", [conversionInfo minute]];
+    
+    if(timeRemaining == nil)
+        return time;
+    
+    return timeRemaining;
+}
+
++ (NSString*)DateDashesYYYYMMDD:(NSDate*)date
+{
+    NSDateFormatter* dateFormatter = [self MTDateFormatterDashesYYYYMMDD];
+    return [dateFormatter stringFromDate:date];
+}
+
 + (NSDateFormatter*)MTDateFormatterDashesYYYYMMDD
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
