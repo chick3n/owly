@@ -51,7 +51,7 @@
     _distanceHeading.text = NSLocalizedString(@"MTDEF_CARDDISTANCE", nil);
     _directionHeading.text = NSLocalizedString(@"MTDEF_CARDDIRECTION", nil);
     
-    _dataScrollView.contentSize = CGSizeMake(_dataScrollView.frame.size.width * 2, _dataScrollView.frame.size.height);
+    _dataScrollView.contentSize = CGSizeMake(_dataScrollView.frame.size.width + 163, _dataScrollView.frame.size.height);
    // _dataScrollView.delegate = self;
     
     //page 1
@@ -59,6 +59,8 @@
     CGRect nextTimesFooterFrame = _prevHeading.frame;
     CGRect nextTimesImagesFrame = kElementNextTimesImageRect;
     CGRect nextTimesLabelFrame = _prevTime.frame;
+    
+    nextTimesLabelFrame.origin.x -= 4;
     
     nextTimesLabelFrame.origin.x += _dataScrollView.frame.size.width;
     nextTimesFooterFrame.origin.x += _dataScrollView.frame.size.width;
@@ -85,9 +87,20 @@
         nextTimeFooter.backgroundColor = _prevHeading.backgroundColor;
         nextTimeFooter.textAlignment = _prevHeading.textAlignment;
         nextTimeFooter.textColor = _prevHeading.textColor;
-        nextTimeFooter.text = _nextHeading.text;
         nextTimeFooter.shadowColor = _nextHeading.shadowColor;
         nextTimeFooter.shadowOffset = _nextHeading.shadowOffset;
+        CGRect footerAdjusterFrame = nextTimeFooter.frame;
+        switch (page1) {
+            case 1:
+                nextTimeFooter.text = NSLocalizedString(@"BUS3AWAY", nil);
+                footerAdjusterFrame.origin.x += 12;
+                break;
+            default:
+                nextTimeFooter.text = NSLocalizedString(@"BUSFOLLOWING", nil);
+                footerAdjusterFrame.origin.x += 4;
+                break;
+        }
+        nextTimeFooter.frame = footerAdjusterFrame;
         [_nextTimes addObject:nextTimeFooter];
         
         NSString* setTime = MTDEF_TIMEUNKNOWN;
@@ -310,7 +323,7 @@
             return;
         }
             
-        NSArray* times = [bus getNextTimesOfAmount:3];
+        NSArray* times = [bus getNextTimesOfAmount:kElementNextTimesCount+1];
         
         if(times == nil || times.count <= 0)
         {
@@ -318,7 +331,8 @@
             return;
         }
         
-        for(int x=0, ele=0; ele<_nextTimes.count; x++, ele+=kElementNextTimesElementCount)
+        //skip first one as we have it already
+        for(int x=1, ele=0; ele<_nextTimes.count; x++, ele+=kElementNextTimesElementCount)
         {
             MTTime* time = nil;
             if(x < times.count)

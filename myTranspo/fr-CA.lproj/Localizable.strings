@@ -24,6 +24,9 @@
 //UI ELEMENTS
 "MTDEF_CARDPREVIOUS" = "précédent";
 "MTDEF_CARDNEXT" = "prochain";
+"BUSFOLLOWING" = "suivant";
+"BUS3AWAY" = "3 loin";
+"BUSHERENOW" = "ici";
 "MTDEF_CARDDISTANCE" = "distance";
 "MTDEF_CARDDIRECTION" = "direction";
 "MTDEF_CARDWEEKDAY" = "jour de la semaine";
@@ -38,7 +41,7 @@
 "MTDEF_VIEWCONTROLLERTRAIN" = "train";
 "MTDEF_EDIT" = "éditer";
 "MTDEF_DONE" = "fait";
-"MTDEF_PULLDOWNTOREFRESH" = "Tirez vers le bas pour rafraîchir";
+"MTDEF_PULLDOWNTOREFRESH" = "Tirez pour rafraîchir";
 "MTDEF_RELEASETOREFRESH" = "Relâchez pour rafraîchir";
 "MTDEF_LOADING" = "Chargement...";
 "MTDEF_STOPS" = "Arrêts de Bus";

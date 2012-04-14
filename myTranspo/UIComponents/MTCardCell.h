@@ -15,9 +15,9 @@
 #define kHiddenHeight 86
 #define kFullHeight 130
 #define kCellExpandSpacer 1
-#define kElementNextTimesCount 3
+#define kElementNextTimesCount 2
 #define kElementNextTimesElementCount 4
-#define kElementNextTimesSpacer (300 / kElementNextTimesCount) + 9 //300 is width of _dataScrollView
+#define kElementNextTimesSpacer 80
 #define kElementNextTimesImageRect CGRectMake(9, 10, 21, 22)
 
 @protocol MTCardCellDelegate <NSObject>

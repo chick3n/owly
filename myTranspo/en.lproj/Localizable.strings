@@ -32,6 +32,9 @@
 //UI ELEMENTS
 "MTDEF_CARDPREVIOUS" = "Previous";
 "MTDEF_CARDNEXT" = "Next";
+"BUSFOLLOWING" = "Following";
+"BUS3AWAY" = "3 Away";
+"BUSHERENOW" = "Now";
 "MTDEF_CARDDISTANCE" = "Distance";
 "MTDEF_CARDDIRECTION" = "Direction";
 "MTDEF_CARDWEEKDAY" = "Weekday";

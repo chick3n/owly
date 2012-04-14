@@ -75,12 +75,21 @@
     NSCalendar *sysCalendar = [NSCalendar currentCalendar];
     unsigned int unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSDayCalendarUnit | NSMonthCalendarUnit;
     NSDateComponents *conversionInfo = [sysCalendar components:unitFlags fromDate:today  toDate:chosenTime  options:0];
-    
-    timeRemaining = [NSString stringWithFormat:@"%dm", [conversionInfo minute]];
-    
+
+    if([conversionInfo day] >= 1)
+        timeRemaining = @"1d+";
+    else if([conversionInfo hour] > 0 || [conversionInfo minute] > 0)
+    {
+        timeRemaining = [NSString stringWithFormat:@"%dm", ([conversionInfo hour] * 60) + [conversionInfo minute]];
+    }
+    else
+    {
+        timeRemaining = NSLocalizedString(@"BUSHERENOW", nil);
+    }
+
     if(timeRemaining == nil)
         return time;
-    
+
     return timeRemaining;
 }
 
