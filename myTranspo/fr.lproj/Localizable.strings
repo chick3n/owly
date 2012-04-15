@@ -27,6 +27,7 @@
 "BUSFOLLOWING" = "suivant";
 "BUS3AWAY" = "3 loin";
 "BUSHERENOW" = "ici";
+"SPEED" = "vitesse";
 "MTDEF_CARDDISTANCE" = "distance";
 "MTDEF_CARDDIRECTION" = "direction";
 "MTDEF_CARDWEEKDAY" = "jour de la semaine";

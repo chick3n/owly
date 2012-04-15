@@ -19,6 +19,8 @@
 @synthesize Language                    = _language;
 @synthesize Times                       = _times;
 @synthesize chosenDate                  = _chosenDate;
+@synthesize BusSpeed                    = _busSpeed;
+@synthesize TrueDisplayHeading          = _trueDisplayHeading;
 
 - (id)init
 {
@@ -55,23 +57,26 @@
         _times = [[MTTimes alloc] init];
         _liveTimes = [[MTTimeLive alloc] init];
         _chosenDate = [NSDate date];
+        _busSpeed = MTDEF_STOPDISTANCEUNKNOWN;
     }
     
     return self;
 }
 
+//also clears everything that is set from the Bus Data
 - (BOOL)clearLiveTimes
 {
     _hasGpsTime = NO;
     _liveTimes.LastUpdated = nil;
     _liveTimes.Times = nil;
+    _busSpeed = MTDEF_STOPDISTANCEUNKNOWN;
+    _trueDisplayHeading = nil;
+    
     return YES;
 }
 
 - (BOOL)addLiveTimes:(NSArray*)times
 {
-    [self clearLiveTimes];
-    
     _liveTimes.Times = times;
     _liveTimes.LastUpdated = [NSDate date];
     _hasGpsTime = YES;
@@ -216,16 +221,24 @@
 }
 
 #pragma mark - TIME OPERATIONS
-
+//ToDo: Does not work well with times past midnight that are associated to the previous day still, relying on GPS times for now to resolve
+//To Fix this we can set that OC dates start after 4am, but we cannot assume this is true for other transit types
 - (NSString *)getNextTime
 {
     NSArray* timesToParse = nil;
     
     if(_liveTimes != nil && _hasGpsTime)
     {
-        timesToParse = _liveTimes.Times;
+        if(_liveTimes.Times != nil)
+        {
+            if(_liveTimes.Times.count > 0)
+            {
+                timesToParse = _liveTimes.Times;
+            }
+        }
     }
-    else
+    
+    if(timesToParse == nil)
     {
         if(_times == nil)
             return MTDEF_TIMEUNKNOWN;
@@ -266,19 +279,26 @@
 
 - (NSArray*)getNextThreeTimes
 {
-    return [self getNextTimesOfAmount:3];
+    return [self getNextTimesOfAmount:3 IncludeLiveTime:YES];
 }
 
-- (NSArray*)getNextTimesOfAmount:(int)count
+- (NSArray*)getNextTimesOfAmount:(int)count IncludeLiveTime:(BOOL)useLive
 {
     NSArray* timesToParse = nil;
     NSMutableArray *foundTimes = nil;
     
-    if(_liveTimes != nil && _hasGpsTime)
+    if(_liveTimes != nil && _hasGpsTime && useLive)
     {
-        timesToParse = _liveTimes.Times;
+        if(_liveTimes.Times != nil)
+        {
+            if(_liveTimes.Times.count > 0)
+            {
+                timesToParse = _liveTimes.Times;
+            }
+        }
     }
-    else
+    
+    if(timesToParse == nil)
     {
         if(_times == nil)
             return nil;
@@ -362,49 +382,14 @@
 
 - (MTTime*)getCurrentTrip
 {
-    NSArray* timesToParse = nil;
-    
-    if(_liveTimes != nil && _hasGpsTime)
-    {
-        timesToParse = _liveTimes.Times;
-    }
-    else
-    {
-        if(_times == nil)
-            return nil;
-        
-        switch ([MTHelper DayOfWeekForDate:_chosenDate]) {
-            case 1: //Sunday
-                timesToParse = _times.TimesSun;
-                break;
-            case 7:
-                timesToParse = _times.TimesSat;
-                break;
-            default:
-                timesToParse = _times.Times;
-                break;
-        }
-    }
-    
-    if(timesToParse == nil)
+    NSArray* trips = [self getNextTimesOfAmount:1 IncludeLiveTime:NO];
+    if(trips == nil)
         return nil;
     
-    NSString* currentTime = [MTHelper CurrentTimeHHMMSS];
-    MTTime *nextTime = nil;
+    if(trips.count <= 0)
+        return nil;
     
-    for(MTTime *time in timesToParse)
-    {
-        if([time compareTimesHHMMSS:currentTime Ordering:1] > 0)
-        {
-            nextTime = time;
-            break;
-        }
-    }
-    
-    if(nextTime != nil)
-        return nextTime;
-    
-    return nil;
+    return (MTTime*)[trips objectAtIndex:0];
 }
 
 #pragma mark - DEBUG HELPERS

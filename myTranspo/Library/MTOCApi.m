@@ -77,6 +77,8 @@
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:postData];
+    [request setTimeoutInterval:MTDEF_CONNECTIONTIMEOUT];
+    [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     
     NSURLResponse* response;
     NSError* error;
@@ -244,8 +246,6 @@
           Times:(NSDate*)date
         Results:(NSDictionary*)results
 {
-    return NO;
-    
     if(stop == nil || bus == nil)
         return NO;
     
@@ -253,19 +253,19 @@
     if(![MTHelper IsDateToday:date])
         return NO;
     
-    NSString *soapRequest = [self createSoapRequest:
-                             [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"GetNextTripsForStop", bus.BusNumber, [NSString stringWithFormat:@"%d", stop.StopNumber], _apiKey, nil]
-                                                         forKeys:[NSArray arrayWithObjects:@"header", @"routeNo", @"stopNo", @"apiKey", nil]]];
     if(stop.cancelQueue || bus.cancelQueue)
         return NO;
-    
-    NSData* xmlData = [self sendSoapRequest:soapRequest WithAction:@"GetNextTripsForStop"];
+
+    NSData* xmlData = [self sendSoapRequest:[NSString stringWithFormat:@"appID=%@&apiKey=%@&routeNo=%@&stopNo=%d"
+                                             , _applicationId
+                                             , _apiKey
+                                             , bus.BusNumber
+                                             , stop.StopNumber]
+                                 WithAction:@"GetNextTripsForStop"];
      
      if(xmlData == nil)
          return NO;
-     
     
-    //NSData* xmlData = [[NSData alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"GetRouteStopsAPISample" ofType:@"xml"]];
     NSDictionary *xmlDic = [XMLReader dictionaryForXMLData:xmlData error:nil];
     
     if(xmlDic == nil)
@@ -274,9 +274,9 @@
         return NO;
     }
     
-    if([xmlDic valueForKeyPath:@"StopInfoData.Error"] != nil)
+    if([xmlDic valueForKeyPath:@"GetNextTripsForStopResult.Error"] != nil)
     {
-        NSString *queryError = [xmlDic valueForKeyPath:@"StopInfoData.Error"];
+        NSString *queryError = [xmlDic valueForKeyPath:@"GetNextTripsForStopResult.Error"];
         if(queryError.length > 0)
         {
             MTLog(@"StopInfoData Error: %@", queryError);
@@ -284,12 +284,21 @@
         }
     }
     
+    [bus clearLiveTimes];
+    
     //we now have to determine which bus we want because you can only pass it a stop & a number, in most cases this will return 1 bus however
     //at larger stops BASELINE STATION for example the bus 95 goes both ways. Based on the data given we can take 2 approaches:
     //1 compare bus number and route label
     //2 compare bus number and direction if step 1 fails?
-    
-    NSArray *routes = [xmlDic valueForKeyPath:@"StopInfoData.Route.RouteDirection"];
+
+    NSArray *routes = [xmlDic valueForKeyPath:@"GetNextTripsForStopResult.Route.RouteDirection.node"]; 
+    if(routes == nil)
+    {
+        NSDictionary* tmpRoutes = [xmlDic valueForKeyPath:@"GetNextTripsForStopResult.Route.RouteDirection"];
+        if(tmpRoutes == nil)
+            return NO;
+        routes = [NSArray arrayWithObject:tmpRoutes]; //only 1 routedirection
+    }
     NSArray *trips = nil; //trip match
     
     for(NSDictionary *routeDirection in routes)
@@ -312,9 +321,12 @@
         if(routeNumber == nil || routeLabel == nil) //not possible?
             continue;
         
+        if(routeHeading != nil)
+            bus.BusHeading = [MTHelper convertOCBusHeading:routeHeading];
+        
         if([bus.BusNumber isEqualToString:routeNumber] && [bus.DisplayHeading isEqualToString:routeLabel])
         {
-            trips = [routeDirection valueForKeyPath:@"Trips.Trip"];
+            trips = [routeDirection valueForKeyPath:@"Trips.Trip.node"];
             if(trips != nil)
                 break;
         }
@@ -322,33 +334,50 @@
         //didnt break, didnt find it
         if([bus.BusNumber isEqualToString:routeNumber] && [[bus getBusHeadingOCStyle] isEqualToString:routeHeading])
         {
-            trips = [routeDirection valueForKeyPath:@"Trips.Trip"];
+            trips = [routeDirection valueForKeyPath:@"Trips.Trip.node"];
             if(trips != nil)
                 break;
         }
     }
-    
+
     NSMutableArray *_trips = [[NSMutableArray alloc] init];
     if(trips != nil && trips.count > 0)
     {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateStyle:NSDateFormatterNoStyle];
-        [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
-        [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
-        [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
+        NSDateFormatter *dateFormatter = [MTHelper TimeFormatter];
         
         for(NSDictionary *trip in trips)
         {
-            MTTrip* newTrip = [[MTTrip alloc] init];
+            MTTime* newTrip = [[MTTime alloc] init];
+            //MTTrip* newTrip = [[MTTrip alloc] initWithLanguage:_language];
+            
+            NSString *destination = [trip valueForKey:@"TripDestination"];
+            if(destination != nil)
+                bus.TrueDisplayHeading = destination;
+            
+            NSString *GPSSpeed = [trip valueForKey:@"GPSSpeed"];
+            if(GPSSpeed != nil)
+                bus.BusSpeed = [NSString stringWithFormat:@"%d km/h", [GPSSpeed intValue]];
             
             //Is GPS?
             if([trip objectForKey:@"AdjustmentAge"] != nil)
             {
                 if([(NSString*)[trip valueForKey:@"AdjustmentAge"] floatValue] >= 0.0)
-                    newTrip.Time.IsLive = YES;
+                {
+                    newTrip.IsLive = YES;
+                    //GPS Time            
+                    NSTimeInterval minutesAdjusted = ([trip objectForKey:@"AdjustedScheduleTime"] != nil) ? [[trip objectForKey:@"AdjustedScheduleTime"] doubleValue] * 60 : 0;
+                    newTrip.Time = [dateFormatter stringFromDate:[[NSDate date] dateByAddingTimeInterval:minutesAdjusted]];
+                    newTrip.Time = [MTHelper convertOC24HourTime:newTrip.Time];
+                    MTLog(@"GPS Live Time: %@", newTrip.Time);
+                }
                 else
                 {
-                    return NO;
+                    newTrip.IsLive = NO;
+                    //GPS Time            
+                    NSTimeInterval minutesAdjusted = ([trip objectForKey:@"AdjustedScheduleTime"] != nil) ? [[trip objectForKey:@"AdjustedScheduleTime"] doubleValue] * 60 : 0;
+                    newTrip.Time = [dateFormatter stringFromDate:[[NSDate date] dateByAddingTimeInterval:minutesAdjusted]];
+                    newTrip.Time = [MTHelper convertOC24HourTime:newTrip.Time];
+                    MTLog(@"GPS Schedule Time: %@", newTrip.Time);
                 }
             }
             else
@@ -356,32 +385,10 @@
                 return NO;
             }
             
-            newTrip.Destination = ([trip valueForKey:@"TripDestination"] != nil) ? [trip valueForKey:@"TripDestination"] : @"";
-            newTrip.StartTime = ([trip valueForKey:@"TripStartTime"] != nil) ? [trip valueForKey:@"TripStartTime"] : @"";
-            
-            newTrip.LastTrip = NO;
-            NSString *sLastTrip = [trip valueForKey:@"LastTripOfSchedule"];
-            if(sLastTrip != nil)
-            {
-                if([sLastTrip isEqualToString:@"false"])
-                    newTrip.LastTrip = NO;
-                else newTrip.LastTrip = YES;
-            }
-            
-            //Bus Type here
-            
-            //GPS Time
-            NSTimeInterval minutesAdjusted = ([trip objectForKey:@"AdjustedScheduleTime"] != nil) ? [[trip objectForKey:@"AdjustedScheduleTime"] doubleValue] * 60 : 0;
-            newTrip.Time.Time = [dateFormatter stringFromDate:[[NSDate date] dateByAddingTimeInterval:minutesAdjusted]];
-            
-            newTrip.BusSpeed = ([trip valueForKey:@"Speed"] != nil) ? [(NSString*)[trip valueForKey:@"Speed"] floatValue] : 0.0;
-            newTrip.Latitude = ([trip valueForKey:@"Latitude"] != nil) ? [(NSString*)[trip valueForKey:@"Latitude"] doubleValue] : 0.0;
-            newTrip.Longitude = ([trip valueForKey:@"Longitude"] != nil) ? [(NSString*)[trip valueForKey:@"Longitude"] doubleValue] : 0.0;
-            
             [_trips addObject:newTrip];
         }
         
-        //[bus addLiveTimes:_trips];
+        [bus addLiveTimes:_trips];
     }
     
     return (_trips.count);
@@ -429,12 +436,12 @@
         return NO;
     }
     
-    if([xmlDic valueForKeyPath:@"StopInfoData.Error"] != nil)
+    if([xmlDic valueForKeyPath:@"GetNextTripsForStopResult.Error"] != nil)
     {
-        NSString *queryError = [xmlDic valueForKeyPath:@"StopInfoData.Error"];
+        NSString *queryError = [xmlDic valueForKeyPath:@"GetNextTripsForStopResult.Error"];
         if(queryError.length > 0)
         {
-            MTLog(@"StopInfoData Error: %@", queryError);
+            MTLog(@"GetNextTripsForStopResult Error: %@", queryError);
             return NO;
         }
     }
@@ -447,7 +454,14 @@
     //1 compare bus number and route label
     //2 compare bus number and direction if step 1 fails?
     
-    NSArray *routes = [xmlDic valueForKeyPath:@"GetNextTripsForStopResult.Route.RouteDirection.node"];
+    NSArray *routes = [xmlDic valueForKeyPath:@"GetNextTripsForStopResult.Route.RouteDirection.node"]; 
+    if(routes == nil)
+    {
+        NSDictionary* tmpRoutes = [xmlDic valueForKeyPath:@"GetNextTripsForStopResult.Route.RouteDirection"];
+        if(tmpRoutes == nil)
+            return NO;
+        routes = [NSArray arrayWithObject:tmpRoutes]; //only 1 routedirection
+    }
     NSArray *trips = nil; //trip match
     
     for(NSDictionary *routeDirection in routes)

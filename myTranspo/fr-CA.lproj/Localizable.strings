@@ -11,10 +11,10 @@
 "MTDEF_BUSNAMEUNKNOWN" = "inconnu";
 //DIRECTIIONS
 "MTDEF_DIRECTIONUNKNOWN" = "inconnu";
-"MTDEF_DIRECTIONNORTH" = "nord";
-"MTDEF_DIRECTIONSOUTH" = "sud";
-"MTDEF_DIRECTIONEAST" = "est";
-"MTDEF_DIRECTIONWEST" = "ouest";
+"MTDEF_DIRECTIONNORTH" = "Nord";
+"MTDEF_DIRECTIONSOUTH" = "Sud";
+"MTDEF_DIRECTIONEAST" = "Est";
+"MTDEF_DIRECTIONWEST" = "Ouest";
 //OC Label for Descriptions as provided by them through their API
 "MTDEF_DIRECTIONUNKNOWNOC" = "inconnu";
 "MTDEF_DIRECTIONNORTHOC" = "du nord";
@@ -27,6 +27,7 @@
 "BUSFOLLOWING" = "suivant";
 "BUS3AWAY" = "3 loin";
 "BUSHERENOW" = "ici";
+"SPEED" = "vitesse";
 "MTDEF_CARDDISTANCE" = "distance";
 "MTDEF_CARDDIRECTION" = "direction";
 "MTDEF_CARDWEEKDAY" = "jour de la semaine";

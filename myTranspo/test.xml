@@ -96,3 +96,56 @@
         </RouteDirection>
     </Route>
 </GetNextTripsForStopResult>
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<GetNextTripsForStopResult>
+    <StopNo>7007</StopNo>
+    <StopLabel>CRICHTON   KEEFER</StopLabel>
+    <Error></Error>
+    <Route>
+        <RouteDirection>
+            <RouteNo>9</RouteNo>
+            <RouteLabel>Rideau C./Ctr Rideau</RouteLabel>
+            <Direction>Southbound</Direction>
+            <Error></Error>
+            <RequestProcessingTime>20120414153326</RequestProcessingTime>
+            <Trips>
+                <Trip>
+                    <node>
+                        <TripDestination>Downtown / Centre-ville</TripDestination>
+                        <TripStartTime>15:43</TripStartTime>
+                        <AdjustedScheduleTime>23</AdjustedScheduleTime>
+                        <AdjustmentAge>-1</AdjustmentAge>
+                        <LastTripOfSchedule></LastTripOfSchedule>
+                        <BusType>4L - DEH</BusType>
+                        <Latitude></Latitude>
+                        <Longitude></Longitude>
+                        <GPSSpeed></GPSSpeed>
+                    </node>
+                    <node>
+                        <TripDestination>Downtown / Centre-ville</TripDestination>
+                        <TripStartTime>16:13</TripStartTime>
+                        <AdjustedScheduleTime>53</AdjustedScheduleTime>
+                        <AdjustmentAge>-1</AdjustmentAge>
+                        <LastTripOfSchedule></LastTripOfSchedule>
+                        <BusType>4L - IN</BusType>
+                        <Latitude></Latitude>
+                        <Longitude></Longitude>
+                        <GPSSpeed></GPSSpeed>
+                    </node>
+                    <node>
+                        <TripDestination>Downtown / Centre-ville</TripDestination>
+                        <TripStartTime>16:43</TripStartTime>
+                        <AdjustedScheduleTime>83</AdjustedScheduleTime>
+                        <AdjustmentAge>-1</AdjustmentAge>
+                        <LastTripOfSchedule></LastTripOfSchedule>
+                        <BusType>4LA - DEH</BusType>
+                        <Latitude></Latitude>
+                        <Longitude></Longitude>
+                        <GPSSpeed></GPSSpeed>
+                    </node>
+                </Trip>
+            </Trips>
+        </RouteDirection>
+    </Route>
+</GetNextTripsForStopResult>

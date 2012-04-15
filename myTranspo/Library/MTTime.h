@@ -47,6 +47,7 @@
 - (long)getStartTimeInSeconds;
 - (NSString*)getTimeForDisplay;
 - (int)compareTimesHHMMSS:(NSString*)time Ordering:(int)orderBy;
+- (int)compareTimesHHMMSS:(NSString*)time Ordering:(int)orderBy PassedMidnight:(BOOL)passMidnight;
 
 @end
 

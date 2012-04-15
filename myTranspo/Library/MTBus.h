@@ -35,6 +35,8 @@
 @property (nonatomic)           MTLanguage              Language;
 @property (nonatomic, strong)   MTTimes*                Times;
 @property (nonatomic, strong)   NSDate*                 chosenDate;
+@property (nonatomic, strong)   NSString*               BusSpeed; //km/hr
+@property (nonatomic, strong)   NSString*               TrueDisplayHeading;
 
 @property (readonly, getter = getNextTime)          NSString*   NextTime;
 @property (readonly, getter = getPrevTime)          NSString*   PrevTime;
@@ -55,7 +57,7 @@
 - (NSArray*)getWeekdayTimesForDisplay;
 - (NSArray*)getSaturdayTimesForDisplay;
 - (NSArray*)getSundayTimesForDisplay;
-- (NSArray*)getNextTimesOfAmount:(int)count;
+- (NSArray*)getNextTimesOfAmount:(int)count IncludeLiveTime:(BOOL)useLive;
 
 //debug helper methods
 - (NSString *)description;

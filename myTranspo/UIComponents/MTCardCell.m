@@ -12,11 +12,14 @@
 - (void)viewForPage:(int)page;
 - (void)pageOneHelperEmptyTimes;
 - (void)nextTimesClicked:(id)sender;
+- (void)editMode:(id)sender;
+- (void)defaultMode:(id)sender;
 @end
 
 @implementation MTCardCell
 @synthesize delegate =          _delegate;
 @synthesize language =          _language;
+@synthesize indexRow =          _indexRow;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier WithLanguage:(MTLanguage)language
 {
@@ -39,6 +42,8 @@
 
 - (void)initializeUI
 {       
+    _hasExpanded = NO;
+    
     CGRect frame = _detailsView.frame;
     frame.origin.y -= _titleView.frame.size.height - frame.size.height + 24;
     _detailsView.frame = frame;
@@ -51,7 +56,7 @@
     _distanceHeading.text = NSLocalizedString(@"MTDEF_CARDDISTANCE", nil);
     _directionHeading.text = NSLocalizedString(@"MTDEF_CARDDIRECTION", nil);
     
-    _dataScrollView.contentSize = CGSizeMake(_dataScrollView.frame.size.width + 163, _dataScrollView.frame.size.height);
+    _dataScrollView.contentSize = CGSizeMake(_dataScrollView.frame.size.width, _dataScrollView.frame.size.height);
    // _dataScrollView.delegate = self;
     
     //page 1
@@ -114,6 +119,52 @@
         [_dataScrollView addSubview:nextTime];
         [_dataScrollView addSubview:nextTimeFooter];
     }
+    
+    //page 2 speed, bus type, etc
+    _moreDetails = [[NSMutableArray alloc] initWithCapacity:kElementMoreDetailsElementCount];
+    nextTimesLabelFrame.origin.x += 4;
+    for(int page2 = 0; page2 < kElementMoreDetailsCount; page2++)
+    {
+        UIImageView* moreDetailsImage = [[UIImageView alloc] initWithFrame:nextTimesImagesFrame];
+        moreDetailsImage.image = [UIImage imageNamed:@"cardcell_next_icon.png"];
+        moreDetailsImage.contentMode = UIViewContentModeCenter;
+        [_moreDetails addObject:moreDetailsImage];
+        
+        UILabel* moreDetailsLabel = [[UILabel alloc] initWithFrame:nextTimesLabelFrame];
+        moreDetailsLabel.font = _prevTime.font;
+        moreDetailsLabel.backgroundColor = _prevTime.backgroundColor;
+        moreDetailsLabel.textAlignment = _prevTime.textAlignment;
+        moreDetailsLabel.textColor = _prevTime.textColor;
+        [_moreDetails addObject:moreDetailsLabel];
+        
+        UILabel* moreDetailsFooter = [[UILabel alloc] initWithFrame:nextTimesFooterFrame];
+        moreDetailsFooter.font = _prevHeading.font;
+        moreDetailsFooter.backgroundColor = _prevHeading.backgroundColor;
+        moreDetailsFooter.textAlignment = _prevHeading.textAlignment;
+        moreDetailsFooter.textColor = _prevHeading.textColor;
+        moreDetailsFooter.shadowColor = _nextHeading.shadowColor;
+        moreDetailsFooter.shadowOffset = _nextHeading.shadowOffset;
+        CGRect footerAdjusterFrame = moreDetailsFooter.frame;
+        switch (page2) {
+            case 0:
+                moreDetailsFooter.text = NSLocalizedString(@"SPEED", nil);
+                footerAdjusterFrame.origin.x += 12;
+                break;
+        }
+        moreDetailsFooter.frame = footerAdjusterFrame;
+        [_moreDetails addObject:moreDetailsFooter];
+        
+        nextTimesLabelFrame.origin.x += kElementNextTimesSpacer;
+        nextTimesFooterFrame.origin.x += kElementNextTimesSpacer;
+        nextTimesImagesFrame.origin.x += kElementNextTimesSpacer;
+        
+        [_dataScrollView addSubview:moreDetailsImage];
+        [_dataScrollView addSubview:moreDetailsLabel];
+        [_dataScrollView addSubview:moreDetailsFooter];
+    }
+    
+    _dataScrollView.contentSize = CGSizeMake((nextTimesLabelFrame.origin.x + nextTimesLabelFrame.size.width) - kElementNextTimesSpacer
+                                             , _dataScrollView.frame.size.height);
 }
 
 - (NSInteger)getCellHeight
@@ -139,7 +190,7 @@
     _stop = stop;
     
     _busNumber.text = stop.Bus.BusNumber;
-    _busHeading.text = stop.Bus.DisplayHeading;
+    _busHeading.text = (stop.Bus.TrueDisplayHeading != nil) ? stop.Bus.TrueDisplayHeading : stop.Bus.DisplayHeading;
     _streetName.text = stop.StopName;
     
     if(stop.IsUpdating)
@@ -163,6 +214,7 @@
     _nextTimeValue = stop.Bus.NextTime;
     [_nextTime setTitle:_nextTimeValue forState:UIControlStateNormal];
     [self viewForPage:1];
+    [self viewForPage:2];
     
     [self toggleLoadingAnimation:NO];
     
@@ -185,7 +237,11 @@
     if(_modeLarge)
         return;
     
+    if(_hasExpanded)
+        return;
+    
     _modeLarge = YES;
+    _hasExpanded = YES;
     [self toggleLoadingAnimation:NO];
     
     //_titleBackground.image = [UIImage imageNamed:@"cardcell_top_background.png"];
@@ -234,7 +290,7 @@
     
     if(animate)
     {
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.25 animations:^{
             _detailsView.frame = frame;
         }];
     }
@@ -323,7 +379,7 @@
             return;
         }
             
-        NSArray* times = [bus getNextTimesOfAmount:kElementNextTimesCount+1];
+        NSArray* times = [bus getNextTimesOfAmount:kElementNextTimesCount+1 IncludeLiveTime:YES];
         
         if(times == nil || times.count <= 0)
         {
@@ -348,6 +404,25 @@
             
             [nextTime setTitle:[time getTimeForDisplay] forState:UIControlStateNormal];
             [_nextTimes replaceObjectAtIndex:ele+3 withObject:[time getTimeForDisplay]];
+        }
+    }
+    else if(page == 2)
+    {
+        if(_stop.Bus == nil)
+            return;
+        
+        NSString* speedValue = _stop.Bus.BusSpeed;
+        UILabel* speed = [_moreDetails objectAtIndex:0+1];
+        CGSize size = [speedValue sizeWithFont:speed.font];
+        speed.text = _stop.Bus.BusSpeed;
+        
+        if(speed.frame.size.width < size.width)
+        {
+            CGRect speedFrame = speed.frame;
+            speedFrame.size.width = size.width;
+            speed.frame = speedFrame;
+            
+            _dataScrollView.contentSize = CGSizeMake(speedFrame.origin.x + speedFrame.size.width + 10, _dataScrollView.frame.size.height);
         }
     }
 }
@@ -382,6 +457,46 @@
         NSString *nextTimeString = nextTime.titleLabel.text;
         [nextTime setTitle:[MTHelper timeRemaingUntilTime:nextTimeString] forState:UIControlStateNormal];
     }
+}
+
+#pragma mark - EDIT / DELETE MODE
+
+- (void)layoutSubviews
+{
+    if(self.editing)
+        self.contentView.frame = CGRectMake(0, self.contentView.frame.origin.y, self.contentView.frame.size.width
+                                            , self.contentView.frame.size.height);
+}
+
+- (void)willTransitionToState:(UITableViewCellStateMask)state
+{
+    switch (state) {
+        case UITableViewCellStateShowingEditControlMask:
+        case UITableViewCellStateShowingDeleteConfirmationMask:
+            [self editMode:nil];
+            return;
+    }
+    
+    [self defaultMode:nil];
+}
+
+- (void)editMode:(id)sender
+{
+    _delete.hidden = NO;
+    _dataScrollView.scrollEnabled = NO;
+    _dataScrollView.contentOffset = CGPointMake(0, 0);
+}
+
+- (void)defaultMode:(id)sender
+{
+    _delete.hidden = YES;
+    _dataScrollView.scrollEnabled = YES;
+}
+
+- (IBAction)deleteClicked:(id)sender
+{
+    if([_delegate conformsToProtocol:@protocol(MTCardCellDelegate)])
+        [_delegate mtCardcellDeleteClicked:self];
 }
 
 @end

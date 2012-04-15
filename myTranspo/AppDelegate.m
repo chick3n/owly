@@ -248,9 +248,8 @@
     
     _lastDate = [_transpo getLastSupportedDate];
     
-    //[_transpo addAPI];
     [_transpo addWebDBPath:@"http://www.vicestudios.com/apps/owly/oc/"];
-    [_transpo addAPI];
+    //[_transpo addAPI];
 }
 
 - (void)preLoad

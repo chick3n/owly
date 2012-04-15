@@ -646,13 +646,12 @@
 
 - (BOOL)updateFavoriteData:(MTStop*)stop ForDate:(NSDate*)date StoreTimes:(BOOL)store;
 {
+    [stop.Bus clearLiveTimes];
+    
     dispatch_async(_queue, ^{
         BOOL status = NO;
-        BOOL checkedScheduleTime = NO;
         if(!stop.Bus.Times.TimesAdded)
         {
-            checkedScheduleTime = YES;
-            
             //get stop information
             if(_hasDB)
             {
@@ -715,17 +714,18 @@
         {
             stop.IsUpdating = YES;
             status = [_ocApi getStop:stop Route:stop.Bus Times:date Results:nil];
+            if(_hasDB)
+            {
+                [_ocDb updateFavorite:stop AndBus:stop.Bus];
+            }
             stop.IsUpdating = NO;       
         }      
         
-        if(!checkedScheduleTime)
-        {
-            stop.IsUpdating = NO;
-            dispatch_async(MTLDEF_MAINQUEUE, ^(void){
-                if(!stop.cancelQueue && [_delegate respondsToSelector:@selector(myTranspo:UpdateType:updatedFavorite:)])
-                    [_delegate myTranspo:[MTHelper QuickResultState:status] UpdateType:MTUPDATETYPE_API updatedFavorite:stop];
-            });
-        }
+        stop.IsUpdating = NO;
+        dispatch_async(MTLDEF_MAINQUEUE, ^(void){
+            if(!stop.cancelQueue && [_delegate respondsToSelector:@selector(myTranspo:UpdateType:updatedFavorite:)])
+                [_delegate myTranspo:[MTHelper QuickResultState:status] UpdateType:MTUPDATETYPE_API updatedFavorite:stop];
+        });
     });
    
     
@@ -774,6 +774,7 @@
             BOOL status = [_ocDb removeFavoriteForStop:stop AndBus:bus];
             if(status)
             {
+                [_ocDb addTimes:[NSDictionary dictionary] ToLocalDatabaseForStop:stop AndBus:bus]; //will remove times and not add any
                 [self removeUpdateNotificationForStop:stop AndRoute:bus];
             }
             stop.IsUpdating = NO;

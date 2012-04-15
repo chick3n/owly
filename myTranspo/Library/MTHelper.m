@@ -7,6 +7,7 @@
 //
 
 #import "MTHelper.h"
+#import "MTSettings.h"
 
 @implementation MTHelper
 
@@ -28,10 +29,18 @@
     if(date == nil)
         return 2; //monday
     
+    int currentWeekday = 2;
+    if([MTSettings cityPreference] == MTCITYOTTAWA)
+    {
+        NSDateComponents *ocDates = [[NSDateComponents alloc] init];
+        ocDates.hour = -4;
+        date = [[NSCalendar currentCalendar] dateByAddingComponents:ocDates toDate:date options:0];
+    }
+    
     NSDateComponents *weekdayComponents = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:date];
     weekdayComponents.timeZone = [NSTimeZone localTimeZone];
-    int currentWeekday = [weekdayComponents weekday];
-
+    currentWeekday = [weekdayComponents weekday];
+    
     return  currentWeekday;
 }
 
@@ -44,6 +53,17 @@
 
 + (NSString*)CurrentTimeHHMMSS
 {
+    if([MTSettings cityPreference] == MTCITYOTTAWA)
+    {
+        NSDateComponents *dateComp = [[NSCalendar currentCalendar] components:NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit fromDate:[NSDate date]];
+        dateComp.timeZone = [NSTimeZone localTimeZone];
+        if(dateComp.hour < 4)
+        {
+            int modHour = dateComp.hour + 24;
+            return [NSString stringWithFormat:@"%02d:%02d:00", modHour, dateComp.minute];
+        }
+    }
+    
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm:ss"];
     [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
@@ -108,6 +128,15 @@
     return dateFormatter;
 }
 
++ (NSDateFormatter*)TimeFormatter
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"HH:mm:ss"];
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
+    return dateFormatter;
+}
+
 + (BOOL)IsDateToday:(NSDate*)date
 {
     if(date == nil)
@@ -136,6 +165,41 @@
     }
     
     return MTTRANSPOTYPE_OC;
+}
+
+#pragma mark - OC HELPERS
+
++ (MTDirection)convertOCBusHeading:(NSString*)heading
+{
+    if([heading isEqualToString:@"Northbound"])
+    {
+        return MTDIRECTION_NORTH;
+    }
+    else if([heading isEqualToString:@"Southbound"])
+        return MTDIRECTION_SOUTH;
+    else if([heading isEqualToString:@"Eastbound"])
+        return MTDIRECTION_EAST;
+    else if([heading isEqualToString:@"Westbound"])
+        return MTDIRECTION_WEST;
+    
+    return MTDIRECTION_UNKNOWN;
+}
+
++ (NSString*)convertOC24HourTime:(NSString*)time
+{
+    if(time.length < 5)
+        return time;
+    
+    NSString* hourValue = [time substringToIndex:2];
+    if([hourValue intValue] < 4)
+    {
+        int hour = [hourValue intValue] + 24;
+        NSRange minRange = NSMakeRange(3, 2);
+        int min = [[time substringWithRange:minRange] intValue];
+        return [NSString stringWithFormat:@"%02d:%02d:00", hour, min];
+    }
+    
+    return time;
 }
 
 @end

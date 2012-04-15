@@ -55,6 +55,7 @@
     _stop = [[MTStop alloc] initWithLanguage:_language];
     _stop.StopId = @"RF990"; //Greenborrow
     _stop.StopNumber = 3037;
+    _stop.StopName = @"OTRAIN GREENBORO";
     _stop.Latitude = 45.409195;
     _stop.Longitude = -75.721931;
     MTBus* bus = [[MTBus alloc] initWithLanguage:_language];
@@ -66,6 +67,7 @@
     _stop2 = [[MTStop alloc] initWithLanguage:_language];
     _stop2.StopId = @"NA990"; //Bayview
     _stop2.StopNumber = 3060;
+    _stop2.StopName = @"BAYVIEW";
     _stop2.Latitude = 45.359711;
     _stop2.Longitude = -75.659401;
     MTBus* bus2 = [[MTBus alloc] initWithLanguage:_language];

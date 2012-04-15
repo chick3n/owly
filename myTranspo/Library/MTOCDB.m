@@ -208,7 +208,7 @@
                          , @"stop_routes sr"
                          , @"stops s on s.stop_id = sr.stop_id"
                          , [NSString stringWithFormat:@"sr.route_id = '%@' AND sr.trip_headsign = '%@'", bus.BusId, bus.DisplayHeading]
-                         , @"s.stop_id"];
+                         , @"DIST asc"];
     
     if(sqlite3_prepare_v2(_db, [sqlStmt UTF8String], -1, &_cmpStmt, NULL) == SQLITE_OK)
     {
@@ -840,6 +840,46 @@
     else
     {
         MTLog(@"Add Favorite Error: %s", sqlite3_errmsg(_db));
+    }
+    
+    return NO;
+}
+
+- (BOOL)updateFavorite:(MTStop*)stop AndBus:(MTBus*)bus
+{
+    if(!_isConnected)
+        return NO;
+    
+    NSString *sqlStmt = [NSString stringWithFormat: \
+                         @"UPDATE favorites SET route_direction = %d WHERE stop_id = '%@' and route_id = '%@';"
+                         , [bus getBusHeadingForFavorites]
+                         , stop.StopId
+                         , bus.BusId];
+    sqlite3_stmt* _cmpStmt;
+    
+    if(sqlite3_prepare_v2(_db
+                          , [sqlStmt UTF8String]
+                          , -1
+                          , &_cmpStmt
+                          , NULL) == SQLITE_OK)
+    {
+        sqlite3_exec(_db, "BEGIN;", NULL, NULL, NULL);
+        
+        int result = sqlite3_step(_cmpStmt);
+        if(result != SQLITE_DONE)
+        {
+            MTLog(@"Update Favorite Error: %s", sqlite3_errmsg(_db));
+        }
+        sqlite3_reset(_cmpStmt);		
+        
+        if(result == SQLITE_DONE)
+        {
+            sqlite3_exec(_db, "COMMIT;", NULL, NULL, NULL);
+            bus.isFavorite = NO;
+            return YES;
+        }
+        else 
+            sqlite3_exec(_db, "ROLLBACK;", NULL, NULL, NULL);   
     }
     
     return NO;

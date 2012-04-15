@@ -42,11 +42,19 @@
 
 - (int)compareTimesHHMMSS:(NSString*)time Ordering:(int)orderBy
 {
+    return [self compareTimesHHMMSS:time Ordering:orderBy PassedMidnight:NO];
+}
+
+//ToDo: Doesnt compare against time after midnight as it registers it as less than because no date is associated to it
+- (int)compareTimesHHMMSS:(NSString*)time Ordering:(int)orderBy PassedMidnight:(BOOL)passMidnight
+{
     NSString* time1 = [time stringByReplacingOccurrencesOfString:@":" withString:@""];
     NSString* time2 = [_time stringByReplacingOccurrencesOfString:@":" withString:@""];
     
     int nTime1 = [time1 intValue];
     int nTime2 = [time2 intValue];
+    
+    //NSLog(@"time1: %d time2: %d", nTime1, nTime2);
     
     if(nTime1 > nTime2)
         return (orderBy == 1) ? -1 : 1;
@@ -92,9 +100,18 @@
 {
     if(_time == nil)
         return MTDEF_TIMEUNKNOWN;
+
+    //is time past 23:59? adjust!
+    NSString* firstPart = [_time substringToIndex:2];
+    if([firstPart intValue] >= 24)
+    {
+        int hour = [firstPart intValue] - 24;
+        NSRange minRange = NSMakeRange(3, 2);
+        int min = [[_time substringWithRange:minRange] intValue];
+        return [NSString stringWithFormat:@"%02d:%02d", hour, min];
+    }
     
     //strip off last 2
-    
     return [_time substringToIndex:5];
 }
 

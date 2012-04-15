@@ -161,20 +161,16 @@
     
     MTStop* stop = (MTStop*)[_favorites objectAtIndex:indexPath.row];
     
-    if(stop.MTCardCellHelper == NO && stop.UpdateCount > 0)
+    if(stop.UpdateCount > 0)
     {
         [cell expandCellWithAnimation:YES];
-        stop.MTCardCellHelper = YES;
-    }
-    else if(stop.UpdateCount > 0)
-    {
-        [cell expandCellWithAnimation:NO];
     }
     
-    if(stop.IsUpdating == NO)
-        [cell updateCellDetails:stop New:YES];
-    
+    //if(stop.IsUpdating == NO) //removed this because IsUpdating = YES until API returns so updates werent happening in between.
+    [cell updateCellDetails:stop New:YES];
     [cell updateCellHeader:stop];
+    
+    [cell setIndexRow:indexPath.row];
     
     return cell;
 }
@@ -211,12 +207,14 @@
         [_tableView setEditing:YES];
         _editButton.title = NSLocalizedString(@"MTDEF_DONE", nil);
         _editButton.style = UIBarButtonItemStyleDone;
+        [self.view removeGestureRecognizer:_panGesture];
     }
     else
     {
         [_tableView setEditing:NO];
         _editButton.title = NSLocalizedString(@"MTDEF_EDIT", nil);
         _editButton.style = UIBarButtonItemStylePlain;
+        [self.view addGestureRecognizer:_panGesture];
     }
 }
 
@@ -245,23 +243,30 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MTStop* stop = [_favorites objectAtIndex:indexPath.row];
-    
-    TripViewController* tvc = [[TripViewController alloc] initWithNibName:@"TripViewController" bundle:nil];
-    tvc.transpo = _transpo;
-    tvc.language = _language;
-    tvc.stop = stop;
-    tvc.bus = stop.Bus;
-    tvc.chosenDate = _chosenDate;
-    tvc.panGesture = _panGesture;
-    tvc.futureTrip = ![MTHelper IsDateToday:_chosenDate];
-    
-    //[tvc.view addGestureRecognizer:_panGesture];
-    //[tvc.navigationController.navigationBar addGestureRecognizer:_panGesture];
-    
-    [self.navigationController pushViewController:tvc animated:YES];
-    
-    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    if(!tableView.editing)
+    {
+        MTStop* stop = [_favorites objectAtIndex:indexPath.row];
+        
+        TripViewController* tvc = [[TripViewController alloc] initWithNibName:@"TripViewController" bundle:nil];
+        tvc.transpo = _transpo;
+        tvc.language = _language;
+        tvc.stop = stop;
+        tvc.bus = stop.Bus;
+        tvc.chosenDate = _chosenDate;
+        tvc.panGesture = _panGesture;
+        tvc.futureTrip = ![MTHelper IsDateToday:_chosenDate];
+        
+        //[tvc.view addGestureRecognizer:_panGesture];
+        //[tvc.navigationController.navigationBar addGestureRecognizer:_panGesture];
+        
+        [self.navigationController pushViewController:tvc animated:YES];
+        
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
+    else
+    {
+
+    }
 }
 
 #pragma mark - Favorites Delegate
@@ -375,6 +380,17 @@
     //do nothing now
 }
 
+- (void)mtCardcellDeleteClicked:(id)cell
+{
+    MTCardCell* c = (MTCardCell*)cell;
+    
+    MTStop* favorite = [_favorites objectAtIndex:c.indexRow];
+    if(favorite == nil)
+        return;
+    
+    [_transpo removeFavorite:favorite WithBus:favorite.Bus];
+}
+
 #pragma mark - MTRefreshTableView
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
@@ -392,6 +408,12 @@
 //ToDo: not very reliable, might be better to play it safe and do _favorites.count/2
 - (void)refreshTableViewNeedsRefresh
 {
+    if(_tableView.editing)
+    {
+        [_tableView stopLoading];
+        return;
+    }
+    
     _loadingCounter = _favorites.count;
     [self updateFavorites];
 }
