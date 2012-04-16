@@ -215,6 +215,56 @@
     return [userDefaults integerForKey:kMTNotificationStartupView];
 }
 
+- (NSString*)cityString
+{
+    return [userDefaults valueForKey:kMTMyCity];
+}
+
+- (NSString*)notificationAlertTimeString
+{
+    switch ((MTAlertTimes)[userDefaults integerForKey:kMTNotificationTime]) {
+        case MTALERT5MINS:
+            return kMTALERT5MINS;
+        case MTALERT10MINS:
+            return kMTALERT10MINS;
+        case MTALERT15MINS:
+            return kMTALERT15MINS;
+        case MTALERT20MINS:
+            return kMTALERT20MINS;
+        case MTALERT30MINS:
+            return kMTALERT30MINS;
+        case MTALERT45MINS:
+            return kMTALERT45MINS;
+        case MTALERT60MINS:
+            return kMTALERT60MINS;
+    }
+    
+    return @"";
+}
+
+- (NSString*)startupScreenString
+{
+    switch ((MTViewControllers)[userDefaults integerForKey:kMTNotificationStartupView]) {
+        case MTVCSTOPS:
+            return NSLocalizedString(@"MTDEF_STOPS", nil);
+        case MTVCTRAIN:
+            return NSLocalizedString(@"MTDEF_VIEWCONTROLLERTRAIN", nil);
+        case MTVCMYBUSES:
+            return NSLocalizedString(@"MTDEF_VIEWCONTROLLERMYBUSES", nil);
+        case MTVCNOTICIES:
+            return NSLocalizedString(@"MTDEF_VIEWCONTROLLERNOTICES", nil);
+        case MTVCTRIPPLANNER:
+            return NSLocalizedString(@"MTDEF_VIEWCONTROLLERTRIPPLAN", nil);
+        case MTVCSETTINGS:
+            return NSLocalizedString(@"MTDEF_SETTINGSTITLE", nil);
+        case MTVCUNKNOWN:
+        case MTVCMENU:
+            return @"";
+    }
+    
+    return @"";
+}
+
 #pragma mark - SETTERS
 
 - (void)updateDatabaseVersionToBundle

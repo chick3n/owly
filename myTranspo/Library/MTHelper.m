@@ -11,6 +11,8 @@
 
 @implementation MTHelper
 
+#pragma mark - Days of Week
+
 + (int)DayOfWeek
 {
 #if 0
@@ -42,6 +44,20 @@
     currentWeekday = [weekdayComponents weekday];
     
     return  currentWeekday;
+}
+
++ (int)NextDayOfWeekFromWeek:(int)week
+{
+    //sunday = 1 sat = 7
+    switch (week) {
+        case 1:
+            return 2;
+        case 7:
+            return 1;
+    }
+    
+    //return week + 1;
+    return 7; //dont care about mon-fri as the times are the same return sat as the next day if its a weekday
 }
 
 + (MTResultState)QuickResultState:(BOOL)status
@@ -194,6 +210,23 @@
     if([hourValue intValue] < 4)
     {
         int hour = [hourValue intValue] + 24;
+        NSRange minRange = NSMakeRange(3, 2);
+        int min = [[time substringWithRange:minRange] intValue];
+        return [NSString stringWithFormat:@"%02d:%02d:00", hour, min];
+    }
+    
+    return time;
+}
+
++ (NSString*)revertOC24HourTime:(NSString*)time
+{
+    if(time.length < 5)
+        return time;
+    
+    NSString* hourValue = [time substringToIndex:2];
+    if([hourValue intValue] >= 24)
+    {
+        int hour = [hourValue intValue] - 24;
         NSRange minRange = NSMakeRange(3, 2);
         int min = [[time substringWithRange:minRange] intValue];
         return [NSString stringWithFormat:@"%02d:%02d:00", hour, min];

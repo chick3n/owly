@@ -36,6 +36,15 @@ ModificationCaller:(SEL)modificationCaller
 @synthesize modificationCaller  = _modificationCaller;
 @synthesize dataCaller          = _dataCaller;
 
+- (void)setSelected:(NSInteger)selected
+{
+    _selected = selected;
+    
+    NSString* value = [_data objectAtIndex:selected];
+    if(value)
+        _subTitle = value;
+}
+
 + (id)settingsTypeForGroup:(SettingGroup)group 
                       Type:(SettingTypes)type 
                      Title:(NSString*)title 

@@ -137,7 +137,7 @@
     
     _trip = trip;
     
-    _stopName.text = _trip.StopName;
+    _stopName.text = _trip.StopNameDisplay;
     _tripTime.text = [_trip.Time getTimeForDisplay];
 }
 

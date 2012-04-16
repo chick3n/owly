@@ -75,6 +75,8 @@
     [_searchBar setPlaceholder:NSLocalizedString(@"MTDEF_SEARCHPLANCEHOLDER", nil)];
     [_searchBar setSelectedScopeButtonIndex:0];
     [_searchBar sizeToFit];
+    //[[_searchBar.subviews objectAtIndex:0] setAlpha:0.0];
+    [_searchBar setBackgroundImage:[UIImage imageNamed:@"global_header_background.png"]];
     //[self.searchDisplayController.searchResultsTableView addSubview:_searchLoading];
     
     //date stuff
@@ -256,7 +258,7 @@
         MTStop* stop = [sectionResults objectAtIndex:indexPath.row];
         
         cell.title = [NSString stringWithFormat:@"%d", stop.StopNumber];
-        cell.subtitle = stop.StopName;
+        cell.subtitle = stop.StopNameDisplay;
         
         if(indexPath.section == 2)
             cell.type = CELLSTREET;
@@ -490,7 +492,7 @@
         
         MTStopAnnotation* stopAnnotation = [[MTStopAnnotation alloc] initWithCoordinate:CLLocationCoordinate2DMake(stop.Latitude, stop.Longitude)];
         stopAnnotation.stopCode = [NSString stringWithFormat:@"%d", stop.StopNumber];
-        stopAnnotation.stopStreetName = stop.StopName;
+        stopAnnotation.stopStreetName = stop.StopNameDisplay;
         stopAnnotation.stop = stop;
         stopAnnotation.stopRoutes = stop.BusIds;
         

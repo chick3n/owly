@@ -13,7 +13,7 @@
 #define kMTSEARCHCELLSHAPEWIDTH 48
 
 #define kOffSetOriginX 3
-#define kOffSetOriginY 12
+#define kOffSetOriginY 13
 #define kOffSetSubtitleOriginX kOffSetOriginX + 60
 #define kOffSetSubtitleOriginY kOffSetOriginY
 

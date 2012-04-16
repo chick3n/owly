@@ -67,7 +67,7 @@
     _stop2 = [[MTStop alloc] initWithLanguage:_language];
     _stop2.StopId = @"NA990"; //Bayview
     _stop2.StopNumber = 3060;
-    _stop2.StopName = @"BAYVIEW";
+    _stop2.StopName = @"OTRAIN BAYVIEW";
     _stop2.Latitude = 45.359711;
     _stop2.Longitude = -75.659401;
     MTBus* bus2 = [[MTBus alloc] initWithLanguage:_language];
@@ -231,14 +231,14 @@
         
         MTTrip* trip = [_trips objectAtIndex:_trips.count - 1];
             
-        NSString *headerTime = trip.StopName;
+        NSString *headerTime = trip.StopNameDisplay;
         if(headerTime == nil)
             headerTime = @"";
         tableViewHeaderLabel.text = [NSString stringWithFormat:@"%@: %@", [MTHelper DateDashesYYYYMMDD:_chosenDate], headerTime];
         
         if(_trainAnnotation != nil)
         {
-            _trainAnnotation.busHeading = trip.StopName;
+            _trainAnnotation.busHeading = trip.StopNameDisplay;
         }
     }
     
@@ -473,7 +473,7 @@
     {
         MTStopAnnotation* stopAnnotation = [[MTStopAnnotation alloc] initWithCoordinate:CLLocationCoordinate2DMake(trip.Latitude, trip.Longitude)];
         stopAnnotation.stopCode = [NSString stringWithFormat:@"%d", trip.StopNumber];
-        stopAnnotation.stopStreetName = trip.StopName;
+        stopAnnotation.stopStreetName = trip.StopNameDisplay;
         
         [_mapView addAnnotation:stopAnnotation];
     }

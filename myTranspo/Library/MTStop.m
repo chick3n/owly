@@ -32,7 +32,7 @@
         _updatedCount += 1;
 }
 
-- (NSString*)StopName
+- (NSString*)StopNameDisplay
 {
     //Upper case first lower case rest all words
     //NSString* original = _stopName;

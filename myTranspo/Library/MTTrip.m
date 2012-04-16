@@ -21,11 +21,11 @@
 @synthesize StopSequence            = _stopSequence;
 @synthesize Time                    = _time;
 
-@synthesize BusSpeed        = _busSpeed;
-@synthesize Destination     = _destination;
-@synthesize BusType         = _busType;
-@synthesize LastTrip        = _lastTrip;
-@synthesize StartTime       = _startTime;
+@synthesize BusSpeed                = _busSpeed;
+@synthesize Destination             = _destination;
+@synthesize BusType                 = _busType;
+@synthesize LastTrip                = _lastTrip;
+@synthesize StartTime               = _startTime;
 
 - (id)initWithLanguage:(MTLanguage)lang
 {
@@ -53,6 +53,25 @@
     if(_stopName == nil)
         return @"";
     return _stopName;
+}
+
+- (NSString*)StopNameDisplay
+{
+    //Upper case first lower case rest all words
+    //NSString* original = _stopName;
+    
+    NSMutableString * firstCharacters = [NSMutableString string];
+    NSArray * words = [[_stopName lowercaseString] componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    for (NSString * word in words) {
+        if ([word length] > 0) {
+            NSString * firstLetter = [word substringToIndex:1];
+            [firstCharacters appendString:[firstLetter uppercaseString]];
+            [firstCharacters appendString:[word substringFromIndex:1]];
+            [firstCharacters appendString:@" "];
+        }
+    }
+    
+    return (NSString*)firstCharacters;
 }
 
 @end

@@ -13,6 +13,7 @@
 
 + (int)DayOfWeek;
 + (int)DayOfWeekForDate:(NSDate*)date;
++ (int)NextDayOfWeekFromWeek:(int)week;
 + (MTResultState)QuickResultState:(BOOL)status;
 + (NSString*)CurrentTimeHHMMSS;
 + (NSString*)DateDashesYYYYMMDD:(NSDate*)date;
@@ -23,5 +24,6 @@
 + (NSString*)timeRemaingUntilTime:(NSString*)time;
 + (MTDirection)convertOCBusHeading:(NSString*)heading;
 + (NSString*)convertOC24HourTime:(NSString*)time;
++ (NSString*)revertOC24HourTime:(NSString*)time;
 
 @end

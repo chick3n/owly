@@ -68,6 +68,9 @@ static NSString* kMTIDatabaseVersion = @"Database Version";
 - (BOOL)notificationUpdateTime;
 - (MTAlertTimes)notificationAlertTime;
 - (MTViewControllers)startupScreen;
+- (NSString*)cityString;
+- (NSString*)notificationAlertTimeString;
+- (NSString*)startupScreenString;
 
 //setters
 - (void)updateDatabaseVersionToBundle;

@@ -8,6 +8,16 @@
 
 #import "MTBus.h"
 
+@interface MTBus ()
+- (BOOL)nextTimesForWeek:(int)week 
+        IncludeLiveTimes:(BOOL)includeLive 
+             CompareTime:(NSString*)time 
+            AmountToFind:(int)count 
+                 Results:(NSMutableArray*)results
+           RecursiveDeep:(int)deep
+                 NextDay:(BOOL)nextDay;
+@end
+
 @implementation MTBus
 
 @synthesize BusId                       = _busId;
@@ -221,10 +231,30 @@
 }
 
 #pragma mark - TIME OPERATIONS
-//ToDo: Does not work well with times past midnight that are associated to the previous day still, relying on GPS times for now to resolve
-//To Fix this we can set that OC dates start after 4am, but we cannot assume this is true for other transit types
-- (NSString *)getNextTime
+
+- (BOOL)nextTimesForWeek:(int)week 
+        IncludeLiveTimes:(BOOL)includeLive 
+             CompareTime:(NSString*)time 
+            AmountToFind:(int)count 
+                 Results:(NSMutableArray*)results
+           RecursiveDeep:(int)deep
+                 NextDay:(BOOL)nextDay
 {
+    if(week < 1 || week > 7)
+        week = [MTHelper DayOfWeekForDate:_chosenDate];
+    
+    if(time == nil)
+        time = [MTHelper CurrentTimeHHMMSS];
+    
+    if(count < 1)
+        return NO;
+    
+    if(results == nil)
+        return NO;
+    
+    if(deep < 0)
+        return results.count;
+    
     NSArray* timesToParse = nil;
     
     if(_liveTimes != nil && _hasGpsTime)
@@ -240,10 +270,13 @@
     
     if(timesToParse == nil)
     {
-        if(_times == nil)
-            return MTDEF_TIMEUNKNOWN;
+        if(_times == nil) //we have no times set
+        {
+            [results addObject:MTDEF_TIMEUNKNOWN];
+            return NO;
+        }
         
-        switch ([MTHelper DayOfWeekForDate:_chosenDate]) {
+        switch (week) {
             case 1: //Sunday
                 timesToParse = _times.TimesSun;
                 break;
@@ -256,87 +289,87 @@
         }
     }
     
-    if(timesToParse == nil)
-        return MTDEF_TIMEUNKNOWN;
-    
-    NSString* currentTime = [MTHelper CurrentTimeHHMMSS];
     MTTime *nextTime = nil;
-    
-    for(MTTime *time in timesToParse)
+    NSString* currentTime = [MTHelper CurrentTimeHHMMSS];
+    if(timesToParse != nil && timesToParse.count > 0)
     {
-        if([time compareTimesHHMMSS:currentTime Ordering:1] > 0)
+        for(MTTime *time in timesToParse)
         {
-            nextTime = time;
-            break;
+            if(results.count > count)
+                break;
+            
+            if([time compareTimesHHMMSS:currentTime Ordering:1 PassedMidnight:nextDay] > 0)
+            {
+                nextTime = time;
+                if(nextTime != nil)
+                    [results addObject:nextTime];
+            }
         }
     }
     
-    if(nextTime != nil)
-        return [nextTime getTimeForDisplay];
+    //if no times found doesnt match the requested amount try the next day
+    if(results.count < count)
+    {
+        [self nextTimesForWeek:[MTHelper NextDayOfWeekFromWeek:week]
+              IncludeLiveTimes:NO
+                   CompareTime:time
+                  AmountToFind:count 
+                       Results:results
+                 RecursiveDeep:deep-1 
+                       NextDay:YES];
+    }
     
+    return results.count;
+}
+
+- (NSString *)getNextTime
+{
+    NSMutableArray* results = [[NSMutableArray alloc] initWithCapacity:1];
+    if([self nextTimesForWeek:[MTHelper DayOfWeekForDate:_chosenDate]
+             IncludeLiveTimes:YES
+                  CompareTime:[MTHelper CurrentTimeHHMMSS]
+                 AmountToFind:1
+                      Results:results
+                RecursiveDeep:1
+                      NextDay:NO] > 0)
+    {
+        if(results.count > 0)
+        {
+            MTTime* time = [results objectAtIndex:0];
+            if(time != nil)
+            {
+                return [time getTimeForDisplay];
+            }
+        }
+    }
+
     return MTDEF_TIMEUNKNOWN;
 }
 
 - (NSArray*)getNextThreeTimes
 {
-    return [self getNextTimesOfAmount:3 IncludeLiveTime:YES];
+    return [self getNextTimesOfAmount:3 IncludeLiveTime:NO];
 }
 
 - (NSArray*)getNextTimesOfAmount:(int)count IncludeLiveTime:(BOOL)useLive
 {
-    NSArray* timesToParse = nil;
-    NSMutableArray *foundTimes = nil;
-    
-    if(_liveTimes != nil && _hasGpsTime && useLive)
+    NSMutableArray* results = [[NSMutableArray alloc] initWithCapacity:1];
+    if([self nextTimesForWeek:[MTHelper DayOfWeekForDate:_chosenDate]
+             IncludeLiveTimes:useLive
+                  CompareTime:[MTHelper CurrentTimeHHMMSS]
+                 AmountToFind:count
+                      Results:results
+                RecursiveDeep:1
+                      NextDay:NO] > 0)
     {
-        if(_liveTimes.Times != nil)
+        if(results.count < count)
         {
-            if(_liveTimes.Times.count > 0)
-            {
-                timesToParse = _liveTimes.Times;
-            }
+            for(int x=0; x<count - results.count; x++)
+                [results addObject:[[MTTime alloc] init]];
         }
     }
     
-    if(timesToParse == nil)
-    {
-        if(_times == nil)
-            return nil;
-        
-        switch ([MTHelper DayOfWeekForDate:_chosenDate]) {
-            case 1: //Sunday
-                timesToParse = _times.TimesSun;
-                break;
-            case 7:
-                timesToParse = _times.TimesSat;
-                break;
-            default:
-                timesToParse = _times.Times;
-                break;
-        }
-    }
-    
-    if(timesToParse == nil)
-        return nil;
-    
-    foundTimes = [[NSMutableArray alloc] initWithCapacity:count];
-    NSString* currentTime = [MTHelper CurrentTimeHHMMSS];
-    
-    for(MTTime *time in timesToParse)
-    {
-        if(foundTimes.count >= count)
-            break;
-        
-        if([time compareTimesHHMMSS:currentTime Ordering:1] > 0)
-        {
-            [foundTimes addObject:time];
-        }
-    }
-    
-    if(foundTimes != nil && foundTimes.count > 0)
-        return (NSArray*)foundTimes;
-    
-    return nil;
+    return results;
 }
 
 - (NSString *)getPrevTime

@@ -634,7 +634,7 @@ numberOfRowsInComponent:(NSInteger)component;
     {
         MTStopAnnotation* stopAnnotation = [[MTStopAnnotation alloc] initWithCoordinate:CLLocationCoordinate2DMake(trip.Latitude, trip.Longitude)];
         stopAnnotation.stopCode = [NSString stringWithFormat:@"%d", trip.StopNumber];
-        stopAnnotation.stopStreetName = trip.StopName;
+        stopAnnotation.stopStreetName = trip.StopNameDisplay;
         
         [_mapView addAnnotation:stopAnnotation];
     }

@@ -198,7 +198,7 @@
     
     _busNumber.text = stop.Bus.BusNumber;
     _busHeading.text = (stop.Bus.TrueDisplayHeading != nil) ? stop.Bus.TrueDisplayHeading : stop.Bus.DisplayHeading;
-    _streetName.text = stop.StopName;
+    _streetName.text = stop.StopNameDisplay;
     
     if(stop.IsUpdating)
     {

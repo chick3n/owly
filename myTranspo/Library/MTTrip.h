@@ -41,11 +41,13 @@
 @property (nonatomic, strong)   MTTime*             Time;
 @property (nonatomic)           int                 StopSequence;
 
-@property (nonatomic, strong)   NSString*       Destination;
-@property (nonatomic, strong)   NSString*       StartTime;
-@property (nonatomic)           BOOL            LastTrip;
-@property (nonatomic)           uint            BusType;
-@property (nonatomic)           float           BusSpeed;
+@property (nonatomic, strong)   NSString*           Destination;
+@property (nonatomic, strong)   NSString*           StartTime;
+@property (nonatomic)           BOOL                LastTrip;
+@property (nonatomic)           uint                BusType;
+@property (nonatomic)           float               BusSpeed;
+
+@property (nonatomic, readonly) NSString*           StopNameDisplay;
 
 - (id)initWithLanguage:(MTLanguage)lang;
 

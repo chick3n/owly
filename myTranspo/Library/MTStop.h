@@ -41,7 +41,8 @@
 @property (nonatomic)           double              CurrentLat;
 @property (nonatomic)           double              CurrentLon;
 
-@property (nonatomic, readonly, getter = getFirstBus)  MTBus*  Bus;
+@property (nonatomic, readonly, getter = getFirstBus)   MTBus*      Bus;
+@property (nonatomic, readonly)                         NSString*   StopNameDisplay;
 
 //methods
 - (id)initWithLanguage:(MTLanguage)lang;

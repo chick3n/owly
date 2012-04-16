@@ -23,13 +23,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "myTranspo/Library/MTBus.m"
-         timestampString = "356159089.258612"
+         timestampString = "356283418.475337"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "371"
-         endingLineNumber = "371"
-         landmarkName = "-getPrevTime"
-         landmarkType = "5">
+         startingLineNumber = "747"
+         endingLineNumber = "747">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"

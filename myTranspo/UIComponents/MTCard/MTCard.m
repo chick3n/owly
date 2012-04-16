@@ -106,7 +106,7 @@
     
     [self updateBusNumber:_bus.BusNumber];
     [self updateBusHeading:_bus.DisplayHeading];
-    [self updateStreetName:_stop.StopName];
+    [self updateStreetName:_stop.StopNameDisplay];
     
     if(!_hideDetailsView)
     {

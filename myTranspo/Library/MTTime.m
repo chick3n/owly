@@ -48,7 +48,7 @@
 //ToDo: Doesnt compare against time after midnight as it registers it as less than because no date is associated to it
 - (int)compareTimesHHMMSS:(NSString*)time Ordering:(int)orderBy PassedMidnight:(BOOL)passMidnight
 {
-    NSString* time1 = [time stringByReplacingOccurrencesOfString:@":" withString:@""];
+    NSString* time1 = [(!passMidnight ? time : [MTHelper revertOC24HourTime:time]) stringByReplacingOccurrencesOfString:@":" withString:@""];
     NSString* time2 = [_time stringByReplacingOccurrencesOfString:@":" withString:@""];
     
     int nTime1 = [time1 intValue];
