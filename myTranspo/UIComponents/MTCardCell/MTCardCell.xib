@@ -229,7 +229,7 @@
 												<int key="IBUIContentVerticalAlignment">0</int>
 												<int key="IBUILineBreakMode">4</int>
 												<string key="IBUITitleShadowOffset">{0, 1}</string>
-												<object class="NSColor" key="IBUIHighlightedTitleColor" id="753575803">
+												<object class="NSColor" key="IBUIHighlightedTitleColor" id="767717348">
 													<int key="NSColorSpace">3</int>
 													<bytes key="NSWhite">MQA</bytes>
 												</object>
@@ -359,7 +359,7 @@
 												<reference key="IBUIFont" ref="755541611"/>
 											</object>
 										</array>
-										<string key="NSFrame">{{4, 0}, {300, 55}}</string>
+										<string key="NSFrame">{{4, 0}, {300, 57}}</string>
 										<reference key="NSSuperview" ref="695019060"/>
 										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="368533634"/>
@@ -372,11 +372,12 @@
 										<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 									</object>
 								</array>
-								<string key="NSFrame">{{6, 69}, {308, 55}}</string>
+								<string key="NSFrame">{{6, 69}, {308, 57}}</string>
 								<reference key="NSSuperview" ref="467181345"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="389867693"/>
 								<reference key="IBUIBackgroundColor" ref="1022519228"/>
+								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">5</int>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
@@ -505,7 +506,7 @@
 										<string key="NSFrame">{{75, 34}, {198, 21}}</string>
 										<reference key="NSSuperview" ref="35804433"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="120274795"/>
+										<reference key="NSNextKeyView" ref="752665376"/>
 										<reference key="IBUIBackgroundColor" ref="1022519228"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClipsSubviews">YES</bool>
@@ -550,10 +551,10 @@
 											<bytes key="NSWhite">MAA</bytes>
 										</object>
 									</object>
-									<object class="IBUIButton" id="120274795">
+									<object class="IBUIButton" id="752665376">
 										<reference key="NSNextResponder" ref="35804433"/>
 										<int key="NSvFlags">-2147483356</int>
-										<string key="NSFrame">{{118, 17}, {72, 37}}</string>
+										<string key="NSFrame">{{118, 21}, {72, 37}}</string>
 										<reference key="NSSuperview" ref="35804433"/>
 										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="994217850"/>
@@ -563,7 +564,7 @@
 										<int key="IBUIContentVerticalAlignment">0</int>
 										<int key="IBUIButtonType">1</int>
 										<string key="IBUINormalTitle">DELETE</string>
-										<reference key="IBUIHighlightedTitleColor" ref="753575803"/>
+										<reference key="IBUIHighlightedTitleColor" ref="767717348"/>
 										<object class="NSColor" key="IBUINormalTitleColor">
 											<int key="NSColorSpace">1</int>
 											<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
@@ -612,6 +613,7 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<int key="IBUISelectionStyle">0</int>
 				<reference key="IBUIContentView" ref="467181345"/>
+				<string key="IBUIReuseIdentifier">MTCardCell</string>
 				<real value="11" key="IBUIRowHeight"/>
 			</object>
 		</array>
@@ -773,7 +775,7 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">_delete</string>
 						<reference key="source" ref="1016456301"/>
-						<reference key="destination" ref="120274795"/>
+						<reference key="destination" ref="752665376"/>
 					</object>
 					<int key="connectionID">88</int>
 				</object>
@@ -789,11 +791,11 @@
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">deleteClicked:</string>
-						<reference key="source" ref="120274795"/>
+						<reference key="source" ref="752665376"/>
 						<reference key="destination" ref="1016456301"/>
 						<int key="IBEventType">7</int>
 					</object>
-					<int key="connectionID">89</int>
+					<int key="connectionID">95</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -835,7 +837,7 @@
 							<reference ref="680867504"/>
 							<reference ref="64368870"/>
 							<reference ref="96825526"/>
-							<reference ref="120274795"/>
+							<reference ref="752665376"/>
 						</array>
 						<reference key="parent" ref="1016456301"/>
 						<string key="objectName">titleView</string>
@@ -988,7 +990,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">87</int>
-						<reference key="object" ref="120274795"/>
+						<reference key="object" ref="752665376"/>
 						<reference key="parent" ref="35804433"/>
 					</object>
 				</array>
@@ -1029,7 +1031,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">89</int>
+			<int key="maxID">95</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1171,7 +1173,7 @@
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="cardcell_arrow.png">{10, 15}</string>
-			<string key="cardcell_bottom_background.png">{615, 109}</string>
+			<string key="cardcell_bottom_background.png">{615, 105}</string>
 			<string key="cardcell_busnumber_background.png">{52, 52}</string>
 			<string key="cardcell_direction_icon.png">{21, 22}</string>
 			<string key="cardcell_distance_icon.png">{21, 22}</string>

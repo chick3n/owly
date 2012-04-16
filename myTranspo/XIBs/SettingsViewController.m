@@ -46,6 +46,8 @@
     
     _tableView.dataSource = self;
     _tableView.delegate = self;
+    
+    _tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]];
 }
 
 - (void)viewDidUnload
@@ -136,6 +138,11 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell.textLabel.textColor = [UIColor colorWithRed:89./255. green:89./255. blue:89./255. alpha:1.0];
+        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
+        cell.textLabel.shadowColor = [UIColor whiteColor];
+        cell.textLabel.shadowOffset = CGSizeMake(0, 1);
+        cell.backgroundColor = [UIColor colorWithRed:245./255. green:247./255. blue:248./255. alpha:1.0];
     }
     
     NSArray* settings = [_data objectAtIndex:indexPath.section];
@@ -154,8 +161,9 @@
     switch (setting.type) {
         case STLIST:
         case STOTHER:
-            [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+            //[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+            [cell setAccessoryView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cardcell_arrow.png"]]];
+            cell.selectionStyle = UITableViewCellSelectionStyleGray;
             break;
         case STCHECKBOX:
             if(setting.selected == 0)
@@ -185,17 +193,62 @@
     return @"";
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if(section == SGDATA)
-        return NSLocalizedString(@"MTDEF_MANAGEDATAFOOTER", nil);
-    else if(section == SGACCOUNTINFO)
-        return NSLocalizedString(@"MTDEF_ACCOUNTINFOFOOTER", nil);
-    else if(section == SGAPPLICATION)
-        return NSLocalizedString(@"MTDEF_APPSETTINGSFOOTER", nil);
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 32)];
+    UILabel* headerLabel;
+    headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 4, 320, 32)];
+    headerLabel.backgroundColor = [UIColor clearColor];
+    headerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:16];
+    headerLabel.textColor = [UIColor colorWithRed:154./255. green:154./255. blue:154./255. alpha:1.0];
+    headerLabel.shadowColor = [UIColor whiteColor];
+    headerLabel.shadowOffset = CGSizeMake(0, 1.0);
+    headerLabel.textAlignment = UITextAlignmentLeft;
     
-    return @"";
+    if(section == SGDATA)
+        headerLabel.text = NSLocalizedString(@"MTDEF_MANAGEDATAHEADER", nil);
+    else if(section == SGACCOUNTINFO)
+        headerLabel.text = NSLocalizedString(@"MTDEF_ACCOUNTINFOHEADER", nil);
+    else if(section == SGAPPLICATION)
+        headerLabel.text = NSLocalizedString(@"MTDEF_APPSETTINGSHEADER", nil);
+    
+    [headerView addSubview:headerLabel];
+    return headerView;
 }
+
+#if 0
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+    UILabel* headerLabel;
+    headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 320, 32)];
+    headerLabel.backgroundColor = [UIColor clearColor];
+    headerLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+    headerLabel.textColor = [UIColor colorWithRed:154./255. green:154./255. blue:154./255. alpha:1.0];
+    headerLabel.shadowColor = [UIColor whiteColor];
+    headerLabel.shadowOffset = CGSizeMake(0, 1.0);
+    headerLabel.textAlignment = UITextAlignmentLeft;
+    headerLabel.lineBreakMode = UILineBreakModeWordWrap;
+    headerLabel.numberOfLines = 0;
+    
+    if(section == SGDATA)
+        headerLabel.text = NSLocalizedString(@"MTDEF_MANAGEDATAFOOTER", nil);
+    else if(section == SGACCOUNTINFO)
+        headerLabel.text = NSLocalizedString(@"MTDEF_ACCOUNTINFOFOOTER", nil);
+    else if(section == SGAPPLICATION)
+        headerLabel.text = NSLocalizedString(@"MTDEF_APPSETTINGSFOOTER", nil);
+    
+    CGSize footerSize = [headerLabel.text sizeWithFont:headerLabel.font constrainedToSize:CGSizeMake(320, 480)];
+    CGRect footerFrame = headerLabel.frame;
+    footerFrame.size.height = footerSize.height;
+    headerLabel.frame = footerFrame;
+    footerFrame.origin.x = 0;
+    headerView.frame = footerFrame;
+    
+    [headerView addSubview:headerLabel];
+    return headerView;
+}
+#endif
 
 #pragma mark - Table view delegate
 

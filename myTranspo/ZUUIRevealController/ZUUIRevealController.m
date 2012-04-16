@@ -366,6 +366,30 @@
 	}
 }
 
+- (void)revealOptions:(id)sender
+{
+    if(self.currentFrontViewPosition == FrontViewPositionLeft)
+    {
+        int optionsIndex = [self.view.subviews indexOfObject:self.rightView];
+        int menuIndex = [self.view.subviews indexOfObject:self.rearView];
+        if(menuIndex > optionsIndex)
+            [self.view exchangeSubviewAtIndex:menuIndex withSubviewAtIndex:optionsIndex];
+        
+        [self _revealOptionsAnimation];
+        self.currentFrontViewPosition = FrontViewPositionOptions;
+    }
+    else
+    {
+        int optionsIndex = [self.view.subviews indexOfObject:self.rightView];
+        int menuIndex = [self.view.subviews indexOfObject:self.rearView];
+        if(optionsIndex > menuIndex)
+            [self.view exchangeSubviewAtIndex:optionsIndex withSubviewAtIndex:menuIndex];
+        
+        [self _concealAnimation];
+        self.currentFrontViewPosition = FrontViewPositionLeft;
+    }
+}
+
 - (void)setFrontViewController:(UIViewController *)frontViewController
 {
 	[self setFrontViewController:frontViewController animated:NO];

@@ -22,6 +22,9 @@
 #define kElementMoreDetailsCount 1
 #define kElementMoreDetailsElementCount 3
 
+#define kDetailsViewFrameHeight 57
+#define kDataScrollViewFrameHeight 55
+
 @protocol MTCardCellDelegate <NSObject>
 @required
 - (void)mtCardCellnextTimeClickedForStop:(MTStop*)stop;

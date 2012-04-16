@@ -23,12 +23,32 @@
 @synthesize CurrentLon              = _currentLon;
 @synthesize UpdateCount             = _updatedCount;
 @synthesize MTCardCellHelper        = _MTCardCellHelper;
+@synthesize MTCardCellIsAnimating   = _MTCardCellIsAnimating;
 
 - (void)setIsUpdating:(BOOL)IsUpdating
 {
     _isUpdating = IsUpdating;
     if(!IsUpdating)
         _updatedCount += 1;
+}
+
+- (NSString*)StopName
+{
+    //Upper case first lower case rest all words
+    //NSString* original = _stopName;
+    
+    NSMutableString * firstCharacters = [NSMutableString string];
+    NSArray * words = [[_stopName lowercaseString] componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    for (NSString * word in words) {
+        if ([word length] > 0) {
+            NSString * firstLetter = [word substringToIndex:1];
+            [firstCharacters appendString:[firstLetter uppercaseString]];
+            [firstCharacters appendString:[word substringFromIndex:1]];
+            [firstCharacters appendString:@" "];
+        }
+    }
+    
+    return (NSString*)firstCharacters;
 }
 
 - (id)init
@@ -49,6 +69,7 @@
         _currentLon = 0;
         _updatedCount = 0;
         _MTCardCellHelper = NO;
+        _MTCardCellIsAnimating = NO;
     }
     
     return self;
@@ -72,6 +93,7 @@
         _currentLon = 0;
         _updatedCount = 0;
         _MTCardCellHelper = NO;
+        _MTCardCellIsAnimating = NO;
     }
     
     return self;

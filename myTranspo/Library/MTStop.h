@@ -36,6 +36,7 @@
 @property (nonatomic)           double              DistanceFromOrigin;
 @property (nonatomic)           BOOL                IsUpdating;
 @property (nonatomic)           BOOL                MTCardCellHelper;
+@property (nonatomic)           BOOL                MTCardCellIsAnimating;
 @property (nonatomic)           uint                UpdateCount;
 @property (nonatomic)           double              CurrentLat;
 @property (nonatomic)           double              CurrentLon;

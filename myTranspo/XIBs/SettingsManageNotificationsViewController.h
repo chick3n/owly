@@ -9,6 +9,7 @@
 #import "MTBaseViewController.h"
 #import "MTDefinitions.h"
 #import "MTHelper.h"
+#import "MTRightButton.h"
 
 @interface SettingsManageNotificationsViewController : MTBaseViewController<UITableViewDataSource, UITableViewDelegate>
 {

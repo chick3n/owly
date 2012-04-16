@@ -93,6 +93,8 @@ ModificationCaller:(SEL)modificationCaller
         ((UITextField*)_accessoryView).clearButtonMode = UITextFieldViewModeWhileEditing;
         ((UITextField*)_accessoryView).autocapitalizationType = UITextAutocapitalizationTypeNone;
         ((UITextField*)_accessoryView).spellCheckingType = UITextSpellCheckingTypeNo;
+        ((UITextField*)_accessoryView).textColor = [UIColor colorWithRed:140./255. green:140./255. blue:140./255. alpha:1.0];
+        ((UITextField*)_accessoryView).font = [UIFont fontWithName:@"HelveitcaNeue" size:16.];
         if(_type == STPASSWORD)
             ((UITextField*)_accessoryView).secureTextEntry = YES;
         [_accessoryView addTarget:self action:@selector(accessoryViewChanged:) forControlEvents:UIControlEventEditingChanged];

@@ -37,11 +37,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "myTranspo/UIComponents/MTCardCell.m"
-         timestampString = "356164223.069053"
+         timestampString = "356244363.055873"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "206"
-         endingLineNumber = "206"
+         startingLineNumber = "213"
+         endingLineNumber = "213"
          landmarkName = "-updateCellDetails:New:"
          landmarkType = "5">
       </FileBreakpoint>

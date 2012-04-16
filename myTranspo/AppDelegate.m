@@ -161,6 +161,7 @@
     newView.transpo = _transpo;
     newView.panGesture = _panGesture;
     newView.navPanGesture = _navPanGesture;
+    newView.menuControl = _menuController;
     /*newView.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:_menuController action:@selector(revealToggle:)];*/
     UIButton* navButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [navButton setImage:[UIImage imageNamed:@"global_menu_btn.png"] forState:UIControlStateNormal];
@@ -290,7 +291,8 @@
 
 - (void)postLoad
 {
-    
+    [[UIApplication sharedApplication] 
+     setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
 }
 
 #pragma mark - MENUVIEWCONTROLLER DELEGATE

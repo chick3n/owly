@@ -13,6 +13,7 @@
 - (void)concealToolbar:(id)sender;
 - (void)editTableView:(id)sender;
 - (void)doneEditTableView:(id)sender;
+- (void)goBack:(id)sender;
 @end
 
 @implementation SettingsManageNotificationsViewController
@@ -22,6 +23,11 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _selectedRows = [[NSMutableArray alloc] init];
+        
+        MTRightButton* backButton = [[MTRightButton alloc] initWithType:kRightButtonTypeBack];        
+        [backButton setTitle:NSLocalizedString(@"BACKBUTTON", nil) forState:UIControlStateNormal];
+        [backButton addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     }
     return self;
 }
@@ -51,9 +57,17 @@
     _removeSelectedButton.title = NSLocalizedString(@"MTDEF_REMOVESELECTED", nil);
     
     //navigationcontroller
-    _editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editTableView:)];
-    _doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneEditTableView:)];
-    self.navigationItem.rightBarButtonItem = _editButton;
+    MTRightButton* editButton = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+    [editButton addTarget:self action:@selector(editTableView:) forControlEvents:UIControlEventTouchUpInside];
+    [editButton setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
+    _editButton = [[UIBarButtonItem alloc] initWithCustomView:editButton];
+    
+    MTRightButton* doneButton = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+    [doneButton addTarget:self action:@selector(doneEditTableView:) forControlEvents:UIControlEventTouchUpInside];
+    [doneButton setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
+    _doneButton = [[UIBarButtonItem alloc] initWithCustomView:doneButton];
+    if(_data.count > 0)
+        self.navigationItem.rightBarButtonItem = _editButton;
     
     //view
     [self.view addGestureRecognizer:_panGesture];
@@ -111,6 +125,12 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10.0];
+        
+        cell.textLabel.textColor = [UIColor colorWithRed:89./255. green:89./255. blue:89./255. alpha:1.0];
+        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
+        cell.textLabel.shadowColor = [UIColor whiteColor];
+        cell.textLabel.shadowOffset = CGSizeMake(0, 1);
+        cell.backgroundColor = [UIColor colorWithRed:245./255. green:247./255. blue:248./255. alpha:1.0];
     }
     
     UILocalNotification* notification = [_data objectAtIndex:indexPath.row];
@@ -207,7 +227,9 @@
     
     [_tableView setEditing:NO];
     
-    self.navigationItem.rightBarButtonItem = _editButton;
+    if(_data.count > 0)
+        self.navigationItem.rightBarButtonItem = _editButton;
+    else self.navigationItem.rightBarButtonItem = nil;
 }
 
 #pragma mark - Toolbar
@@ -216,6 +238,7 @@
 {
     CGRect newToolbarFrame = _toolBar.frame;
     newToolbarFrame.origin.y -= _toolBar.frame.size.height;
+    
     CGRect newTableViewFrame = _tableView.frame;
     newTableViewFrame.size.height -= _toolBar.frame.size.height;
     
@@ -254,6 +277,7 @@
     {
         _removeSelectedButton.enabled = NO;
         _removeAllButton.enabled = NO;
+        [self doneEditTableView:nil];
     }
     
     [_tableView reloadData];
@@ -282,10 +306,18 @@
         if(_data.count <= 0)
         {
             _removeAllButton.enabled = NO;
+            [self doneEditTableView:nil];
         }
     }
     
     notifications = nil;
+}
+
+#pragma  mark - Navigation bar
+
+- (void)goBack:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

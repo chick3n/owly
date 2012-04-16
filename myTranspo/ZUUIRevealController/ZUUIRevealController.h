@@ -55,6 +55,7 @@ typedef enum
 - (id)initWithFrontViewController:(UIViewController *)aFrontViewController rearViewController:(UIViewController *)aBackViewController;
 - (void)revealGesture:(UIPanGestureRecognizer *)recognizer;
 - (void)revealToggle:(id)sender;
+- (void)revealOptions:(id)sender;
 
 - (void)setFrontViewController:(UIViewController *)frontViewController;
 - (void)setFrontViewController:(UIViewController *)frontViewController animated:(BOOL)animated;

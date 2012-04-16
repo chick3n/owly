@@ -8,6 +8,8 @@
 
 #import "StopsViewController.h"
 
+
+
 @interface StopsViewController ()
 - (void)refreshStopSearch:(id)sender;
 - (void)updateMapAnnotations:(NSArray*)annotations animated:(BOOL)animated;
@@ -17,6 +19,7 @@
 - (void)addFavoriteClicked:(id)sender;
 - (void)removeFavoriteClicked:(id)sender;
 - (void)moveMapBackToLocation:(id)sender;
+- (void)changeTripScheduleTime:(id)sender;
 @end
 
 @implementation StopsViewController
@@ -57,8 +60,12 @@
     [navButton2 setImage:[UIImage imageNamed:@"global_heartselected_btn.png"] forState:UIControlStateNormal];
     [navButton2 addTarget:self action:@selector(removeFavoriteClicked:) forControlEvents:UIControlEventTouchUpInside];
     [navButton2 setFrame:CGRectMake(0, 0, 40, 29)];
-    _cardManagerFavoriteAlready = [[UIBarButtonItem alloc] initWithCustomView:navButton2]; 
-    _resetMapLocationButton = [[UIBarButtonItem alloc] initWithTitle:@"ME" style:UIBarButtonItemStylePlain target:self action:@selector(moveMapBackToLocation:)];
+    _cardManagerFavoriteAlready = [[UIBarButtonItem alloc] initWithCustomView:navButton2];
+    UIButton* timesButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [timesButton setImage:[UIImage imageNamed:@"global_time_btn.png"] forState:UIControlStateNormal];
+    [timesButton addTarget:self action:@selector(changeTripScheduleTime:) forControlEvents:UIControlEventTouchUpInside];
+    [timesButton setFrame:CGRectMake(0, 0, 41, 29)];
+    _resetMapLocationButton = [[UIBarButtonItem alloc] initWithCustomView:timesButton];
     [self.navigationItem setRightBarButtonItem:_resetMapLocationButton];
     
     //view
@@ -71,7 +78,11 @@
     //[self.searchDisplayController.searchResultsTableView addSubview:_searchLoading];
     
     //date stuff
-    _chosenDate = [NSDate date];
+    _chosenDate = [NSDate date];    
+    
+    //searchTableView
+    [self.searchDisplayController.searchResultsTableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background"]]];
+    [self.searchDisplayController.searchResultsTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
 - (void)viewDidUnload
@@ -129,6 +140,7 @@
 
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
+    _searchBar.selectedScopeButtonIndex = 0;
     _searchResults = nil;
 }
 
@@ -270,7 +282,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 54;
+    return kMTSEARCHCELLHEIGHT;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -741,6 +753,11 @@
             }
         }
     }
+}
+
+- (void)changeTripScheduleTime:(id)sender
+{
+    [_menuControl revealOptions:nil];
 }
 
 @end

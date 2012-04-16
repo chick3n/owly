@@ -8,6 +8,10 @@
 
 #import "SettingsListViewController.h"
 
+@interface SettingsListViewController ()
+- (void)goBack:(id)sender;
+@end
+
 @implementation SettingsListViewController
 @synthesize tableView               = _tableView;
 @synthesize setting                 = _setting;
@@ -17,6 +21,17 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        MTRightButton* backButton = [[MTRightButton alloc] initWithType:kRightButtonTypeBack];
+        [backButton setTitle:NSLocalizedString(@"BACKBUTTON", nil) forState:UIControlStateNormal];
+#if 0 //debugging for button
+        [backButton setTitle:@"Reserved" forState:UIControlStateReserved];
+        [backButton setTitle:@"Selected" forState:UIControlStateSelected];
+        [backButton setTitle:@"Highlighted" forState:UIControlStateHighlighted];
+        [backButton setTitle:@"Disabled" forState:UIControlStateDisabled];
+        [backButton setTitle:@"Application" forState:UIControlStateApplication];
+#endif
+        [backButton addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     }
     return self;
 }
@@ -76,6 +91,12 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        
+        cell.textLabel.textColor = [UIColor colorWithRed:89./255. green:89./255. blue:89./255. alpha:1.0];
+        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
+        cell.textLabel.shadowColor = [UIColor whiteColor];
+        cell.textLabel.shadowOffset = CGSizeMake(0, 1);
+        cell.backgroundColor = [UIColor colorWithRed:245./255. green:247./255. blue:248./255. alpha:1.0];
     }
     
     NSString* settings = (NSString*)[_setting.data objectAtIndex:indexPath.row];
@@ -99,6 +120,13 @@
     [_setting selectedSettingHasChanged];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma  mark - Navigation bar
+
+- (void)goBack:(id)sender
+{
     [self.navigationController popViewControllerAnimated:YES];
 }
 

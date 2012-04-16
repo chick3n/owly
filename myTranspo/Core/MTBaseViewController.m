@@ -13,6 +13,7 @@
 @synthesize transpo                 = _transpo;
 @synthesize panGesture              = _panGesture;
 @synthesize navPanGesture           = _navPanGesture;
+@synthesize menuControl             = _menuControl;
 
 
 @end

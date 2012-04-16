@@ -13,10 +13,14 @@
 - (void)updateFavorites;
 - (void)refreshTableStopLoading;
 - (void)updateNavigationBar;
+- (void)startPoolUpdate:(id)sender;
+- (void)stopPoolUpdate:(id)sender;
+- (void)poolUpdateTick:(id)sender;
 @end
 
 @implementation MyBusesViewController
 @synthesize tableView                   = _tableView;
+@synthesize cellLoader                  = _cellLoader;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -48,9 +52,13 @@
     [super viewDidLoad];
     
     //navigationBar Setup
-    _editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"MTDEF_EDIT", nil) style:UIBarButtonItemStylePlain target:self action:@selector(editFavorites:)];
-        
+    //_editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"MTDEF_EDIT", nil) style:UIBarButtonItemStylePlain target:self action:@selector(editFavorites:)];
+    _editButtonValue = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+    [_editButtonValue addTarget:self action:@selector(editFavorites:) forControlEvents:UIControlEventTouchUpInside];
+    [_editButtonValue setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
+    _editButton = [[UIBarButtonItem alloc] initWithCustomView:_editButtonValue];
     self.navigationItem.rightBarButtonItem = _editButton;
+    
     self.title = NSLocalizedString(@"MTDEF_VIEWCONTROLLERMYBUSES", nil);
     //[self.navigationController.navigationBar addGestureRecognizer:_navPanGesture];
     
@@ -64,6 +72,11 @@
     [self.tableView setupRefresh:_language];
     [self.tableView addPullToRefreshHeader];
     [self.tableView setRefreshDelegate:self];
+    
+    //UINib
+    _cellLoader = [UINib nibWithNibName:@"MTCardCell" bundle:nil];
+    //static NSString *CellIdentifier = @"MTCardCell";    
+    //[_tableView registerNib:_cellLoader forCellReuseIdentifier:CellIdentifier];
     
     //view
     //[self.view addGestureRecognizer:_panGesture];
@@ -152,8 +165,9 @@
     MTCardCell *cell = (MTCardCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         //cell = [[MTCardCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier WithLanguage:_language];
-        NSArray* mtCardCellXib = [[NSBundle mainBundle] loadNibNamed:@"MTCardCell" owner:self options:nil];
-        cell = [mtCardCellXib objectAtIndex:0];
+        //NSArray* mtCardCellXib = [[NSBundle mainBundle] loadNibNamed:@"MTCardCell" owner:self options:nil];
+        //cell = [mtCardCellXib objectAtIndex:0];
+        cell = [[_cellLoader instantiateWithOwner:self options:nil] objectAtIndex:0];
         cell.delegate = self;
         cell.language = _language;
         [cell initializeUI];
@@ -161,6 +175,15 @@
     
     MTStop* stop = (MTStop*)[_favorites objectAtIndex:indexPath.row];
     
+    [cell updateCellHeader:stop];
+#if 0
+    if(stop.MTCardCellHelper == NO && stop.UpdateCount > 0)
+    {
+        [cell expandCellWithAnimation:YES];
+        stop.MTCardCellHelper = YES;
+    }
+    else 
+#endif
     if(stop.UpdateCount > 0)
     {
         [cell expandCellWithAnimation:YES];
@@ -168,7 +191,6 @@
     
     //if(stop.IsUpdating == NO) //removed this because IsUpdating = YES until API returns so updates werent happening in between.
     [cell updateCellDetails:stop New:YES];
-    [cell updateCellHeader:stop];
     
     [cell setIndexRow:indexPath.row];
     
@@ -205,14 +227,14 @@
     if(_editing)
     {
         [_tableView setEditing:YES];
-        _editButton.title = NSLocalizedString(@"MTDEF_DONE", nil);
+        [_editButtonValue setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
         _editButton.style = UIBarButtonItemStyleDone;
         [self.view removeGestureRecognizer:_panGesture];
     }
     else
     {
         [_tableView setEditing:NO];
-        _editButton.title = NSLocalizedString(@"MTDEF_EDIT", nil);
+        [_editButtonValue setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
         _editButton.style = UIBarButtonItemStylePlain;
         [self.view addGestureRecognizer:_panGesture];
     }
@@ -345,8 +367,12 @@
         
         if(stop == favorite)
         {
-            [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:x inSection:0]]
+            if(stop.MTCardCellIsAnimating == NO)
+                [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:x inSection:0]]
                               withRowAnimation:UITableViewRowAnimationNone];
+            else
+                [self startPoolUpdate:nil];
+            
             break;
         }
     }
@@ -441,6 +467,55 @@
     }
     
     [_tableView automaticallyStartLoading:YES];
+}
+
+#pragma mark - Pool Update
+
+- (void)startPoolUpdate:(id)sender
+{
+    if(_poolUpdates != nil && [_poolUpdates isValid])
+    {
+        MTLog(@"Pool already Running!");
+        return;
+    }
+    
+    
+    _poolUpdates = [NSTimer scheduledTimerWithTimeInterval:0.8 target:self selector:@selector(poolUpdateTick:) userInfo:nil repeats:NO];
+}
+
+- (void)stopPoolUpdate:(id)sender
+{
+    if(_poolUpdates != nil)
+    {
+        [_poolUpdates invalidate];
+        _poolUpdates = nil;
+    }
+}
+
+- (void)poolUpdateTick:(id)sender
+{
+    BOOL update = YES;
+    for(MTStop* fav in _favorites)
+    {
+        if(fav.MTCardCellIsAnimating == YES)
+        {
+            update = NO;
+            break;
+        }
+    }
+    
+    if(update)
+    {
+        [_tableView reloadData];
+        [self stopPoolUpdate:nil];
+        MTLog(@"Reloading Pool Update");
+    }
+    else
+    {
+        MTLog(@"Adding Another Pool Update");
+        [self stopPoolUpdate:nil];
+        [self startPoolUpdate:nil]; //try again
+    }    
 }
 
 @end

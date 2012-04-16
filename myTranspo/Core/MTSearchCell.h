@@ -8,6 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+#define kMTSEARCHCELLHEIGHT 44
+#define kMTSEARCHCELLSHAPEHEIGHT 38
+#define kMTSEARCHCELLSHAPEWIDTH 48
+
+#define kOffSetOriginX 3
+#define kOffSetOriginY 12
+#define kOffSetSubtitleOriginX kOffSetOriginX + 60
+#define kOffSetSubtitleOriginY kOffSetOriginY
+
+#define kOffSetBusDrawOriginX 8
+#define kOffSetBusDrawOriginY 2
+
 typedef enum
 {
     CELLBUS = 0
@@ -25,6 +37,8 @@ typedef enum
     UILabel*                _titleLabel;
     UILabel*                _subtitleLabel;
     MTSearchCellShape*      _titleBackground;
+    UIImageView*            _backgroundImage;
+    UIImageView*            _cellImage;
 }
 
 @property (nonatomic, strong)   NSString*               title;

@@ -76,10 +76,16 @@
     bus2.DisplayHeading = @"Greenboro";
     [_stop2.BusIds addObject:bus2];
 
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"TEST" style:UIBarButtonItemStylePlain target:self action:@selector(swapRoutes:)];
+
+    //navigation controller
+    UIButton* swapButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [swapButton setImage:[UIImage imageNamed:@"train_switch_btn.png"] forState:UIControlStateNormal];
+    [swapButton addTarget:self action:@selector(swapRoutes:) forControlEvents:UIControlEventTouchUpInside];
+    [swapButton sizeToFit];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:swapButton];
     
     //view
-    _backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]];
+    _backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
     self.title = @"OTrain";
     
     //setup tableview header
@@ -196,6 +202,22 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    MTTrip* trip = [_trips objectAtIndex:indexPath.row];
+    
+    MKCoordinateRegion mapRegion;
+    if(trip.StopNumber == _trainLastLocation)
+    {
+        mapRegion.center = CLLocationCoordinate2DMake(_trainAnnotation.coordinates.latitude - 0.001, _trainAnnotation.coordinates.longitude);
+    }
+    else
+    {
+        mapRegion.center = CLLocationCoordinate2DMake(trip.Latitude - 0.001, trip.Longitude);
+    }
+    
+    mapRegion.span.latitudeDelta = 0.002;
+    mapRegion.span.longitudeDelta = 0.002;
+    [_mapView setRegion:mapRegion animated:YES];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -487,12 +509,13 @@
     mapRegion.span.latitudeDelta = 0.002;
     mapRegion.span.longitudeDelta = 0.002;
     [_mapView setRegion:mapRegion animated:YES];
+    
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation 
 {
     if ([annotation isKindOfClass:[MTStopAnnotation class]]) 
-	{
+	{        
 		static NSString *identifier = @"MTStopAnnotation";
         MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
         
@@ -502,7 +525,10 @@
             annotationView.annotation = annotation;
         }
         
-        
+        MTStopAnnotation* stopAnno = (MTStopAnnotation*)annotation;
+        if([stopAnno.stopCode intValue] == _trainLastLocation)
+            annotationView.hidden = YES;
+        else annotationView.hidden = NO;
         annotationView.enabled = YES;
         annotationView.canShowCallout = YES;
         annotationView.image=[UIImage imageNamed:@"global_train_pin.png"];
@@ -512,19 +538,17 @@
 	else if([annotation isKindOfClass:[MTBusAnnotation class]]) 
 	{
 		static NSString *identifier = @"MTBusAnnotation";
-        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
         
 		if (annotationView == nil) {
-            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
         } else {
             annotationView.annotation = annotation;
         }
         
         annotationView.enabled = YES;
         annotationView.canShowCallout = YES;
-        annotationView.animatesDrop = YES;
-        annotationView.pinColor = MKPinAnnotationColorPurple;
-        //annotationView.image=[UIImage imageNamed:@""];
+        annotationView.image=[UIImage imageNamed:@"train_pin_location.png"];
         
         return annotationView;
     }

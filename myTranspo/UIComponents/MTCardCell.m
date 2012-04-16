@@ -43,13 +43,20 @@
 - (void)initializeUI
 {       
     _hasExpanded = NO;
-    
-    CGRect frame = _detailsView.frame;
-    frame.origin.y -= _titleView.frame.size.height - frame.size.height + 24;
-    _detailsView.frame = frame;
-    
     _detailsView.hidden = NO;
-    _arrowImage.hidden = YES;
+    _arrowImage.hidden = YES;    
+    
+    CGRect frame = _detailsBackground.frame;
+    CGRect scrollFrame = _dataScrollView.frame;
+    //CGRect detailsFrame = _detailsView.frame;
+    
+    frame.origin.y = 0 - 40;
+    scrollFrame.origin.y = 0 - 40;
+    //detailsFrame.size.height = 10;
+    
+    _detailsBackground.frame = frame;
+    _dataScrollView.frame = scrollFrame;
+    //_detailsView.frame = detailsFrame;    
     
     _prevHeading.text = NSLocalizedString(@"MTDEF_CARDPREVIOUS", nil);
     _nextHeading.text = NSLocalizedString(@"MTDEF_CARDNEXT", nil);
@@ -57,7 +64,6 @@
     _directionHeading.text = NSLocalizedString(@"MTDEF_CARDDIRECTION", nil);
     
     _dataScrollView.contentSize = CGSizeMake(_dataScrollView.frame.size.width, _dataScrollView.frame.size.height);
-   // _dataScrollView.delegate = self;
     
     //page 1
     _nextTimes = [[NSMutableArray alloc] initWithCapacity:kElementNextTimesCount*kElementNextTimesElementCount];
@@ -126,7 +132,7 @@
     for(int page2 = 0; page2 < kElementMoreDetailsCount; page2++)
     {
         UIImageView* moreDetailsImage = [[UIImageView alloc] initWithFrame:nextTimesImagesFrame];
-        moreDetailsImage.image = [UIImage imageNamed:@"cardcell_next_icon.png"];
+        moreDetailsImage.image = [UIImage imageNamed:@"cardcell_speed_icon.png"];
         moreDetailsImage.contentMode = UIViewContentModeCenter;
         [_moreDetails addObject:moreDetailsImage];
         
@@ -165,6 +171,7 @@
     
     _dataScrollView.contentSize = CGSizeMake((nextTimesLabelFrame.origin.x + nextTimesLabelFrame.size.width) - kElementNextTimesSpacer
                                              , _dataScrollView.frame.size.height);
+
 }
 
 - (NSInteger)getCellHeight
@@ -242,29 +249,10 @@
     
     _modeLarge = YES;
     _hasExpanded = YES;
+    _stop.MTCardCellIsAnimating = YES;
+    
     [self toggleLoadingAnimation:NO];
     
-    //_titleBackground.image = [UIImage imageNamed:@"cardcell_top_background.png"];
-    
-#if 0
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathAddRect(path, NULL, CGRectMake(0, _titleBackground.frame.size.height, _detailsView.frame.size.width, _detailsView.frame.size.height));
-    
-    CAShapeLayer* mask = [CAShapeLayer layer];
-    mask.contents = (id)[[UIImage imageNamed:@"cardcell_top_background.png"] CGImage];
-    //mask.fillColor = [[UIColor whiteColor] CGColor];
-    //mask.backgroundColor = [[UIColor clearColor] CGColor];
-    //mask.frame = _detailsView.bounds;
-    mask.path = path;
-    _detailsView.layer.mask = mask;
-    
-    CGRect titleBackgroundFrame = _titleBackground.frame;
-    titleBackgroundFrame.origin.y -= 15;
-    _titleBackground.frame = titleBackgroundFrame;
-    
-#endif
-
-        
     CGRect titleFrame = _busNumber.frame;
     titleFrame.origin.y -= kCellExpandSpacer;
     _busNumber.frame = titleFrame;
@@ -285,20 +273,36 @@
     titleFrame.origin.y -= kCellExpandSpacer;
     _streetName.frame = titleFrame;
     
-    CGRect frame = _detailsView.frame;
-    frame.origin.y = _titleBackground.frame.origin.y + (_titleBackground.frame.size.height - 3);
+    CGRect frame = _detailsBackground.frame;
+    CGRect scrollFrame = _dataScrollView.frame;
+    //CGRect detailsFrame = _detailsView.frame;
+    
+    frame.origin.y = 2;
+    //scrollFrame.origin.y = -40;
+    //_dataScrollView.frame = scrollFrame;
+    scrollFrame.origin.y = 0;
+    //scrollFrame.size.height = kDataScrollViewFrameHeight;
+    //detailsFrame.size.height = kDetailsViewFrameHeight;
+    
+    //_detailsView.frame = detailsFrame;
     
     if(animate)
     {
-        [UIView animateWithDuration:0.25 animations:^{
-            _detailsView.frame = frame;
+        [UIView animateWithDuration:0.5 animations:^{
+            _detailsBackground.frame = frame;
+            _dataScrollView.frame = scrollFrame;
+        } completion:^(BOOL finished) {
+            _stop.MTCardCellIsAnimating = NO;
         }];
     }
     else
     {
-        _detailsView.frame = frame;
+        _detailsBackground.frame = frame;
+        _dataScrollView.frame = scrollFrame;
     }
 }
+
+
 
 - (BOOL)isCellUpdated
 {

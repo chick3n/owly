@@ -15,6 +15,7 @@
 #import "TripViewController.h"
 #import "MenuTableViewController.h"
 #import "MTOptionsDate.h"
+#import "MTRightButton.h"
 
 @interface MyBusesViewController : MTBaseViewController<MyTranspoDelegate, MTCardCellDelegate, MTQueueSafe, UITableViewDataSource, UITableViewDelegate, MTRefreshDelegate, MTOptionsDateProtocol>
 {
@@ -22,11 +23,14 @@
     BOOL                                _editing;
     int                                 _loadingCounter;
     NSDate*                             _chosenDate;
+    NSTimer*                            _poolUpdates;
     
     //UIComponents
     UIBarButtonItem*                    _editButton;
+    MTRightButton*                      _editButtonValue;
 }
 
-@property (nonatomic, strong)   IBOutlet MTRefreshTableView*   tableView;
+@property (nonatomic, strong)   IBOutlet MTRefreshTableView*    tableView;
+@property (nonatomic, strong)   UINib*                          cellLoader;
 
 @end

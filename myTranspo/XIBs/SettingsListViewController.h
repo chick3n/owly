@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SettingsType.h"
 #import "MTBaseViewController.h"
+#import "MTRightButton.h"
 
 @interface SettingsListViewController : MTBaseViewController <UITableViewDataSource, UITableViewDelegate>
 

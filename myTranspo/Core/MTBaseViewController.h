@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "myTranspoOC.h"
+#import "ZUUIRevealController.h"
 
 @interface MTBaseViewController : UIViewController
 {
     MTLanguage              _language;
     myTranspoOC* __weak     _transpo;
+    ZUUIRevealController* __weak _menuControl;
     
     //UI Components
     UIPanGestureRecognizer* __weak  _panGesture;
@@ -23,5 +25,6 @@
 @property (nonatomic, weak)     myTranspoOC*                transpo;
 @property (nonatomic, weak)     UIPanGestureRecognizer*     panGesture;
 @property (nonatomic, weak)     UIPanGestureRecognizer*     navPanGesture;
+@property (nonatomic, weak)     ZUUIRevealController*       menuControl;
 
 @end

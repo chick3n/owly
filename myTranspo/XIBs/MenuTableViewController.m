@@ -49,6 +49,8 @@
     
     _tableView.dataSource = self;
     _tableView.delegate = self;
+    
+    _accountButton.enabled = NO;
 }
 
 - (void)viewDidUnload

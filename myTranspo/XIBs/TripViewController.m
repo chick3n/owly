@@ -20,6 +20,7 @@
 - (void)busMonitorTick:(id)sender;
 - (void)resizeTableAndMap;
 - (void)resetTrip;
+- (void)goBack:(id)sender;
 @end
 
 @implementation TripViewController
@@ -73,7 +74,7 @@
     _timesPickerView.frame = frame;
     
     //view
-    _backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]];
+    _backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
 	
 	//setup tableview
 	[self.tableView setDelaysContentTouches:NO];
@@ -110,6 +111,11 @@
 	//setup navigation bar
 	self.title = [NSString stringWithFormat:@"%@ %@", _bus.BusNumber, _bus.DisplayHeading];
 	
+    MTRightButton* backButton = [[MTRightButton alloc] initWithType:kRightButtonTypeBack];
+    [backButton setTitle:NSLocalizedString(@"BACKBUTTON", nil) forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    
     UIButton* navButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [navButton setImage:[UIImage imageNamed:@"global_time_btn.png"] forState:UIControlStateNormal];
     [navButton addTarget:self action:@selector(changeTripScheduleTime:) forControlEvents:UIControlEventTouchUpInside];
@@ -402,6 +408,23 @@ numberOfRowsInComponent:(NSInteger)component;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    MTTrip* trip = [_trips objectAtIndex:indexPath.row];
+    
+    MKCoordinateRegion mapRegion;
+    if(trip.StopNumber == _busTripLocation) //zoom map to
+    {
+        mapRegion.center = CLLocationCoordinate2DMake(_busAnnotation.coordinates.latitude - 0.002, _busAnnotation.coordinates.longitude);
+    }
+    else
+    {
+        mapRegion.center = CLLocationCoordinate2DMake(trip.Latitude - 0.002, trip.Longitude);
+    }
+    
+    mapRegion.span.latitudeDelta = 0.004;
+    mapRegion.span.longitudeDelta = 0.004;
+    
+    [_mapView setRegion:mapRegion animated:YES];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -701,7 +724,7 @@ numberOfRowsInComponent:(NSInteger)component;
 	else if([annotation isKindOfClass:[MTBusAnnotation class]]) 
 	{
 		static NSString *identifier = @"MTBusAnnotation";
-        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
         
 		if (annotationView == nil) {
             annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
@@ -711,9 +734,7 @@ numberOfRowsInComponent:(NSInteger)component;
         
         annotationView.enabled = YES;
         annotationView.canShowCallout = YES;
-        annotationView.animatesDrop = YES;
-        annotationView.pinColor = MKPinAnnotationColorPurple;
-        //annotationView.image=[UIImage imageNamed:@""];
+        annotationView.image=[UIImage imageNamed:@"bus_location_pin.png"];
         
         return annotationView;
     }
@@ -724,6 +745,17 @@ numberOfRowsInComponent:(NSInteger)component;
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
     MTLog(@"Show Card manager??"); //i dont think this is a good idea for this screen
+}
+
+- (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views 
+{
+    for (MKAnnotationView * annView in views) 
+    {
+        if([annView.annotation class] == [MTStopAnnotation class])
+        {
+            [[annView superview] sendSubviewToBack:annView];
+        }
+    }
 }
 
 - (void)startBusMonitor
@@ -817,6 +849,13 @@ numberOfRowsInComponent:(NSInteger)component;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
    // NSLog(@"%f", scrollView.contentOffset.y);
+}
+
+#pragma mark - Navigation UI
+
+- (void)goBack:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

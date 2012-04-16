@@ -526,6 +526,7 @@
                 return NO; //no API, why do we want this data than?
             }
             
+            
             newTrip.Destination = ([trip valueForKey:@"TripDestination"] != nil) ? [trip valueForKey:@"TripDestination"] : @"";
             newTrip.StartTime = ([trip valueForKey:@"TripStartTime"] != nil) ? [trip valueForKey:@"TripStartTime"] : @"";
             
@@ -543,12 +544,12 @@
             //GPS Time
             NSTimeInterval minutesAdjusted = ([trip objectForKey:@"AdjustedScheduleTime"] != nil) ? [[trip objectForKey:@"AdjustedScheduleTime"] doubleValue] * 60 : 0;
             newTrip.Time.Time = [dateFormatter stringFromDate:[[NSDate date] dateByAddingTimeInterval:minutesAdjusted]];
+            
+            MTLog(@"GPSTime Trip: %@ Live: %d", newTrip.Time.Time, newTrip.Time.IsLive);
 
             newTrip.BusSpeed = ([trip valueForKey:@"Speed"] != nil) ? [(NSString*)[trip valueForKey:@"Speed"] floatValue] : 0.0;
             newTrip.Latitude = ([trip valueForKey:@"Latitude"] != nil) ? [(NSString*)[trip valueForKey:@"Latitude"] doubleValue] : 0.0;
             newTrip.Longitude = ([trip valueForKey:@"Longitude"] != nil) ? [(NSString*)[trip valueForKey:@"Longitude"] doubleValue] : 0.0;
-            
-            MTLog(@"API: BusSpeed: %@ Lat: %@ Lon: %@ Time: %@", newTrip.BusSpeed, newTrip.Latitude, newTrip.Longitude, newTrip.Time.Time);
             
             [_trips addObject:newTrip];
         }
