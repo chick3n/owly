@@ -1196,4 +1196,44 @@
     return notifyDate;
 }
 
+#pragma mark - Notices
+
+- (BOOL)getNotices
+{
+    if(_hasWebDb)
+    {
+        dispatch_async(_queue
+                       , ^(void){
+                           NSMutableDictionary* results = [[NSMutableDictionary alloc] init];
+                           BOOL status = [_ocWebDb getNotices:results ForLanguage:_language];
+                           dispatch_async(MTLDEF_MAINQUEUE, ^(void){
+                               if([_delegate respondsToSelector:@selector(myTranspo:State:receivedNotices:)])
+                                   [_delegate myTranspo:self State:[MTHelper QuickResultState:status] receivedNotices:results];
+                           });
+                       });
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)getRouteNotices
+{
+    if(_hasWebDb)
+    {
+        dispatch_async(_queue
+                       , ^(void){
+                           NSMutableArray* results = [[NSMutableArray alloc] init];
+                           BOOL status = [_ocWebDb getRoutesForNotices:results];
+                           dispatch_async(MTLDEF_MAINQUEUE, ^(void){
+                               if([_delegate respondsToSelector:@selector(myTranspo:State:receivedRouteNotices::)])
+                                   [_delegate myTranspo:self State:[MTHelper QuickResultState:status] receivedRouteNotices:results];
+                           });
+                       });
+        return YES;
+    }
+    
+    return NO;
+}
+
 @end

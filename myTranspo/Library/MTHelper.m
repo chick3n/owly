@@ -235,4 +235,20 @@
     return time;
 }
 
+#pragma mark - NOTICES
+
++ (NSString*)convertNoticeIdToString:(NSString*)notice
+{
+    if([notice isEqualToString:@"genserchange"])
+        return NSLocalizedString(@"NOTICEGENSERCHANGE", nil);
+    else if([notice isEqualToString:@"genmsg"])
+        return NSLocalizedString(@"NOTICEGENMSG", nil);
+    else if([notice isEqualToString:@"cantrips"])
+        return NSLocalizedString(@"NOTICECANTRIPS", nil);
+    else if([notice isEqualToString:@"detours"])
+        return NSLocalizedString(@"NOTICEDETOURS", nil);
+    
+    return @"";
+}
+
 @end

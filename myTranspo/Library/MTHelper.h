@@ -25,5 +25,6 @@
 + (MTDirection)convertOCBusHeading:(NSString*)heading;
 + (NSString*)convertOC24HourTime:(NSString*)time;
 + (NSString*)revertOC24HourTime:(NSString*)time;
++ (NSString*)convertNoticeIdToString:(NSString*)notice;
 
 @end

@@ -56,6 +56,11 @@
 //GPS
 @optional
 -(void)myTranspo:(id)transpo State:(MTResultState)state updatedUserCoordinates:(CLLocationCoordinate2D)newCoordinates;
+
+//notices
+@optional
+- (void)myTranspo:(id)transpo State:(MTResultState)state receivedNotices:(NSDictionary*)notices;
+- (void)myTranspo:(id)transpo State:(MTResultState)state receivedRouteNotices:(NSArray*)notices;
 @end
 
 #define kDefaultCoordinatesOttawa CLLocationCoordinate2DMake(45.42158812329091, -75.69442749023438)
@@ -148,5 +153,9 @@
 
 //options
 - (NSDate*)getLastSupportedDate;
+
+//notices
+- (BOOL)getNotices;
+- (BOOL)getRouteNotices;
 
 @end

@@ -532,14 +532,31 @@
 
 #pragma mark - NOTICES
 
-- (BOOL)getBusNotices:(NSMutableArray*)notices
+- (BOOL)getNotices:(NSMutableDictionary*)notices ForLanguage:(MTLanguage)language
 {
-    return NO;
+    
+    NSData* data = [self webData:[self appendUrlQuery:((language == MTLANGUAGE_FRENCH) ? @"oc_notices_fr.php" : @"oc_notices.php")]];
+    NSDictionary *json = [self jsonData:data WithClassType:[NSDictionary class]];
+    
+    if(json == nil)
+        return NO;
+    
+    [notices addEntriesFromDictionary:json];
+    
+    return YES;
 }
 
 - (BOOL)getRoutesForNotices:(NSMutableArray*)notices
 {
-    return NO;
+    NSData* data = [self webData:[self appendUrlQuery:@"oc_routeNotices.php"]];
+    NSArray *json = [self jsonData:data WithClassType:[NSArray class]];
+    
+    if(json == nil)
+        return NO;
+    
+    [notices addObjectsFromArray:json];
+    
+    return YES;
 }
 
 @end

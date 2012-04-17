@@ -38,7 +38,7 @@
 			<key>NotificationType</key>
 			<integer>1</integer>
 			<key>Selector</key>
-			<integer>3</integer>
+			<integer>6</integer>
 		</dict>
 		<dict>
 			<key>NavIcon</key>

@@ -151,8 +151,10 @@
         case MTVCTRAIN:
             newView = [[OTrainViewController alloc] initWithNibName:@"OTrainViewController" bundle:nil];
             break;
-        case MTVCUNKNOWN:
         case MTVCNOTICIES:
+            newView = [[NoticesViewController alloc] initWithNibName:@"NoticesViewController" bundle:nil];
+            break;
+        case MTVCUNKNOWN:
         case MTVCTRIPPLANNER:
             return;
     }

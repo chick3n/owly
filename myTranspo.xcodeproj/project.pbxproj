@@ -203,6 +203,12 @@
 		31EE55A8153B5B6500C83552 /* cardcell_speed_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 31EE55A6153B5B6500C83552 /* cardcell_speed_icon.png */; };
 		31EE55A9153B5B6500C83552 /* cardcell_speed_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31EE55A7153B5B6500C83552 /* cardcell_speed_icon@2x.png */; };
 		31EE55AD153BD6FF00C83552 /* cardcell_bottom_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 31EE55AC153BD6FF00C83552 /* cardcell_bottom_background.png */; };
+		31EE55B1153CD6C200C83552 /* NoticesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31EE55AF153CD6BC00C83552 /* NoticesViewController.m */; };
+		31EE55B2153CD6C200C83552 /* NoticesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31EE55B0153CD6BF00C83552 /* NoticesViewController.xib */; };
+		31EE55B6153D16D700C83552 /* NoticesSectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31EE55B4153D16C800C83552 /* NoticesSectionViewController.m */; };
+		31EE55B7153D16D700C83552 /* NoticesSectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31EE55B5153D16CB00C83552 /* NoticesSectionViewController.xib */; };
+		31EE55BB153D19A700C83552 /* NoticesDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31EE55B9153D19A100C83552 /* NoticesDataViewController.m */; };
+		31EE55BC153D19A700C83552 /* NoticesDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31EE55BA153D19A400C83552 /* NoticesDataViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -456,6 +462,15 @@
 		31EE55A6153B5B6500C83552 /* cardcell_speed_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cardcell_speed_icon.png; sourceTree = "<group>"; };
 		31EE55A7153B5B6500C83552 /* cardcell_speed_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cardcell_speed_icon@2x.png"; sourceTree = "<group>"; };
 		31EE55AC153BD6FF00C83552 /* cardcell_bottom_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cardcell_bottom_background.png; sourceTree = "<group>"; };
+		31EE55AE153CD6B900C83552 /* NoticesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoticesViewController.h; path = XIBs/NoticesViewController.h; sourceTree = "<group>"; };
+		31EE55AF153CD6BC00C83552 /* NoticesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoticesViewController.m; path = XIBs/NoticesViewController.m; sourceTree = "<group>"; };
+		31EE55B0153CD6BF00C83552 /* NoticesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NoticesViewController.xib; path = XIBs/NoticesViewController.xib; sourceTree = "<group>"; };
+		31EE55B3153D16C400C83552 /* NoticesSectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoticesSectionViewController.h; path = XIBs/NoticesSectionViewController.h; sourceTree = "<group>"; };
+		31EE55B4153D16C800C83552 /* NoticesSectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoticesSectionViewController.m; path = XIBs/NoticesSectionViewController.m; sourceTree = "<group>"; };
+		31EE55B5153D16CB00C83552 /* NoticesSectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NoticesSectionViewController.xib; path = XIBs/NoticesSectionViewController.xib; sourceTree = "<group>"; };
+		31EE55B8153D199C00C83552 /* NoticesDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoticesDataViewController.h; path = XIBs/NoticesDataViewController.h; sourceTree = "<group>"; };
+		31EE55B9153D19A100C83552 /* NoticesDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoticesDataViewController.m; path = XIBs/NoticesDataViewController.m; sourceTree = "<group>"; };
+		31EE55BA153D19A400C83552 /* NoticesDataViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NoticesDataViewController.xib; path = XIBs/NoticesDataViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -841,6 +856,15 @@
 				310D691E15329183000C4A89 /* SettingsManageNotificationsViewController.h */,
 				310D691F15329183000C4A89 /* SettingsManageNotificationsViewController.m */,
 				310D692015329183000C4A89 /* SettingsManageNotificationsViewController.xib */,
+				31EE55AE153CD6B900C83552 /* NoticesViewController.h */,
+				31EE55AF153CD6BC00C83552 /* NoticesViewController.m */,
+				31EE55B0153CD6BF00C83552 /* NoticesViewController.xib */,
+				31EE55B3153D16C400C83552 /* NoticesSectionViewController.h */,
+				31EE55B4153D16C800C83552 /* NoticesSectionViewController.m */,
+				31EE55B5153D16CB00C83552 /* NoticesSectionViewController.xib */,
+				31EE55B8153D199C00C83552 /* NoticesDataViewController.h */,
+				31EE55B9153D19A100C83552 /* NoticesDataViewController.m */,
+				31EE55BA153D19A400C83552 /* NoticesDataViewController.xib */,
 			);
 			name = XIBs;
 			sourceTree = "<group>";
@@ -1088,6 +1112,9 @@
 				31EE55A8153B5B6500C83552 /* cardcell_speed_icon.png in Resources */,
 				31EE55A9153B5B6500C83552 /* cardcell_speed_icon@2x.png in Resources */,
 				31EE55AD153BD6FF00C83552 /* cardcell_bottom_background.png in Resources */,
+				31EE55B2153CD6C200C83552 /* NoticesViewController.xib in Resources */,
+				31EE55B7153D16D700C83552 /* NoticesSectionViewController.xib in Resources */,
+				31EE55BC153D19A700C83552 /* NoticesDataViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1142,6 +1169,9 @@
 				319D791715371B5B00542ED3 /* MTNavHeader.m in Sources */,
 				319D791815371B5B00542ED3 /* MTTripCell.m in Sources */,
 				31EE5577153B27D400C83552 /* MTRightButton.m in Sources */,
+				31EE55B1153CD6C200C83552 /* NoticesViewController.m in Sources */,
+				31EE55B6153D16D700C83552 /* NoticesSectionViewController.m in Sources */,
+				31EE55BB153D19A700C83552 /* NoticesDataViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

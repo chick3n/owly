@@ -25,7 +25,8 @@
 - (id)initWithUrlPath:(NSString*)urlPath And:(MTLanguage)lang;
 - (BOOL)connectToServer;
 
-- (BOOL)getBusNotices:(NSMutableArray*)notices;
+- (BOOL)getNotices:(NSMutableDictionary*)notices ForLanguage:(MTLanguage)language;
 - (BOOL)getRoutesForNotices:(NSMutableArray*)notices;
+
 
 @end

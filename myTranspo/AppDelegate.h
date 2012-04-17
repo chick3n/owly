@@ -17,6 +17,7 @@
 #import "MTOptionsDate.h"
 #import "SettingsViewController.h"
 #import "OTrainViewController.h"
+#import "NoticesViewController.h"
 
 #include "Core/ViewControllers.h"
 

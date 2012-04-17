@@ -115,6 +115,9 @@
         case 5: //settings
             _viewController = MTVCSETTINGS;
             break;
+        case 6: //notices
+            _viewController = MTVCNOTICIES;
+            break;
         default: //unknown
             _viewController = MTVCUNKNOWN;
             break;

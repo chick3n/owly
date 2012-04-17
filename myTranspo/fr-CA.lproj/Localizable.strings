@@ -53,6 +53,15 @@
 "MTDEF_NOTIFICATIONS" = "Notifications";
 "MTDEF_REMOVEALL" = "Supprimer tout";
 "MTDEF_REMOVESELECTED" = "Supprimer la sélection";
+"NOTICESTITLE" = "Avis";
+"NOTICEGENSERCHANGE" = "Changement de service";
+"NOTICEGENMSG" = "message général";
+"NOTICECANTRIPS" = "Voyages annulés";
+"NOTICEDETOURS" = "Detours";
+"EXTERNALLINKTITLE" = "Ouvrez dans le Safari";
+"EXTERNALLINKMSG" = "Lancez Safari pour consulter ce site?";
+"EXTERNALCANCEL" = "Annuler";
+"EXTERNALOK" = "Ouvert";
 //Dimanche, lundi, mardi, mercredi, jeudi, vendredi, samedi
 "MTDEF_MONDAY" = "Lundi";
 "MTDEF_TUESDAY" = "Mardi";
