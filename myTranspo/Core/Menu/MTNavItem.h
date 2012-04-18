@@ -13,13 +13,15 @@
 #import "MTNavHeader.h"
 #import "ViewControllers.h"
 
+
 @interface MTNavItem : NSObject
 
 @property (nonatomic, strong)   NSString*               title;
 @property (nonatomic, strong)   NSString*               notificationMessage;
 @property (nonatomic)           MTNavIcon               icon;
 @property (nonatomic)           MTNavNotificationType   type;
-@property (nonatomic)           BOOL                    hasAlert;
+@property (nonatomic)           BOOL                    hasAlert; //show an alert
+@property (nonatomic)           BOOL                    hasImportantAlert; //show a bolder alert
 @property (nonatomic)           MTLanguage              language;
 @property (nonatomic)           MTViewControllers       viewController;
 

@@ -26,5 +26,7 @@
 + (NSString*)convertOC24HourTime:(NSString*)time;
 + (NSString*)revertOC24HourTime:(NSString*)time;
 + (NSString*)convertNoticeIdToString:(NSString*)notice;
++ (NSString*)convertNoticeIdToSubtitleString:(NSString*)notice;
++ (NSString*)convertNoticeIdToIconString:(NSString*)notice;
 
 @end

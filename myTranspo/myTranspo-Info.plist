@@ -24,8 +24,12 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
+	<key>Database Version</key>
+	<real>0.59999999999999998</real>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>Settings Version</key>
+	<real>0.40000000000000002</real>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
@@ -35,9 +39,5 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
-	<key>Database Version</key>
-	<real>0.6</real>
-	<key>Settings Version</key>
-	<real>0.4</real>
 </dict>
 </plist>

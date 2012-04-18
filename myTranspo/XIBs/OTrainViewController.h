@@ -17,6 +17,9 @@
 #import "MTStopAnnotation.h"
 
 #define kMTTrainTimerInterval 60
+#define kMTTrainDeltaLat 0.1
+#define kMTTrainDeltaLon 0.1
+#define kMTTrainDeltaOffset 0.02
 
 @interface OTrainViewController : MTBaseViewController<UITableViewDelegate, UITableViewDataSource, MTQueueSafe, MyTranspoDelegate, MKMapViewDelegate>
 {
@@ -34,10 +37,17 @@
     IBOutlet UIActivityIndicatorView*   _loadingIndicator;
     IBOutlet MKMapView*					_mapView;
     UIImageView*                        _backgroundImage;
+    
+    //map components
+    MKPolyline*                         _routeLine;
+    MKPolylineView*                     _routeLineView;
+    MKMapRect                           _routeRect;
 }
 
 @property (nonatomic, weak)	IBOutlet UITableView*		tableView;
-@property (nonatomic, strong)   NSDate*             chosenDate;
-@property (nonatomic)           BOOL                futureTrip;
+@property (nonatomic, strong)   NSDate*                 chosenDate;
+@property (nonatomic)           BOOL                    futureTrip;
+@property (nonatomic, strong) MKPolyline*               routeLine;
+@property (nonatomic, strong) MKPolylineView*           routeLineView;
 
 @end

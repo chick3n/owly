@@ -1219,15 +1219,21 @@
 
 - (BOOL)getRouteNotices
 {
+    return [self getRouteNoticesForTempDelegate:_delegate];
+}
+
+- (BOOL)getRouteNoticesForTempDelegate:(id<MyTranspoDelegate>)delegate
+{
     if(_hasWebDb)
     {
         dispatch_async(_queue
                        , ^(void){
                            NSMutableArray* results = [[NSMutableArray alloc] init];
                            BOOL status = [_ocWebDb getRoutesForNotices:results];
+                           BOOL hasFavorite = [_ocDb compareFavoritesToNotices:results];
                            dispatch_async(MTLDEF_MAINQUEUE, ^(void){
-                               if([_delegate respondsToSelector:@selector(myTranspo:State:receivedRouteNotices::)])
-                                   [_delegate myTranspo:self State:[MTHelper QuickResultState:status] receivedRouteNotices:results];
+                               if([delegate respondsToSelector:@selector(myTranspo:State:receivedRouteNotices:forFavoriteRoute:)])
+                                   [delegate myTranspo:self State:[MTHelper QuickResultState:status] receivedRouteNotices:results forFavoriteRoute:hasFavorite];
                            });
                        });
         return YES;

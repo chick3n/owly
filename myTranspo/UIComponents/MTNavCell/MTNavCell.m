@@ -38,7 +38,7 @@
     _notificationMessage.hidden = YES;
 }
 
-- (void)updateNotificationMessage:(NSString*)count
+- (void)updateNotificationMessage:(NSString*)count isImportant:(BOOL)important
 {
     if(count == nil)
     {
@@ -62,7 +62,10 @@
     frame.size.width = _notificationMessage.frame.size.width;
     _notificationImage.frame = frame;
     
-    //_notificationImage.backgroundColor = kMTNAVCELLNOTIFIERCOLOR;
+    if(important) 
+        _notificationImage.backgroundColor = kMTNAVCELLNOTIFIERCOLOR;
+    else _notificationImage.backgroundColor = kMTNAVCELLNOTIFIERNORMALCOLOR;
+    
     _notificationImage.layer.cornerRadius = 5;
 }
 

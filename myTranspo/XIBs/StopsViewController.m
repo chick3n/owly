@@ -128,7 +128,8 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return ((interfaceOrientation == UIInterfaceOrientationPortrait) || 
+            (interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown));
 }
 
 #pragma mark - QUEUE SAFE
@@ -249,7 +250,7 @@
         MTBus *bus = [sectionResults objectAtIndex:indexPath.row];
         
         //cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", bus.BusNumber, bus.DisplayHeading];
-        cell.title = bus.BusNumber;
+        cell.title = bus.BusNumberDisplay;
         cell.subtitle = bus.DisplayHeading;
         cell.type = CELLBUS;
     }

@@ -8,6 +8,11 @@
 
 #import "MenuTableViewController.h"
 
+@interface MenuTableViewController ()
+- (void)startNoticesUpdate:(id)sender;
+- (void)finishedNoticesUpdate:(id)sender;
+@end
+
 @implementation MenuTableViewController
 @synthesize tableView                   = _tableView;
 @synthesize delegate                    = _delegate;
@@ -51,6 +56,9 @@
     _tableView.delegate = self;
     
     _accountButton.enabled = NO;
+    
+    _actionUpdates = [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(startNoticesUpdate:) userInfo:nil repeats:NO];
+    [_actionUpdates fire];
 }
 
 - (void)viewDidUnload
@@ -58,6 +66,13 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+    
+    if(_actionUpdates != nil)
+        [_actionUpdates invalidate];
+    
+    _accountButton = nil;
+    _accountIcon = nil;
+    _accountIcon = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -83,7 +98,8 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return ((interfaceOrientation == UIInterfaceOrientationPortrait) || 
+            (interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown));
 }
 
 #pragma mark - Table view data source
@@ -121,10 +137,10 @@
                 [cell updateNotificationAlert];
                 break;
             case MTNAVNOTIFICATIONTYPECOUNT:
-                [cell updateNotificationMessage:item.notificationMessage];
+                [cell updateNotificationMessage:item.notificationMessage isImportant:item.hasImportantAlert];
                 break;
             case MTNAVNOTIFICATIONTYPENONE:
-                [cell updateNotificationMessage:nil]; //hides notification
+                [cell updateNotificationMessage:nil isImportant:NO]; //hides notification
                 break;
         }
     }
@@ -144,12 +160,52 @@
         [_delegate menuTable:self selectedNewOption:item.viewController];
     }
     
+    if(item.viewController == MTVCNOTICIES)
+        [self startNoticesUpdate:nil];//re update
+    
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 - (IBAction)accountClicked:(id)sender
 {
     
+}
+
+#pragma mark - My Transpo Delegate
+
+- (void)myTranspo:(id)transpo State:(MTResultState)state receivedRouteNotices:(NSArray *)notices forFavoriteRoute:(BOOL)hasFavorite
+{
+    if(state == MTRESULTSTATE_SUCCESS && notices != nil)
+    {
+        for(MTNavItem* item in _menu)
+        {
+            if(item.viewController == MTVCNOTICIES)
+            {
+                item.hasAlert = YES;
+                if(hasFavorite)
+                    item.hasImportantAlert = YES;
+                
+                item.notificationMessage = [NSString stringWithFormat:@"%d", notices.count];
+                [_tableView reloadData];
+                break;
+            }
+        }
+    }
+    [self finishedNoticesUpdate:nil];
+}
+
+#pragma mark - Notices
+
+- (void)startNoticesUpdate:(id)sender
+{
+    [_transpo getRouteNoticesForTempDelegate:self];
+    [_actionUpdates invalidate];
+}
+
+- (void)finishedNoticesUpdate:(id)sender
+{
+    //reset timer here
+    _actionUpdates = [NSTimer scheduledTimerWithTimeInterval:600 target:self selector:@selector(startNoticesUpdate:) userInfo:nil repeats:NO];
 }
 
 @end

@@ -104,7 +104,7 @@
     if(_stop == nil || _bus == nil)
         return NO;
     
-    [self updateBusNumber:_bus.BusNumber];
+    [self updateBusNumber:_bus.BusNumberDisplay];
     [self updateBusHeading:_bus.DisplayHeading];
     [self updateStreetName:_stop.StopNameDisplay];
     

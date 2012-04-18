@@ -339,7 +339,7 @@
         [card updateDistance:[_stop getDistanceOfStop]];
         [card updateBusHeading:route.DisplayHeading];
         [card updateStreetName:_stop.StopNameDisplay];
-        [card updateBusNumber:route.BusNumber];
+        [card updateBusNumber:route.BusNumberDisplay];
     }
     else
     {

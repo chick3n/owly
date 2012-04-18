@@ -54,10 +54,14 @@
 "MTDEF_REMOVEALL" = "Supprimer tout";
 "MTDEF_REMOVESELECTED" = "Supprimer la sélection";
 "NOTICESTITLE" = "Avis";
-"NOTICEGENSERCHANGE" = "Changement de service";
-"NOTICEGENMSG" = "message général";
-"NOTICECANTRIPS" = "Voyages annulés";
+"NOTICEGENSERCHANGE" = "Plans d'avenir";
+"NOTICEGENMSG" = "Ascenseurs / Accessibilité";
+"NOTICECANTRIPS" = "Annulé Aujourd'hui";
 "NOTICEDETOURS" = "Detours";
+"NOTICEGENSERCHANGEDESC" = "Modifications futures et les plans";
+"NOTICEGENMSGDESC" = "Calendriers de maintenance ascenseur";
+"NOTICECANTRIPSDESC" = "Voir Changes Live pour aujourd'hui";
+"NOTICEDETOURSDESC" = "Voir tous les détours à venir";
 "EXTERNALLINKTITLE" = "Ouvrez dans le Safari";
 "EXTERNALLINKMSG" = "Lancez Safari pour consulter ce site?";
 "EXTERNALCANCEL" = "Annuler";

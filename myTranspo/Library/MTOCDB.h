@@ -52,6 +52,7 @@
 - (BOOL)removeFavoriteForStop:(MTStop*)stop AndBus:(MTBus*)bus;
 - (BOOL)isFavoriteForStop:(MTStop*)stop AndBus:(MTBus*)bus;
 - (BOOL)updateFavorite:(MTStop*)stop AndBus:(MTBus*)bus;
+- (BOOL)compareFavoritesToNotices:(NSArray*)notices;
 
 //stored times
 - (BOOL)addTimes:(NSDictionary*)times ToLocalDatabaseForStop:(MTStop*)stop AndBus:(MTBus*)bus;

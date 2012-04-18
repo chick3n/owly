@@ -60,7 +60,7 @@
 //notices
 @optional
 - (void)myTranspo:(id)transpo State:(MTResultState)state receivedNotices:(NSDictionary*)notices;
-- (void)myTranspo:(id)transpo State:(MTResultState)state receivedRouteNotices:(NSArray*)notices;
+- (void)myTranspo:(id)transpo State:(MTResultState)state receivedRouteNotices:(NSArray*)notices forFavoriteRoute:(BOOL)hasFavorite;
 @end
 
 #define kDefaultCoordinatesOttawa CLLocationCoordinate2DMake(45.42158812329091, -75.69442749023438)
@@ -83,8 +83,8 @@
     CLLocationManager*      _locationManager;
     
 //    NSOperationQueue*       _queue;
-    dispatch_queue_t        _queue;
-    id<MyTranspoDelegate> __weak   _delegate;
+    dispatch_queue_t                _queue;
+    id<MyTranspoDelegate> __weak    _delegate;
 }
 
 @property (nonatomic)           MTLanguage              Language;
@@ -157,5 +157,6 @@
 //notices
 - (BOOL)getNotices;
 - (BOOL)getRouteNotices;
+- (BOOL)getRouteNoticesForTempDelegate:(id<MyTranspoDelegate>)delegate;
 
 @end

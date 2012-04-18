@@ -732,7 +732,8 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-	return (toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+	return ((toInterfaceOrientation == UIInterfaceOrientationPortrait) || 
+            (toInterfaceOrientation == UIInterfaceOrientationPortraitUpsideDown));
 }
 
 #pragma mark - Memory Management

@@ -42,6 +42,7 @@
 @property (readonly, getter = getPrevTime)          NSString*   PrevTime;
 @property (readonly, getter = getNextThreeTimes)    NSArray*    NextThreeTimes;
 @property (readonly, getter = getCurrentTrip)       MTTime*     CurrentTrip;
+@property (readonly)                                NSString*   BusNumberDisplay;
 
 //methods
 - (id)initWithLanguage:(MTLanguage)lang;
@@ -58,6 +59,7 @@
 - (NSArray*)getSaturdayTimesForDisplay;
 - (NSArray*)getSundayTimesForDisplay;
 - (NSArray*)getNextTimesOfAmount:(int)count IncludeLiveTime:(BOOL)useLive;
+
 
 //debug helper methods
 - (NSString *)description;

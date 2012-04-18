@@ -196,7 +196,7 @@
 {
     _stop = stop;
     
-    _busNumber.text = stop.Bus.BusNumber;
+    _busNumber.text = stop.Bus.BusNumberDisplay;
     _busHeading.text = (stop.Bus.TrueDisplayHeading != nil) ? stop.Bus.TrueDisplayHeading : stop.Bus.DisplayHeading;
     _streetName.text = stop.StopNameDisplay;
     

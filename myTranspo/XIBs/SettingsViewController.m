@@ -85,7 +85,8 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return ((interfaceOrientation == UIInterfaceOrientationPortrait) || 
+            (interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown));
 }
 
 #pragma mark - SETTINGS SETUP
@@ -94,9 +95,10 @@
 {    
     //group account
     NSMutableArray* groupAccount = [[NSMutableArray alloc] init];
+#if 0    
     [groupAccount addObject:[SettingsType settingsTypeForGroup:SGACCOUNTINFO Type:STTEXTBOX Title:NSLocalizedString(@"MTDEF_ACCOUNTNAME", nil) SubTitle:nil Data:[NSArray arrayWithObject:[_settings accountNameForArary]] Selected:0 ModificationCaller:@selector(updateAccountName:) Delegate:self]];
     [groupAccount addObject:[SettingsType settingsTypeForGroup:SGACCOUNTINFO Type:STPASSWORD Title:NSLocalizedString(@"MTDEF_ACCOUNTPASSWORD", nil)SubTitle:nil Data:[NSArray arrayWithObject:[_settings passwordForArray]] Selected:0 ModificationCaller:@selector(updatePassword:) Delegate:self]];
-    
+#endif
     [_data addObject:groupAccount];
     
     //application settings
@@ -129,7 +131,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSArray* settings = [_data objectAtIndex:section];
-    return (settings == nil) ? 0 : settings.count;
+    return (settings == nil || settings.count == 0) ? 0 : settings.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -145,7 +147,7 @@
         cell.textLabel.shadowOffset = CGSizeMake(0, 1);
         
         cell.detailTextLabel.textColor = [UIColor colorWithRed:140./255. green:140./255. blue:140./255. alpha:1.0];
-        cell.detailTextLabel.font = [UIFont fontWithName:@"HelveitcaNeue" size:16.];
+        cell.detailTextLabel.font = [UIFont fontWithName:@"HelveitcaNeue" size:14.0];
         
         cell.backgroundColor = [UIColor colorWithRed:245./255. green:247./255. blue:248./255. alpha:1.0];
     }
@@ -189,17 +191,19 @@
     return cell;
 }
 
+#if 1
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if(section == SGDATA)
+    if(section == SGDATA && [[_data objectAtIndex:section] count] > 0)
         return NSLocalizedString(@"MTDEF_MANAGEDATAHEADER", nil);
-    else if(section == SGACCOUNTINFO)
+    else if(section == SGACCOUNTINFO && [[_data objectAtIndex:section] count] > 0)
         return NSLocalizedString(@"MTDEF_ACCOUNTINFOHEADER", nil);
-    else if(section == SGAPPLICATION)
+    else if(section == SGAPPLICATION && [[_data objectAtIndex:section] count] > 0)
         return NSLocalizedString(@"MTDEF_APPSETTINGSHEADER", nil);
     
     return @"";
 }
+#endif
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -213,11 +217,11 @@
     headerLabel.shadowOffset = CGSizeMake(0, 1.0);
     headerLabel.textAlignment = UITextAlignmentLeft;
     
-    if(section == SGDATA)
+    if(section == SGDATA && [[_data objectAtIndex:section] count] > 0)
         headerLabel.text = NSLocalizedString(@"MTDEF_MANAGEDATAHEADER", nil);
-    else if(section == SGACCOUNTINFO)
+    else if(section == SGACCOUNTINFO && [[_data objectAtIndex:section] count] > 0)
         headerLabel.text = NSLocalizedString(@"MTDEF_ACCOUNTINFOHEADER", nil);
-    else if(section == SGAPPLICATION)
+    else if(section == SGAPPLICATION && [[_data objectAtIndex:section] count] > 0)
         headerLabel.text = NSLocalizedString(@"MTDEF_APPSETTINGSHEADER", nil);
     
     [headerView addSubview:headerLabel];

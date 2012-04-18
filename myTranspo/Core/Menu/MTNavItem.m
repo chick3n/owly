@@ -23,6 +23,7 @@
 @synthesize hasAlert                = _hasAlert;
 @synthesize language                = _language;
 @synthesize viewController          = _viewController;
+@synthesize hasImportantAlert       = _hasImportantAlert;
 
 - (id)initWithTitle:(NSString*)title WithIcon:(MTNavIcon)icon WithLanguage:(MTLanguage)language
 {
@@ -36,6 +37,7 @@
         _hasAlert = NO;
         _language = language;
         _viewController = MTVCMENU;
+        _hasImportantAlert = NO;
     }
     
     return self;
@@ -53,6 +55,7 @@
         _title = (_language == MTLANGUAGE_ENGLISH) ? [dic valueForKey:@"NavTitle"] : [dic valueForKey:@"NavTitleFrench"];
         _hasAlert = NO;
         _notificationMessage = nil;
+        _hasImportantAlert = NO;
     }
     return self;
 }

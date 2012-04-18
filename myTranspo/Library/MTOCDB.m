@@ -688,6 +688,9 @@
     if(!_isConnected)
         return NO;
     
+    if(favorites == nil)
+        return NO;
+    
     NSString *sqlStmt = [NSString stringWithFormat: \
                          @"select %@ \
                          from %@ \
@@ -733,6 +736,36 @@
         sqlite3_reset(_cmpStmt);
         
         return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)compareFavoritesToNotices:(NSArray*)notices
+{
+    if(!_isConnected)
+        return NO;
+    
+    if(notices == nil)
+        return NO;
+    
+    if(notices.count <= 0)
+        return NO;
+    
+    NSMutableArray* favorites = [[NSMutableArray alloc] init];
+    [self getFavorites:favorites];
+    
+    if(favorites == nil)
+        return NO;
+    
+    for(MTStop* stop in favorites)
+    {
+        MTBus* bus = stop.Bus;
+        for(int x=0; x<notices.count; x++)
+        {
+            if([bus.BusNumber isEqualToString:(NSString*)[notices objectAtIndex:x]])
+                return YES;
+        }
     }
     
     return NO;

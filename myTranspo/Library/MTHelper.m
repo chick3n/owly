@@ -49,15 +49,11 @@
 + (int)NextDayOfWeekFromWeek:(int)week
 {
     //sunday = 1 sat = 7
-    switch (week) {
-        case 1:
-            return 2;
-        case 7:
-            return 1;
-    }
+    if(week >= 7)
+        return 1;
     
     //return week + 1;
-    return 7; //dont care about mon-fri as the times are the same return sat as the next day if its a weekday
+    return week+1;
 }
 
 + (MTResultState)QuickResultState:(BOOL)status
@@ -106,7 +102,11 @@
     
     NSTimeInterval timeBetweenDates = [chosenTime timeIntervalSinceDate:today];
     if(timeBetweenDates < 0)
-        return time;
+    {
+        //assume that the time we sent is now for the next day
+        chosenTime = [chosenTime dateByAddingTimeInterval:24*60*60];
+//        return time;
+    }
     
     NSCalendar *sysCalendar = [NSCalendar currentCalendar];
     unsigned int unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSDayCalendarUnit | NSMonthCalendarUnit;
@@ -114,6 +114,10 @@
 
     if([conversionInfo day] >= 1)
         timeRemaining = @"1d+";
+    else if([conversionInfo hour] > 16 || ([conversionInfo hour] >= 16 && [conversionInfo minute] > 39))
+    {
+        timeRemaining = [NSString stringWithFormat:@"%dh+", [conversionInfo hour]];
+    }
     else if([conversionInfo hour] > 0 || [conversionInfo minute] > 0)
     {
         timeRemaining = [NSString stringWithFormat:@"%dm", ([conversionInfo hour] * 60) + [conversionInfo minute]];
@@ -247,6 +251,34 @@
         return NSLocalizedString(@"NOTICECANTRIPS", nil);
     else if([notice isEqualToString:@"detours"])
         return NSLocalizedString(@"NOTICEDETOURS", nil);
+    
+    return @"";
+}
+
++ (NSString*)convertNoticeIdToSubtitleString:(NSString*)notice
+{
+    if([notice isEqualToString:@"genserchange"])
+        return NSLocalizedString(@"NOTICEGENSERCHANGEDESC", nil);
+    else if([notice isEqualToString:@"genmsg"])
+        return NSLocalizedString(@"NOTICEGENMSGDESC", nil);
+    else if([notice isEqualToString:@"cantrips"])
+        return NSLocalizedString(@"NOTICECANTRIPSDESC", nil);
+    else if([notice isEqualToString:@"detours"])
+        return NSLocalizedString(@"NOTICEDETOURSDESC", nil);
+    
+    return @"";
+}
+
++ (NSString*)convertNoticeIdToIconString:(NSString*)notice
+{
+    if([notice isEqualToString:@"genserchange"])
+        return @"notice_plan_icon.png";
+    else if([notice isEqualToString:@"genmsg"])
+        return @"";
+    else if([notice isEqualToString:@"cantrips"])
+        return @"notice_day_icon.png";
+    else if([notice isEqualToString:@"detours"])
+        return @"notice_detour_icon.png";
     
     return @"";
 }

@@ -10,6 +10,8 @@
 #import "MTIncludes.h"
 #import "NoticesSectionViewController.h"
 
+#define kNoticesCellHeight 72
+
 @interface NoticesViewController : MTBaseViewController <UITableViewDataSource, UITableViewDelegate, MyTranspoDelegate>
 {
     NSDictionary*                       _data;

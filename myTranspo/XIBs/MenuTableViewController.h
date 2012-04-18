@@ -18,15 +18,16 @@
 - (void)menuTable:(id)menuView selectedNewOption:(MTViewControllers)view;
 @end
 
-@interface MenuTableViewController : MTBaseViewController<UITableViewDataSource, UITableViewDelegate>
+@interface MenuTableViewController : MTBaseViewController<UITableViewDataSource, UITableViewDelegate, MyTranspoDelegate>
 {
+    NSTimer*                        _actionUpdates;
     NSMutableArray*                 _menu;
     IBOutlet UIButton*              _accountButton;
     IBOutlet UILabel*               _accountLabel;
     IBOutlet UIImageView*           _accountIcon;
 }
 
-@property (nonatomic, strong)   IBOutlet UITableView*       tableView;
+@property (nonatomic, weak)     IBOutlet UITableView*       tableView;
 @property (nonatomic, weak)     id<MenuTableViewDelegate>   delegate;
 
 - (IBAction)accountClicked:(id)sender;

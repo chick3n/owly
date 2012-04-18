@@ -18,12 +18,15 @@
 - (void)startMonitor:(id)sender;
 - (void)stopMonitor:(id)sender;
 - (void)trainMonitorTick:(id)sender;
+- (void)loadRouteOverlay:(id)sender;
 @end
 
 @implementation OTrainViewController
 @synthesize tableView           = _tableView;
 @synthesize chosenDate          = _chosenDate;
 @synthesize futureTrip          = _futureTrip;
+@synthesize routeLine           = _routeLine;
+@synthesize routeLineView       = _routeLineView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -112,8 +115,12 @@
     tableViewFrame.origin.y = _mapView.frame.origin.y + _mapView.frame.size.height;
     self.tableView.frame = tableViewFrame;
     
-    //mapvoew
+    //mapvoew    
     _mapView.delegate = self;
+    [self loadRouteOverlay:nil];
+    if(_routeLine != nil)
+        [_mapView addOverlay:_routeLine];
+    [self setTrainLocation:nil];
 }
 
 - (void)viewDidUnload
@@ -144,7 +151,8 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return ((interfaceOrientation == UIInterfaceOrientationPortrait) || 
+            (interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown));
 }
 
 #pragma mark - Table view data source
@@ -207,15 +215,15 @@
     MKCoordinateRegion mapRegion;
     if(trip.StopNumber == _trainLastLocation)
     {
-        mapRegion.center = CLLocationCoordinate2DMake(_trainAnnotation.coordinates.latitude - 0.001, _trainAnnotation.coordinates.longitude);
+        mapRegion.center = CLLocationCoordinate2DMake(_trainAnnotation.coordinates.latitude - kMTTrainDeltaOffset, _trainAnnotation.coordinates.longitude);
     }
     else
     {
-        mapRegion.center = CLLocationCoordinate2DMake(trip.Latitude - 0.001, trip.Longitude);
+        mapRegion.center = CLLocationCoordinate2DMake(trip.Latitude - kMTTrainDeltaOffset, trip.Longitude);
     }
     
-    mapRegion.span.latitudeDelta = 0.002;
-    mapRegion.span.longitudeDelta = 0.002;
+    mapRegion.span.latitudeDelta = kMTTrainDeltaLat;
+    mapRegion.span.longitudeDelta = kMTTrainDeltaLon;
     [_mapView setRegion:mapRegion animated:YES];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -451,12 +459,19 @@
 - (void)setTrainLocation:(id)sender
 {
     MTTrip* trip = [_trips objectAtIndex:0];
-    
-    MKCoordinateRegion mapRegion;
-    mapRegion.center = CLLocationCoordinate2DMake(trip.Latitude - 0.001, trip.Longitude);
-    mapRegion.span.latitudeDelta = 0.002;
-    mapRegion.span.longitudeDelta = 0.002;
-    [_mapView setRegion:mapRegion animated:YES];
+ 
+    if(_routeRect.origin.x == 0 || _routeRect.origin.y == 0)
+    {
+        MKCoordinateRegion mapRegion;
+        mapRegion.center = CLLocationCoordinate2DMake(trip.Latitude - kMTTrainDeltaOffset, trip.Longitude);
+        mapRegion.span.latitudeDelta = kMTTrainDeltaLat;
+        mapRegion.span.longitudeDelta = kMTTrainDeltaLon;
+        [_mapView setRegion:mapRegion animated:YES];
+    }
+    else
+    {
+        [_mapView setVisibleMapRect:_routeRect];
+    }
 }
 
 #pragma mark - ANNOTATIONS
@@ -505,11 +520,11 @@
     [_tableView reloadData];
     
     MKCoordinateRegion mapRegion;
-    mapRegion.center = CLLocationCoordinate2DMake(prevTrip.Latitude - 0.001, prevTrip.Longitude);
-    mapRegion.span.latitudeDelta = 0.002;
-    mapRegion.span.longitudeDelta = 0.002;
+    mapRegion.center = CLLocationCoordinate2DMake(prevTrip.Latitude - kMTTrainDeltaOffset, prevTrip.Longitude);
+    mapRegion.span.latitudeDelta = kMTTrainDeltaLat;
+    mapRegion.span.longitudeDelta = kMTTrainDeltaLon;
     [_mapView setRegion:mapRegion animated:YES];
-    
+
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation 
@@ -556,10 +571,6 @@
     return nil;    
 }
 
-- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
-{
-    MTLog(@"Show Card manager??"); //i dont think this is a good idea for this screen
-}
 
 - (void)getTrainLocation:(id)sender
 {
@@ -655,6 +666,93 @@
     
     [_stop cancelQueuesForBuses];
     [_stop2 cancelQueuesForBuses];
+}
+
+#pragma mark - MKMAP OVERLAY
+
+- (void)loadRouteOverlay:(id)sender
+{
+    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"otrainRoutes" ofType:@"csv"];
+    NSString* fileContents = [NSString stringWithContentsOfFile:filePath
+                                                       encoding:NSUTF8StringEncoding
+                                                          error:nil];
+    NSArray* pointStrings = [fileContents componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+    MKMapPoint north;
+    MKMapPoint south;
+    
+    MKMapPoint* pointArr = malloc(sizeof(CLLocationCoordinate2D) * pointStrings.count);
+    
+    
+    
+    for(int idx = 0; idx < pointStrings.count; idx++)
+    {
+        NSString* currentPointString = [pointStrings objectAtIndex:idx];
+        if(currentPointString == nil)
+            continue;
+        
+        NSArray* latLonArr = [currentPointString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@","]];
+        
+        if(latLonArr == nil || latLonArr.count != 2)
+        {
+            continue;
+        }
+        
+        CLLocationDegrees latitude = [[latLonArr objectAtIndex:0] doubleValue];
+        CLLocationDegrees longitude = [[latLonArr objectAtIndex:1] doubleValue];
+        
+        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latitude, longitude);
+        
+        MKMapPoint point = MKMapPointForCoordinate(coordinate);
+        
+        if(idx == 0)
+        {
+            north = point;
+            south = point;
+        }
+        else
+        {
+            if(point.x > north.x)
+                north.x = point.x;
+            if(point.y > north.y)
+                north.y = point.y;
+            if(point.x < south.x)
+                south.x = point.x;
+            if(point.y < south.y)
+                south.y = point.y;
+        }
+        
+        pointArr[idx] = point;
+    } 
+    
+    _routeLine = [MKPolyline polylineWithPoints:pointArr count:pointStrings.count];
+    _routeRect = MKMapRectMake(south.x
+                               , south.y
+                               , north.x - south.x
+                               , north.y - south.y);
+    
+    free(pointArr);
+}
+
+- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id<MKOverlay>)overlay
+{
+    MKOverlayView* overlayView = nil;
+    
+    if(overlay == _routeLine)
+    {
+        if(_routeLineView == nil)
+        {
+            _routeLineView = [[MKPolylineView alloc] initWithPolyline:_routeLine];
+            //_routeLineView.fillColor = [UIColor blueColor];
+            _routeLineView.strokeColor = [UIColor blueColor];
+            _routeLineView.lineWidth = 10;
+            _routeLineView.alpha = 0.7;
+        }
+        
+        overlayView = _routeLineView;
+    }
+    
+    return overlayView;
 }
 
 @end

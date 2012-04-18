@@ -32,6 +32,20 @@
 @synthesize BusSpeed                    = _busSpeed;
 @synthesize TrueDisplayHeading          = _trueDisplayHeading;
 
+- (NSString*)BusNumberDisplay
+{
+    if(_busNumber == nil)
+        return @"";
+    
+    NSNumberFormatter* f = [[NSNumberFormatter alloc] init];
+    if([f numberFromString:_busNumber] == nil) //isnt a number
+    {
+        return [_busNumber substringToIndex:1]; //return the first letter only
+    }
+    
+    return _busNumber;
+}
+
 - (id)init
 {
     self = [super init];

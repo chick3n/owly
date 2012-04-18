@@ -40,7 +40,7 @@ typedef enum
     IBOutlet UILabel*                   _notificationMessage;
 }
 
-- (void)updateNotificationMessage:(NSString*)count;
+- (void)updateNotificationMessage:(NSString*)count isImportant:(BOOL)important;
 - (void)updateNavCell:(MTNavIcon)icon WithTitle:(NSString*)title;
 - (void)updateNotificationAlert;
 - (void)initializeUI;
