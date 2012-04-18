@@ -46,10 +46,12 @@
     [self.tableView setTableFooterView:[[MTNavFooter alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 1)]];
     
     //dateformatter
-    _dateFormatter = [[NSDateFormatter alloc] init];
-    [_dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    [_dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
-    [_dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
+    _dateFormatter = [MTHelper MTDateFormatterDashesYYYYMMDD];
+    _dateFormatter.dateFormat = @"EEEE, d";
+    
+    //date suffix
+    NSString *suffix_string = @"|st|nd|rd|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|st|nd|rd|th|th|th|th|th|th|th|st";
+    _suffixes = [suffix_string componentsSeparatedByString: @"|"];
     
     if(_lastDate != nil)
     {
@@ -133,6 +135,9 @@
     NSArray *month = [_data objectAtIndex:indexPath.section];
     NSDate *date = [month objectAtIndex:indexPath.row];
 
+    NSDateComponents* dateComponent = [[NSCalendar currentCalendar] components:NSDayCalendarUnit fromDate:date];
+    int day = [dateComponent day];
+    
     if(_selectedDate != nil)
     {
         NSDateComponents* components = [[NSCalendar currentCalendar] components:NSDayCalendarUnit fromDate:date toDate:_selectedDate options:0];
@@ -142,7 +147,9 @@
         else sel.hidden = YES;
     }
     
-    cell.textLabel.text = [_dateFormatter stringFromDate:date];
+    NSString *suffix = [_suffixes objectAtIndex:day];   
+    
+    cell.textLabel.text = [[_dateFormatter stringFromDate:date] stringByAppendingString:suffix];
     
     return cell;
 }
@@ -151,7 +158,7 @@
 {
     NSString* headerLabel = @"";
     NSDateFormatter* monthFormatter = [[NSDateFormatter alloc] init];
-    monthFormatter.dateFormat = @"MMMM";
+    monthFormatter.dateFormat = @"MMMM Y";
     
     NSArray* months = [_data objectAtIndex:section];
     if(months != nil && months.count > 0)
@@ -160,17 +167,22 @@
         headerLabel = [monthFormatter stringFromDate:date];
     }
     
-    UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 23)];
-    [header addSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_category_bar.png"]]];
-    UILabel *tableViewHeadlerLabel = [[UILabel alloc] initWithFrame:CGRectMake((header.frame.size.width - 100) + 8, 4, 312, 17)];
+    UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    [header addSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_header_bar.png"]]];
+    //(header.frame.size.width - REVEAL_OPTIONS_EDGE) + 8
+    UILabel *tableViewHeadlerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 310, 17)];
     tableViewHeadlerLabel.tag = 100;
-    tableViewHeadlerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0];
-    tableViewHeadlerLabel.textColor = [UIColor whiteColor];
-    tableViewHeadlerLabel.backgroundColor = [UIColor clearColor];
-    tableViewHeadlerLabel.shadowColor = [UIColor colorWithRed:38./255. green:154./255. blue:201./255. alpha:1.0];
+    tableViewHeadlerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:16.];
+    tableViewHeadlerLabel.textColor = [UIColor colorWithRed:230./250. green:230./250. blue:230./250. alpha:0.8];
+    tableViewHeadlerLabel.shadowColor = [UIColor blackColor];
     tableViewHeadlerLabel.shadowOffset = CGSizeMake(0, 1);
-    tableViewHeadlerLabel.textAlignment = UITextAlignmentLeft;
+    tableViewHeadlerLabel.backgroundColor = [UIColor clearColor];
+    tableViewHeadlerLabel.textAlignment = UITextAlignmentRight;
     tableViewHeadlerLabel.text = headerLabel;
+    
+    CGRect headerFrame = tableViewHeadlerLabel.frame;
+    headerFrame.origin.y = (header.frame.size.height / 2) - (headerFrame.size.height / 2);
+    tableViewHeadlerLabel.frame = headerFrame;
     
     [header addSubview:tableViewHeadlerLabel];
     
@@ -182,7 +194,7 @@
     NSArray* months = [_data objectAtIndex:section];
     if(months != nil && months.count > 0)
     {
-        return 20;
+        return 44;
     }
     
     return 0;

@@ -33,6 +33,22 @@
 #import <UIKit/UIKit.h>
 #import "MTOptionsDate.h"
 
+// 'REVEAL_EDGE' defines the point on the x-axis up to which the rear view is shown.
+#define REVEAL_EDGE 280.0f
+#define REVEAL_OPTIONS_EDGE 160.0f
+
+// 'REVEAL_EDGE_OVERDRAW' defines the maximum offset that can occur after the 'REVEAL_EDGE' has been reached.
+#define REVEAL_EDGE_OVERDRAW 60.0f
+
+// 'REVEAL_VIEW_TRIGGER_LEVEL_LEFT' defines the least amount of offset that needs to be panned until the front view snaps to the right edge.
+#define REVEAL_VIEW_TRIGGER_LEVEL_LEFT 125.0f
+
+// 'REVEAL_VIEW_TRIGGER_LEVEL_RIGHT' defines the least amount of translation that needs to be panned until the front view snaps _BACK_ to the left edge.
+#define REVEAL_VIEW_TRIGGER_LEVEL_RIGHT 200.0f
+
+// 'VELOCITY_REQUIRED_FOR_QUICK_FLICK' is the minimum speed of the finger required to instantly trigger a reveal/hide.
+#define VELOCITY_REQUIRED_FOR_QUICK_FLICK 1300.0f
+
 typedef enum
 {
 	FrontViewPositionLeft,

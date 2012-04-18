@@ -167,6 +167,8 @@
 		319D791715371B5B00542ED3 /* MTNavHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 319D789215371B5A00542ED3 /* MTNavHeader.m */; };
 		319D791815371B5B00542ED3 /* MTTripCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 319D789515371B5A00542ED3 /* MTTripCell.m */; };
 		319D791915371B5B00542ED3 /* MTTripCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319D789615371B5A00542ED3 /* MTTripCell.xib */; };
+		31A42427153EFA86007CD687 /* search_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31A42425153EFA86007CD687 /* search_background@2x.png */; };
+		31A42428153EFA86007CD687 /* search_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 31A42426153EFA86007CD687 /* search_background.png */; };
 		31ADE8BD151FDFA30029C964 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31ADE8BC151FDFA30029C964 /* UIKit.framework */; };
 		31ADE8BF151FDFA30029C964 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31ADE8BE151FDFA30029C964 /* Foundation.framework */; };
 		31ADE8C1151FDFA30029C964 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31ADE8C0151FDFA30029C964 /* CoreGraphics.framework */; };
@@ -423,6 +425,8 @@
 		319D789415371B5A00542ED3 /* MTTripCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTripCell.h; sourceTree = "<group>"; };
 		319D789515371B5A00542ED3 /* MTTripCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTripCell.m; sourceTree = "<group>"; };
 		319D789615371B5A00542ED3 /* MTTripCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTTripCell.xib; sourceTree = "<group>"; };
+		31A42425153EFA86007CD687 /* search_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_background@2x.png"; sourceTree = "<group>"; };
+		31A42426153EFA86007CD687 /* search_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_background.png; sourceTree = "<group>"; };
 		31ADE8B8151FDFA30029C964 /* myTranspo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = myTranspo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		31ADE8BC151FDFA30029C964 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		31ADE8BE151FDFA30029C964 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -598,6 +602,8 @@
 		319D781115371B5A00542ED3 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				31A42425153EFA86007CD687 /* search_background@2x.png */,
+				31A42426153EFA86007CD687 /* search_background.png */,
 				3195B021153E685000E30DB8 /* notice_plan_icon.png */,
 				3195B022153E685000E30DB8 /* notice_plan_icon@2x.png */,
 				3195B00D153E45A600E30DB8 /* notice_detour_icon@2x.png */,
@@ -1167,6 +1173,8 @@
 				3195B020153E45A700E30DB8 /* notice_cell_bottom.png in Resources */,
 				3195B023153E685000E30DB8 /* notice_plan_icon.png in Resources */,
 				3195B024153E685000E30DB8 /* notice_plan_icon@2x.png in Resources */,
+				31A42427153EFA86007CD687 /* search_background@2x.png in Resources */,
+				31A42428153EFA86007CD687 /* search_background.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

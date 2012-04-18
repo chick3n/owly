@@ -30,7 +30,7 @@
     MTRightButton*                      _editButtonValue;
 }
 
-@property (nonatomic, strong)   IBOutlet MTRefreshTableView*    tableView;
+@property (nonatomic, weak)     IBOutlet MTRefreshTableView*    tableView;
 @property (nonatomic, strong)   UINib*                          cellLoader;
 
 @end

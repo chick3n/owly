@@ -9,16 +9,16 @@
 #import "MTBaseViewController.h"
 #import "MTIncludes.h"
 #import "NoticesSectionViewController.h"
+#import "MTRefreshTableView.h"
 
 #define kNoticesCellHeight 72
 
-@interface NoticesViewController : MTBaseViewController <UITableViewDataSource, UITableViewDelegate, MyTranspoDelegate>
+@interface NoticesViewController : MTBaseViewController <UITableViewDataSource, UITableViewDelegate, MyTranspoDelegate, MTRefreshDelegate>
 {
     NSDictionary*                       _data;
     NSArray*                            _keys; //to ensure that the order is always the same as [dic allKeys] deosnt garauntee that
     
     //UI Components
-    IBOutlet UITableView*               _tableView;
-    IBOutlet UIActivityIndicatorView*   _loader;
+    IBOutlet MTRefreshTableView*        _tableView;
 }
 @end

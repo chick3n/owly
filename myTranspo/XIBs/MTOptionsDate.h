@@ -10,6 +10,7 @@
 #import "MTNavCell.h"
 #import "MTNavFooter.h"
 #import "ZUUIRevealController.h"
+#import "MTHelper.h"
 
 @protocol MTOptionsDateProtocol <NSObject>
 @required
@@ -20,6 +21,7 @@
 {
     NSArray*                _data;
     NSDateFormatter*        _dateFormatter;
+    NSArray*                _suffixes;
 }
 
 

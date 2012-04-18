@@ -61,21 +61,17 @@
     //tableview
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    [_tableView setDelaysContentTouches:NO];
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, 2)]];
     [_tableView setOpaque:NO];
     [_tableView setBackgroundColor:[UIColor clearColor]];
     [_tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-
+    [_tableView setupRefresh:_language];
+    [_tableView addPullToRefreshHeader];
+    [_tableView setRefreshDelegate:self];
     
-    //navigationItem
-    MTRightButton* refreshButton = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
-    [refreshButton setTitle:@"Refresh" forState:UIControlStateNormal];
-    [refreshButton addTarget:self action:@selector(refreshNotices:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:refreshButton];
-    
-    [self startLoading:nil];
-    [_transpo getNotices];
+    [self refreshNotices:nil];
 }
 
 - (void)viewDidUnload
@@ -232,19 +228,39 @@
 - (void)startLoading:(id)sender
 {
     [_tableView setUserInteractionEnabled:NO];
-    [_loader startAnimating];
+    [_tableView startLoading];
 }
 
 - (void)stopLoading:(id)sender
 {
-    [_loader stopAnimating];
     [_tableView setUserInteractionEnabled:YES];
+    [_tableView stopLoading];
 }
 
 - (void)refreshNotices:(id)sender
 {
     [self startLoading:nil];
     [_transpo getNotices];
+}
+
+#pragma mark - MTRefresh Delegate
+
+- (void)refreshTableViewNeedsRefresh
+{
+    [_tableView setUserInteractionEnabled:NO];
+    [_transpo getNotices];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [_tableView scrollViewWillBeginDragging:scrollView];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [_tableView scrollViewDidScroll:scrollView];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    [_tableView scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
 }
 
 @end

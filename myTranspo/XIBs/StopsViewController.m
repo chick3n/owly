@@ -28,6 +28,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        
     }
     return self;
 }
@@ -70,13 +71,30 @@
     
     //view
     [self.view addGestureRecognizer:_panGesture];
-    
+
     //searchcontroller
     [_searchBar setPlaceholder:NSLocalizedString(@"MTDEF_SEARCHPLANCEHOLDER", nil)];
     [_searchBar setSelectedScopeButtonIndex:0];
     [_searchBar sizeToFit];
     //[[_searchBar.subviews objectAtIndex:0] setAlpha:0.0];
-    [_searchBar setBackgroundImage:[UIImage imageNamed:@"global_header_background.png"]];
+    [_searchBar setBackgroundImage:[UIImage imageNamed:@"search_background.png"]];
+    [_searchBar setScopeBarBackgroundImage:[UIImage imageNamed:@"search_background.png"]];
+    [_searchBar setScopeBarButtonBackgroundImage:[UIImage imageNamed:@"global_right_btn.png"] forState:UIControlStateNormal];
+    [_searchBar setScopeBarButtonTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], UITextAttributeTextColor
+                                                      , [UIColor whiteColor], UITextAttributeTextShadowColor
+                                                      , [NSValue valueWithUIOffset:UIOffsetMake(0, 1)], UITextAttributeTextShadowOffset
+                                                      , [UIFont fontWithName:@"HelveticaNeue" size:16.0], UITextAttributeFont
+                                                      , nil] 
+                                            forState:UIControlStateNormal];
+    [_searchBar setScopeBarButtonTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor
+                                                      , [UIColor blackColor], UITextAttributeTextShadowColor
+                                                      , [NSValue valueWithUIOffset:UIOffsetMake(0, 1)], UITextAttributeTextShadowOffset
+                                                      , [UIFont fontWithName:@"HelveticaNeue" size:16.0], UITextAttributeFont
+                                                      , nil] 
+                                            forState:UIControlStateSelected];
+    [_searchBar setScopeBarButtonDividerImage:[UIImage imageNamed:@"global_train_arrival.png"]
+                          forLeftSegmentState:UIControlStateNormal
+                            rightSegmentState:UIControlStateSelected];
     //[self.searchDisplayController.searchResultsTableView addSubview:_searchLoading];
     
     //date stuff

@@ -191,20 +191,6 @@
     return cell;
 }
 
-#if 1
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if(section == SGDATA && [[_data objectAtIndex:section] count] > 0)
-        return NSLocalizedString(@"MTDEF_MANAGEDATAHEADER", nil);
-    else if(section == SGACCOUNTINFO && [[_data objectAtIndex:section] count] > 0)
-        return NSLocalizedString(@"MTDEF_ACCOUNTINFOHEADER", nil);
-    else if(section == SGAPPLICATION && [[_data objectAtIndex:section] count] > 0)
-        return NSLocalizedString(@"MTDEF_APPSETTINGSHEADER", nil);
-    
-    return @"";
-}
-#endif
-
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 32)];
@@ -261,6 +247,23 @@
     return headerView;
 }
 #endif
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if(section == SGDATA && [[_data objectAtIndex:section] count] > 0)
+        return 32;
+    else if(section == SGACCOUNTINFO && [[_data objectAtIndex:section] count] > 0)
+        return 32;
+    else if(section == SGAPPLICATION && [[_data objectAtIndex:section] count] > 0)
+        return 32;
+    
+    return 0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0;
+}
 
 #pragma mark - Table view delegate
 

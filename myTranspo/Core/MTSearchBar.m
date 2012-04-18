@@ -8,7 +8,55 @@
 
 #import "MTSearchBar.h"
 
+@interface MTSearchBar ()
+- (void)initAppearance;
+@end
+
 @implementation MTSearchBar
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if(self)
+    {
+        [self initAppearance];
+    }
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if(self)
+    {
+        [self initAppearance];
+    }
+    return self;
+}
+
+- (id)init
+{
+    self = [super init];
+    if(self)
+    {
+        [self initAppearance];
+    }
+    return self;
+}
+
+- (void)initAppearance
+{
+    [[UIButton appearanceWhenContainedIn:[MTSearchBar class], nil] setBackgroundImage:[UIImage imageNamed:@"global_right_btn.png"] forState:UIControlStateNormal];
+    [[UIButton appearanceWhenContainedIn:[MTSearchBar class], nil] setBackgroundImage:[UIImage imageNamed:@"global_right_btn.png"] forState:UIControlStateHighlighted];
+    
+    /*[[UIButton appearanceWhenContainedIn:[MTSearchBar class], nil] 
+     setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+     [UIColor blackColor], UITextAttributeTextColor
+     , [UIColor whiteColor], UITextAttributeTextShadowColor
+     //, [NSValue valueWithUIOffset:UIOffsetMake(0, 1)], UITextAttributeTextShadowOffset
+     , [UIFont fontWithName:@"HelveticaNeue" size:16.0], UITextAttributeFont
+     , nil] forState:UIControlStateNormal];*/
+}
 
 - (void)layoutSubviews
 {    

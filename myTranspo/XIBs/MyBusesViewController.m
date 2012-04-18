@@ -80,6 +80,9 @@
     
     //view
     //[self.view addGestureRecognizer:_panGesture];
+    
+    _transpo.delegate = self;
+    [_transpo getFavorites];
 }
 
 - (void)viewDidUnload
@@ -96,6 +99,7 @@
     _transpo.delegate = self;
     [self.view addGestureRecognizer:_panGesture];
     
+#if 0
     if(_favorites == nil)
     {
         [_transpo getFavorites];
@@ -105,6 +109,7 @@
         [self updateFavorites];
         [self updateNavigationBar];
     }
+#endif
 }
 
 - (void)viewDidDisappear:(BOOL)animated
