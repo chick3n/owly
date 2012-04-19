@@ -107,6 +107,7 @@
      */
 }
 
+
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification 
 {
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:notification.alertBody delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -293,8 +294,7 @@
 
 - (void)postLoad
 {
-    [[UIApplication sharedApplication] 
-     setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
+    
 }
 
 #pragma mark - MENUVIEWCONTROLLER DELEGATE
