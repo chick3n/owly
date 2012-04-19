@@ -96,6 +96,8 @@
     {
         [_transpo turnOnLocationTracking];
     }
+    
+    application.applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

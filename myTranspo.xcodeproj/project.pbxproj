@@ -35,6 +35,7 @@
 		3195B01E153E45A700E30DB8 /* notice_cell_middle.png in Resources */ = {isa = PBXBuildFile; fileRef = 3195B014153E45A700E30DB8 /* notice_cell_middle.png */; };
 		3195B01F153E45A700E30DB8 /* notice_cell_bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3195B015153E45A700E30DB8 /* notice_cell_bottom@2x.png */; };
 		3195B020153E45A700E30DB8 /* notice_cell_bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 3195B016153E45A700E30DB8 /* notice_cell_bottom.png */; };
+		3195FEA31540504100343691 /* cardcell_bottom_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 3195FEA21540504100343691 /* cardcell_bottom_background.png */; };
 		319D779B1534E1E400542ED3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 319D779D1534E1E400542ED3 /* Localizable.strings */; };
 		319D77A315365C4200542ED3 /* OTrainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319D77A115365C4100542ED3 /* OTrainViewController.m */; };
 		319D77A415365C4200542ED3 /* OTrainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319D77A215365C4200542ED3 /* OTrainViewController.xib */; };
@@ -267,6 +268,7 @@
 		3195B014153E45A700E30DB8 /* notice_cell_middle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notice_cell_middle.png; sourceTree = "<group>"; };
 		3195B015153E45A700E30DB8 /* notice_cell_bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notice_cell_bottom@2x.png"; sourceTree = "<group>"; };
 		3195B016153E45A700E30DB8 /* notice_cell_bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notice_cell_bottom.png; sourceTree = "<group>"; };
+		3195FEA21540504100343691 /* cardcell_bottom_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cardcell_bottom_background.png; sourceTree = "<group>"; };
 		319D779C1534E1E400542ED3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		319D779E1534E1F800542ED3 /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "fr-CA"; path = "fr-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		319D779F1534E1FD00542ED3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -654,6 +656,7 @@
 				319D781B15371B5A00542ED3 /* cardcell_arrow copy.png */,
 				319D781C15371B5A00542ED3 /* cardcell_arrow.png */,
 				319D781D15371B5A00542ED3 /* cardcell_arrow@2x.png */,
+				3195FEA21540504100343691 /* cardcell_bottom_background.png */,
 				31EE55AC153BD6FF00C83552 /* cardcell_bottom_background@2x.png */,
 				319D782015371B5A00542ED3 /* cardcell_busnumber_background.png */,
 				319D782115371B5A00542ED3 /* cardcell_busnumber_background@2x.png */,
@@ -998,7 +1001,7 @@
 		31ADE8AF151FDFA30029C964 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = "Vice Interactive";
 			};
 			buildConfigurationList = 31ADE8B2151FDFA30029C964 /* Build configuration list for PBXProject "myTranspo" */;
@@ -1191,6 +1194,7 @@
 				3122C281153FC0E600019410 /* Default.png in Resources */,
 				3122C282153FC0E600019410 /* Default@2x.png in Resources */,
 				31FFC49E153FCD85003E5061 /* cardcell_top_background@2x.png in Resources */,
+				3195FEA31540504100343691 /* cardcell_bottom_background.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

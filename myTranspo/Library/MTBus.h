@@ -24,6 +24,7 @@
     MTLanguage          _language;
     MTTimes*            _times; //used for static times
     MTTimeLive*         _liveTimes; //used to track live times, needs to be cleared before update
+    NSNumberFormatter*  _numFormatter;
 }
 
 @property (nonatomic, strong)   NSString*               BusId;
@@ -44,6 +45,11 @@
 @property (readonly, getter = getCurrentTrip)       MTTime*     CurrentTrip;
 @property (readonly)                                NSString*   BusNumberDisplay;
 
+//display vars
+@property (nonatomic, strong)   NSString*               PrevTimeDisplay;
+@property (nonatomic, strong)   NSString*               NextTimeDisplay;
+@property (nonatomic, strong)   NSArray*                NextThreeTimesDisplay;
+
 //methods
 - (id)initWithLanguage:(MTLanguage)lang;
 - (BOOL)clearLiveTimes;
@@ -59,7 +65,7 @@
 - (NSArray*)getSaturdayTimesForDisplay;
 - (NSArray*)getSundayTimesForDisplay;
 - (NSArray*)getNextTimesOfAmount:(int)count IncludeLiveTime:(BOOL)useLive;
-
+- (void)updateDisplayObjects;
 
 //debug helper methods
 - (NSString *)description;

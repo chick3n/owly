@@ -31,18 +31,21 @@
 @synthesize chosenDate                  = _chosenDate;
 @synthesize BusSpeed                    = _busSpeed;
 @synthesize TrueDisplayHeading          = _trueDisplayHeading;
+//display
+@synthesize NextTimeDisplay             = _NextTimeDisplay;
+@synthesize PrevTimeDisplay             = _PrevTimeDisplay;
+@synthesize NextThreeTimesDisplay       = _NextThreeTimesDisplay;
 
 - (NSString*)BusNumberDisplay
 {
     if(_busNumber == nil)
         return @"";
-    
-    NSNumberFormatter* f = [[NSNumberFormatter alloc] init];
-    if([f numberFromString:_busNumber] == nil) //isnt a number
+#if 1
+    if([_numFormatter numberFromString:_busNumber] == nil) //isnt a number
     {
         return [_busNumber substringToIndex:1]; //return the first letter only
     }
-    
+#endif
     return _busNumber;
 }
 
@@ -61,6 +64,8 @@
         _times = [[MTTimes alloc] init];
         _liveTimes = [[MTTimeLive alloc] init];
         _chosenDate = [NSDate date];
+        _busSpeed = MTDEF_STOPDISTANCEUNKNOWN;
+        _numFormatter = [[NSNumberFormatter alloc] init];
     }
     
     return self;
@@ -82,6 +87,7 @@
         _liveTimes = [[MTTimeLive alloc] init];
         _chosenDate = [NSDate date];
         _busSpeed = MTDEF_STOPDISTANCEUNKNOWN;
+         _numFormatter = [[NSNumberFormatter alloc] init];
     }
     
     return self;
@@ -437,6 +443,13 @@
         return nil;
     
     return (MTTime*)[trips objectAtIndex:0];
+}
+
+- (void)updateDisplayObjects
+{
+    self.NextThreeTimesDisplay = self.NextThreeTimes;
+    self.NextTimeDisplay = self.NextTime;
+    self.PrevTimeDisplay = self.PrevTime;
 }
 
 #pragma mark - DEBUG HELPERS

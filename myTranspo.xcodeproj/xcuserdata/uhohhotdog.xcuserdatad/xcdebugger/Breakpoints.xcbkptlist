@@ -23,11 +23,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "myTranspo/Library/MTBus.m"
-         timestampString = "356376221.005748"
+         timestampString = "356541388.926668"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "761"
-         endingLineNumber = "761">
+         startingLineNumber = "774"
+         endingLineNumber = "774">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -35,11 +35,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "myTranspo/UIComponents/MTCardCell.m"
-         timestampString = "356244363.055873"
+         timestampString = "356538920.729426"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "213"
-         endingLineNumber = "213"
+         startingLineNumber = "217"
+         endingLineNumber = "217"
          landmarkName = "-updateCellDetails:New:"
          landmarkType = "5">
       </FileBreakpoint>

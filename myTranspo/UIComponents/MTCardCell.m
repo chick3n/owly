@@ -209,16 +209,20 @@
 
 - (void)updateCellDetails:(MTStop*)stop New:(BOOL)newData
 {
+#if 0
+    if(_stop == stop && newData == NO)
+        return; //no need for an update!
+#endif
     //details have changed scroll back
     [_dataScrollView setContentOffset:CGPointMake(0, 0) animated:YES];    
     
     _stop = stop;
     
-    _prevTime.text = stop.Bus.PrevTime;
+    _prevTime.text = stop.Bus.PrevTimeDisplay;//stop.Bus.PrevTime;
     _direction.text = [stop.Bus getBusHeadingShortForm];
     _distance.text = [stop getDistanceOfStop];
     
-    _nextTimeValue = stop.Bus.NextTime;
+    _nextTimeValue = stop.Bus.NextTimeDisplay;//stop.Bus.NextTime;
     [_nextTime setTitle:_nextTimeValue forState:UIControlStateNormal];
     [self viewForPage:1];
     [self viewForPage:2];
@@ -388,7 +392,8 @@
             return;
         }
             
-        NSArray* times = [bus getNextTimesOfAmount:kElementNextTimesCount+1 IncludeLiveTime:YES];
+        //NSArray* times = [bus getNextTimesOfAmount:kElementNextTimesCount+1 IncludeLiveTime:YES];
+        NSArray* times = bus.NextThreeTimesDisplay;
         
         if(times == nil || times.count <= 0)
         {

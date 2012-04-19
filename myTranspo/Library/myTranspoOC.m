@@ -708,7 +708,23 @@
                 if(!stop.cancelQueue && [_delegate respondsToSelector:@selector(myTranspo:UpdateType:updatedFavorite:)])
                     [_delegate myTranspo:[MTHelper QuickResultState:status] UpdateType:MTUPDATETYPE_ALL updatedFavorite:stop];
             });
-        }        
+        } 
+        else //information updates only
+        {
+            if(_hasDB)
+            {
+                stop.IsUpdating = YES;
+                
+                if(_hasRealCoordinates)
+                {
+                    stop.CurrentLat = _coordinates.latitude;
+                    stop.CurrentLon = _coordinates.longitude;
+                    [_ocDb getDistanceFromStop:stop];
+                }
+                
+                stop.IsUpdating = NO;
+            }
+        }
         
         if(_hasAPI) //get next times live
         {

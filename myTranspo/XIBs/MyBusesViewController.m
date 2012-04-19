@@ -370,6 +370,11 @@
         MTLog(@"Failed to update Favorite...");//if failed still ahve to stop the loading!
     }
 
+    if(favorite != nil)
+    {
+        [favorite.Bus updateDisplayObjects];
+    }
+    
     for(int x=0; x<_favorites.count; x++)
     {
         MTStop* stop = [_favorites objectAtIndex:x];
