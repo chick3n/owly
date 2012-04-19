@@ -20,6 +20,9 @@
 - (void)removeFavoriteClicked:(id)sender;
 - (void)moveMapBackToLocation:(id)sender;
 - (void)changeTripScheduleTime:(id)sender;
+- (void)dateHasChanged:(id)sender;
+- (void)hideSearchBar:(id)sender;
+- (void)showSearchBar:(id)sender;
 @end
 
 @implementation StopsViewController
@@ -98,7 +101,12 @@
     //[self.searchDisplayController.searchResultsTableView addSubview:_searchLoading];
     
     //date stuff
-    _chosenDate = [NSDate date];    
+    _chosenDate = [NSDate date]; 
+    
+    //date selector
+    _dateSelector.minimumDate = _chosenDate;
+    _dateSelector.frame = CGRectMake(0, self.view.frame.size.height, _dateSelector.frame.size.width, _dateSelector.frame.size.height);
+    [_dateSelector addTarget:self action:@selector(dateHasChanged:) forControlEvents:UIControlEventValueChanged];
     
     //searchTableView
     [self.searchDisplayController.searchResultsTableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background"]]];
@@ -549,7 +557,7 @@
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
         button.frame = CGRectMake(0, 0, 23, 23);
-        [button setImage:[UIImage imageNamed:@"menu_news_icon.png"] forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:@"card_arrow_right.png"] forState:UIControlStateNormal];
         
         annotationView.enabled = YES;
         annotationView.canShowCallout = YES;
@@ -686,6 +694,8 @@
         _cardManager.delegate = self;
     }    
     
+    [self hideSearchBar:nil];
+    
     _cardManager.chosenDate = _chosenDate;
     
     _leftBarButton = self.navigationItem.leftBarButtonItem;
@@ -715,6 +725,8 @@
     _leftBarButton = nil;
     
     [_cardManager unload];
+    
+    [self showSearchBar:nil];
 }
 
 - (void)addFavoriteClicked:(id)sender
@@ -778,7 +790,73 @@
 
 - (void)changeTripScheduleTime:(id)sender
 {
+    CGRect datePickerFrame = _dateSelector.frame;
+    
+    if(datePickerFrame.origin.y == self.view.frame.size.height)
+    {
+        UIView *fadedView = [[UIView alloc] initWithFrame:self.view.frame];
+        fadedView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
+        fadedView.tag = 20123;
+        [self.view insertSubview:fadedView belowSubview:_dateSelector];
+        
+        datePickerFrame.origin.y -= _dateSelector.frame.size.height;
+        [self hideSearchBar:nil];
+    }
+    else
+    {
+        UIView* fadedView = [self.view viewWithTag:20123];
+        if(fadedView != nil)
+            [fadedView removeFromSuperview];
+        datePickerFrame.origin.y = self.view.frame.size.height;
+        [self showSearchBar:nil];
+    }
+    
+    
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         _dateSelector.frame = datePickerFrame;
+                     }];
+    
+#if 0
     [_menuControl revealOptions:nil];
+#endif
+}
+
+#pragma mark - Date Pickerview Delegate
+
+- (void)dateHasChanged:(id)sender
+{
+    [self optionsDate:nil dateHasChanged:_dateSelector.date];
+}
+
+- (void)hideSearchBar:(id)sender
+{
+    CGRect searchFrame = _searchBar.frame;
+    searchFrame.origin.y -= _searchBar.frame.size.height;
+    CGRect mapFrame = _mapView.frame;
+    mapFrame.size.height += _searchBar.frame.size.height;
+    mapFrame.origin.y = 0;
+    
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         _searchBar.frame = searchFrame;
+                         _mapView.frame = mapFrame;
+                     }];
+}
+
+- (void)showSearchBar:(id)sender
+{
+    CGRect searchFrame = _searchBar.frame;
+    searchFrame.origin.y = 0;
+    CGRect mapFrame = _mapView.frame;
+    mapFrame.size.height -= _searchBar.frame.size.height;
+    mapFrame.origin.y = 44;
+    
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         _searchBar.frame = searchFrame;
+                         _mapView.frame = mapFrame;
+                     }];
 }
 
 @end

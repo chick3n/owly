@@ -274,7 +274,7 @@
     if([notice isEqualToString:@"genserchange"])
         return @"notice_plan_icon.png";
     else if([notice isEqualToString:@"genmsg"])
-        return @"";
+        return @"notice_elevator_icon.png";
     else if([notice isEqualToString:@"cantrips"])
         return @"notice_day_icon.png";
     else if([notice isEqualToString:@"detours"])

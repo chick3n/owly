@@ -36,5 +36,6 @@
     UIBarButtonItem*                        _cardManagerFavoriteAlready;
     UIBarButtonItem*                        _leftBarButton;
     UIBarButtonItem*                        _resetMapLocationButton;
+    IBOutlet UIDatePicker*                  _dateSelector;
 }
 @end

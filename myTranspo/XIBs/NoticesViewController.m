@@ -72,6 +72,10 @@
     [_tableView setRefreshDelegate:self];
     
     [self refreshNotices:nil];
+    
+    
+    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://maps.google.com/maps?saddr=21+Gospel+Oak+Dr,+Ottawa,+ON+K2J+5G6,+Canada&daddr=99+Bank+St,+Ottawa,+ON+K1P+6G3,+Canada&hl=en&sll=44.465151,-73.981934&sspn=5.339076,6.888428&geocode=FZb7sgId5mR8-ylV9fZaO_3NTDEWIljP6Ku67w%3BFbcNtQId--d8-ynjW5xWVATOTDFAq7FOJf8pJQ&oq=99+bank+st&dirflg=r&ttype=arr&date=04%2F18%2F12&time=11:25pm&noexp=0&noal=0&sort=def&mra=ls&t=m&z=12&start=0"]];
 }
 
 - (void)viewDidUnload

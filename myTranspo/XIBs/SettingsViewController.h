@@ -26,6 +26,7 @@
     
     //ui compinents
     IBOutlet UITextField*       _keyboardDismisser;
+    IBOutlet UIWebView*         _webView;
 }
 
 @property (nonatomic, weak)     IBOutlet MTSettingsTableView*            tableView;

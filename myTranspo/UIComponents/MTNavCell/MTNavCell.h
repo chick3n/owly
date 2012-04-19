@@ -38,6 +38,7 @@ typedef enum
     IBOutlet UILabel*                   _navTitle;
     IBOutlet UIView*                    _notificationImage;
     IBOutlet UILabel*                   _notificationMessage;
+    UIView*                             _selectedView;
 }
 
 - (void)updateNotificationMessage:(NSString*)count isImportant:(BOOL)important;

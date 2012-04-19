@@ -124,6 +124,11 @@
         NSArray *topLevelItems = [[NSBundle mainBundle] loadNibNamed:@"MTNavCell" owner:self options:nil];
         cell = [topLevelItems objectAtIndex:0];
         [cell initializeUI];
+#if 0
+        UIView * background = [[UIView alloc] initWithFrame:cell.frame];
+        background.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+        cell.selectedBackgroundView = background;
+#endif
     }
       
     MTNavItem* item = [_menu objectAtIndex:indexPath.row];

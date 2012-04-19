@@ -56,7 +56,8 @@
     _scrollView.pagingEnabled  = YES;
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.showsHorizontalScrollIndicator = NO;
-    _scrollView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.4];
+    _scrollView.backgroundColor = [UIColor clearColor];
+    //_scrollView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.4];
     _scrollView.delegate = self;
     [self addSubview:_scrollView];
     
