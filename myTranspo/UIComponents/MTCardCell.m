@@ -225,6 +225,7 @@
     
     [self toggleLoadingAnimation:NO];
     
+    /*
     if(newData)
     {
         [UIView animateWithDuration:0.5 animations:^{
@@ -237,6 +238,7 @@
             _distance.alpha = 1.0;
         }];
     }
+     */
 }
 
 - (void)expandCellWithAnimation:(BOOL)animate
