@@ -18,6 +18,8 @@
 		31101F661530A5B1001D220A /* SettingsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31101F641530A5AF001D220A /* SettingsListViewController.xib */; };
 		31101F691530CABE001D220A /* MTSettingsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31101F681530CABD001D220A /* MTSettingsTableView.m */; };
 		31101F6B1530D14A001D220A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31101F6A1530D148001D220A /* Security.framework */; };
+		3122C281153FC0E600019410 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 3122C27F153FC0E600019410 /* Default.png */; };
+		3122C282153FC0E600019410 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3122C280153FC0E600019410 /* Default@2x.png */; };
 		318195A8152E0A1300B85129 /* MTSearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 318195A7152E0A1300B85129 /* MTSearchCell.m */; };
 		318195AF152F53D700B85129 /* MTOptionsDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 318195AD152F53D500B85129 /* MTOptionsDate.m */; };
 		318195B0152F53D700B85129 /* MTOptionsDate.xib in Resources */ = {isa = PBXBuildFile; fileRef = 318195AE152F53D600B85129 /* MTOptionsDate.xib */; };
@@ -246,6 +248,8 @@
 		31101F671530CABD001D220A /* MTSettingsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTSettingsTableView.h; path = Core/MTSettingsTableView.h; sourceTree = "<group>"; };
 		31101F681530CABD001D220A /* MTSettingsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTSettingsTableView.m; path = Core/MTSettingsTableView.m; sourceTree = "<group>"; };
 		31101F6A1530D148001D220A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		3122C27F153FC0E600019410 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = UIComponents/Assets/Default.png; sourceTree = "<group>"; };
+		3122C280153FC0E600019410 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "UIComponents/Assets/Default@2x.png"; sourceTree = "<group>"; };
 		318195A6152E0A1300B85129 /* MTSearchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTSearchCell.h; path = Core/MTSearchCell.h; sourceTree = "<group>"; };
 		318195A7152E0A1300B85129 /* MTSearchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTSearchCell.m; path = Core/MTSearchCell.m; sourceTree = "<group>"; };
 		318195AC152F53D400B85129 /* MTOptionsDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTOptionsDate.h; path = XIBs/MTOptionsDate.h; sourceTree = "<group>"; };
@@ -852,6 +856,8 @@
 		31ADE8C3151FDFA30029C964 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3122C27F153FC0E600019410 /* Default.png */,
+				3122C280153FC0E600019410 /* Default@2x.png */,
 				3195B00B153E104700E30DB8 /* otrainRoutes.csv */,
 				318195B1152FBBDB00B85129 /* OCTranspo.sqlite */,
 				31ADE8D7151FDFF80029C964 /* MTNavigation.plist */,
@@ -1183,6 +1189,8 @@
 				31A4242F153FAF3B007CD687 /* notice_plan_icon.png in Resources */,
 				31A42430153FAF3B007CD687 /* notice_elevator_icon@2x.png in Resources */,
 				31A42431153FAF3B007CD687 /* notice_elevator_icon.png in Resources */,
+				3122C281153FC0E600019410 /* Default.png in Resources */,
+				3122C282153FC0E600019410 /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
