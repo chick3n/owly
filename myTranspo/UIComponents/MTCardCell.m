@@ -279,7 +279,7 @@
     CGRect scrollFrame = _dataScrollView.frame;
     //CGRect detailsFrame = _detailsView.frame;
     
-    frame.origin.y = 2;
+    frame.origin.y = 1;
     //scrollFrame.origin.y = -40;
     //_dataScrollView.frame = scrollFrame;
     scrollFrame.origin.y = 0;
@@ -288,19 +288,22 @@
     
     //_detailsView.frame = detailsFrame;
     
-    if(animate)
+    if(animate && _stop.MTCardCellHelper == NO)
     {
         [UIView animateWithDuration:0.5 animations:^{
             _detailsBackground.frame = frame;
             _dataScrollView.frame = scrollFrame;
         } completion:^(BOOL finished) {
             _stop.MTCardCellIsAnimating = NO;
+            _stop.MTCardCellHelper = YES;
         }];
     }
     else
     {
         _detailsBackground.frame = frame;
         _dataScrollView.frame = scrollFrame;
+        _stop.MTCardCellIsAnimating = NO;
+        _stop.MTCardCellHelper = YES;
     }
 }
 

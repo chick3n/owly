@@ -141,10 +141,10 @@
             break;
         case MTVCSTOPS:
             newView = [[StopsViewController alloc] initWithNibName:@"StopsViewController" bundle:nil];
-            optionsView = [[MTOptionsDate alloc] initWithNibName:@"MTOptionsDate" bundle:nil];
-            optionsView.lastDate = _lastDate;
-            optionsView.selectedDate = [NSDate date];
-            optionsView.delegateOptions = (StopsViewController*)newView;
+            //optionsView = [[MTOptionsDate alloc] initWithNibName:@"MTOptionsDate" bundle:nil];
+            //optionsView.lastDate = _lastDate;
+            //optionsView.selectedDate = [NSDate date];
+            //optionsView.delegateOptions = (StopsViewController*)newView;
             break;
         case MTVCSETTINGS:
             newView = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil];

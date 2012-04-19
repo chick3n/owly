@@ -460,7 +460,7 @@
 {
     MTTrip* trip = [_trips objectAtIndex:0];
  
-    if(_routeRect.origin.x == 0 || _routeRect.origin.y == 0)
+    if(YES)//_routeRect.origin.x == 0 || _routeRect.origin.y == 0)
     {
         MKCoordinateRegion mapRegion;
         mapRegion.center = CLLocationCoordinate2DMake(trip.Latitude - kMTTrainDeltaOffset, trip.Longitude);

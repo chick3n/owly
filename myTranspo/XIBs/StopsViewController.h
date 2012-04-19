@@ -17,9 +17,9 @@
 #import "MTSearchBar.h"
 #import "MTCardManager.h"
 #import "MTSearchCell.h"
-#import "MTOptionsDate.h"
+//#import "MTOptionsDate.h"
 
-@interface StopsViewController : MTBaseViewController <MyTranspoDelegate, MTQueueSafe, MyTranspoDelegate, MKMapViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDataSource, UITableViewDelegate, MTCardManagerDelegate, MTOptionsDateProtocol>
+@interface StopsViewController : MTBaseViewController <MyTranspoDelegate, MTQueueSafe, MyTranspoDelegate, MKMapViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDataSource, UITableViewDelegate, MTCardManagerDelegate>//, MTOptionsDateProtocol>
 {
     NSArray*                                _searchResults;
     BOOL                                    _isSearchInProgress;

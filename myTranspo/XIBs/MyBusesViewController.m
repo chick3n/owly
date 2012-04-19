@@ -193,6 +193,7 @@
     if(stop.UpdateCount > 0)
     {
         [cell expandCellWithAnimation:YES];
+        stop.MTCardCellHelper = YES;
     }
     
     //if(stop.IsUpdating == NO) //removed this because IsUpdating = YES until API returns so updates werent happening in between.

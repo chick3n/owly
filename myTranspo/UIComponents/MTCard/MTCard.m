@@ -189,10 +189,6 @@
     UIColor *dividerColor = [UIColor colorWithRed:239./255. green:238./255. blue:236./255. alpha:1.0];
     
     UIFont *timeFont = [UIFont fontWithName:@"HelveticaNeue" size:12];
-    
-    UIView *tileView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _scrollView.frame.size.width, tileHeight)];
-    UIView *tileAlternateView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _scrollView.frame.size.width, tileHeight)];
-    UIView *currentTileView = tileView;
 
     UIImageView* categoryBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"card_category_bar.png"]];
     categoryBar.frame = CGRectMake(0, topPos, 302, 23);
@@ -207,8 +203,7 @@
     [_scrollView addSubview:categoryBar];
     topPos += categoryBar.frame.size.height;
     
-    tileView.backgroundColor = tileColour;
-    tileAlternateView.backgroundColor = tileColourAlternate;
+    UIColor* currentColor = tileColour;
     
     if(times.count > 0)
     {
@@ -235,9 +230,15 @@
                 leftPos = 0;
                 topPos += tileHeight;
                 
-                currentTileView = (currentTileView == tileView) ? tileAlternateView : tileView;
-                currentTileView.frame = CGRectMake(0, topPos, _scrollView.frame.size.width, tileHeight);
-                [_scrollView addSubview:currentTileView];
+                if(currentColor == tileColour)
+                    currentColor = tileColourAlternate;
+                else
+                    currentColor = tileColour;
+                
+                UIView *newBgView = [[UIView alloc] initWithFrame:CGRectMake(0, topPos, _scrollView.frame.size.width, tileHeight)];
+                newBgView.backgroundColor = currentColor;
+                
+                [_scrollView addSubview:newBgView];
             }
             else
             {
