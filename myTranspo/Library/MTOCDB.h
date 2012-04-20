@@ -45,6 +45,7 @@
 - (BOOL)getDistanceFromStop:(MTStop*)stop;
 - (BOOL)getStopsForBus:(MTBus *)bus ByDistanceLat:(double)latitude Lon:(double)longitude;
 - (BOOL)getBus:(MTBus *)bus ForStop:(MTStop *)stop;
+- (MTTrip*)getClosestTrip:(NSArray*)trips ToLat:(double)latitude Lon:(double)longitude;
 
 //favorites
 - (BOOL)getFavorites:(NSMutableArray*)favorites;

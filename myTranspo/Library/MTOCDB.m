@@ -535,9 +535,59 @@
         }
     }
     
+    sqlite3_reset(_cmpStmt);
+    
     [self getAllBusesForStops:stops];
     
     return (stops.count > 0) ? YES : NO;
+}
+
+- (MTTrip*)getClosestTrip:(NSArray*)trips ToLat:(double)latitude Lon:(double)longitude
+{
+    if(!_isConnected)
+        return nil;
+    
+    NSMutableString* stopList = [[NSMutableString alloc] init];
+    
+    for(int x=0; x<trips.count; x++)
+    {
+        MTTrip* trip = [trips objectAtIndex:x];
+        if(x+1 >= trips.count)
+            [stopList appendFormat:@"'%@'", trip.StopId];
+        else [stopList appendFormat:@"'%@', ", trip.StopId];
+    }
+    
+    sqlite3_create_function(_db, "distance", 4, SQLITE_UTF8, NULL, &distanceFunc, NULL, NULL);
+    
+    NSString * sqlStmt = [NSString stringWithFormat:
+                          @"SELECT s.stop_id, s.stop_code, s.stop_name, s.stop_lat, s.stop_lon, distance(s.stop_lat, s.stop_lon, %f, %f) AS DIST FROM stops s WHERE s.stop_id IN (%@) ORDER BY DIST ASC;"
+						  , latitude
+						  , longitude
+						  , (NSString*)stopList];
+    
+    NSLog(@"getClosestTrip:%@", sqlStmt);
+    sqlite3_stmt* _cmpStmt;
+    if(sqlite3_prepare_v2(_db, [sqlStmt UTF8String], -1, &_cmpStmt, NULL) == SQLITE_OK)
+	{
+		if(sqlite3_step(_cmpStmt) == SQLITE_ROW)
+		{
+            MTTrip* trip = [[MTTrip alloc] initWithLanguage:_language];
+            
+            trip.StopId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(_cmpStmt, 0)];
+            trip.StopNumber = sqlite3_column_int(_cmpStmt, 1);
+            trip.StopName = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(_cmpStmt, 2)];
+            trip.Latitude = sqlite3_column_double(_cmpStmt, 3);
+            trip.Longitude = sqlite3_column_double(_cmpStmt, 4);
+            
+            sqlite3_reset(_cmpStmt);
+            
+            return trip;
+        }
+    }
+    
+    sqlite3_reset(_cmpStmt);
+    
+    return nil;
 }
 
 #pragma mark - BUSES CUSTOM

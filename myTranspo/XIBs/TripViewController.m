@@ -509,6 +509,7 @@ numberOfRowsInComponent:(NSInteger)component;
             
             if([trip.StopId isEqualToString:_stop.StopId])
             {
+                _currentTrip = trip;
                 [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:x inSection:0]
                                   atScrollPosition:UITableViewScrollPositionTop
                                           animated:YES];
@@ -536,6 +537,7 @@ numberOfRowsInComponent:(NSInteger)component;
         
         _trips = nil;
         _trips = [NSArray arrayWithObject:trip];
+        _currentTrip = trip;
         [_tableView reloadData];
     }
     
@@ -590,6 +592,16 @@ numberOfRowsInComponent:(NSInteger)component;
     }
     
     MTTrip* prevTrip = [times objectAtIndex:0];
+    
+    if(prevTrip.StopNumber <= 0)
+    {
+        //determine where it should go based on time get all lat/lon of each stop and get the closest one tot he lat/lon of the trip
+        MTTrip* closest = [_transpo getClosestTrip:_trips ToLat:prevTrip.Latitude Lon:prevTrip.Longitude];
+        prevTrip.StopId = closest.StopId;
+        prevTrip.StopName = closest.StopName;
+        prevTrip.StopNumber = closest.StopNumber;
+    }
+    
     [self updateBusAnnotationsPrevTrip:prevTrip AndNextTrip:nil];
 }
 
@@ -674,39 +686,42 @@ numberOfRowsInComponent:(NSInteger)component;
     [_mapView addAnnotation:_busAnnotation];
     
     _busTripLocation = prevTrip.StopNumber;
+    NSLog(@"Update bus annotations stop: %d", prevTrip.StopNumber);
     [_tableView reloadData];
 }
 
 - (void)getBusLocation
 {
-    //For this we will have to determine the next stop in the sequence based on time, from there send that stop data and get where the bus
-    //currently is
-    NSString* currentTime = [MTHelper CurrentTimeHHMMSS];
-    MTTrip *nextTrip = nil;
-    MTTrip *prevTrip = nil;
-
-    for(MTTrip *trip in _trips)
+    _bus.cancelQueue = NO;
+    _currentTrip.cancelQueue = NO;
+    if(![_transpo getLiveNextTripsForTrip:_currentTrip WithRoute:_bus])
     {
-        if([trip.Time compareTimesHHMMSS:currentTime Ordering:1] > 0)
-        {
-            nextTrip = trip;
-            break;
-        }
-        prevTrip = trip;
-    }
-
-    if(prevTrip == nil) //first Trip
-        prevTrip = nextTrip;
-    
-    if(nextTrip == nil) //last Trip shouldnt be on map anymore?
-        return;
-    //nextTrip = prevTrip;
-    
-    if(nextTrip == nil && prevTrip == nil)//uhoh
-        return;
+        //For this we will have to determine the next stop in the sequence based on time, from there send that stop data and get where the bus
+        //currently is
+        NSString* currentTime = [MTHelper CurrentTimeHHMMSS];
+        MTTrip *nextTrip = nil;
+        MTTrip *prevTrip = nil;
         
-    if(![_transpo getLiveNextTripsForTrip:nextTrip WithRoute:_bus])
-    {
+        for(MTTrip *trip in _trips)
+        {
+            if([trip.Time compareTimesHHMMSS:currentTime Ordering:1] > 0)
+            {
+                nextTrip = trip;
+                break;
+            }
+            prevTrip = trip;
+        }
+        
+        if(prevTrip == nil) //first Trip
+            prevTrip = nextTrip;
+        
+        if(nextTrip == nil) //last Trip shouldnt be on map anymore?
+            return;
+        //nextTrip = prevTrip;
+        
+        if(nextTrip == nil && prevTrip == nil)//uhoh
+            return;
+        
         [self updateBusAnnotationsPrevTrip:prevTrip AndNextTrip:nextTrip];
     }
 }

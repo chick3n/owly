@@ -38,4 +38,5 @@
     UIBarButtonItem*                        _resetMapLocationButton;
     IBOutlet UIDatePicker*                  _dateSelector;
 }
+
 @end

@@ -277,7 +277,7 @@
     
     NSArray* timesToParse = nil;
     
-    if(_liveTimes != nil && _hasGpsTime)
+    if(_liveTimes != nil && _hasGpsTime && includeLive)
     {
         if(_liveTimes.Times != nil)
         {

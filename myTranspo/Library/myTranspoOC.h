@@ -150,6 +150,7 @@
 //helpers
 - (NSDate*)stripNextDateFromJson:(NSDictionary*)json;
 - (NSDate*)addTime:(NSString*)time toDate:(NSDate*)date withInterval:(int)interval;
+- (MTTrip*)getClosestTrip:(NSArray*)trips ToLat:(double)latitude Lon:(double)longitude; //not threaded
 
 //options
 - (NSDate*)getLastSupportedDate;

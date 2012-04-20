@@ -27,6 +27,7 @@
 	NSArray*							_timesOptions;
 	NSArray*							_tempTimesChanged;
     MTTime*                             _trip;
+    MTTrip*                             _currentTrip;
     NSInteger                           _pickerViewSelectedRow; //only used for the initial setting of picker view.
     NSTimer*                            _busTimer;
     MTBusAnnotation*                    _busAnnotation;

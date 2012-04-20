@@ -103,3 +103,6 @@
 
 //TRIPS
 "HEADING" = "Destination";
+
+//STOPS
+"AT" = "à";

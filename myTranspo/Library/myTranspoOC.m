@@ -423,7 +423,6 @@
             NSMutableArray *times = [[NSMutableArray alloc] init];
             BOOL status = [_ocApi getNextTrips:times ForTrip:stop ForRoute:bus];
             stop.IsUpdating = NO;
-            
             dispatch_async(MTLDEF_MAINQUEUE, ^(void){
                 if([_delegate respondsToSelector:@selector(myTranspo:State:finishedGettingNextLiveTimes:)])
                     [_delegate myTranspo:self State:[MTHelper QuickResultState:status] finishedGettingNextLiveTimes:times];
@@ -1210,6 +1209,16 @@
     NSDate* notifyDate = [scheduleDate dateByAddingTimeInterval:-60*interval];
     
     return notifyDate;
+}
+
+- (MTTrip*)getClosestTrip:(NSArray*)trips ToLat:(double)latitude Lon:(double)longitude
+{
+    if(_hasDB)
+    {
+        return [_ocDb getClosestTrip:trips ToLat:latitude Lon:longitude];
+    }
+    
+    return nil;
 }
 
 #pragma mark - Notices

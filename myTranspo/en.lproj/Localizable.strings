@@ -110,3 +110,6 @@
 
 //TRIPS
 "HEADING" = "Heading";
+
+//STOPS
+"AT" = "at";

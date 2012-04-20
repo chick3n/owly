@@ -46,29 +46,19 @@
 
 - (void)initAppearance
 {
+#if 0
     [[UIButton appearanceWhenContainedIn:[MTSearchBar class], nil] setBackgroundImage:[UIImage imageNamed:@"global_right_btn.png"] forState:UIControlStateNormal];
     [[UIButton appearanceWhenContainedIn:[MTSearchBar class], nil] setBackgroundImage:[UIImage imageNamed:@"global_right_btn.png"] forState:UIControlStateHighlighted];
+#endif
     
-    /*[[UIButton appearanceWhenContainedIn:[MTSearchBar class], nil] 
-     setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-     [UIColor blackColor], UITextAttributeTextColor
-     , [UIColor whiteColor], UITextAttributeTextShadowColor
-     //, [NSValue valueWithUIOffset:UIOffsetMake(0, 1)], UITextAttributeTextShadowOffset
-     , [UIFont fontWithName:@"HelveticaNeue" size:16.0], UITextAttributeFont
-     , nil] forState:UIControlStateNormal];*/
-}
-
-- (void)layoutSubviews
-{    
     for(UIView* view in self.subviews)
     {
         if([view isKindOfClass:[UITextField class]])
         {
             _mtSearchField = (UITextField*)view;
-            break;
+            [(UITextField*)view setClearButtonMode:UITextFieldViewModeWhileEditing];
         }
     }
-    
     if(_mtSearchField != nil)
     {
         if(_loading == nil)
@@ -79,7 +69,24 @@
         //_mtSearchField.leftView = _loading;
     }
     
-    [super layoutSubviews];
+    /*[[UIButton appearanceWhenContainedIn:[MTSearchBar class], nil] 
+     setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+     [UIColor blackColor], UITextAttributeTextColor
+     , [UIColor whiteColor], UITextAttributeTextShadowColor
+     //, [NSValue valueWithUIOffset:UIOffsetMake(0, 1)], UITextAttributeTextShadowOffset
+     , [UIFont fontWithName:@"HelveticaNeue" size:16.0], UITextAttributeFont
+     , nil] forState:UIControlStateNormal];*/
+}
+
+- (void)didAddSubview:(UIView *)subview
+{
+    [super didAddSubview:subview];
+    
+    if([subview isKindOfClass:[UIButton class]])
+    {
+        [(UIButton*)subview setBackgroundImage:[UIImage imageNamed:@"global_right_btn.png"] forState:UIControlStateNormal];
+        [(UIButton*)subview setBackgroundImage:[UIImage imageNamed:@"global_right_btn.png"] forState:UIControlStateHighlighted];
+    }
 }
 
 - (void)startAnimating

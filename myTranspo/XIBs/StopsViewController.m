@@ -171,6 +171,7 @@
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
     _searchBar.selectedScopeButtonIndex = 0;
+    _searchBar.text = @"";
     _searchResults = nil;
 }
 
@@ -184,7 +185,7 @@
     
     [_searchBar stopAnimating];
     
-    if(controller.searchBar.text.length == 0)
+    if(_searchBar.text.length == 0)
     {
         [_mapView removeAnnotations:_mapView.annotations];
         [self mapView:_mapView regionDidChangeAnimated:YES]; //update to near by stops as we arent search anything anymore?
@@ -199,6 +200,12 @@
         [self mapView:_mapView regionDidChangeAnimated:YES]; //update to near by stops as we arent search anything anymore?
     }
 }
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    
+}
+
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
@@ -286,7 +293,7 @@
         MTStop* stop = [sectionResults objectAtIndex:indexPath.row];
         
         cell.title = @"";
-        cell.subtitle = [NSString stringWithFormat:@"%d %@", stop.StopNumber, stop.StopNameDisplay];
+        cell.subtitle = [NSString stringWithFormat:@"%d %@ %@", stop.StopNumber, NSLocalizedString(@"AT", nil), stop.StopNameDisplay];
         
         cell.type = CELLSTOP;
     }
