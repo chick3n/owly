@@ -16,6 +16,7 @@
 - (void)startPoolUpdate:(id)sender;
 - (void)stopPoolUpdate:(id)sender;
 - (void)poolUpdateTick:(id)sender;
+- (void)firstGetFavorites:(id)sender;
 @end
 
 @implementation MyBusesViewController
@@ -82,7 +83,8 @@
     //[self.view addGestureRecognizer:_panGesture];
     
     _transpo.delegate = self;
-    [_transpo getFavorites];
+    [_tableView startLoadingWithoutDelegate];
+    [self performSelector:@selector(firstGetFavorites:) withObject:nil afterDelay:0.5];
 }
 
 - (void)viewDidUnload
@@ -233,14 +235,14 @@
     
     if(_editing)
     {
-        [_tableView setEditing:YES];
+        [_tableView setEditing:YES animated:YES];
         [_editButtonValue setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
         _editButton.style = UIBarButtonItemStyleDone;
         [self.view removeGestureRecognizer:_panGesture];
     }
     else
     {
-        [_tableView setEditing:NO];
+        [_tableView setEditing:NO animated:YES];
         [_editButtonValue setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
         _editButton.style = UIBarButtonItemStylePlain;
         [self.view addGestureRecognizer:_panGesture];
@@ -268,6 +270,11 @@
         [stop restoreQueuesForBuses];
         [_transpo updateFavoriteData:stop ForDate:_chosenDate];
     }
+}
+
+- (void)firstGetFavorites:(id)sender
+{
+    [_transpo getFavorites];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -312,7 +319,7 @@
             {
                 [_favorites removeObjectAtIndex:x];
                 [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:x inSection:0]]
-                                  withRowAnimation:UITableViewRowAnimationFade];
+                                  withRowAnimation:UITableViewRowAnimationLeft];
                 break;
             }
         }
@@ -320,9 +327,10 @@
     else
     {
         MTLog(@"Failed to remove Favorite...");
+        [_tableView reloadData];
     }
     
-    [_tableView reloadData];
+    //
     
     [self updateNavigationBar];
 }

@@ -81,21 +81,22 @@
     [_searchBar sizeToFit];
     //[[_searchBar.subviews objectAtIndex:0] setAlpha:0.0];
     [_searchBar setBackgroundImage:[UIImage imageNamed:@"search_background.png"]];
-    [_searchBar setScopeBarBackgroundImage:[UIImage imageNamed:@"search_background.png"]];
-    [_searchBar setScopeBarButtonBackgroundImage:[UIImage imageNamed:@"global_right_btn.png"] forState:UIControlStateNormal];
-    [_searchBar setScopeBarButtonTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], UITextAttributeTextColor
-                                                      , [UIColor whiteColor], UITextAttributeTextShadowColor
+    [_searchBar setScopeBarBackgroundImage:[UIImage imageNamed:@"global_searchfilter_bg.png"]];
+    [_searchBar setScopeBarButtonBackgroundImage:[UIImage imageNamed:@"global_searchfilter_selected_btn.png"] forState:UIControlStateNormal];
+    [_searchBar setScopeBarButtonBackgroundImage:[UIImage imageNamed:@"global_searchfilter_default_btn.png"] forState:UIControlStateSelected];
+    [_searchBar setScopeBarButtonTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor
+                                                      , [[UIColor blackColor] colorWithAlphaComponent:0.35], UITextAttributeTextShadowColor
                                                       , [NSValue valueWithUIOffset:UIOffsetMake(0, 1)], UITextAttributeTextShadowOffset
-                                                      , [UIFont fontWithName:@"HelveticaNeue" size:16.0], UITextAttributeFont
+                                                      , [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0], UITextAttributeFont
                                                       , nil] 
                                             forState:UIControlStateNormal];
     [_searchBar setScopeBarButtonTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor
-                                                      , [UIColor blackColor], UITextAttributeTextShadowColor
+                                                      , [[UIColor blackColor] colorWithAlphaComponent:0.35], UITextAttributeTextShadowColor
                                                       , [NSValue valueWithUIOffset:UIOffsetMake(0, 1)], UITextAttributeTextShadowOffset
-                                                      , [UIFont fontWithName:@"HelveticaNeue" size:16.0], UITextAttributeFont
+                                                      , [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0], UITextAttributeFont
                                                       , nil] 
                                             forState:UIControlStateSelected];
-    [_searchBar setScopeBarButtonDividerImage:[UIImage imageNamed:@"global_train_arrival.png"]
+    [_searchBar setScopeBarButtonDividerImage:[UIImage imageNamed:@"global_searchfilter_line.png"]
                           forLeftSegmentState:UIControlStateNormal
                             rightSegmentState:UIControlStateSelected];
     //[self.searchDisplayController.searchResultsTableView addSubview:_searchLoading];
@@ -108,8 +109,8 @@
     _dateSelector.frame = CGRectMake(0, self.view.frame.size.height, _dateSelector.frame.size.width, _dateSelector.frame.size.height);
     [_dateSelector addTarget:self action:@selector(dateHasChanged:) forControlEvents:UIControlEventValueChanged];
     
-    //searchTableView
-    [self.searchDisplayController.searchResultsTableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background"]]];
+    //searchTableView[self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]]];
+    [self.searchDisplayController.searchResultsTableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]]];
     [self.searchDisplayController.searchResultsTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
@@ -280,16 +281,23 @@
         cell.subtitle = bus.DisplayHeading;
         cell.type = CELLBUS;
     }
-    else if(indexPath.section == 1 || indexPath.section == 2) //stops & streets
+    else if(indexPath.section == 1) //stops & streets
     {
         MTStop* stop = [sectionResults objectAtIndex:indexPath.row];
         
-        cell.title = [NSString stringWithFormat:@"%d", stop.StopNumber];
+        cell.title = @"";
+        cell.subtitle = [NSString stringWithFormat:@"%d %@", stop.StopNumber, stop.StopNameDisplay];
+        
+        cell.type = CELLSTOP;
+    }
+    else if(indexPath.section == 2)
+    {
+        MTStop* stop = [sectionResults objectAtIndex:indexPath.row];
+        
+        cell.title = @"";
         cell.subtitle = stop.StopNameDisplay;
         
-        if(indexPath.section == 2)
-            cell.type = CELLSTREET;
-        else cell.type = CELLSTOP;
+        cell.type = CELLSTREET;
     }
     
     [cell update];
@@ -357,11 +365,28 @@
         [_transpo getStopsForRoute:bus ByDistanceLat:_transpo.coordinates.latitude Lon:_transpo.coordinates.longitude];
         searchBarText = bus.BusNumber;
     }
-    else if(indexPath.section == 1 || indexPath.section == 2)
+    else if(indexPath.section == 1)
     {
         MTStop* stop = [sectionResults objectAtIndex:indexPath.row];
         [_transpo getRoutesForStop:stop];
         searchBarText = [NSString stringWithFormat:@"%d", stop.StopNumber];
+    }
+    else if(indexPath.section == 2)
+    {
+        MTStop* stop = [sectionResults objectAtIndex:indexPath.row];
+        
+#if 0
+        [_mapView removeAnnotations:_mapView.annotations];
+#endif
+#if 1
+        MKCoordinateRegion mapRegion;
+        mapRegion.center = CLLocationCoordinate2DMake(stop.Latitude, stop.Longitude);
+        mapRegion.span.latitudeDelta = MTDEF_SPANLATITUDEDELTA;
+        mapRegion.span.longitudeDelta = MTDEF_SPANLONGITUDEDELTA;
+        [_mapView setRegion:mapRegion animated:NO];
+#endif
+         //update to near by stops as we arent search anything anymore?
+        searchBarText = @"";
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

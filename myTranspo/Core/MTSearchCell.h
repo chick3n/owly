@@ -9,16 +9,16 @@
 #import <UIKit/UIKit.h>
 
 #define kMTSEARCHCELLHEIGHT 44
-#define kMTSEARCHCELLSHAPEHEIGHT 38
-#define kMTSEARCHCELLSHAPEWIDTH 48
+#define kMTSEARCHCELLSHAPEHEIGHT 45
+#define kMTSEARCHCELLSHAPEWIDTH 45
 
-#define kOffSetOriginX 3
+#define kOffSetOriginX 8
 #define kOffSetOriginY 13
 #define kOffSetSubtitleOriginX kOffSetOriginX + 60
 #define kOffSetSubtitleOriginY kOffSetOriginY
 
 #define kOffSetBusDrawOriginX 8
-#define kOffSetBusDrawOriginY 2
+#define kOffSetBusDrawOriginY -2
 
 typedef enum
 {

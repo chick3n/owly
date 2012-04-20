@@ -227,7 +227,7 @@
         [self drawBus];
     else if(_type == CELLSTOP)
         [self drawStop];
-    else [self drawStop];    
+    else [self drawStreet];    
     
     //[_titleBackground setNeedsDisplay];
 }
@@ -243,7 +243,7 @@
     imageFrame.size.width = kMTSEARCHCELLSHAPEHEIGHT;
     imageFrame.size.height = kMTSEARCHCELLSHAPEHEIGHT;
     _cellImage.frame = imageFrame;
-    _cellImage.image = [UIImage imageNamed:@"cardcell_busnumber_background.png"];
+    _cellImage.image = [UIImage imageNamed:@"search_busnumber_bg.png"];
     
 #if 0    
     _titleBackground.size = CGSizeMake(kMTSEARCHCELLSHAPEHEIGHT, kMTSEARCHCELLSHAPEHEIGHT);
@@ -255,6 +255,12 @@
     _titleLabel.text = _title;
     _titleLabel.frame = kDefaultLabelFrame;
     
+    CGRect imageFrame = _cellImage.frame;
+    imageFrame.size.width = kMTSEARCHCELLSHAPEHEIGHT;
+    imageFrame.size.height = kMTSEARCHCELLSHAPEHEIGHT;
+    _cellImage.frame = imageFrame;
+    _cellImage.image = [UIImage imageNamed:@"search_busstop_icon.png"];
+    
 #if 0
     int titleWidth = [_title sizeWithFont:_titleLabel.font].width;
     
@@ -263,8 +269,6 @@
     _titleLabel.frame = titleFrame;
 #endif
     _subtitleLabel.text = _subtitle;
-
-    _cellImage.image = nil;
 #if 0   
     _titleBackground.size = CGSizeMake(kMTSEARCHCELLSHAPEWIDTH, kMTSEARCHCELLSHAPEHEIGHT);
 #endif
@@ -273,8 +277,25 @@
 - (void)drawStreet
 {
     _titleLabel.text = _title;
+    _titleLabel.frame = kDefaultLabelFrame;
+    
+    CGRect imageFrame = _cellImage.frame;
+    imageFrame.size.width = kMTSEARCHCELLSHAPEHEIGHT;
+    imageFrame.size.height = kMTSEARCHCELLSHAPEHEIGHT;
+    _cellImage.frame = imageFrame;
+    _cellImage.image = [UIImage imageNamed:@"search_street_icon.png"];
+    
+#if 0
     int titleWidth = [_title sizeWithFont:_titleLabel.font].width;
-    _titleBackground.size = CGSizeMake(titleWidth + kMTSEARCHCELLSHAPEWIDTH, kMTSEARCHCELLSHAPEHEIGHT);
+    
+    CGRect titleFrame = _titleLabel.frame;
+    titleFrame.size.width = titleWidth + 20;
+    _titleLabel.frame = titleFrame;
+#endif
+    _subtitleLabel.text = _subtitle;
+#if 0   
+    _titleBackground.size = CGSizeMake(kMTSEARCHCELLSHAPEWIDTH, kMTSEARCHCELLSHAPEHEIGHT);
+#endif
 }
 
 @end

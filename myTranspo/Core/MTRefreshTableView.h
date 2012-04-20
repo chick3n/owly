@@ -55,6 +55,7 @@
 - (void)stopLoading;
 - (void)refresh;
 - (void)automaticallyStartLoading:(BOOL)animated;
+- (void)startLoadingWithoutDelegate;
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;

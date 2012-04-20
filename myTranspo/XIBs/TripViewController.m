@@ -120,11 +120,19 @@
     [navButton setImage:[UIImage imageNamed:@"global_time_btn.png"] forState:UIControlStateNormal];
     [navButton addTarget:self action:@selector(changeTripScheduleTime:) forControlEvents:UIControlEventTouchUpInside];
     [navButton setFrame:CGRectMake(0, 0, 41, 29)];
-    
     _timesChangeButton = [[UIBarButtonItem alloc] initWithCustomView:navButton];
-	_timesCancelButton = [[UIBarButtonItem alloc] initWithTitle:@"CANCEL" style:UIBarButtonItemStylePlain target:self action:@selector(cancelTripScheduleTime:)];
-	_timesDoneButton = [[UIBarButtonItem alloc] initWithTitle:@"DONE" style:UIBarButtonItemStyleDone target:self action:@selector(doneTripScheduleTime:)];
-	[self.navigationItem setRightBarButtonItem:_timesChangeButton];
+    self.navigationItem.rightBarButtonItem = _timesChangeButton;
+    
+    MTRightButton* cancelButton = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+    [cancelButton setTitle:NSLocalizedString(@"EXTERNALCANCEL", nil) forState:UIControlStateNormal];
+    [cancelButton addTarget:self action:@selector(cancelTripScheduleTime:) forControlEvents:UIControlEventTouchUpInside];
+    _timesCancelButton = [[UIBarButtonItem alloc] initWithCustomView:cancelButton];    
+    
+    MTRightButton* doneButton = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+    [doneButton setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
+    [doneButton addTarget:self action:@selector(doneTripScheduleTime:) forControlEvents:UIControlEventTouchUpInside];
+    _timesDoneButton = [[UIBarButtonItem alloc] initWithCustomView:doneButton];
+    
 	_initialLeftButton = self.navigationItem.leftBarButtonItem;
     
     //mapview
@@ -437,7 +445,7 @@ numberOfRowsInComponent:(NSInteger)component;
         NSString *headerTime = [_trip getTimeForDisplay];
         if(headerTime == nil)
             headerTime = @"";
-        tableViewHeaderLabel.text = [NSString stringWithFormat:@"%@ @ %@", NSLocalizedString(@"MTDEF_SCHEDULEDTIME", nil), headerTime];
+        tableViewHeaderLabel.text = [NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"MTDEF_SCHEDULEDTIME", nil), headerTime];
     }
     
     return _tableViewHeader;

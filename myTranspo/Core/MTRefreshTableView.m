@@ -115,6 +115,20 @@
     else [self refresh];
 }
 
+- (void)startLoadingWithoutDelegate
+{
+    self.isLoading = YES;
+    
+    refreshLabel.text = self.textLoading;
+    refreshArrow.hidden = NO;
+    loadingAnimation.hidden = NO;
+    
+    [UIView animateWithDuration:0.5 animations:^(void){
+        self.contentInset = UIEdgeInsetsMake(REFRESH_HEADER_HEIGHT, 0, 0, 0);
+    }];    
+	[loadingAnimation startAnimating];
+}
+
 - (void)startLoading {
     self.isLoading = YES;
     

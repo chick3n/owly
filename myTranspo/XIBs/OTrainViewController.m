@@ -27,6 +27,8 @@
 @synthesize futureTrip          = _futureTrip;
 @synthesize routeLine           = _routeLine;
 @synthesize routeLineView       = _routeLineView;
+@synthesize routeLineOverlap    = _routeLineOverlap;
+@synthesize routeLineViewOverlap = _routeLineViewOverlap;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -117,9 +119,11 @@
     
     //mapvoew    
     _mapView.delegate = self;
-    [self loadRouteOverlay:nil];
+    [self loadRouteOverlay:nil];    
     if(_routeLine != nil)
         [_mapView addOverlay:_routeLine];
+    if(_routeLineOverlap != nil)
+        [_mapView addOverlay:_routeLineOverlap];
     [self setTrainLocation:nil];
 }
 
@@ -242,7 +246,8 @@
         NSString *headerTime = trip.StopNameDisplay;
         if(headerTime == nil)
             headerTime = @"";
-        tableViewHeaderLabel.text = [NSString stringWithFormat:@"%@: %@", [MTHelper DateDashesYYYYMMDD:_chosenDate], headerTime];
+        headerTime = [headerTime stringByReplacingOccurrencesOfString:@"O-train" withString:@""];
+        tableViewHeaderLabel.text = [NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"HEADING", nil), headerTime];
         
         if(_trainAnnotation != nil)
         {
@@ -303,7 +308,11 @@
 {
     [_loadingIndicator stopAnimating];
     
-
+    for(MTTrip* trip in trips)
+    {
+        NSLog(@"%@", trip.StopName);
+        trip.StopName = [trip.StopName stringByReplacingOccurrencesOfString:@"O-TRAIN" withString:@""];
+    }
     
     if(state == MTRESULTSTATE_SUCCESS)
     {
@@ -684,7 +693,6 @@
     MKMapPoint* pointArr = malloc(sizeof(CLLocationCoordinate2D) * pointStrings.count);
     
     
-    
     for(int idx = 0; idx < pointStrings.count; idx++)
     {
         NSString* currentPointString = [pointStrings objectAtIndex:idx];
@@ -704,7 +712,7 @@
         CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latitude, longitude);
         
         MKMapPoint point = MKMapPointForCoordinate(coordinate);
-        
+
         if(idx == 0)
         {
             north = point;
@@ -726,6 +734,8 @@
     } 
     
     _routeLine = [MKPolyline polylineWithPoints:pointArr count:pointStrings.count];
+    _routeLineOverlap = [MKPolyline polylineWithPoints:pointArr count:pointStrings.count];
+    
     _routeRect = MKMapRectMake(south.x
                                , south.y
                                , north.x - south.x
@@ -743,13 +753,26 @@
         if(_routeLineView == nil)
         {
             _routeLineView = [[MKPolylineView alloc] initWithPolyline:_routeLine];
-            //_routeLineView.fillColor = [UIColor blueColor];
-            _routeLineView.strokeColor = [UIColor blueColor];
-            _routeLineView.lineWidth = 10;
-            _routeLineView.alpha = 0.7;
+            //_routeLineView.fillColor = [UIColor colorWithRed:43./255. green:184./255. blue:239./255. alpha:1.0];
+            _routeLineView.strokeColor = [UIColor whiteColor];
+            _routeLineView.lineWidth = 28;
+            _routeLineView.alpha = 1.0;            
         }
         
         overlayView = _routeLineView;
+    }
+    else if(overlay == _routeLineOverlap)
+    {
+        if(_routeLineViewOverlap == nil)
+        {
+            _routeLineViewOverlap = [[MKPolylineView alloc] initWithPolyline:_routeLineOverlap];
+            //_routeLineView.fillColor = [UIColor colorWithRed:43./255. green:184./255. blue:239./255. alpha:1.0];
+            _routeLineViewOverlap.strokeColor = [UIColor colorWithRed:43./255. green:184./255. blue:239./255. alpha:1.0];
+            _routeLineViewOverlap.lineWidth = 20;
+            _routeLineViewOverlap.alpha = 1.0;  
+        }
+        
+        overlayView = _routeLineViewOverlap;
     }
     
     return overlayView;

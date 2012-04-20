@@ -12,8 +12,7 @@
 - (void)viewForPage:(int)page;
 - (void)pageOneHelperEmptyTimes;
 - (void)nextTimesClicked:(id)sender;
-- (void)editMode:(id)sender;
-- (void)defaultMode:(id)sender;
+
 @end
 
 @implementation MTCardCell
@@ -48,14 +47,17 @@
     
     CGRect frame = _detailsBackground.frame;
     CGRect scrollFrame = _dataScrollView.frame;
+    CGRect deleteFrame = _delete.frame;
     //CGRect detailsFrame = _detailsView.frame;
     
     frame.origin.y = 0 - 40;
     scrollFrame.origin.y = 0 - 40;
+    deleteFrame.origin.x = 52;
     //detailsFrame.size.height = 10;
     
     _detailsBackground.frame = frame;
     _dataScrollView.frame = scrollFrame;
+    _delete.frame = deleteFrame;
     //_detailsView.frame = detailsFrame;    
     
     _prevHeading.text = NSLocalizedString(@"MTDEF_CARDPREVIOUS", nil);
@@ -482,6 +484,7 @@
                                             , self.contentView.frame.size.height);
 }
 
+#if 0
 - (void)willTransitionToState:(UITableViewCellStateMask)state
 {
     switch (state) {
@@ -493,18 +496,56 @@
     
     [self defaultMode:nil];
 }
+#endif
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated
+{
+    //[super setEditing:editing animated:animated];
+    
+    if(editing)
+        [self editMode:nil];
+    else [self defaultMode:nil];
+}
 
 - (void)editMode:(id)sender
 {
+    if(_isAnimatingEdit)
+        return;
+    
+    _isAnimatingEdit = YES;
     _delete.hidden = NO;
     _dataScrollView.scrollEnabled = NO;
     _dataScrollView.contentOffset = CGPointMake(0, 0);
+    
+    CGRect deleteFrame = _delete.frame;
+    deleteFrame.origin.x = 0;
+    
+    [UIView animateWithDuration:0.25
+                     animations:^(void){
+                         _delete.frame = deleteFrame;
+                     } completion:^(BOOL finished) {
+                         _isAnimatingEdit = NO;
+                     }];
 }
 
 - (void)defaultMode:(id)sender
 {
-    _delete.hidden = YES;
+    if(_isAnimatingEdit)
+        return;
+    
+    _isAnimatingEdit = YES;
     _dataScrollView.scrollEnabled = YES;
+    
+    CGRect deleteFrame = _delete.frame;
+    deleteFrame.origin.x = 52;
+    
+    [UIView animateWithDuration:0.25
+                     animations:^(void){
+                         _delete.frame = deleteFrame;
+                     } completion:^(BOOL finished) {
+                         _delete.hidden = YES;
+                         _isAnimatingEdit = NO;
+                     }];
 }
 
 - (IBAction)deleteClicked:(id)sender

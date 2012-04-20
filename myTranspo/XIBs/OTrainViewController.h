@@ -40,7 +40,9 @@
     
     //map components
     MKPolyline*                         _routeLine;
+    MKPolyline*                         _routeLineOverlap;
     MKPolylineView*                     _routeLineView;
+    MKPolylineView*                     _routeLineViewOverlap;
     MKMapRect                           _routeRect;
 }
 
@@ -49,5 +51,7 @@
 @property (nonatomic)           BOOL                    futureTrip;
 @property (nonatomic, strong) MKPolyline*               routeLine;
 @property (nonatomic, strong) MKPolylineView*           routeLineView;
+@property (nonatomic, strong) MKPolyline*               routeLineOverlap;
+@property (nonatomic, strong) MKPolylineView*           routeLineViewOverlap;
 
 @end

@@ -55,7 +55,7 @@
 "MTDEF_LOADING" = "Loading...";
 "MTDEF_STOPS" = "Stops";
 "MTDEF_SEARCHPLANCEHOLDER" = "Search for a bus, stop number or street.";
-"MTDEF_SCHEDULEDTIME" = "Scheduled Time";
+"MTDEF_SCHEDULEDTIME" = "Scheduled Time at";
 "MTDEF_BUS" = "Bus";
 "MTDEF_STREET" = "Street Name";
 "MTDEF_NOTIFICATIONS" = "Notifications";
@@ -108,3 +108,5 @@
 "MTDEF_ALERTUPDATEMESSAGE" = "locally stored time needs to be updated now.";
 "MTDEF_ALERTTIMEMESSAGE" = "is scheduled to arrive in";
 
+//TRIPS
+"HEADING" = "Heading";

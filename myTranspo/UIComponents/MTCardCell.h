@@ -40,6 +40,7 @@
     MTLanguage                      _language;
     NSString*                       _nextTimeValue;
     BOOL                            _hasExpanded;
+    BOOL                            _isAnimatingEdit;
     
     //UI Components
     IBOutlet UILabel*               _busNumber;
@@ -85,5 +86,8 @@
 - (void)expandCellWithAnimation:(BOOL)animate;
 - (void)toggleLoadingAnimation:(BOOL)toggle;
 - (void)initializeUI;
+
+- (void)editMode:(id)sender;
+- (void)defaultMode:(id)sender;
 
 @end

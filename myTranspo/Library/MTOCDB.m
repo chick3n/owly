@@ -388,6 +388,7 @@
                from stops s \
                INNER JOIN stop_routes sr ON sr.stop_id = s.stop_id \
                WHERE s.stop_name like '%%%@%%' \
+               GROUP BY s.stop_name \
                ORDER BY s.stop_name ASC \
                LIMIT %d, %d"
                , identifier

@@ -47,7 +47,7 @@
 "MTDEF_LOADING" = "Chargement...";
 "MTDEF_STOPS" = "Arrêts de Bus";
 "MTDEF_SEARCHPLANCEHOLDER" = "Rechercher un autobus, arrêtez le nombre ou la rue.";
-"MTDEF_SCHEDULEDTIME" = "heure prévue";
+"MTDEF_SCHEDULEDTIME" = "heure prévue à";
 "MTDEF_BUS" = "bus";
 "MTDEF_STREET" = "Nom de la rue";
 "MTDEF_NOTIFICATIONS" = "Notifications";
@@ -100,3 +100,6 @@
 "MTDEF_ALERTUPDATEMESSAGE" = "le temps stocké localement doit être mis à jour aujourd'hui.";
 "MTDEF_ALERTTIMEMESSAGE" = "est prévue pour arriver à";
 
+
+//TRIPS
+"HEADING" = "Destination";
