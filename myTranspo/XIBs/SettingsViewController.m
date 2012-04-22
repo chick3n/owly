@@ -48,6 +48,7 @@
     _tableView.delegate = self;
     
     _tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]];
+    [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)]];
 }
 
 - (void)viewDidUnload
@@ -134,6 +135,7 @@
     return (settings == nil || settings.count == 0) ? 0 : settings.count;
 }
 
+#define kNoticesCellBackgroundTag 104
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
@@ -141,6 +143,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+        
+        //cell.textLabel.frame = CGRectMake(20, 10, cell.textLabel.frame.size.width, cell.textLabel.frame.size.height);
         cell.textLabel.textColor = [UIColor colorWithRed:89./255. green:89./255. blue:89./255. alpha:1.0];
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
         cell.textLabel.shadowColor = [UIColor whiteColor];
@@ -149,8 +153,14 @@
         cell.detailTextLabel.textColor = [UIColor colorWithRed:140./255. green:140./255. blue:140./255. alpha:1.0];
         cell.detailTextLabel.font = [UIFont fontWithName:@"HelveitcaNeue" size:14.0];
         
+        UIImageView* cellBackground = [[UIImageView alloc] initWithFrame:CGRectMake(-4, 0, 308, 44)];
+        cellBackground.tag = kNoticesCellBackgroundTag;
+        
         //cell.backgroundColor = [UIColor colorWithRed:245./255. green:247./255. blue:248./255. alpha:1.0];
-        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"settings_cell_pattern.png"]];
+        //cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"settings_cell_pattern.png"]];
+        cell.backgroundColor = [UIColor clearColor];
+        
+        [cell.contentView insertSubview:cellBackground atIndex:0];
     }
     
     NSArray* settings = [_data objectAtIndex:indexPath.section];
@@ -158,6 +168,30 @@
         return cell;
     
     SettingsType* setting = [settings objectAtIndex:indexPath.row];
+        
+    BOOL cellPosMiddle = NO;
+    
+    UIImageView* cellBackground = (UIImageView*)[cell.contentView viewWithTag:kNoticesCellBackgroundTag];
+    if(indexPath.row == 0 && settings.count == 1)
+    {
+        //draw single cell
+        cellBackground.image = [UIImage imageNamed:@"settings_singlecell.png"];
+    }
+    else if(indexPath.row == 0)
+    {
+        cellBackground.image = [UIImage imageNamed:@"settings_topcell.png"];
+    }
+    else if(indexPath.row == settings.count-1)
+    {
+        //draw end cell
+        cellBackground.image = [UIImage imageNamed:@"settings_bottomcell.png"];
+    }
+    else
+    {
+        //draw medium cell
+        cellBackground.image = [UIImage imageNamed:@"settings_middlecell.png"];
+        cellPosMiddle = YES;
+    }
     
     cell.textLabel.text = setting.title;
     if(setting.subTitle != nil)
@@ -172,15 +206,21 @@
     switch (setting.type) {
         case STLIST:
         case STOTHER:
+        {
             //[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-            [cell setAccessoryView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cardcell_arrow.png"]]];
+            UIImageView* emptyCellAccessory = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cardcell_arrow.png"]];
+            emptyCellAccessory.hidden = !cellPosMiddle; 
+            cell.accessoryView = emptyCellAccessory;
             cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             break;
+        }
         case STCHECKBOX:
             if(setting.selected == 0)
                 [cell setAccessoryType:UITableViewCellAccessoryNone];
             else
+            {
                 [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+            }
             break;
         case STTEXTBOX:
         case STPASSWORD:
@@ -188,6 +228,10 @@
             [cell setAccessoryView:[setting accessoryView]];
             break;
     }
+    
+    CGRect detailFrame = cell.detailTextLabel.frame;
+    detailFrame.origin.x -= 10;
+    cell.detailTextLabel.frame = detailFrame;
     
     return cell;
 }
@@ -218,6 +262,7 @@
 #if 0
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
+
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
     UILabel* headerLabel;
     headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 320, 32)];

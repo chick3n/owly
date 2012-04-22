@@ -15,5 +15,6 @@
     UIView*         _customView;
     UILabel*        _title;
     UILabel*        _subtitle;
+    UIButton*       _callBack;
 }
 @end

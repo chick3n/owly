@@ -36,7 +36,7 @@
 
 - (void)initializeUI
 {
-    _customView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 140, 50)];
+    _customView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 140, 60)];
     _customView.backgroundColor = [UIColor brownColor];
     
     _title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 140, 20)];
@@ -45,8 +45,13 @@
     _subtitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, 140, 20)];
     _subtitle.text = @"TEST2";
     
+    _callBack = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    _callBack.frame = CGRectMake(0, 40, 100, 100);
+    [_callBack setTitle:@"TEST BTN" forState:UIControlStateNormal];
+    
     [_customView addSubview:_title];
     [_customView addSubview:_subtitle];
+    [_customView addSubview:_callBack];
     
     CGRect customFrame = _customView.frame;
     customFrame.origin.x = self.frame.origin.x;
@@ -57,7 +62,7 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     NSLog(@"Set Selected: %d for: %@", selected, self.annotation.title);
-    [_customView addSubview:self.rightCalloutAccessoryView];
+
     if(selected)
         [self addSubview:_customView];
     else [_customView removeFromSuperview];
@@ -138,13 +143,13 @@
             third = text1;
         }
         
-        largest.textColor = [UIColor blueColor];
-        largest.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:14.0];
+        largest.textColor = [UIColor whiteColor];
+        largest.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
         largest.shadowColor = [UIColor whiteColor];
         largest.shadowOffset = CGSizeMake(0, 1);
         
-        second.textColor = [UIColor redColor];
-        second.font = [UIFont fontWithName:@"HelveticaNeue" size:10.0];
+        second.textColor = [UIColor whiteColor];
+        second.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0];
         second.shadowColor = [UIColor whiteColor];
         second.shadowOffset = CGSizeMake(0, 1);
         

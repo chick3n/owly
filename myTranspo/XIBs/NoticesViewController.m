@@ -129,6 +129,7 @@
 #define kNoticesCellImageTag 101
 #define kNoticesCellTitleTag 102
 #define kNoticesCellSubTitleTag 103
+#define kNoticesCellBackgroundTag 104
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -159,6 +160,12 @@
         UIImageView* cellIcon = [[UIImageView alloc] initWithFrame:CGRectMake(15, 13, 48, 48)];
         cellIcon.tag = kNoticesCellImageTag;
         
+        UIImageView* cellBackground = [[UIImageView alloc] initWithFrame:CGRectMake(6, 0, 308, 72)];
+        cellBackground.tag = kNoticesCellBackgroundTag;
+        
+        [cell setBackgroundColor:[UIColor clearColor]];
+        
+        [cell.contentView addSubview:cellBackground];
         [cell.contentView addSubview:cellTitle];
         [cell.contentView addSubview:cellSubTitle];
         [cell.contentView addSubview:cellIcon];
@@ -166,28 +173,25 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
+    UIImageView* cellBackground = (UIImageView*)[cell.contentView viewWithTag:kNoticesCellBackgroundTag];
     if(indexPath.row == 0 && _keys.count == 1)
     {
         //draw single cell
-        UIImageView* backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"notice_cell_top.png"]];
-        cell.backgroundView = backgroundImage;
+        cellBackground.image = [UIImage imageNamed:@"notice_cell_top.png"];
     }
     else if(indexPath.row == 0)
     {
-        UIImageView* backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"notice_cell_top.png"]];
-        cell.backgroundView = backgroundImage;
+        cellBackground.image = [UIImage imageNamed:@"notice_cell_top.png"];
     }
     else if(indexPath.row == _keys.count-1)
     {
         //draw end cell
-        UIImageView* backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"notice_cell_bottom.png"]];
-        cell.backgroundView = backgroundImage;
+        cellBackground.image = [UIImage imageNamed:@"notice_cell_bottom.png"];
     }
     else
     {
         //draw medium cell
-        UIImageView* backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"notice_cell_middle.png"]];
-        cell.backgroundView = backgroundImage;
+        cellBackground.image = [UIImage imageNamed:@"notice_cell_middle.png"];
     }
     
     UILabel *title = (UILabel*)[cell.contentView viewWithTag:kNoticesCellTitleTag];
