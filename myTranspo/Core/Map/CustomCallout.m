@@ -145,13 +145,13 @@
         
         largest.textColor = [UIColor whiteColor];
         largest.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
-        largest.shadowColor = [UIColor whiteColor];
-        largest.shadowOffset = CGSizeMake(0, 1);
+        largest.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:0.50];
+        largest.shadowOffset = CGSizeMake(0, -1);
         
         second.textColor = [UIColor whiteColor];
         second.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0];
-        second.shadowColor = [UIColor whiteColor];
-        second.shadowOffset = CGSizeMake(0, 1);
+        second.shadowColor = largest.shadowColor;
+        second.shadowOffset = CGSizeMake(0, -1);
         
         third.textColor = second.textColor;
         third.font = second.font;
