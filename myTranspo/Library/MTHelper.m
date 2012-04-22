@@ -162,9 +162,15 @@
     if(date == nil)
         return NO;
     
-    NSDateComponents* components = [[NSCalendar currentCalendar] components:NSDayCalendarUnit fromDate:date toDate:[NSDate date] options:0];
-     
+#if 0
+    NSDateComponents* components = [[NSCalendar currentCalendar] components:NSDayCalendarUnit fromDate:[NSDate date] toDate:date options:0];
+    NSLog(@"%@ %d %@", [NSDate date], components.day, date);
     return (components.day == 0) ? YES : NO;
+#endif
+    int day1 = [self DayOfWeekForDate:date];
+    int day2 = [self DayOfWeek];
+    //NSLog(@"Day1: %d - Day2: %d", day1, day2);
+    return (day1 == day2) ? YES : NO;
 }
 
 + (MTTranspoTypes)transpoTypeBasedOnCity:(MTCity)city

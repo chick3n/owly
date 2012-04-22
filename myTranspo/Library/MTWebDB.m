@@ -10,8 +10,11 @@
 
 @interface MTWebDB()
 - (NSURL*)appendUrlQuery:(NSString*)query, ...;
+- (NSURL*)appendQuery:(NSString*)query, ...;
 - (NSData*)webData:(NSURL*)url;
 - (id)jsonData:(NSData *)data WithClassType:(Class)class;
+- (NSMutableURLRequest *) multipartRequestWithURL:(NSURL *)url andDataDictionary:(NSDictionary *) dictionary;
+- (NSData*)webDataWithURLRequest:(NSURLRequest*)request;
 @end
 
 @implementation MTWebDB
@@ -53,6 +56,15 @@
     return [NSURL URLWithString:urlPath];
 }
 
+- (NSURL*)appendQuery:(NSString*)query, ...
+{
+    va_list args;
+    va_start(args, query);
+    
+    NSString *urlPath = [[NSString alloc] initWithFormat:query arguments:args];
+    return [NSURL URLWithString:urlPath];
+}
+
 - (NSData*)webData:(NSURL*)url
 {
     NSMutableURLRequest* chRequest = [NSMutableURLRequest requestWithURL:url 
@@ -61,6 +73,23 @@
     
 	NSError* error = nil;
 	NSData* xmlData = [NSURLConnection sendSynchronousRequest:chRequest returningResponse:nil error:&error];
+    
+	if(error)
+	{
+		MTLog(@"Failure to connect and gather XML data. %@", [error localizedFailureReason]);
+		return nil;
+	}
+    
+    return xmlData;
+}
+
+- (NSData*)webDataWithURLRequest:(NSURLRequest*)request
+{
+    if(request == nil)
+        return nil;
+    
+	NSError* error = nil;
+	NSData* xmlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
     
 	if(error)
 	{
@@ -91,6 +120,52 @@
         json = nil;
     
     return json;
+}
+
+/** Creates a multipart HTTP POST request.
+ *  @param url is the target URL for the POST request
+ *  @param dictionary is a key/value dictionary with the DATA of the multipart post.
+ *  
+ *  Should be constructed like:
+ *      NSArray *keys = [[NSArray alloc] initWithObjects:@"login", @"password", nil];
+ *      NSArray *objects = [[NSArray alloc] initWithObjects:@"TheLoginName", @"ThePassword!", nil];    
+ *      NSDictionary *dictionary = [[NSDictionary alloc] initWithObjects:objects forKeys:keys];
+ */
+- (NSMutableURLRequest *) multipartRequestWithURL:(NSURL *)url andDataDictionary:(NSDictionary *) dictionary
+{
+    // Create POST request
+    NSMutableURLRequest *mutipartPostRequest = [NSMutableURLRequest requestWithURL:url];
+    [mutipartPostRequest setHTTPMethod:@"POST"];
+    
+    // Add HTTP header info
+    // Note: POST boundaries are described here: http://www.vivtek.com/rfc1867.html
+    // and here http://www.w3.org/TR/html4/interact/forms.html
+    NSString *POSTBoundary = [NSString stringWithString:@"0xHttPbOuNdArY"]; // You could calculate a better boundary here.
+    [mutipartPostRequest addValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", POSTBoundary] forHTTPHeaderField:@"Content-Type"];
+    
+    // Add HTTP Body
+    NSMutableData *POSTBody = [NSMutableData data];
+    [POSTBody appendData:[[NSString stringWithFormat:@"--%@\r\n",POSTBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    // Add Key/Values to the Body
+    NSEnumerator *enumerator = [dictionary keyEnumerator];
+    NSString *key;
+    
+    while ((key = [enumerator nextObject])) {
+        [POSTBody appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
+        [POSTBody appendData:[[NSString stringWithFormat:@"%@", [dictionary objectForKey:key]] dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        if (key != nil) {
+            [POSTBody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", POSTBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        }
+    }
+    
+    // Add the closing -- to the POST Form
+    [POSTBody appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", POSTBoundary] dataUsingEncoding:NSUTF8StringEncoding]]; 
+    
+    // Add the body to the mutipartPostRequest & return
+    [mutipartPostRequest setHTTPBody:POSTBody];
+    return mutipartPostRequest;
 }
 
 #pragma mark - STOPS
@@ -344,7 +419,7 @@
                    , bus.BusId
                    , stop.StopId
                    , [dateFormatter stringFromDate:date]]];
-    
+
     NSDictionary *json = (NSDictionary*)[self jsonData:data WithClassType:[NSDictionary class]];
     
     if(json == nil)
@@ -557,6 +632,100 @@
     [notices addObjectsFromArray:json];
     
     return YES;
+}
+
+#pragma mark - Trip Planner
+
+/******
+    1. Pass in url to oc.com and get html results
+    2. Pass results to vicestudios.com to parse and return parsed data (easier to parse in PHP than iOS
+ */
+- (BOOL)getOCTripPlanner:(MTTripPlanner*)tripPlanner WithResults:(NSMutableDictionary*)results
+{
+    if(tripPlanner == nil)
+        return NO;
+    
+    if(results == nil)
+        return NO;
+    //http://octranspo.com/mobileweb/jnot/post.details.tripplan.oci?origin=21+gospel+oak&originRegion=OTTA&destination=99+bank+st&destinationRegion=OTTA&timeType=3&hour=6&minute=20&pm=True&day=20120423&accessible=on&regularFare=on&excludeSTO=on&bicycles=on&lang=en&action=Search
+    //http://octranspo.com/mobileweb/jnot/post.details.tripplan.oci?origin=21+gospel+oak&originRegion=OTTA&destination=99+bank+st&destinationRegion=OTTA&timeType=4&hour=6&minute=20&pm=True&day=20120423&accessible=on&regularFare=on&excludeSTO=on&bicycles=on&lang=en&action=Search
+    //http://octranspo.com/mobileweb/jnot/post.details.tripplan.oci?origin=21+gospel+oak&originRegion=OTTA&destination=99+bank+st&destinationRegion=OTTA&timeType=3&hour=6&minute=20&pm=False&day=20120423&accessible=on&regularFare=on&excludeSTO=on&bicycles=on&lang=en&action=Search
+    //http://octranspo.com/mobileweb/jnot/post.details.tripplan.oci?origin=21+gospel+oak&originRegion=OTTA&destination=99+bank+st&destinationRegion=OTTA&timeType=3&hour=6&minute=20&pm=False&day=20120423&regularFare=on&excludeSTO=on&bicycles=on&lang=en&action=Search
+    
+    NSString* url = @"http://octranspo.com/mobileweb/jnot/post.details.tripplan.oci?origin=%@&originRegion=OTTA&destination=%@&destinationRegion=OTTA&timeType=%@&hour=%@&minute=%@&pm=%@&day=%@&accessible=%@&regularFare=%@&excludeSTO=%@&bicycles=%@&lang=%@&action=Search";
+    
+    NSDateComponents* comp = [[NSCalendar currentCalendar] components:NSYearCalendarUnit | NSDayCalendarUnit | NSMonthCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit fromDate:tripPlanner.arriveBy];
+    comp.timeZone = [NSTimeZone localTimeZone];
+    
+    NSString* hour;
+    NSString* nightTime; //am
+    if(comp.hour > 12) //pm
+    {
+        nightTime = @"True";
+        if(comp.hour == 12)
+            hour = [NSString stringWithFormat:@"%d", comp.hour];
+        else hour = [NSString stringWithFormat:@"%d", comp.hour - 12];
+    }
+    else {
+        nightTime = @"False"; //am
+        hour = [NSString stringWithFormat:@"%d", comp.hour];
+    }
+    NSString *day;
+    NSString *month;
+    
+    if(comp.day < 10)
+        day = [NSString stringWithFormat:@"0%d", comp.day];
+    else day = [NSString stringWithFormat:@"%d", comp.day];
+    
+    if(comp.month < 10)
+        month = [NSString stringWithFormat:@"0%d", comp.month];
+    else month = [NSString stringWithFormat:@"%d", comp.month];
+    
+    NSURL* callUrl = [self appendQuery:url
+                      , tripPlanner.startingLocation
+                      , tripPlanner.endingLocation
+                      , (tripPlanner.departBy) ? @"3" : @"4"
+                      , hour
+                      , [NSString stringWithFormat:@"%d", comp.minute]
+                      , nightTime
+                      , [NSString stringWithFormat:@"%d%@%@", comp.year, month, day]
+                      , (tripPlanner.accessible) ? @"on" : @"off"
+                      , (tripPlanner.regulareFare) ? @"on" : @"off"
+                      , (tripPlanner.excludeSTO) ? @"on" : @"off"
+                      , (tripPlanner.bikeRack) ? @"on" : @"off"
+                      , (_language == MTLANGUAGE_FRENCH) ? @"fr" : @"en"];
+    
+
+
+#if 1 //used for basic testing
+    NSError* error = nil;
+    NSString* file = [[NSString alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tripplanner.html" ofType:nil] encoding:NSUTF8StringEncoding error:&error];
+    if(error)
+	{
+		MTLog(@"create file. %@", [error localizedFailureReason]);
+		return NO;
+	}
+    NSURL* postUrl = [NSURL URLWithString:@"http://192.168.0.38/oc/oc_tripPlanner.php"];
+    
+#endif
+    
+    if(tripPlanner.cancelQueue)
+        return NO;
+    
+    NSDictionary* post = [NSDictionary dictionaryWithObjectsAndKeys:file, @"DATA", nil];
+    NSMutableURLRequest* request = [self multipartRequestWithURL:postUrl andDataDictionary:post];
+      
+	NSData* xmlData = [self webDataWithURLRequest:request];
+    NSDictionary* json = [self jsonData:xmlData WithClassType:[NSDictionary class]];
+    
+    if(json != nil)
+    {
+        [results addEntriesFromDictionary:json];
+        return YES;
+    }
+    
+    MTLog(@"getOCTripPlanner json failed.");
+    return NO;
 }
 
 @end

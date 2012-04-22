@@ -183,11 +183,11 @@
     
     [_loadingIndicator startAnimating];
     
-    if(![_transpo getTripDetailsFor:_trip.TripId])
-        [self myTranspo:nil State:MTRESULTSTATE_FAILED finishedGettingTrips:nil];
-    
     _timesPickerView.hidden = YES;
     [self stopBusMonitor];
+    
+    if(![_transpo getTripDetailsFor:_trip.TripId])
+        [self myTranspo:nil State:MTRESULTSTATE_FAILED finishedGettingTrips:nil];
 }
 
 #pragma mark - UIPickerView Delegate / Datasource

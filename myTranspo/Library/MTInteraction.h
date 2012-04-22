@@ -10,6 +10,7 @@
 #import "MTBus.h"
 #import "MTStop.h"
 #import "MTTrip.h"
+#import "MTTripPlanner.h"
 
 @protocol MTInteraction
 

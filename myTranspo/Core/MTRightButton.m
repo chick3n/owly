@@ -41,7 +41,7 @@
     [self setBackgroundImage:strechBackground forState:UIControlStateNormal];
     self.backgroundColor = [UIColor clearColor];
     
-    self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:14.0];
+    self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0];
 }
 
 #if 1

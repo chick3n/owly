@@ -141,6 +141,12 @@
     _tripTime.text = [_trip.Time getTimeForDisplay];
 }
 
+- (void)updateCellDetailsQuick:(NSString*)title ForSecond:(NSString*)second
+{
+    _stopName.text = title;
+    _tripTime.text = second;
+}
+
 - (IBAction)alertButtonClicked:(id)sender
 {
     if([_delegate conformsToProtocol:@protocol(MTTripCellDelegate)])

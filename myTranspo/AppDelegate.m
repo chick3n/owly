@@ -136,10 +136,10 @@
             break; //should never happen
         case MTVCMYBUSES:
             newView = [[MyBusesViewController alloc] initWithNibName:@"MyBusesViewController" bundle:nil];
-            optionsView = [[MTOptionsDate alloc] initWithNibName:@"MTOptionsDate" bundle:nil];
+            /*optionsView = [[MTOptionsDate alloc] initWithNibName:@"MTOptionsDate" bundle:nil];
             optionsView.lastDate = _lastDate;
             optionsView.selectedDate = [NSDate date];
-            optionsView.delegateOptions = (MyBusesViewController*)newView;
+            optionsView.delegateOptions = (MyBusesViewController*)newView;*/
             break;
         case MTVCSTOPS:
             newView = [[StopsViewController alloc] initWithNibName:@"StopsViewController" bundle:nil];
@@ -157,8 +157,10 @@
         case MTVCNOTICIES:
             newView = [[NoticesViewController alloc] initWithNibName:@"NoticesViewController" bundle:nil];
             break;
-        case MTVCUNKNOWN:
         case MTVCTRIPPLANNER:
+            newView = [[TripPlannerViewController alloc] initWithNibName:@"TripPlannerViewController" bundle:nil];
+            break;
+        case MTVCUNKNOWN:
             return;
     }
     

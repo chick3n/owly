@@ -58,6 +58,8 @@
     //tableView
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    
+    _tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
 }
 
 - (void)viewDidUnload
@@ -90,16 +92,20 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"NoticesCell";
+    static NSString *CellIdentifier = @"MTCardCell";
     
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    MTSearchCell *cell = (MTSearchCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+        cell = [[MTSearchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     NSDictionary* entry = [_data objectAtIndex:indexPath.row];
-    cell.textLabel.text = [entry valueForKey:@"title"];
-    cell.detailTextLabel.text = [entry valueForKey:@"date"];
+    
+    cell.title = [entry valueForKey:@"title"];
+    cell.subtitle = [entry valueForKey:@"date"];
+    cell.type = CELLNOTICE;
+
+    [cell update];
     
     return cell;
 }

@@ -16,6 +16,7 @@
 #import "MTOCDB.h"
 #import "MTWebDB.h"
 #import "MTSettings.h"
+#import "MTTripPlanner.h"
 
 @protocol MyTranspoDelegate <NSObject>
 //GENERAL
@@ -61,6 +62,10 @@
 @optional
 - (void)myTranspo:(id)transpo State:(MTResultState)state receivedNotices:(NSDictionary*)notices;
 - (void)myTranspo:(id)transpo State:(MTResultState)state receivedRouteNotices:(NSArray*)notices forFavoriteRoute:(BOOL)hasFavorite;
+
+//trip planner
+@optional
+- (void)myTranspo:(id)transpo State:(MTResultState)state receivedTripPlan:(NSDictionary*)trip;
 @end
 
 #define kDefaultCoordinatesOttawa CLLocationCoordinate2DMake(45.42158812329091, -75.69442749023438)
@@ -146,6 +151,9 @@
 - (NSArray*)tripNotifications;
 - (BOOL)removeAllTripNotifications;
 - (BOOL)removeNotifications:(NSArray*)notifications;
+
+//tripplanner
+- (BOOL)getTripPlanner:(MTTripPlanner*)trip;
 
 //helpers
 - (NSDate*)stripNextDateFromJson:(NSDictionary*)json;

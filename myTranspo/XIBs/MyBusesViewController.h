@@ -14,10 +14,10 @@
 #import "MTRefreshTableView.h"
 #import "TripViewController.h"
 #import "MenuTableViewController.h"
-#import "MTOptionsDate.h"
+//#import "MTOptionsDate.h"
 #import "MTRightButton.h"
 
-@interface MyBusesViewController : MTBaseViewController<MyTranspoDelegate, MTCardCellDelegate, MTQueueSafe, UITableViewDataSource, UITableViewDelegate, MTRefreshDelegate, MTOptionsDateProtocol>
+@interface MyBusesViewController : MTBaseViewController<MyTranspoDelegate, MTCardCellDelegate, MTQueueSafe, UITableViewDataSource, UITableViewDelegate, MTRefreshDelegate>//, MTOptionsDateProtocol>
 {
     NSMutableArray*                     _favorites;
     BOOL                                _editing;
@@ -28,6 +28,7 @@
     //UIComponents
     UIBarButtonItem*                    _editButton;
     MTRightButton*                      _editButtonValue;
+    IBOutlet UIDatePicker*              _dateSelector;
 }
 
 @property (nonatomic, weak)     IBOutlet MTRefreshTableView*    tableView;

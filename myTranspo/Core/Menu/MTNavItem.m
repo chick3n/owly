@@ -112,6 +112,9 @@
         case 2: //stops
             _viewController = MTVCSTOPS;
             break;       
+        case 3: //trip planner
+            _viewController = MTVCTRIPPLANNER;
+            break;
         case 4: //trains
             _viewController = MTVCTRAIN;
             break;

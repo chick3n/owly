@@ -35,7 +35,7 @@
     
     for(MTBus* bus in _stopRoutes)
     {
-        [routes appendFormat:@"%@, ", bus.BusNumber];
+        [routes appendFormat:@"%@   ", bus.BusNumber];
     }
     
     if(routes.length >= 3) //strip off last comma

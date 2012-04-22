@@ -17,6 +17,7 @@
 - (void)stopPoolUpdate:(id)sender;
 - (void)poolUpdateTick:(id)sender;
 - (void)firstGetFavorites:(id)sender;
+- (void)changeTripScheduleTime:(id)sender;
 @end
 
 @implementation MyBusesViewController
@@ -54,10 +55,11 @@
     
     //navigationBar Setup
     //_editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"MTDEF_EDIT", nil) style:UIBarButtonItemStylePlain target:self action:@selector(editFavorites:)];
-    _editButtonValue = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
-    [_editButtonValue addTarget:self action:@selector(editFavorites:) forControlEvents:UIControlEventTouchUpInside];
-    [_editButtonValue setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
-    _editButton = [[UIBarButtonItem alloc] initWithCustomView:_editButtonValue];
+    UIButton* timesButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [timesButton setImage:[UIImage imageNamed:@"global_time_btn.png"] forState:UIControlStateNormal];
+    [timesButton addTarget:self action:@selector(changeTripScheduleTime:) forControlEvents:UIControlEventTouchUpInside];
+    [timesButton setFrame:CGRectMake(0, 0, 41, 29)];
+    _editButton = [[UIBarButtonItem alloc] initWithCustomView:timesButton];
     self.navigationItem.rightBarButtonItem = _editButton;
     
     self.title = NSLocalizedString(@"MTDEF_VIEWCONTROLLERMYBUSES", nil);
@@ -78,6 +80,11 @@
     _cellLoader = [UINib nibWithNibName:@"MTCardCell" bundle:nil];
     //static NSString *CellIdentifier = @"MTCardCell";    
     //[_tableView registerNib:_cellLoader forCellReuseIdentifier:CellIdentifier];
+    
+    //date selector
+    _dateSelector.minimumDate = _chosenDate;
+    _dateSelector.frame = CGRectMake(0, self.view.frame.size.height, _dateSelector.frame.size.width, _dateSelector.frame.size.height);
+    //[_dateSelector addTarget:self action:@selector(dateHasChanged:) forControlEvents:UIControlEventValueChanged];
     
     //view
     //[self.view addGestureRecognizer:_panGesture];
@@ -204,6 +211,11 @@
     [cell setIndexRow:indexPath.row];
     
     return cell;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return YES if you want the specified item to be editable.
+    return YES;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -476,6 +488,7 @@
 - (void)optionsDate:(id)options dateHasChanged:(NSDate *)newDate
 {
     //do something
+    
     _chosenDate = newDate;
 
     for(MTStop* stop in _favorites)
@@ -538,6 +551,50 @@
         [self stopPoolUpdate:nil];
         [self startPoolUpdate:nil]; //try again
     }    
+}
+
+#pragma mark - Date Pickerview Delegate
+
+- (void)dateHasChanged:(id)sender
+{
+    [self optionsDate:nil dateHasChanged:_dateSelector.date];
+}
+
+- (void)changeTripScheduleTime:(id)sender
+{
+    CGRect datePickerFrame = _dateSelector.frame;
+    
+    if(datePickerFrame.origin.y == self.view.frame.size.height)
+    {
+        UIView *fadedView = [[UIView alloc] initWithFrame:self.view.frame];
+        fadedView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
+        fadedView.tag = 20123;
+        [self.view insertSubview:fadedView belowSubview:_dateSelector];
+        
+        datePickerFrame.origin.y -= _dateSelector.frame.size.height;
+        _tableView.userInteractionEnabled = NO;
+    }
+    else
+    {
+        UIView* fadedView = [self.view viewWithTag:20123];
+        if(fadedView != nil)
+            [fadedView removeFromSuperview];
+        datePickerFrame.origin.y = self.view.frame.size.height;
+        _tableView.userInteractionEnabled = YES;
+        
+        if(_dateSelector.date != _chosenDate)
+            [self dateHasChanged:_dateSelector];
+    }
+    
+    
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         _dateSelector.frame = datePickerFrame;
+                     }];
+    
+#if 0
+    [_menuControl revealOptions:nil];
+#endif
 }
 
 @end

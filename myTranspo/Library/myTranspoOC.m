@@ -725,7 +725,7 @@
             }
         }
         
-        if(_hasAPI) //get next times live
+        if(_hasAPI && [MTHelper IsDateToday:date]) //get next times live
         {
             stop.IsUpdating = YES;
             status = [_ocApi getStop:stop Route:stop.Bus Times:date Results:nil];
@@ -998,7 +998,7 @@
                              [NSNumber numberWithInt:[MTSettings notificationAlertTimeInt]], kMTNotificationTripAlertTimeKey,
                              nil];
     notification.userInfo = userDic;
-    notification.repeatInterval = NSWeekdayCalendarUnit;
+    notification.repeatInterval = NSWeekCalendarUnit;
     
     //create repeaters
     NSDateComponents *weekdayComponents = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:startDate];
@@ -1262,6 +1262,38 @@
                            });
                        });
         return YES;
+    }
+    
+    return NO;
+}
+
+#pragma mark - Trip Planner
+
+- (BOOL)getTripPlanner:(MTTripPlanner*)trip
+{
+    if(_hasWebDb)
+    {
+        dispatch_async(_queue
+                       , ^(void){
+                           BOOL transpTypeFound = NO;
+                           BOOL status = NO;
+                           NSMutableDictionary* results = [[NSMutableDictionary alloc] init];
+                           if(_transpoType == MTTRANSPOTYPE_OC)
+                           {
+                               status = [_ocWebDb getOCTripPlanner:trip WithResults:results];
+                               transpTypeFound = YES;
+                           }        
+                           
+                           if(transpTypeFound == NO)
+                               results = nil;
+                           
+                           dispatch_async(MTLDEF_MAINQUEUE, ^(void){
+                               if(!trip.cancelQueue && [_delegate respondsToSelector:@selector(myTranspo:State:receivedTripPlan:)])
+                                   [_delegate myTranspo:self State:[MTHelper QuickResultState:status] receivedTripPlan:results];
+                           });
+
+                       });
+        
     }
     
     return NO;

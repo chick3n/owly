@@ -149,7 +149,8 @@
         cell.detailTextLabel.textColor = [UIColor colorWithRed:140./255. green:140./255. blue:140./255. alpha:1.0];
         cell.detailTextLabel.font = [UIFont fontWithName:@"HelveitcaNeue" size:14.0];
         
-        cell.backgroundColor = [UIColor colorWithRed:245./255. green:247./255. blue:248./255. alpha:1.0];
+        //cell.backgroundColor = [UIColor colorWithRed:245./255. green:247./255. blue:248./255. alpha:1.0];
+        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"settings_cell_pattern.png"]];
     }
     
     NSArray* settings = [_data objectAtIndex:indexPath.section];

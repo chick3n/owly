@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "MTInteraction.h"
 #import "MTDefinitions.h"
+#import "NSString+URLEncoding.h"
+
 #import <sqlite3.h>
 #import "sqlite3_distance.c"
 
@@ -28,5 +30,7 @@
 - (BOOL)getNotices:(NSMutableDictionary*)notices ForLanguage:(MTLanguage)language;
 - (BOOL)getRoutesForNotices:(NSMutableArray*)notices;
 
+//TRIP PLANNER
+- (BOOL)getOCTripPlanner:(MTTripPlanner*)tripPlanner WithResults:(NSMutableDictionary*)results;
 
 @end

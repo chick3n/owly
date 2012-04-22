@@ -579,17 +579,19 @@
     if ([annotation isKindOfClass:[MTStopAnnotation class]]) 
 	{
 		static NSString *identifier = @"MTStopAnnotation";
-        MKAnnotationView *annotationView = (MKAnnotationView *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
-        
+        CustomCallout *annotationView = (CustomCallout *) [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+
 		if (annotationView == nil) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView = [[CustomCallout alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
         } else {
             annotationView.annotation = annotation;
         }
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-        button.frame = CGRectMake(0, 0, 23, 23);
-        [button setImage:[UIImage imageNamed:@"card_arrow_right.png"] forState:UIControlStateNormal];
+        button.frame = CGRectMake(0, 0, 25, 26);
+        [button setImage:[UIImage imageNamed:@"map_arrow_btn.png"] forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:@"map_arrow_btn.png"] forState:UIControlStateHighlighted];
+        [button setImage:[UIImage imageNamed:@"map_arrow_btn.png"] forState:UIControlStateSelected];
         
         annotationView.enabled = YES;
         annotationView.canShowCallout = YES;
@@ -731,7 +733,15 @@
     _cardManager.chosenDate = _chosenDate;
     
     _leftBarButton = self.navigationItem.leftBarButtonItem;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleDone target:self action:@selector(hideCardManager:)];
+    if(_cardManagerClose == nil)
+    {
+        MTRightButton* backButton = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+        [backButton setTitle:NSLocalizedString(@"CLOSE", nil) forState:UIControlStateNormal];
+        [backButton addTarget:self action:@selector(hideCardManager:) forControlEvents:UIControlEventTouchUpInside];
+        _cardManagerClose = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    }
+    
+    self.navigationItem.leftBarButtonItem = _cardManagerClose;
     
     self.navigationItem.rightBarButtonItem = _cardManagerFavorite;
     

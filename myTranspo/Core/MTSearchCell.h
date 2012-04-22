@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MTHelper.h"
 
 #define kMTSEARCHCELLHEIGHT 44
 #define kMTSEARCHCELLSHAPEHEIGHT 45
@@ -25,6 +26,7 @@ typedef enum
     CELLBUS = 0
     , CELLSTOP
     , CELLSTREET
+    , CELLNOTICE
 } MTSearchType;
 
 @interface MTSearchCellShape : UIView

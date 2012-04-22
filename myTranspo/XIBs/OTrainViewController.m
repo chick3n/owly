@@ -310,7 +310,6 @@
     
     for(MTTrip* trip in trips)
     {
-        NSLog(@"%@", trip.StopName);
         trip.StopName = [trip.StopName stringByReplacingOccurrencesOfString:@"O-TRAIN" withString:@""];
     }
     
@@ -421,6 +420,10 @@
         
         if(![_transpo getTripDetailsFor:time.TripId])
             [self myTranspo:nil State:MTRESULTSTATE_FAILED finishedGettingTrips:nil];
+    }
+    else
+    {
+        [self myTranspo:nil State:MTRESULTSTATE_FAILED finishedGettingTrips:nil];
     }
 }
 
@@ -755,7 +758,7 @@
             _routeLineView = [[MKPolylineView alloc] initWithPolyline:_routeLine];
             //_routeLineView.fillColor = [UIColor colorWithRed:43./255. green:184./255. blue:239./255. alpha:1.0];
             _routeLineView.strokeColor = [UIColor whiteColor];
-            _routeLineView.lineWidth = 28;
+            _routeLineView.lineWidth = 15;
             _routeLineView.alpha = 1.0;            
         }
         
@@ -768,7 +771,7 @@
             _routeLineViewOverlap = [[MKPolylineView alloc] initWithPolyline:_routeLineOverlap];
             //_routeLineView.fillColor = [UIColor colorWithRed:43./255. green:184./255. blue:239./255. alpha:1.0];
             _routeLineViewOverlap.strokeColor = [UIColor colorWithRed:43./255. green:184./255. blue:239./255. alpha:1.0];
-            _routeLineViewOverlap.lineWidth = 20;
+            _routeLineViewOverlap.lineWidth = 11;
             _routeLineViewOverlap.alpha = 1.0;  
         }
         

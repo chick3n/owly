@@ -18,6 +18,7 @@
 #import "SettingsViewController.h"
 #import "OTrainViewController.h"
 #import "NoticesViewController.h"
+#import "TripPlannerViewController.h"
 
 #include "Core/ViewControllers.h"
 

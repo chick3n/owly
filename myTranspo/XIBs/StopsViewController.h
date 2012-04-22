@@ -17,6 +17,8 @@
 #import "MTSearchBar.h"
 #import "MTCardManager.h"
 #import "MTSearchCell.h"
+#import "CustomCallout.h"
+#import "MTRightButton.h"
 //#import "MTOptionsDate.h"
 
 @interface StopsViewController : MTBaseViewController <MyTranspoDelegate, MTQueueSafe, MyTranspoDelegate, MKMapViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDataSource, UITableViewDelegate, MTCardManagerDelegate>//, MTOptionsDateProtocol>
@@ -34,6 +36,7 @@
     MTCardManager*                          _cardManager;
     UIBarButtonItem*                        _cardManagerFavorite;
     UIBarButtonItem*                        _cardManagerFavoriteAlready;
+    UIBarButtonItem*                        _cardManagerClose;
     UIBarButtonItem*                        _leftBarButton;
     UIBarButtonItem*                        _resetMapLocationButton;
     IBOutlet UIDatePicker*                  _dateSelector;

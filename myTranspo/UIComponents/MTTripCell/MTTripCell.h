@@ -55,6 +55,7 @@ typedef enum
 - (void)toggleDisplayViews;
 - (void)updateCellBackgroundWithStopSequence:(MTTripSequence)sequence;
 - (void)updateCellDetails:(MTTrip*)trip;
+- (void)updateCellDetailsQuick:(NSString*)title ForSecond:(NSString*)second;
 - (void)updateBusImage:(BOOL)toggle;
 - (IBAction)alertButtonClicked:(id)sender;
 

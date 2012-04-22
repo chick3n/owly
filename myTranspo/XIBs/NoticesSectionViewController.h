@@ -9,6 +9,7 @@
 #import "MTBaseViewController.h"
 #import "MTRightButton.h"
 #import "NoticesDataViewController.h"
+#import "MTSearchCell.h"
 
 @interface NoticesSectionViewController : MTBaseViewController<UITableViewDataSource, UITableViewDelegate>
 {
