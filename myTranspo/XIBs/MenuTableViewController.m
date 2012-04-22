@@ -71,8 +71,6 @@
         [_actionUpdates invalidate];
     
     _accountButton = nil;
-    _accountIcon = nil;
-    _accountIcon = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated

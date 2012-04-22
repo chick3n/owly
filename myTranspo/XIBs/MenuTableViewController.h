@@ -23,8 +23,6 @@
     NSTimer*                        _actionUpdates;
     NSMutableArray*                 _menu;
     IBOutlet UIButton*              _accountButton;
-    IBOutlet UILabel*               _accountLabel;
-    IBOutlet UIImageView*           _accountIcon;
 }
 
 @property (nonatomic, weak)     IBOutlet UITableView*       tableView;
