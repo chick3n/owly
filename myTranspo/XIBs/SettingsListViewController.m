@@ -107,6 +107,8 @@
         cell.backgroundColor = [UIColor clearColor];
         
         [cell.contentView insertSubview:cellBackground atIndex:0];
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     UIImageView* cellBackground = (UIImageView*)[cell.contentView viewWithTag:kNoticesCellBackgroundTag];
