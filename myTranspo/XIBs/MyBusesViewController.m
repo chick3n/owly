@@ -18,6 +18,7 @@
 - (void)poolUpdateTick:(id)sender;
 - (void)firstGetFavorites:(id)sender;
 - (void)changeTripScheduleTime:(id)sender;
+- (void)didSwipe:(UIGestureRecognizer*)gestureRecognizer;
 @end
 
 @implementation MyBusesViewController
@@ -66,7 +67,7 @@
     //[self.navigationController.navigationBar addGestureRecognizer:_navPanGesture];
     
     //setup tableview
-    [self.tableView setDelaysContentTouches:NO];
+    [self.tableView setDelaysContentTouches:YES];
     [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]]];
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
@@ -75,6 +76,9 @@
     [self.tableView setupRefresh:_language];
     [self.tableView addPullToRefreshHeader];
     [self.tableView setRefreshDelegate:self];
+    UISwipeGestureRecognizer *gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
+    gesture.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.tableView addGestureRecognizer:gesture];
     
     //UINib
     _cellLoader = [UINib nibWithNibName:@"MTCardCell" bundle:nil];
@@ -106,7 +110,7 @@
     [super viewWillAppear:animated];
     
     _transpo.delegate = self;
-    [self.view addGestureRecognizer:_panGesture];
+    //[self.view addGestureRecognizer:_panGesture];
     
 #if 0
     if(_favorites == nil)
@@ -125,7 +129,7 @@
 {
     [super viewDidDisappear:animated];
     
-    [self.view removeGestureRecognizer:_panGesture];
+    //[self.view removeGestureRecognizer:_panGesture];
     
     if(_editing)
     {
@@ -230,6 +234,33 @@
     }
 }
 
+#if 0
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    MTCardCell* cell = (MTCardCell*)[tableView cellForRowAtIndexPath:indexPath];
+    if(cell.editing)
+        return UITableViewCellEditingStyleNone;
+    
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"TEST!");
+}
+
+- (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 0;
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
+
+#endif
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     int height = kFullHeight;
@@ -250,14 +281,14 @@
         [_tableView setEditing:YES animated:YES];
         [_editButtonValue setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
         _editButton.style = UIBarButtonItemStyleDone;
-        [self.view removeGestureRecognizer:_panGesture];
+        //[self.view removeGestureRecognizer:_panGesture];
     }
     else
     {
         [_tableView setEditing:NO animated:YES];
         [_editButtonValue setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
         _editButton.style = UIBarButtonItemStylePlain;
-        [self.view addGestureRecognizer:_panGesture];
+        //[self.view addGestureRecognizer:_panGesture];
     }
 }
 
@@ -310,10 +341,6 @@
         [self.navigationController pushViewController:tvc animated:YES];
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-    }
-    else
-    {
-
     }
 }
 
@@ -562,6 +589,9 @@
 
 - (void)changeTripScheduleTime:(id)sender
 {
+    if(_tableView.isEditing)
+        return;
+    
     CGRect datePickerFrame = _dateSelector.frame;
     
     if(datePickerFrame.origin.y == self.view.frame.size.height)
@@ -595,6 +625,21 @@
 #if 0
     [_menuControl revealOptions:nil];
 #endif
+}
+
+#pragma mark - SWIPES
+
+- (void)didSwipe:(UIGestureRecognizer*)gestureRecognizer
+{
+    if(gestureRecognizer.state == UIGestureRecognizerStateEnded)
+    {
+        CGPoint swipeLocation = [gestureRecognizer locationInView:self.tableView];
+        NSIndexPath* swipedIndexPath = [self.tableView indexPathForRowAtPoint:swipeLocation];
+        if(swipedIndexPath != nil)
+        {
+            [self editFavorites:nil];
+        }
+    }
 }
 
 @end

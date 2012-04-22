@@ -487,20 +487,14 @@
 #if 0
 - (void)willTransitionToState:(UITableViewCellStateMask)state
 {
-    switch (state) {
-        case UITableViewCellStateShowingEditControlMask:
-        case UITableViewCellStateShowingDeleteConfirmationMask:
-            [self editMode:nil];
-            return;
-    }
-    
-    [self defaultMode:nil];
+    [super willTransitionToState:state];
+    NSLog(@"Will transition to staet");
 }
 #endif
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
-    //[super setEditing:editing animated:animated];
+    //[super setEditing:editing animated:animated]; //auto indents ???
     
     if(editing)
         [self editMode:nil];

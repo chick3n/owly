@@ -55,8 +55,10 @@
     
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    _tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]];
+    [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)]];
     
-    [self.view addGestureRecognizer:_panGesture];
+    //[self.view addGestureRecognizer:_panGesture];
 }
 
 - (void)viewDidUnload
@@ -97,7 +99,9 @@
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
         cell.textLabel.shadowColor = [UIColor whiteColor];
         cell.textLabel.shadowOffset = CGSizeMake(0, 1);
-        cell.backgroundColor = [UIColor colorWithRed:245./255. green:247./255. blue:248./255. alpha:1.0];
+        
+        //cell.backgroundColor = [UIColor colorWithRed:245./255. green:247./255. blue:248./255. alpha:1.0];
+        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"settings_cell_pattern.png"]];
     }
     
     NSString* settings = (NSString*)[_setting.data objectAtIndex:indexPath.row];

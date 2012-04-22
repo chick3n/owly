@@ -162,11 +162,28 @@
     if(date == nil)
         return NO;
     
-#if 1
-    NSDateComponents* components = [[NSCalendar currentCalendar] components:NSDayCalendarUnit fromDate:[NSDate date] toDate:date options:0];
-    NSLog(@"%@ %d %@", [NSDate date], components.day, date);
-    return (components.day == 0) ? YES : NO;
-#endif
+    NSDate* today = [NSDate date];
+    NSUInteger components = NSHourCalendarUnit | NSMinuteCalendarUnit | NSDayCalendarUnit | NSYearCalendarUnit | NSMonthCalendarUnit | NSSecondCalendarUnit;
+    //reset date to midnight
+    
+    NSDateComponents* day1 = [[NSCalendar currentCalendar] components:components fromDate:date];
+    NSDateComponents* day2 = [[NSCalendar currentCalendar] components:components fromDate:today];
+    
+    day1.hour = 04; //this is OC midngiht time, modify this when using other cities
+    day1.minute = 00;
+    day1.second = 00;
+    
+    day2.hour = 04;
+    day2.minute = 00;
+    day2.second = 00;
+    
+    NSDate *newToday = [[NSCalendar currentCalendar] dateFromComponents:day2];
+    NSDate *newDate = [[NSCalendar currentCalendar] dateFromComponents:day1];
+    
+    NSDateComponents* component = [[NSCalendar currentCalendar] components:components fromDate:newToday toDate:newDate options:0];
+    //NSLog(@"newToday: %@, day: %d, newDate: %@", newToday, component.day, newDate);
+    return (component.day == 0) ? YES : NO;
+
 }
 
 + (MTTranspoTypes)transpoTypeBasedOnCity:(MTCity)city

@@ -318,11 +318,20 @@
             if(results.count > count)
                 break;
             
-            if([time compareTimesHHMMSS:currentTime Ordering:1 PassedMidnight:nextDay] > 0)
+            if(nextDay)
             {
                 nextTime = time;
                 if(nextTime != nil)
                     [results addObject:nextTime];
+            }
+            else
+            {
+                if([time compareTimesHHMMSS:currentTime Ordering:1 PassedMidnight:nextDay] > 0)
+                {
+                    nextTime = time;
+                    if(nextTime != nil)
+                        [results addObject:nextTime];
+                }
             }
         }
     }
@@ -351,7 +360,7 @@
                  AmountToFind:1
                       Results:results
                 RecursiveDeep:1
-                      NextDay:NO] > 0)
+                      NextDay:![MTHelper IsDateToday:_chosenDate]] > 0)
     {
         if(results.count > 0)
         {
@@ -373,14 +382,16 @@
 
 - (NSArray*)getNextTimesOfAmount:(int)count IncludeLiveTime:(BOOL)useLive
 {
-    NSMutableArray* results = [[NSMutableArray alloc] initWithCapacity:1];
+    BOOL isToday = [MTHelper IsDateToday:_chosenDate];
+    
+    NSMutableArray* results = [[NSMutableArray alloc] initWithCapacity:count];
     if([self nextTimesForWeek:[MTHelper DayOfWeekForDate:_chosenDate]
              IncludeLiveTimes:useLive
                   CompareTime:[MTHelper CurrentTimeHHMMSS]
                  AmountToFind:count
                       Results:results
                 RecursiveDeep:1
-                      NextDay:NO] > 0)
+                      NextDay:!isToday] > 0)
     {
         if(results.count < count)
         {

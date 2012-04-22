@@ -39,7 +39,7 @@
 {
     [super viewWillAppear:animated];
     
-    [self.view addGestureRecognizer:_panGesture];
+    //[self.view addGestureRecognizer:_panGesture];
     
     _transpo.delegate = self;
 }
@@ -48,7 +48,7 @@
 {
     [super viewWillDisappear:animated];
     
-    [self.view removeGestureRecognizer:_panGesture];
+    //[self.view removeGestureRecognizer:_panGesture];
 }
 
 - (void)viewDidLoad

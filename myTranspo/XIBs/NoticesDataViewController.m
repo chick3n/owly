@@ -42,16 +42,16 @@
 {
     [super viewWillAppear:animated];
     
-    if(_panGesture != nil)
-        [self.view addGestureRecognizer:_panGesture];
+    //if(_panGesture != nil)
+    //    [self.view addGestureRecognizer:_panGesture];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
-    if(_panGesture != nil)
-        [self.view removeGestureRecognizer:_panGesture];
+    //if(_panGesture != nil)
+    //    [self.view removeGestureRecognizer:_panGesture];
 }
 
 - (void)viewDidLoad

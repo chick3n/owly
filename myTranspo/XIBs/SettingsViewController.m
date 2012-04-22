@@ -62,7 +62,7 @@
 {
     [super viewWillAppear:animated];
     
-    [self.view addGestureRecognizer:_panGesture];
+    //[self.view addGestureRecognizer:_panGesture];
     [_tableView reloadData];
 }
 
@@ -75,7 +75,7 @@
 {
     [super viewWillDisappear:animated];
     
-    [self.view removeGestureRecognizer:_panGesture];
+    //[self.view removeGestureRecognizer:_panGesture];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -95,13 +95,14 @@
 - (void)initializeSettingsData
 {    
     //group account
+#if 0  
     NSMutableArray* groupAccount = [[NSMutableArray alloc] init];
-#if 0    
+  
     [groupAccount addObject:[SettingsType settingsTypeForGroup:SGACCOUNTINFO Type:STTEXTBOX Title:NSLocalizedString(@"MTDEF_ACCOUNTNAME", nil) SubTitle:nil Data:[NSArray arrayWithObject:[_settings accountNameForArary]] Selected:0 ModificationCaller:@selector(updateAccountName:) Delegate:self]];
     [groupAccount addObject:[SettingsType settingsTypeForGroup:SGACCOUNTINFO Type:STPASSWORD Title:NSLocalizedString(@"MTDEF_ACCOUNTPASSWORD", nil)SubTitle:nil Data:[NSArray arrayWithObject:[_settings passwordForArray]] Selected:0 ModificationCaller:@selector(updatePassword:) Delegate:self]];
-#endif
+
     [_data addObject:groupAccount];
-    
+   #endif 
     //application settings
     NSMutableArray* groupApplication = [[NSMutableArray alloc] init];
 #if 0 //using proper language (localization now)
@@ -211,7 +212,6 @@
             UIImageView* emptyCellAccessory = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cardcell_arrow.png"]];
             emptyCellAccessory.hidden = !cellPosMiddle; 
             cell.accessoryView = emptyCellAccessory;
-            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             break;
         }
         case STCHECKBOX:
@@ -238,9 +238,12 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    if([[_data objectAtIndex:section] count] <= 0)
+        return nil;
+    
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 32)];
     UILabel* headerLabel;
-    headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 4, 320, 32)];
+    headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 8, 320, 16)];
     headerLabel.backgroundColor = [UIColor clearColor];
     headerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:16];
     headerLabel.textColor = [UIColor colorWithRed:154./255. green:154./255. blue:154./255. alpha:1.0];
@@ -296,12 +299,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if(section == SGDATA && [[_data objectAtIndex:section] count] > 0)
+    if([[_data objectAtIndex:section] count] > 0)
         return 32;
-    else if(section == SGACCOUNTINFO && [[_data objectAtIndex:section] count] > 0)
-        return 32;
-    else if(section == SGAPPLICATION && [[_data objectAtIndex:section] count] > 0)
-        return 32;
+    
     
     return 0;
 }

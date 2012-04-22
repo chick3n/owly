@@ -73,7 +73,7 @@
     [self.navigationItem setRightBarButtonItem:_resetMapLocationButton];
     
     //view
-    [self.view addGestureRecognizer:_panGesture];
+    //[self.view addGestureRecognizer:_panGesture];
 
     //searchcontroller
     [_searchBar setPlaceholder:NSLocalizedString(@"MTDEF_SEARCHPLANCEHOLDER", nil)];
@@ -745,7 +745,7 @@
     
     self.navigationItem.rightBarButtonItem = _cardManagerFavorite;
     
-    [self.view removeGestureRecognizer:_panGesture];
+    //[self.view removeGestureRecognizer:_panGesture];
     [self.view addSubview:_cardManager];
 }
 
@@ -757,7 +757,7 @@
     _cardManager.stop = nil;
     
     [_cardManager removeFromSuperview];
-    [self.view addGestureRecognizer:_panGesture];
+    //[self.view addGestureRecognizer:_panGesture];
     
     if(_leftBarButton != nil)
         self.navigationItem.leftBarButtonItem = _leftBarButton;
