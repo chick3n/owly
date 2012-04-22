@@ -87,6 +87,7 @@
     return (_setting.data == nil) ? 0 : _setting.data.count;
 }
 
+#define kNoticesCellBackgroundTag 104
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
@@ -100,8 +101,33 @@
         cell.textLabel.shadowColor = [UIColor whiteColor];
         cell.textLabel.shadowOffset = CGSizeMake(0, 1);
         
-        //cell.backgroundColor = [UIColor colorWithRed:245./255. green:247./255. blue:248./255. alpha:1.0];
-        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"settings_cell_pattern.png"]];
+        UIImageView* cellBackground = [[UIImageView alloc] initWithFrame:CGRectMake(-4, 0, 308, 44)];
+        cellBackground.tag = kNoticesCellBackgroundTag;
+        
+        cell.backgroundColor = [UIColor clearColor];
+        
+        [cell.contentView insertSubview:cellBackground atIndex:0];
+    }
+    
+    UIImageView* cellBackground = (UIImageView*)[cell.contentView viewWithTag:kNoticesCellBackgroundTag];
+    if(indexPath.row == 0 && _setting.data.count == 1)
+    {
+        //draw single cell
+        cellBackground.image = [UIImage imageNamed:@"settings_singlecell.png"];
+    }
+    else if(indexPath.row == 0)
+    {
+        cellBackground.image = [UIImage imageNamed:@"settings_topcell.png"];
+    }
+    else if(indexPath.row == _setting.data.count-1)
+    {
+        //draw end cell
+        cellBackground.image = [UIImage imageNamed:@"settings_bottomcell.png"];
+    }
+    else
+    {
+        //draw medium cell
+        cellBackground.image = [UIImage imageNamed:@"settings_middlecell.png"];
     }
     
     NSString* settings = (NSString*)[_setting.data objectAtIndex:indexPath.row];
