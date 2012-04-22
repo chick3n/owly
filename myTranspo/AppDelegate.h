@@ -36,6 +36,7 @@
     MTLanguage                      _language;
     NSArray*                        _routeNotices; //stores all the routes that have a notice
     NSDate*                         _lastDate;
+    UIImageView*                    _rainbowBar;
 }
 
 @property (strong, nonatomic) UIWindow *window;

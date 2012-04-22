@@ -34,6 +34,11 @@
         _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:_menuController action:@selector(revealGesture:)];
         _navPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:_menuController action:@selector(revealGesture:)];
         _tap = [[UITapGestureRecognizer alloc] initWithTarget:_menuController action:@selector(revealToggle:)];
+        
+        _rainbowBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_topcolour_bar.png"]];
+        CGRect rainbowFrame = _rainbowBar.frame;
+        rainbowFrame.origin.y = 0;
+        _rainbowBar.frame = rainbowFrame;
     }
     
     return self;
@@ -52,6 +57,7 @@
     //auto goto favorites if we need an update or notified of upcoming bus
     [self launchNewView:(localNotification == nil) ? [MTSettings startupScreen] : MTVCMYBUSES]; 
     
+    [_menuController.view addSubview:_rainbowBar];
     self.window.rootViewController = _menuController;
     [self.window makeKeyAndVisible];
     
