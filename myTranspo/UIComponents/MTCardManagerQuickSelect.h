@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "MTIncludes.h"
 
+#define kQuickCellWidth 44
+
 @protocol MTCardManagerQuickSelectDelegate <NSObject>
 @required
 - (void)quickSelect:(id)owner receivedClick:(int)row;
@@ -16,9 +18,9 @@
 
 @interface MTCardManagerQuickSelect : UIView <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) UIImageView* headerBar;
-@property (nonatomic, strong) UITableView* tableView;
-@property (nonatomic, weak) NSArray* data;
-@property (nonatomic, weak) id<MTCardManagerQuickSelectDelegate> delegateQuick;
+@property (nonatomic, strong)   UIImageView*    headerBar;
+@property (nonatomic, strong)   UITableView*    tableView;
+@property (nonatomic, weak)     NSArray*        data;
+@property (nonatomic, weak)     id<MTCardManagerQuickSelectDelegate> delegateQuick;
 
 @end

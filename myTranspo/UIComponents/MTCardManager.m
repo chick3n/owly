@@ -16,8 +16,6 @@
 - (void)updatedCardPositions;
 - (void)updateCard:(MTCard*)card ForRoute:(MTBus*)route AtPage:(int)page;
 - (void)resetPositions;
-- (void)swipeGesture:(id)sender;
-- (void)swipeGestureHide:(id)sender;
 - (void)hideQuickTable:(id)sender;
 - (void)revealQuickTable:(id)sender;
 @end
@@ -34,11 +32,9 @@
     {
         _cards = [[NSMutableArray alloc] initWithCapacity:3];
         _language = language;   
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
-        _pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, rect.size.height - 40, rect.size.width, 36)];
-        _quickTable = [[MTCardManagerQuickSelect alloc] initWithFrame:CGRectMake(0, rect.size.height, rect.size.width, rect.size.height/2)];
-        _swipGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(swipeGesture:)];
-        
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 20, rect.size.width, rect.size.height)];
+        _pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, rect.size.height - 30, rect.size.width, 36)];
+        _quickTable = [[MTCardManagerQuickSelect alloc] initWithFrame:CGRectMake(0, -kQuickCellWidth, kQuickCellWidth, rect.size.width)];
         _quickTable.delegateQuick = self;
         
         [self initializeCardManager];
@@ -80,7 +76,7 @@
     [self addSubview:_pageControl];
     
     [self addSubview:_quickTable];
-    [self addGestureRecognizer:_swipGesture];
+    //[self addGestureRecognizer:_swipGesture];
     
     _currentCard = [_cards objectAtIndex:0];
     _prevCard = [_cards objectAtIndex:2];
@@ -103,11 +99,14 @@
     _pageControl.currentPage = 0;
     _pageControl.numberOfPages = stop.BusIds.count;
     
-    if(_pageControl.numberOfPages > 10)
+    if(_pageControl.numberOfPages > 1)
     {
-        _pageControl.hidden = YES;
+        //_pageControl.hidden = YES;
         [self revealQuickTable:nil];
     }
+    
+    if(_pageControl.numberOfPages > 10)
+        _pageControl.hidden = YES;
     else if(_pageControl.hidden)
         _pageControl.hidden = NO;
         
@@ -390,138 +389,17 @@
     return nil;
 }
 
-#pragma mark - SWIP GESTURE
-
-- (void)swipeGesture:(id)sender
-{
-    UIPanGestureRecognizer* gesture = (UIPanGestureRecognizer*)sender;
-    
-    if (UIGestureRecognizerStateBegan == [gesture state])
-    {
-        //get start coordinates and save them
-        if([gesture locationInView:self].y >= kSwipeUpFromY)
-            _swipeStartedAtBottom = YES;
-        else
-            _swipeStartedAtBottom = NO;
-    }
-    else if (UIGestureRecognizerStateEnded == [gesture state])
-    {
-        if(_swipeStartedAtBottom == NO)
-            return;
-        
-        if (fabs([gesture velocityInView:self].y) > kQuickSelectFlick)
-		{
-			if ([gesture velocityInView:self].y < 0.0f)
-			{				
-				[self revealQuickTable:nil];
-			}
-			else
-			{
-				[self hideQuickTable:nil];
-			}
-		}
-        else if(_quickTable.frame.origin.y > (self.frame.size.height - 40))
-        {
-            //slide back down
-            [self hideQuickTable:nil];
-        }
-        else
-        {
-            //lock table view to position
-            [self revealQuickTable:nil];
-        }
-        
-        
-        _swipeStartedAtBottom = NO;
-    }
-    else //in progress
-    {
-        if(_swipeStartedAtBottom == NO)
-            return;
-        
-        if([gesture locationInView:self].y <= self.frame.size.height/2)
-        {
-            CGRect quickTableFrame = _quickTable.frame;
-            quickTableFrame.origin.y = self.frame.size.height/2;
-            _quickTable.frame = quickTableFrame;
-        }
-        else
-        {
-            //draw up tableview
-            CGRect quickTableFrame = _quickTable.frame;
-            quickTableFrame.origin.y = [gesture locationInView:self].y;
-            _quickTable.frame = quickTableFrame;
-        }
-    }
-}
-
-- (void)swipeGestureHide:(id)sender
-{
-    UIPanGestureRecognizer* gesture = (UIPanGestureRecognizer*)sender;
-    
-    //NSLog(@"%f %f", fabs([gesture velocityInView:self].y), [gesture velocityInView:self].y);
-    
-    if (UIGestureRecognizerStateBegan == [gesture state])
-    {
-        //get start coordinates and save them
-        CGFloat rangeA = _quickTable.frame.origin.y - 10;
-        CGFloat rangeB = _quickTable.frame.origin.y + _quickTable.headerBar.frame.size.height;
-        
-        if([gesture locationInView:self].y >= rangeA && [gesture locationInView:self].y <= rangeB)
-            _swipeStartedAtBottom = YES;
-        else
-            _swipeStartedAtBottom = NO;
-    }
-    else if (UIGestureRecognizerStateEnded == [gesture state])
-    {
-        if(_swipeStartedAtBottom == NO)
-            return;
-        if(_quickTable.frame.origin.y > self.frame.size.height/2 )
-        {
-            //slide back down
-            [self hideQuickTable:nil];
-        }
-        else
-        {
-            //lock table view to position
-            [self revealQuickTable:nil];
-        }        
-        
-        _swipeStartedAtBottom = NO;
-    }
-    else //in progress
-    {
-        if(_swipeStartedAtBottom == NO)
-            return;
-        
-        if([gesture locationInView:self].y <= self.frame.size.height/2)
-        {
-            CGRect quickTableFrame = _quickTable.frame;
-            quickTableFrame.origin.y = self.frame.size.height/2;
-            _quickTable.frame = quickTableFrame;
-        }
-        else
-        {
-            //draw up tableview
-            CGRect quickTableFrame = _quickTable.frame;
-            quickTableFrame.origin.y = [gesture locationInView:self].y;
-            _quickTable.frame = quickTableFrame;
-        }
-    }
-}
+#pragma mark - quick view
 
 - (void)hideQuickTable:(id)sender
 {
     CGRect quickTableFrame = _quickTable.frame;
-    quickTableFrame.origin.y = self.frame.size.height;
+    quickTableFrame.origin.y = 0 - _quickTable.frame.size.height;
     
     [UIView animateWithDuration:0.5 
                      animations:^(void){
                          _quickTable.frame = quickTableFrame;
                      }];
-        
-    [_swipGesture removeTarget:self action:@selector(swipeGestureHide:)];
-    [_swipGesture addTarget:self action:@selector(swipeGesture:)];
     
     _swipeStartedAtBottom = NO;
 }
@@ -529,15 +407,12 @@
 - (void)revealQuickTable:(id)sender
 {
     CGRect quickTableFrame = _quickTable.frame;
-    quickTableFrame.origin.y = self.frame.size.height/2;
+    quickTableFrame.origin.y = 0;
     
-    [UIView animateWithDuration:0.5 
+    [UIView animateWithDuration:0.25 
                      animations:^(void){
                          _quickTable.frame = quickTableFrame;
                      }];
-    
-    [_swipGesture removeTarget:self action:@selector(swipeGesture:)];
-    [_swipGesture addTarget:self action:@selector(swipeGestureHide:)];
     
     _swipeStartedAtBottom = NO;
 }
@@ -579,7 +454,7 @@
     [self updatedCardPositions];
     [self updateCurrentCard:0];
     
-    [self hideQuickTable:nil];
+    //[self hideQuickTable:nil];
 }
 
 @end
