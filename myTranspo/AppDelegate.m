@@ -283,14 +283,20 @@
 	NSString *documentsDir = [paths objectAtIndex:0];
 	NSString *dbPath = [documentsDir stringByAppendingPathComponent:@"OCTranspo.sqlite"];
 
+    NSLog(@"%d", [settings currentDatabaseNeedsUpdate]);
     if(![manager fileExistsAtPath:dbPath] || [settings currentDatabaseNeedsUpdate])
     {
-        [manager removeItemAtPath:dbPath error:nil];
-        [manager copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"OCTranspo.sqlite" ofType:nil]
-                         toPath:dbPath
-                          error:nil];
+        NSString* sourcePath = [[NSBundle mainBundle] pathForResource:@"OCTranspo.sqlite" ofType:nil];
         
-        [settings updateDatabaseVersionToBundle];
+        if (sourcePath != nil) {
+            [manager removeItemAtPath:dbPath error:nil];
+            [manager copyItemAtPath:sourcePath
+                             toPath:dbPath
+                              error:nil];
+            
+            [settings updateDatabaseVersionToBundle];
+        }
+                
     }
     
     [self setupMyTranspo];
