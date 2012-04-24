@@ -455,8 +455,9 @@
 - (void)nextTimesClicked:(id)sender
 {
     UIButton* nextTime = (UIButton*)sender;
+    char lastChar = [nextTime.titleLabel.text characterAtIndex:nextTime.titleLabel.text.length-1];
     
-    if([nextTime.titleLabel.text characterAtIndex:nextTime.titleLabel.text.length-1] == 'm')
+    if(lastChar == 'm' || lastChar == '+' || lastChar == 'w')
     {
         for(int ele=0; ele<_nextTimes.count; ele+=kElementNextTimesElementCount)
         {        
