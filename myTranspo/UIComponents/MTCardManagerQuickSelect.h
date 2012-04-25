@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "MTIncludes.h"
+#import "MTSearchCell.h"
 
-#define kBarHeight 23
+#define kBarHeight 19
 
 @protocol MTCardManagerQuickSelectDelegate <NSObject>
 @required
@@ -18,7 +19,7 @@
 
 @interface MTCardManagerQuickSelect : UIView <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) UIImageView* headerBar;
+@property (nonatomic, strong) UIButton* headerBar;
 @property (nonatomic, strong) UITableView* tableView;
 @property (nonatomic, weak) NSArray* data;
 @property (nonatomic, weak) id<MTCardManagerQuickSelectDelegate> delegateQuick;

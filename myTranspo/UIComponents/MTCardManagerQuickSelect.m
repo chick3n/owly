@@ -14,11 +14,16 @@
     self = [super initWithFrame:frame];
     if(self)
     {
-        self.headerBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_category_bar.png"]];
-        self.headerBar.frame = CGRectMake(0, frame.size.height-self.headerBar.frame.size.height, self.headerBar.frame.size.width, self.headerBar.frame.size.height);
+        //self.headerBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_pullbar.png"]];
+        self.headerBar = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.headerBar setImage:[UIImage imageNamed:@"global_pullbar.png"] forState:UIControlStateNormal];        
+        self.headerBar.frame = CGRectMake(0, frame.size.height-20, 320, 20);
+        
         self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height-self.headerBar.frame.size.height) style:UITableViewStylePlain];
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
+        [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]]];
+        [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
         
         [self addSubview:self.headerBar];
         [self addSubview:self.tableView];
@@ -44,16 +49,26 @@
 {
     static NSString *CellIdentifier = @"MTCardCell";
     
-    UITableViewCell *cell = (UITableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    MTSearchCell *cell = (MTSearchCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[MTSearchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell.type = CELLBUS;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    
+        
     MTBus * bus = [_data objectAtIndex:indexPath.row];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", bus.BusNumber, bus.DisplayHeading];
+    cell.title = bus.BusNumberDisplay;
+    cell.subtitle = bus.DisplayHeading;
+    
+    [cell update];
     
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return kMTSEARCHCELLHEIGHT;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

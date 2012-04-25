@@ -20,6 +20,7 @@
 - (void)swipeGestureHide:(id)sender;
 - (void)hideQuickTable:(id)sender;
 - (void)revealQuickTable:(id)sender;
+- (void)bounceQuickView:(id)sender;
 @end
 
 @implementation MTCardManager
@@ -79,6 +80,7 @@
     [_pageControl addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];
     [self addSubview:_pageControl];
     
+    [_quickTable.headerBar addTarget:self action:@selector(bounceQuickView:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_quickTable];
     [self addGestureRecognizer:_swipGesture];
     
@@ -106,11 +108,14 @@
     if(_pageControl.numberOfPages > 10)
     {
         _pageControl.hidden = YES;
-        [self revealQuickTable:nil];
     }
     else if(_pageControl.hidden)
         _pageControl.hidden = NO;
     
+    if(_pageControl.numberOfPages >= 3)
+    {
+        [self performSelector:@selector(bounceQuickView:) withObject:nil afterDelay:0.25];
+    }
     
     if(_chosenDate == nil)
         _chosenDate = [NSDate date];
@@ -463,11 +468,9 @@
     if (UIGestureRecognizerStateBegan == [gesture state])
     {
         //get start coordinates and save them
-        CGFloat rangeA = _quickTable.frame.origin.y + _quickTable.frame.size.height - kBarHeight;
+        CGFloat rangeA = _quickTable.frame.origin.y + _quickTable.frame.size.height - (kBarHeight * 2);
         CGFloat rangeB = _quickTable.frame.origin.y + _quickTable.frame.size.height + _quickTable.headerBar.frame.size.height;
-        
-        NSLog(@"%f %f %f", [gesture locationInView:self].y, rangeA, rangeB);
-        
+                
         if([gesture locationInView:self].y >= rangeA && [gesture locationInView:self].y <= rangeB)
             _swipeStartedAtBottom = YES;
         else
@@ -582,6 +585,76 @@
     [self updateCurrentCard:0];
     
     [self hideQuickTable:nil];
+}
+
+- (void)bounceQuickView:(id)sender
+{
+    NSLog(@"Bounce");
+#if 0
+    CABasicAnimation *bounceAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
+    bounceAnimation.duration = 1.0;
+    bounceAnimation.fromValue = [NSNumber numberWithInt:0];
+    bounceAnimation.toValue = [NSNumber numberWithInt:kBarHeight];
+    bounceAnimation.repeatCount = 3;
+    bounceAnimation.autoreverses = YES;
+    bounceAnimation.fillMode = kCAFillModeForwards;
+    bounceAnimation.removedOnCompletion = NO;
+        
+    [_quickTable.layer addAnimation:bounceAnimation forKey:@"bounce"];
+
+    [UIView beginAnimations:@"bounce" context:nil];
+    [UIView setAnimationRepeatCount:2];
+    [UIView setAnimationRepeatAutoreverses:YES];
+    _quickTable.center = CGPointMake(_quickTable.center.x, _quickTable.center.y + 10);
+    [UIView commitAnimations];
+    
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         [UIView setAnimationRepeatCount:2];
+                         [UIView setAnimationRepeatAutoreverses:YES];
+                         _quickTable.center = CGPointMake(_quickTable.center.x, _quickTable.center.y + 5);
+                     } 
+                     completion:^(BOOL finished) {
+                         _quickTable.frame = quickTableFrame;
+                     }];
+#endif 
+    CGRect quickTableFrame = _quickTable.frame;
+
+    if(quickTableFrame.origin.y >= 0)
+        return;
+    
+    
+    
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         _quickTable.center = CGPointMake(_quickTable.center.x, _quickTable.center.y + 10);
+                     } 
+                     completion:^(BOOL finished) {
+                         if(finished)
+                         {
+                             [UIView animateWithDuration:0.15
+                                              animations:^{
+                                                  _quickTable.frame = quickTableFrame;
+                                              } completion:^(BOOL finished) {
+                                                  if(finished)
+                                                  {
+                                                      [UIView animateWithDuration:0.15
+                                                                       animations:^{
+                                                                           _quickTable.center = CGPointMake(_quickTable.center.x, _quickTable.center.y + 5);
+                                                                       } completion:^(BOOL finished) {
+                                                                           if(finished)
+                                                                           {
+                                                                               [UIView animateWithDuration:0.1
+                                                                                                animations:^{
+                                                                                                    _quickTable.frame = quickTableFrame;
+                                                                                                }];
+                                                                           }
+                                                                       }];
+                                                  }
+                                              }];
+                         }
+                     }];
+
 }
 
 @end
