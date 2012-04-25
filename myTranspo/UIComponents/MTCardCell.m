@@ -173,7 +173,7 @@
     
     _dataScrollView.contentSize = CGSizeMake((nextTimesLabelFrame.origin.x + nextTimesLabelFrame.size.width) - kElementNextTimesSpacer
                                              , _dataScrollView.frame.size.height);
-
+    
 }
 
 - (NSInteger)getCellHeight
@@ -478,28 +478,26 @@
 
 #pragma mark - EDIT / DELETE MODE
 
+#if 0
 - (void)layoutSubviews
 {
+//    [super layoutSubviews];
+    
     if(self.editing)
         self.contentView.frame = CGRectMake(0, self.contentView.frame.origin.y, self.contentView.frame.size.width
                                             , self.contentView.frame.size.height);
 }
 
-#if 0
-- (void)willTransitionToState:(UITableViewCellStateMask)state
-{
-    [super willTransitionToState:state];
-    NSLog(@"Will transition to staet");
-}
 #endif
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
-    //[super setEditing:editing animated:animated]; //auto indents ???
+    [super setEditing:editing animated:animated]; //auto indents ???
     
     if(editing)
         [self editMode:nil];
     else [self defaultMode:nil];
+    
 }
 
 - (void)editMode:(id)sender
@@ -542,6 +540,7 @@
                          _isAnimatingEdit = NO;
                      }];
 }
+
 
 - (IBAction)deleteClicked:(id)sender
 {

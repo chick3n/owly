@@ -16,6 +16,7 @@
 
 #define kQuickSelectFlick 1300.0f
 #define kSwipeUpFromY 350.0f
+#define kSwipeDownFromY 70.0f
 
 @protocol MTCardManagerDelegate <NSObject>
 @required

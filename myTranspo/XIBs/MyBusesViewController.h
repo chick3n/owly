@@ -24,6 +24,7 @@
     int                                 _loadingCounter;
     NSDate*                             _chosenDate;
     NSTimer*                            _poolUpdates;
+    NSIndexPath*                        _editedCell;
     
     //UIComponents
     UIBarButtonItem*                    _editButton;

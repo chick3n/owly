@@ -77,7 +77,7 @@
     [self.tableView addPullToRefreshHeader];
     [self.tableView setRefreshDelegate:self];
     UISwipeGestureRecognizer *gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
-    gesture.direction = UISwipeGestureRecognizerDirectionLeft;
+    gesture.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight;
     [self.tableView addGestureRecognizer:gesture];
     
     //UINib
@@ -213,15 +213,20 @@
     [cell updateCellDetails:stop New:YES];
     
     [cell setIndexRow:indexPath.row];
-    
+
     return cell;
 }
 
+
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return YES if you want the specified item to be editable.
     return YES;
 }
 
+- (BOOL)tableView:(UITableView *)tableview shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
+    return NO;
+}
+
+#if 0
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(editingStyle == UITableViewCellEditingStyleDelete)
@@ -234,29 +239,9 @@
     }
 }
 
-#if 0
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MTCardCell* cell = (MTCardCell*)[tableView cellForRowAtIndexPath:indexPath];
-    if(cell.editing)
-        return UITableViewCellEditingStyleNone;
-    
-    return UITableViewCellEditingStyleDelete;
-}
-
-- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"TEST!");
-}
-
-- (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 0;
-}
-
-- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return NO;
+    return UITableViewCellEditingStyleNone;
 }
 
 #endif
@@ -322,7 +307,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(!tableView.editing)
+    if(!tableView.editing && !_editing)
     {
         MTStop* stop = [_favorites objectAtIndex:indexPath.row];
         
@@ -341,6 +326,14 @@
         [self.navigationController pushViewController:tvc animated:YES];
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
+    else {
+        if(_editedCell != nil && _editedCell.row < _favorites.count)
+        {
+            MTCardCell* cell = (MTCardCell*)[tableView cellForRowAtIndexPath:_editedCell];
+            [cell setEditing:NO animated:YES];
+        }
+        _editing = NO;
     }
 }
 
@@ -481,6 +474,18 @@
 #pragma mark - MTRefreshTableView
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if(_editing)
+    {
+        if(_editedCell != nil && _editedCell.row < _favorites.count)
+        {
+            MTCardCell* cell = (MTCardCell*)[_tableView cellForRowAtIndexPath:_editedCell];
+            [cell setEditing:NO animated:YES];
+        }
+        else {
+            [_tableView reloadData];
+        }
+        _editing = NO;
+    }
     [_tableView scrollViewWillBeginDragging:scrollView];
 }
 
@@ -637,7 +642,33 @@
         NSIndexPath* swipedIndexPath = [self.tableView indexPathForRowAtPoint:swipeLocation];
         if(swipedIndexPath != nil)
         {
-            [self editFavorites:nil];
+            if(_editing)
+            {
+                if(_editedCell != nil && _editedCell.row < _favorites.count)
+                {
+                    MTCardCell* cell = (MTCardCell*)[_tableView cellForRowAtIndexPath:_editedCell];
+                    [cell setEditing:NO animated:YES];
+                }
+                else {
+                    [_tableView reloadData];
+                }
+                _editing = NO;
+            }
+            
+            MTCardCell* cell = (MTCardCell*)[_tableView cellForRowAtIndexPath:swipedIndexPath];
+            if(!cell.editing)
+            {
+                //[_tableView setUserInteractionEnabled:NO];
+                [cell setEditing:YES animated:YES];
+                //[self.view addGestureRecognizer:_editTapGesture];
+                _editedCell = swipedIndexPath;
+                _editing = YES;
+            }
+            else
+            {
+                [cell setEditing:NO animated:YES];
+                [_tableView setUserInteractionEnabled:YES];
+            }
         }
     }
 }

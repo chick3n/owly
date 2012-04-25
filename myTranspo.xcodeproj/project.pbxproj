@@ -20,9 +20,9 @@
 		31101F6B1530D14A001D220A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31101F6A1530D148001D220A /* Security.framework */; };
 		3122C281153FC0E600019410 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 3122C27F153FC0E600019410 /* Default.png */; };
 		3122C282153FC0E600019410 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3122C280153FC0E600019410 /* Default@2x.png */; };
-		315CD5FB1546457D00B6299D /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 315CD5FA1546457D00B6299D /* icon@2x.png */; };
-		315CD5FD1546458100B6299D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 315CD5FC1546458100B6299D /* icon.png */; };
 		315CD5FF1546472500B6299D /* OCTranspo.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 318095D2154332CB00B71188 /* OCTranspo.sqlite */; };
+		315CD6021547804200B6299D /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 315CD6001547804100B6299D /* icon@2x.png */; };
+		315CD6031547804200B6299D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 315CD6011547804200B6299D /* icon.png */; };
 		318095D11543006500B71188 /* TripDetailsDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 318095D01543006500B71188 /* TripDetailsDisplay.m */; };
 		318095E315433F3F00B71188 /* notice_plan_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 318095DB15433F3F00B71188 /* notice_plan_icon.png */; };
 		318095E415433F3F00B71188 /* notice_plan_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 318095DC15433F3F00B71188 /* notice_plan_icon@2x.png */; };
@@ -295,8 +295,8 @@
 		31101F6A1530D148001D220A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		3122C27F153FC0E600019410 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = UIComponents/Assets/Default.png; sourceTree = "<group>"; };
 		3122C280153FC0E600019410 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "UIComponents/Assets/Default@2x.png"; sourceTree = "<group>"; };
-		315CD5FA1546457D00B6299D /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
-		315CD5FC1546458100B6299D /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		315CD6001547804100B6299D /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "UIComponents/Assets/icon@2x.png"; sourceTree = "<group>"; };
+		315CD6011547804200B6299D /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = UIComponents/Assets/icon.png; sourceTree = "<group>"; };
 		318095CF1543006500B71188 /* TripDetailsDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripDetailsDisplay.h; path = Core/TripDetials/TripDetailsDisplay.h; sourceTree = "<group>"; };
 		318095D01543006500B71188 /* TripDetailsDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TripDetailsDisplay.m; path = Core/TripDetials/TripDetailsDisplay.m; sourceTree = "<group>"; };
 		318095D2154332CB00B71188 /* OCTranspo.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = OCTranspo.sqlite; sourceTree = "<group>"; };
@@ -953,8 +953,6 @@
 		31ADE8AD151FDFA30029C964 = {
 			isa = PBXGroup;
 			children = (
-				315CD5FC1546458100B6299D /* icon.png */,
-				315CD5FA1546457D00B6299D /* icon@2x.png */,
 				31ADE8C2151FDFA30029C964 /* myTranspo */,
 				31ADE8BB151FDFA30029C964 /* Frameworks */,
 				31ADE8B9151FDFA30029C964 /* Products */,
@@ -1003,6 +1001,8 @@
 		31ADE8C3151FDFA30029C964 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				315CD6001547804100B6299D /* icon@2x.png */,
+				315CD6011547804200B6299D /* icon.png */,
 				318095D2154332CB00B71188 /* OCTranspo.sqlite */,
 				3122C27F153FC0E600019410 /* Default.png */,
 				3122C280153FC0E600019410 /* Default@2x.png */,
@@ -1381,9 +1381,9 @@
 				31B138BC154474CB002DEB70 /* settings_middlecell.png in Resources */,
 				31B138BF15447783002DEB70 /* settings_singlecell@2x.png in Resources */,
 				31B138C015447783002DEB70 /* settings_singlecell.png in Resources */,
-				315CD5FB1546457D00B6299D /* icon@2x.png in Resources */,
-				315CD5FD1546458100B6299D /* icon.png in Resources */,
 				315CD5FF1546472500B6299D /* OCTranspo.sqlite in Resources */,
+				315CD6021547804200B6299D /* icon@2x.png in Resources */,
+				315CD6031547804200B6299D /* icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

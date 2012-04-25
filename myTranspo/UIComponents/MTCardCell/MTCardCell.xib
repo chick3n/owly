@@ -1097,7 +1097,6 @@
 						<string key="_directionHeading">UILabel</string>
 						<string key="_distance">UILabel</string>
 						<string key="_distanceHeading">UILabel</string>
-						<string key="_editGesture">UISwipeGestureRecognizer</string>
 						<string key="_loadingAnimation">UIActivityIndicatorView</string>
 						<string key="_nextHeading">UILabel</string>
 						<string key="_nextTime">UIButton</string>
@@ -1155,10 +1154,6 @@
 						<object class="IBToOneOutletInfo" key="_distanceHeading">
 							<string key="name">_distanceHeading</string>
 							<string key="candidateClassName">UILabel</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_editGesture">
-							<string key="name">_editGesture</string>
-							<string key="candidateClassName">UISwipeGestureRecognizer</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="_loadingAnimation">
 							<string key="name">_loadingAnimation</string>
