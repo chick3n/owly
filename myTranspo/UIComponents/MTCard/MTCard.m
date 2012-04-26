@@ -10,7 +10,6 @@
 
 @interface MTCard ()
 - (void)initializeUI;
-- (void)clearData;
 @end
 
 @implementation MTCard
@@ -99,6 +98,14 @@
 
 - (BOOL)updateCard
 {
+#if 0
+    NSArray *syms = [NSThread  callStackSymbols]; 
+    if ([syms count] > 1) { 
+        NSLog(@"Update Card: %@ - caller: %@ ", _bus.BusNumberDisplay,[syms objectAtIndex:1]);
+    } else {
+        NSLog(@"Update Card: %@ - %@", _bus.BusNumberDisplay, NSStringFromSelector(_cmd)); 
+    }
+#endif
     [_loader stopAnimating];
     
     if(_stop == nil || _bus == nil)
@@ -121,6 +128,7 @@
     [self updateSaturdayTimes:[_bus getSaturdayTimesForDisplay]];
     [self updateSundayTimes:[_bus getSundayTimesForDisplay]];
     
+    [_scrollView setContentOffset:CGPointMake(0, 0)];
     return NO;
 }
 
@@ -210,10 +218,10 @@
         for(int x=1; x<=times.count; x++)
         {
             NSString *time = [times objectAtIndex:x-1];
-            
+          
             UIView *divider = [[UIView alloc] initWithFrame:CGRectMake(59, 0, 1, 28)];
             [divider setBackgroundColor:dividerColor];
-            
+#if 0
             UIButton *lblTime = [UIButton buttonWithType:UIButtonTypeCustom];
             [lblTime addSubview:divider];
             lblTime.frame = CGRectMake(leftPos, topPos, tileWidth, tileHeight);
@@ -224,7 +232,16 @@
             lblTime.titleLabel.textAlignment = UITextAlignmentCenter;
             lblTime.titleLabel.font = timeFont;
             lblTime.titleLabel.textColor = timeColor;
+#endif
             
+            UILabel *lblTime = [[UILabel alloc] initWithFrame:CGRectMake(leftPos, topPos, tileWidth, tileHeight)];
+            [lblTime addSubview:divider];
+            lblTime.text = time;
+            lblTime.textColor = timeColor;
+            lblTime.backgroundColor = [UIColor clearColor];
+            lblTime.textAlignment = UITextAlignmentCenter;
+            lblTime.font = timeFont;
+
             if((x != 0) && (x % rowSplit == 0))
             {
                 leftPos = 0;
@@ -261,6 +278,8 @@
         [_scrollView addSubview:noTimes];
         _scrollViewContentHeight = noTimes.frame.origin.y + noTimes.frame.size.height;
     }
+    
+    
     
     [_scrollView setContentSize:CGSizeMake(_scrollView.frame.size.width, _scrollViewContentHeight)];
 }

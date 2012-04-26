@@ -134,7 +134,9 @@
 - (NSMutableURLRequest *) multipartRequestWithURL:(NSURL *)url andDataDictionary:(NSDictionary *) dictionary
 {
     // Create POST request
-    NSMutableURLRequest *mutipartPostRequest = [NSMutableURLRequest requestWithURL:url];
+    NSMutableURLRequest *mutipartPostRequest = [NSMutableURLRequest requestWithURL:url 
+                                                                       cachePolicy:NSURLCacheStorageAllowed
+                                                                   timeoutInterval:MTDEF_CONNECTIONTIMEOUT];
     [mutipartPostRequest setHTTPMethod:@"POST"];
     
     // Add HTTP header info

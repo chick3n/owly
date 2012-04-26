@@ -729,7 +729,7 @@
         {
             stop.IsUpdating = YES;
             status = [_ocApi getStop:stop Route:stop.Bus Times:date Results:nil];
-            if(_hasDB)
+            if(status && _hasDB && [stop.Bus getBusHeadingForFavorites] != MTDIRECTION_UNKNOWN)
             {
                 [_ocDb updateFavorite:stop AndBus:stop.Bus];
             }

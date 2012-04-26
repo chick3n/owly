@@ -21,6 +21,8 @@
 - (void)hideQuickTable:(id)sender;
 - (void)revealQuickTable:(id)sender;
 - (void)bounceQuickView:(id)sender;
+- (void)updateCardsBasedOnScroll:(id)sender;
+- (void) updateCard:(MTCard *)card ForRoute:(MTBus *)route AtPage:(int)page UpdateTime:(BOOL)times;
 @end
 
 @implementation MTCardManager
@@ -177,20 +179,27 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (!_isAnimating) _isAnimating = YES;
+
+    [self updatedCardPositions];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
+    _isAnimating = YES;
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
-    scrollView.scrollEnabled = NO;
+    //scrollView.scrollEnabled = NO;
+    _isAnimating = YES;
 }
 
 // When animation stops using setContentOffset
 - (void) scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    
+    [self updatedCardPositions];
+#if 0
+    _isAnimating = NO;
+    //scrollView.scrollEnabled = YES;
     int page = floor((_scrollView.contentOffset.x - _scrollView.frame.size.width / 2) / _scrollView.frame.size.width) + 1;
     int updateValue = 0;
     
@@ -213,19 +222,82 @@
             updateValue = -1;
         }
         
-        _pageControl.currentPage = page;   
         
-        [self updatedCardPositions];
-        [self updateCurrentCard:updateValue];
+        _pageControl.currentPage = page;
+        
+        //[self updatedCardPositions];
+        //[self updateCurrentCard:updateValue];
     }
     
+    [self performSelector:@selector(updateCardsBasedOnScroll:) withObject:nil afterDelay:0.5];
+#endif
+    
     _isAnimating = NO;
-    scrollView.scrollEnabled = YES;
+    [self performSelector:@selector(updateCardsBasedOnScroll:) withObject:nil afterDelay:0.5];
 }
 
 // When animation stops using dragging
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [self updatedCardPositions];
+#if 0
+    _isAnimating = NO;
+    //scrollView.scrollEnabled = YES;
+    int page = floor((_scrollView.contentOffset.x - _scrollView.frame.size.width / 2) / _scrollView.frame.size.width) + 1;
+    int updateValue = 0;
     
+    if(page != _pageControl.currentPage)
+    {
+        if(page > _pageControl.currentPage) //next
+        {
+            MTCard *temp = _currentCard;
+            _currentCard = _nextCard;
+            _nextCard = _prevCard;
+            _prevCard = temp;
+            updateValue = 1;
+        }
+        else
+        {
+            MTCard* temp = _currentCard;
+            _currentCard = _prevCard;
+            _prevCard = _nextCard;
+            _nextCard = temp;
+            updateValue = -1;
+        }
+        
+        
+        _pageControl.currentPage = page;
+        
+        //[self updatedCardPositions];
+        //[self updateCurrentCard:updateValue];
+    }
+    
+    [self performSelector:@selector(updateCardsBasedOnScroll:) withObject:nil afterDelay:0.5];
+#endif
+    
+    _isAnimating = NO;
+    [self performSelector:@selector(updateCardsBasedOnScroll:) withObject:nil afterDelay:0.5];
+}
+
+- (void)updateCardsBasedOnScroll:(id)sender
+{
+    if(_isAnimating)
+        return;
+    
+    [self updateCurrentCard:99];
+}
+
+- (void)changePage:(int)newPage
+{
+    CGRect frame = _scrollView.frame;
+    frame.origin.x = frame.size.width * newPage;
+    frame.origin.y = 0;
+	
+    [_scrollView scrollRectToVisible:frame animated:YES];
+    // [self updatedCardPositions];
+}
+
+- (void)updateCardPage:(int)lastPage
+{
     int page = floor((_scrollView.contentOffset.x - _scrollView.frame.size.width / 2) / _scrollView.frame.size.width) + 1;
     int updateValue = 0;
     
@@ -254,46 +326,53 @@
         [self updatedCardPositions];
         [self updateCurrentCard:updateValue];
     }
-    
-    _isAnimating = NO;
-    
-    scrollView.scrollEnabled = YES;
-}
-
-- (void)changePage:(int)newPage
-{
-    CGRect frame = _scrollView.frame;
-    frame.origin.x = frame.size.width * newPage;
-    frame.origin.y = 0;
-	
-    [_scrollView scrollRectToVisible:frame animated:YES];
-    // [self updatedCardPositions];
-}
-
-- (void)updateCardPage:(int)lastPage
-{
-    
 }
 
 - (void)updateCurrentCard:(int)positionChange
 {
+    
     MTBus *bus = [_stop.BusIds objectAtIndex:_pageControl.currentPage];
-    [self updateCard:_currentCard ForRoute:bus AtPage:_pageControl.currentPage + 1];
+    [self updateCard:_currentCard ForRoute:bus AtPage:_pageControl.currentPage + 1 UpdateTime:(positionChange == 99) ? YES : NO];
     
     if(_pageControl.currentPage - 1 >= 0)
     {
-        MTBus *bus = [_stop.BusIds objectAtIndex:_pageControl.currentPage - 1];
-        [self updateCard:_prevCard ForRoute:bus AtPage:_pageControl.currentPage];
+        MTBus *busPrev = [_stop.BusIds objectAtIndex:_pageControl.currentPage - 1];
+        //MTLog(@"Update Prev Card Details: %@", busPrev.BusNumberDisplay);
+        [self updateCard:_prevCard ForRoute:busPrev AtPage:_pageControl.currentPage UpdateTime:(positionChange == 99) ? YES : NO];
     }
-    else if(_pageControl.currentPage + 1 < _stop.BusIds.count)
+    
+    if(_pageControl.currentPage + 1 < _stop.BusIds.count)
     {
-        MTBus *bus = [_stop.BusIds objectAtIndex:_pageControl.currentPage + 1];
-        [self updateCard:_nextCard ForRoute:bus AtPage:_pageControl.currentPage + 2];
+        MTBus *busNext = [_stop.BusIds objectAtIndex:_pageControl.currentPage + 1];
+        //MTLog(@"Update Next Card Details: %@", busNext.BusNumberDisplay);
+        [self updateCard:_nextCard ForRoute:busNext AtPage:_pageControl.currentPage + 2 UpdateTime:(positionChange == 99) ? YES : NO];
     }
 }
 
 - (void)updatedCardPositions
 {
+    int page = floor((_scrollView.contentOffset.x - _scrollView.frame.size.width / 2) / _scrollView.frame.size.width) + 1;
+    
+    if(page > _pageControl.currentPage) //next
+    {
+        MTCard *temp = _currentCard;
+        _currentCard = _nextCard;
+        _nextCard = _prevCard;
+        _prevCard = temp;
+        
+        [self updateCurrentCard:1];
+    }
+    else if(page < _pageControl.currentPage)
+    {
+        MTCard* temp = _currentCard;
+        _currentCard = _prevCard;
+        _prevCard = _nextCard;
+        _nextCard = temp;
+    }
+    
+    _pageControl.currentPage = page;
+    [self updateCurrentCard:1];
+    
     CGRect currentCardFrame = _currentCard.frame;
     
     CGRect prevFrame = _prevCard.frame;
@@ -319,6 +398,11 @@
 
 - (void) updateCard:(MTCard *)card ForRoute:(MTBus *)route AtPage:(int)page
 {
+    [self updateCard:card ForRoute:route AtPage:page UpdateTime:YES];
+}
+
+- (void) updateCard:(MTCard *)card ForRoute:(MTBus *)route AtPage:(int)page UpdateTime:(BOOL)times
+{
     card.numOfPages.text = [NSString stringWithFormat:@"%d", _stop.BusIds.count];
     card.currentPage.text = [NSString stringWithFormat:@"%d", page];
     
@@ -333,6 +417,20 @@
     
     [card hideNavigationButtonsPrev:prevHidden AndNext:nextHidden];
     
+    if(!times) //just update deetails and move on!
+    {
+        card.stop = _stop;
+        card.bus = route;
+        
+        [card updateDistance:[_stop getDistanceOfStop]];
+        [card updateBusHeading:route.DisplayHeading];
+        [card updateStreetName:_stop.StopNameDisplay];
+        [card updateBusNumber:route.BusNumberDisplay];
+        
+        //[card clearData];
+        return;
+    }
+    
     if(route.Times.TimesAdded == NO)
     {
         [card toggleLoading:YES];
@@ -346,9 +444,12 @@
         [card updateBusHeading:route.DisplayHeading];
         [card updateStreetName:_stop.StopNameDisplay];
         [card updateBusNumber:route.BusNumberDisplay];
+        
+        [card clearData];
     }
     else
     {
+        //card clears data in updateCardForStop no need to call it twice
         [card updateCardForStop:_stop AndBus:route];
     }
     
@@ -589,7 +690,6 @@
 
 - (void)bounceQuickView:(id)sender
 {
-    NSLog(@"Bounce");
 #if 0
     CABasicAnimation *bounceAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
     bounceAnimation.duration = 1.0;

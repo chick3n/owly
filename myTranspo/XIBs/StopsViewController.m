@@ -729,6 +729,7 @@
     }    
     
     [self hideSearchBar:nil];
+    [self.navigationController.navigationBar removeGestureRecognizer:_navPanGesture];
     
     _cardManager.chosenDate = _chosenDate;
     
@@ -757,6 +758,7 @@
     _cardManager.stop = nil;
     
     [_cardManager removeFromSuperview];
+    [self.navigationController.navigationBar addGestureRecognizer:_navPanGesture];
     //[self.view addGestureRecognizer:_panGesture];
     
     if(_leftBarButton != nil)
@@ -795,7 +797,7 @@
 
 - (void)cardManager:(id)owner UpdateTimesFor:(MTStop *)stop AndBus:(MTBus *)bus
 {
-    [_transpo getNewScheduleForStop:stop WithRoute:bus ForDate:_chosenDate];
+    [_transpo getNewScheduleForStop:stop WithRoute:bus ForDate:_chosenDate StoreTimes:NO];
 }
 
 - (void)cardManager:(id)card ChangedToStop:(MTStop*)stop AndBus:(MTBus*)bus

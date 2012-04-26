@@ -197,15 +197,15 @@
     switch(heading)
     {
         case 0:
-            _busHeading = MTDIRECTION_EAST;
+            _busHeading = MTDIRECTION_EAST; break;
         case 3:
-            _busHeading = MTDIRECTION_SOUTH;
+            _busHeading = MTDIRECTION_SOUTH; break;
         case 1:
-            _busHeading = MTDIRECTION_WEST;
+            _busHeading = MTDIRECTION_WEST; break;
         case 2:
-            _busHeading = MTDIRECTION_NORTH;
+            _busHeading = MTDIRECTION_NORTH; break;
         default:
-            _busHeading = MTDIRECTION_UNKNOWN;
+            _busHeading = MTDIRECTION_UNKNOWN; break;
     }
     
     return NO;

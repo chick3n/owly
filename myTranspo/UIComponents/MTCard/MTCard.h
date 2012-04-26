@@ -77,6 +77,7 @@
 - (void)toggleLoading:(BOOL)toggle;
 - (void)hideNavigationButtonsPrev:(BOOL)prev AndNext:(BOOL)next;
 - (void)cleanUp;
+- (void)clearData; //removes scrollview data!
 
 - (IBAction)prevClicked:(id)sender;
 - (IBAction)nextClicked:(id)sender;
