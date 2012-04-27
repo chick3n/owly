@@ -33,6 +33,7 @@
     BOOL                    _isAnimating;
     BOOL                    _isDecelerating;
     BOOL                    _swipeStartedAtBottom;
+    BOOL                    _isQuickSelect;
     
     //ui components
     UIScrollView*           _scrollView;

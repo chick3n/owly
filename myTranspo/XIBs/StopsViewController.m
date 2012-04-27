@@ -470,6 +470,7 @@
 
 - (void)myTranspo:(MTResultState)state newScheduleForStop:(MTStop *)stop AndRoute:(MTBus *)bus
 {
+    [bus updatePrevNextObjects];
     [_cardManager updateDetailsForStop:stop WithRoute:bus];
 }
 

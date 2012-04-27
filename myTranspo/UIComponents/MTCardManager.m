@@ -43,6 +43,7 @@
         _swipGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(swipeGesture:)];
         
         _quickTable.delegateQuick = self;
+        _isQuickSelect = NO;
         
         [self initializeCardManager];
     }
@@ -119,7 +120,7 @@
     
     [self resetPositions];
     
-    [self updateCurrentCard:1];
+    [self updateCurrentCard:99];
     [self updatedCardPositions];
 }
 
@@ -174,14 +175,19 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (!_isAnimating) _isAnimating = YES;
+    if(_isQuickSelect) return;
 
     [self updatedCardPositions];
+    //[_currentCard clearDataForQuickScrolling];
+    [_nextCard clearDataForQuickScrolling];
+    [_prevCard clearDataForQuickScrolling];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     _isAnimating = YES;
     _isDecelerating = NO;
+    _isQuickSelect = NO;
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
@@ -189,20 +195,28 @@
     //scrollView.scrollEnabled = NO;
     _isAnimating = YES;
     _isDecelerating = YES;
+    if(_isQuickSelect)
+        return;
+    
+    [self updateCurrentCard:1];
 }
 
 // When animation stops using setContentOffset
 - (void) scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
         
     _isAnimating = NO;
-    [self performSelector:@selector(updateCardsBasedOnScroll:) withObject:nil afterDelay:0.5];
+    _isQuickSelect = NO;
+    _isDecelerating = NO;
+    [self performSelector:@selector(updateCardsBasedOnScroll:) withObject:nil afterDelay:0.25];
 }
 
 // When animation stops using dragging
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
         
     _isAnimating = NO;
-    [self performSelector:@selector(updateCardsBasedOnScroll:) withObject:nil afterDelay:0.5];
+    _isQuickSelect = NO;
+    _isDecelerating = NO;
+    [self performSelector:@selector(updateCardsBasedOnScroll:) withObject:nil afterDelay:0.25];
 }
 
 - (void)updateCardsBasedOnScroll:(id)sender
@@ -237,8 +251,6 @@
             _nextCard = _prevCard;
             _prevCard = temp;
             
-            [_nextCard clearData];
-            [_prevCard clearData];
             updateValue = 1;
         }
         else
@@ -248,8 +260,6 @@
             _prevCard = _nextCard;
             _nextCard = temp;
             
-            [_nextCard clearData];
-            [_prevCard clearData];
             updateValue = -1;
         }
         
@@ -304,10 +314,11 @@
         _currentCard = _prevCard;
         _prevCard = _nextCard;
         _nextCard = temp;
+        //[self updateCurrentCard:1];
     }
     
     _pageControl.currentPage = page;
-    [self updateCurrentCard:1];
+    //[self updateCurrentCard:1];
     
     CGRect currentCardFrame = _currentCard.frame;
     
@@ -319,6 +330,20 @@
     
     _prevCard.frame = prevFrame;
     _nextCard.frame = nextFrame;
+    
+    if(_pageControl.currentPage + 1 >= _pageControl.numberOfPages)
+        _nextCard.hidden = YES;
+    else {
+        if(_nextCard.hidden)
+            _nextCard.hidden = NO;
+    }
+    
+    if(_pageControl.currentPage - 1 < 0)
+        _prevCard.hidden = YES;
+    else {
+        if(_prevCard.hidden)
+            _prevCard.hidden = NO;
+    }
 }
 
 - (void)resetPositions
@@ -362,6 +387,10 @@
         [card updateBusHeading:route.DisplayHeading];
         [card updateStreetName:_stop.StopNameDisplay];
         [card updateBusNumber:route.BusNumberDisplay];
+        [card updateNextTime:route.NextTimeDisplay IsLive:NO];
+        [card updatePrevTime:route.PrevTimeDisplay];
+        [card updateDistance:[_stop getDistanceOfStop]];
+        [card updateDirection:[route getBusHeadingShortForm]];
         
         //[card clearData];
         return;
@@ -610,6 +639,8 @@
     if(_stop.BusIds.count < row && _currentCard != nil)
         return;
     
+    _isQuickSelect = YES;
+    
     CGRect currentCardFrame = _currentCard.frame;
     currentCardFrame.origin.x = _scrollView.frame.size.width * row + (self.frame.size.width / 2) - (kMTCardSize.size.width / 2);
     _currentCard.frame = currentCardFrame;
@@ -619,7 +650,7 @@
     _pageControl.currentPage = row;
     
     [self updatedCardPositions];
-    [self updateCurrentCard:0];
+    [self updateCurrentCard:99];
     
     [self hideQuickTable:nil];
 }

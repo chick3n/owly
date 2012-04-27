@@ -62,6 +62,7 @@
     [_loader startAnimating];
     [self addSubview:_loader];    
     
+#if 0
     if(_hideDetailsView)
     {
         CGRect frame = _scrollView.frame;
@@ -81,7 +82,7 @@
         _prevButton.hidden = YES;
         _nextButton.hidden = YES;
     }
-    
+#endif
     _prevHeading.text = NSLocalizedString(@"MTDEF_CARDPREVIOUS", nil);
     _nextHeading.text = NSLocalizedString(@"MTDEF_CARDNEXT", nil);
     _distanceHeading.text = NSLocalizedString(@"MTDEF_CARDDISTANCE", nil);
@@ -117,19 +118,22 @@
     
     if(!_hideDetailsView)
     {
+#if 0
         [self updatePrevTime:_bus.PrevTime];
         [self updateNextTime:_bus.NextTime IsLive:_bus.GPSTime];
+#endif
+        [self updatePrevTime:_bus.PrevTimeDisplay];
+        [self updateNextTime:_bus.NextTimeDisplay IsLive:NO];
         [self updateDirection:[_bus getBusHeadingShortForm]];
         [self updateDistance:[_stop getDistanceOfStop]];
     }
     
-    [self clearData];
+    //[self clearData];
     [self updateWeekdayTimes:[_bus getWeekdayTimesForDisplay]];
     [self updateSaturdayTimes:[_bus getSaturdayTimesForDisplay]];
     [self updateSundayTimes:[_bus getSundayTimesForDisplay]];
     [_tableView reloadData];
     
-    [_scrollView setContentOffset:CGPointMake(0, 0)];
     return NO;
 }
 
@@ -186,104 +190,7 @@
     [_distance setText:distance];
 }
 
-#pragma mark - Data Bar
 
-- (void)updateTimes:(NSArray *)times WithHeader:(NSString*)header
-{
-    uint leftPos = 0, topPos = _scrollViewContentHeight, tileWidth = 61, tileHeight = 28, rowSplit = 5;
-    
-    UIColor *tileColour = [UIColor whiteColor];
-    UIColor *tileColourAlternate = [UIColor colorWithRed:247./255. green:247./255. blue:247./255. alpha:1.0];
-    UIColor *timeColor = [UIColor colorWithRed:127./255. green:127./255. blue:127./255. alpha:1.0];
-    UIColor *dividerColor = [UIColor colorWithRed:239./255. green:238./255. blue:236./255. alpha:1.0];
-    
-    UIFont *timeFont = [UIFont fontWithName:@"HelveticaNeue" size:12];
-
-    UIImageView* categoryBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"card_category_bar.png"]];
-    categoryBar.frame = CGRectMake(0, topPos, 302, 23);
-    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, 4, categoryBar.frame.size.width - 24, categoryBar.frame.size.height - 7)];
-    headerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0];
-    headerLabel.textColor = [UIColor whiteColor];
-    headerLabel.backgroundColor = [UIColor clearColor];
-    headerLabel.text = header;
-    headerLabel.shadowColor = [UIColor colorWithRed:38./255. green:154./255. blue:201./255. alpha:1.0];
-    headerLabel.shadowOffset = CGSizeMake(0, 1);
-    [categoryBar addSubview:headerLabel];
-    [_scrollView addSubview:categoryBar];
-    topPos += categoryBar.frame.size.height;
-    
-    UIColor* currentColor = tileColour;
-    
-    if(times.count > 0)
-    {
-        for(int x=1; x<=times.count; x++)
-        {
-            NSString *time = [times objectAtIndex:x-1];
-          
-            UIView *divider = [[UIView alloc] initWithFrame:CGRectMake(59, 0, 1, 28)];
-            [divider setBackgroundColor:dividerColor];
-#if 0
-            UIButton *lblTime = [UIButton buttonWithType:UIButtonTypeCustom];
-            [lblTime addSubview:divider];
-            lblTime.frame = CGRectMake(leftPos, topPos, tileWidth, tileHeight);
-            [lblTime setTitle:time forState:UIControlStateNormal];
-            [lblTime setTitleColor:timeColor forState:UIControlStateNormal];
-            
-            lblTime.backgroundColor = [UIColor clearColor];
-            lblTime.titleLabel.textAlignment = UITextAlignmentCenter;
-            lblTime.titleLabel.font = timeFont;
-            lblTime.titleLabel.textColor = timeColor;
-#endif
-            
-            UILabel *lblTime = [[UILabel alloc] initWithFrame:CGRectMake(leftPos, topPos, tileWidth, tileHeight)];
-            [lblTime addSubview:divider];
-            lblTime.text = time;
-            lblTime.textColor = timeColor;
-            lblTime.backgroundColor = [UIColor clearColor];
-            lblTime.textAlignment = UITextAlignmentCenter;
-            lblTime.font = timeFont;
-
-            if((x != 0) && (x % rowSplit == 0))
-            {
-                leftPos = 0;
-                topPos += tileHeight;
-                
-                if(currentColor == tileColour)
-                    currentColor = tileColourAlternate;
-                else
-                    currentColor = tileColour;
-                
-                UIView *newBgView = [[UIView alloc] initWithFrame:CGRectMake(0, topPos, _scrollView.frame.size.width, tileHeight)];
-                newBgView.backgroundColor = currentColor;
-                
-                [_scrollView addSubview:newBgView];
-            }
-            else
-            {
-                leftPos += tileWidth;
-            }
-            
-            [_scrollView addSubview:lblTime];
-        }
-        
-        _scrollViewContentHeight = (times.count % rowSplit == 0) ? topPos : topPos + tileHeight; //add extra row if wasnt a complete row
-    }
-    else
-    {
-        UILabel* noTimes = [[UILabel alloc] initWithFrame:CGRectMake(0, topPos, _scrollView.frame.size.width, tileHeight)];
-        noTimes.textAlignment = UITextAlignmentCenter;
-        noTimes.font = timeFont;
-        noTimes.text = NSLocalizedString(@"MTDEF_CARDNOTIME", nil);
-        noTimes.textColor = timeColor;
-        
-        [_scrollView addSubview:noTimes];
-        _scrollViewContentHeight = noTimes.frame.origin.y + noTimes.frame.size.height;
-    }
-    
-    
-    
-    [_scrollView setContentSize:CGSizeMake(_scrollView.frame.size.width, _scrollViewContentHeight)];
-}
 
 - (void)updateWeekdayTimes:(NSArray*)times
 {
@@ -303,19 +210,23 @@
     _timesSaturday = [_bus getSaturdayTimesForDisplay];
 }
 
-- (void)clearData
+- (void)clearDataForQuickScrolling
 {
-    for(UIView* subview in _scrollView.subviews)
-    {
-        [subview removeFromSuperview];
-    }
-    
-    _scrollViewContentHeight = 0;
+#if 0
+    _prevTime.text = @"";
+    _nextTime.text = @"";
+    _distance.text = @"";
+    _direction.text = @"";
+#endif
+    _timesSunday = nil;
+    _timesSaturday = nil;
+    _timesWeekday = nil;
+    [_tableView reloadData];
 }
 
 - (void)cleanUp
 {
-    [self clearData];
+    [self clearDataForQuickScrolling];
 }
 
 - (void)toggleLoading:(BOOL)toggle
@@ -349,9 +260,14 @@
     }
     
     if(times == nil)
-        return 0;
+        return 1;
     
-    return times.count / kRowCount;   
+    if(times.count == 0)
+        return 1; //used for empty
+    
+    float rows = (float)times.count / (float)kRowCount;
+    
+    return ceil(rows);   
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -374,7 +290,10 @@
         times = _timesSunday;
     
     if(times == nil)
+    {
+        [cell addNoticeMesssage:NSLocalizedString(@"GATHERINGSCHEDULE", nil)];
         return cell;
+    }
     
     uint sequencedRow = indexPath.row * kRowCount;
     uint totalRows = times.count;

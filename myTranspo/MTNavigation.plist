@@ -56,9 +56,9 @@
 			<key>NavIcon</key>
 			<integer>2</integer>
 			<key>NavTitle</key>
-			<string>Trains</string>
+			<string>O-Train</string>
 			<key>NavTitleFrench</key>
-			<string>Trains</string>
+			<string>O-Train</string>
 			<key>NotificationType</key>
 			<integer>0</integer>
 			<key>Selector</key>

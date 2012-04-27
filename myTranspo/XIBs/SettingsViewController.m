@@ -169,9 +169,7 @@
         return cell;
     
     SettingsType* setting = [settings objectAtIndex:indexPath.row];
-        
-    BOOL cellPosMiddle = NO;
-    
+            
     UIImageView* cellBackground = (UIImageView*)[cell.contentView viewWithTag:kNoticesCellBackgroundTag];
     if(indexPath.row == 0 && settings.count == 1)
     {
@@ -191,7 +189,6 @@
     {
         //draw medium cell
         cellBackground.image = [UIImage imageNamed:@"settings_middlecell.png"];
-        cellPosMiddle = YES;
     }
     
     cell.textLabel.text = setting.title;
@@ -210,7 +207,6 @@
         {
             //[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
             UIImageView* emptyCellAccessory = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cardcell_arrow.png"]];
-            emptyCellAccessory.hidden = !cellPosMiddle; 
             cell.accessoryView = emptyCellAccessory;
             break;
         }

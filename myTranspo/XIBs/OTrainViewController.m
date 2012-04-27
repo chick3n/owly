@@ -91,7 +91,7 @@
     
     //view
     _backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
-    self.title = @"OTrain";
+    self.title = @"O-Train";
     
     //setup tableview header
     _tableViewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, kMTTRIPHEADERHEIGHT)];

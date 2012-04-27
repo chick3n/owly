@@ -103,6 +103,7 @@
 "MTDEF_FIRSTLAUNCHSCREEN" = "First launch screen";
 "BACKBUTTON" = "Back";
 "CLOSE" = "Close";
+"GATHERINGSCHEDULE" = "Gathering schedule information.";
 
 //ALERTS
 "MTDEF_ALERTUPDATETITLE" = "Route Update";

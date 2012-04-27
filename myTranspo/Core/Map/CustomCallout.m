@@ -61,8 +61,6 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
-    NSLog(@"Set Selected: %d for: %@", selected, self.annotation.title);
-
     if(selected)
         [self addSubview:_customView];
     else [_customView removeFromSuperview];

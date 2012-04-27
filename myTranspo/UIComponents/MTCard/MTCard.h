@@ -44,7 +44,6 @@
     IBOutlet UILabel*                   _prevTime;
     IBOutlet UILabel*                   _nextTime;
     IBOutlet UILabel*                   _direction;
-    IBOutlet UIScrollView*              _scrollView;
     IBOutlet UIView*                    _detailsView;
     IBOutlet UIButton*                  _prevButton;
     IBOutlet UIButton*                  _nextButton;
@@ -79,11 +78,10 @@
 - (void)updateWeekdayTimes:(NSArray*)times;
 - (void)updateSundayTimes:(NSArray*)times;
 - (void)updateSaturdayTimes:(NSArray*)times;
-- (void)updateTimes:(NSArray *)times  WithHeader:(NSString*)header;
 - (void)toggleLoading:(BOOL)toggle;
 - (void)hideNavigationButtonsPrev:(BOOL)prev AndNext:(BOOL)next;
 - (void)cleanUp;
-- (void)clearData; //removes scrollview data!
+- (void)clearDataForQuickScrolling; //quick scrolling
 
 - (IBAction)prevClicked:(id)sender;
 - (IBAction)nextClicked:(id)sender;

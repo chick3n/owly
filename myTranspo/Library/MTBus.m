@@ -459,6 +459,11 @@
 - (void)updateDisplayObjects
 {
     self.NextThreeTimesDisplay = self.NextThreeTimes;
+    [self updatePrevNextObjects];
+}
+
+- (void)updatePrevNextObjects
+{    
     self.NextTimeDisplay = self.NextTime;
     self.PrevTimeDisplay = self.PrevTime;
 }

@@ -283,7 +283,6 @@
 	NSString *documentsDir = [paths objectAtIndex:0];
 	NSString *dbPath = [documentsDir stringByAppendingPathComponent:@"OCTranspo.sqlite"];
 
-    NSLog(@"%d", [settings currentDatabaseNeedsUpdate]);
     if(![manager fileExistsAtPath:dbPath] || [settings currentDatabaseNeedsUpdate])
     {
         NSString* sourcePath = [[NSBundle mainBundle] pathForResource:@"OCTranspo.sqlite" ofType:nil];

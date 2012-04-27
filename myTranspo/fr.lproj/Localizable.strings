@@ -95,6 +95,7 @@
 "MTDEF_FIRSTLAUNCHSCREEN" = "Premier lancement d'écran";
 "BACKBUTTON" = "Retour";
 "CLOSE" = "Fermé";
+"GATHERINGSCHEDULE" = "Rassembler calendrier.";
 
 //ALERTS
 "MTDEF_ALERTUPDATETITLE" = "Route mise à jour";

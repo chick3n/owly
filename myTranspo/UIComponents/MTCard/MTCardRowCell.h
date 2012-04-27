@@ -19,6 +19,7 @@
     UILabel             *_row3;
     UILabel             *_row4;
     UILabel             *_row5;
+    UILabel             *_message;
     
     UIColor             *_tileColor;
     UIColor             *_tileAlternateColor;
@@ -26,5 +27,6 @@
 
 - (void)updateRowLabelsRow1:(NSString*)row1 Row2:(NSString*)row2 Row3:(NSString*)row3 Row4:(NSString*)row4 Row5:(NSString*)row5;
 - (void)updateRowBackgroundColor:(BOOL)alternate;
+- (void)addNoticeMesssage:(NSString*)message;
 
 @end

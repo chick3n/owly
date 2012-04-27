@@ -686,7 +686,6 @@ numberOfRowsInComponent:(NSInteger)component;
     [_mapView addAnnotation:_busAnnotation];
     
     _busTripLocation = prevTrip.StopNumber;
-    NSLog(@"Update bus annotations stop: %d", prevTrip.StopNumber);
     [_tableView reloadData];
 }
 

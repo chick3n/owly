@@ -53,6 +53,7 @@
     _row3 = [[UILabel alloc] initWithFrame:CGRectMake(leftPos, 0, kCardRowCellWidth, kCardRowCellHeight)], leftPos += kCardRowCellWidth;
     _row4 = [[UILabel alloc] initWithFrame:CGRectMake(leftPos, 0, kCardRowCellWidth, kCardRowCellHeight)], leftPos += kCardRowCellWidth;
     _row5 = [[UILabel alloc] initWithFrame:CGRectMake(leftPos, 0, kCardRowCellWidth, kCardRowCellHeight)], leftPos += kCardRowCellWidth;
+    _message = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, kCardRowCellHeight)];
     
     NSArray *labels = [NSArray arrayWithObjects:_row1, _row2, _row3, _row4, _row5, nil];
     
@@ -74,10 +75,42 @@
     }
     
     
+    _message.backgroundColor = _tileColor;
+    _message.textAlignment = UITextAlignmentCenter;
+    _message.textColor = timeColor;
+    _message.font = timeFont;
+    _message.hidden = YES;
+    [self.contentView addSubview:_message];
 }
 
 - (void)updateRowLabelsRow1:(NSString*)row1 Row2:(NSString*)row2 Row3:(NSString*)row3 Row4:(NSString*)row4 Row5:(NSString*)row5
 {
+    if(row1 == nil && row2 == nil && row3 == nil && row4 == nil && row5 == nil)
+    {
+        _message.hidden = NO;
+        _message.text = NSLocalizedString(@"MTDEF_CARDNOTIME", nil);
+        
+        _row1.hidden = YES;
+        _row2.hidden = YES;
+        _row3.hidden = YES;
+        _row4.hidden = YES;
+        _row5.hidden = YES;
+        return;
+    }
+    
+    if(!_message.hidden)
+        _message.hidden = YES;
+    if(_row1.hidden)
+        _row1.hidden = NO;
+    if(_row2.hidden)
+        _row2.hidden = NO;
+    if(_row3.hidden)
+        _row3.hidden = NO;
+    if(_row4.hidden)
+        _row4.hidden = NO;
+    if(_row5.hidden)
+        _row5.hidden = NO;
+    
     //NSLog(@"%@ %@ %@ %@ %@", row1, row2, row3, row4, row5);
     _row1.text = (row1 == nil) ? @"" : row1;
     _row2.text = (row2 == nil) ? @"" : row2;
@@ -92,6 +125,19 @@
         self.contentView.backgroundColor = _tileAlternateColor;
     else if(alternate == NO && self.backgroundColor != _tileColor)
         self.contentView.backgroundColor = _tileColor;
+}
+
+- (void)addNoticeMesssage:(NSString*)message
+{
+    _message.hidden = NO;
+    _message.text = message;
+    
+    _row1.hidden = YES;
+    _row2.hidden = YES;
+    _row3.hidden = YES;
+    _row4.hidden = YES;
+    _row5.hidden = YES;
+    return;
 }
 
 @end

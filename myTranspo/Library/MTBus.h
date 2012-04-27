@@ -66,6 +66,7 @@
 - (NSArray*)getSundayTimesForDisplay;
 - (NSArray*)getNextTimesOfAmount:(int)count IncludeLiveTime:(BOOL)useLive;
 - (void)updateDisplayObjects;
+- (void)updatePrevNextObjects;
 
 //debug helper methods
 - (NSString *)description;

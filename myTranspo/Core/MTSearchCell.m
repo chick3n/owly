@@ -306,7 +306,7 @@
 {
     //48 12 206 16 21
     //262 12 48 21
-    NSLog(@"%f", self.frame.size.width);
+
     _titleLabel.frame = CGRectMake(10, 12, self.frame.size.width - 40, 21);
     //_subtitleLabel.frame = CGRectMake(self.frame.size.width - 80 - 10, 12, 80, 21);
     
