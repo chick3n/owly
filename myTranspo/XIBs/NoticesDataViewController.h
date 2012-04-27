@@ -16,6 +16,8 @@
     //UI Components
     IBOutlet UIWebView*             _webView;
     IBOutlet UIScrollView*          _scrollView;
+    IBOutlet UILabel*               _headerTitle;
+    IBOutlet UILabel*               _headerDate;
 }
 
 @property (nonatomic, weak)     NSDictionary*       data;

@@ -94,6 +94,7 @@
 "MTDEF_SETTINGSTITLE" = "Paramètres";
 "MTDEF_FIRSTLAUNCHSCREEN" = "Premier lancement d'écran";
 "BACKBUTTON" = "Retour";
+"CLOSE" = "Fermé";
 
 //ALERTS
 "MTDEF_ALERTUPDATETITLE" = "Route mise à jour";

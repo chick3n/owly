@@ -14,7 +14,7 @@
 
 #define kHiddenHeight 86
 #define kFullHeight 130
-#define kCellExpandSpacer 1
+#define kCellExpandSpacer 0
 #define kElementNextTimesCount 2
 #define kElementNextTimesElementCount 4
 #define kElementNextTimesSpacer 80

@@ -102,6 +102,7 @@
 "MTDEF_SETTINGSTITLE" = "Settings";
 "MTDEF_FIRSTLAUNCHSCREEN" = "First launch screen";
 "BACKBUTTON" = "Back";
+"CLOSE" = "Close";
 
 //ALERTS
 "MTDEF_ALERTUPDATETITLE" = "Route Update";

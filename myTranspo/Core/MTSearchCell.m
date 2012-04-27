@@ -307,30 +307,30 @@
     //48 12 206 16 21
     //262 12 48 21
     NSLog(@"%f", self.frame.size.width);
-    _titleLabel.frame = CGRectMake(10, 12, self.frame.size.width - 80 - 10, 21);
-    _subtitleLabel.frame = CGRectMake(self.frame.size.width - 80 - 10, 12, 80, 21);
+    _titleLabel.frame = CGRectMake(10, 12, self.frame.size.width - 40, 21);
+    //_subtitleLabel.frame = CGRectMake(self.frame.size.width - 80 - 10, 12, 80, 21);
     
     _titleLabel.textColor =[UIColor colorWithRed:89./255. green:89./255. blue:89./255. alpha:1.0];
     _titleLabel.textAlignment = UITextAlignmentLeft;
     _titleLabel.shadowColor = [UIColor whiteColor];
     _titleLabel.shadowOffset = CGSizeMake(0, 1);
     _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
-
+#if 0
     
     _subtitleLabel.textColor = [UIColor colorWithRed:140./255. green:140./255. blue:140./255. alpha:1.0];
     _subtitleLabel.textAlignment = UITextAlignmentRight;
     _subtitleLabel.shadowColor = [UIColor whiteColor];
     _subtitleLabel.shadowOffset = CGSizeMake(0, 1);
     _subtitleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:12.0];
-    
+
     NSDateFormatter* f = [MTHelper MTDateFormatterDashesYYYYMMDD];
     [f setDateFormat:@"yyyy-MM-dd HH:mm"];
     NSDateFormatter* f2 = [[NSDateFormatter alloc] init];
     f2.timeZone = [NSTimeZone localTimeZone];
     f2.dateStyle = NSDateFormatterShortStyle;
-    
+#endif
     _titleLabel.text = _title;
-    _subtitleLabel.text = [f2 stringFromDate:[f dateFromString:_subtitle]];
+   // _subtitleLabel.text = [f2 stringFromDate:[f dateFromString:_subtitle]];
 }
 
 @end

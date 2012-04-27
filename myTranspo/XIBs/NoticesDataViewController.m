@@ -60,6 +60,8 @@
     
     //webview
     _webView.delegate = self;
+    _webView.backgroundColor = [UIColor clearColor];
+    _webView.opaque = NO;
     
     [self loadWebViewContent];
 }
@@ -84,10 +86,39 @@
 {
     if(_data != nil)
     {
+        NSString* headerTitle = [_data valueForKey:@"title"];
+        NSString* dateTitle = [_data valueForKey:@"date"];
+        if(headerTitle == nil)
+        {
+            headerTitle = @"";
+        }
+        
+        if(dateTitle == nil)
+            dateTitle = @"";
+        
+        CGSize headerSize = [headerTitle sizeWithFont:_headerTitle.font
+                                    constrainedToSize:CGSizeMake(320, 2000)
+                                        lineBreakMode:UILineBreakModeWordWrap];
+        CGRect headerFrame = _headerTitle.frame;
+        headerFrame.size.height = headerSize.height;
+        _headerTitle.frame = headerFrame;
+        _headerTitle.text = headerTitle;
+        
+        
+        CGRect dateFrame = _headerDate.frame;
+        dateFrame.origin.y = _headerTitle.frame.origin.y + _headerTitle.frame.size.height + 5;
+        _headerDate.frame = dateFrame;  
+        _headerDate.text = dateTitle;
+        
         NSString* content = [_data valueForKey:@"desc"];
 
         if(content != nil)
         {
+            CGRect webFrame = _webView.frame;
+            webFrame.origin.y = _headerDate.frame.origin.y + _headerDate.frame.size.height + 10;
+            webFrame.size.height = self.view.frame.size.height - webFrame.origin.y;
+            _webView.frame = webFrame;
+            
             [_webView loadHTMLString:content baseURL:nil];
         }
     }

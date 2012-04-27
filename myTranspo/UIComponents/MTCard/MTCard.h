@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MTStop.h"
 #import "MTBus.h"
+#import "MTCardRowCell.h"
 
 #define kMTCardSize CGRectMake(0, 0, 309, 344)
 
@@ -20,7 +21,7 @@
 
 @end
 
-@interface MTCard : UIView 
+@interface MTCard : UIView <UITableViewDataSource, UITableViewDelegate>
 {
     id<MTCardDelegate> __weak           _delegate;
     MTLanguage                          _language;
@@ -29,6 +30,10 @@
     uint                                _scrollViewContentHeight;
     BOOL                                _hideDetailsView;
     BOOL                                _hidePaging;
+    
+    NSArray*                            _timesWeekday;
+    NSArray*                            _timesSaturday;
+    NSArray*                            _timesSunday;
     
     //UI Components
     UIActivityIndicatorView*            _loader;
@@ -47,6 +52,7 @@
     IBOutlet UILabel*                   _nextHeading;
     IBOutlet UILabel*                   _distanceHeading;
     IBOutlet UILabel*                   _directionHeading;
+    IBOutlet UITableView*               _tableView;
     
 }
 

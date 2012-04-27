@@ -10,7 +10,7 @@
 #import "MTIncludes.h"
 #import "MTSearchCell.h"
 
-#define kBarHeight 19
+#define kBarHeight 30
 
 @protocol MTCardManagerQuickSelectDelegate <NSObject>
 @required

@@ -59,8 +59,8 @@
     _scrollView.pagingEnabled  = YES;
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.showsHorizontalScrollIndicator = NO;
-    _scrollView.backgroundColor = [UIColor clearColor];
-    //_scrollView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.4];
+    //_scrollView.backgroundColor = [UIColor clearColor];
+    _scrollView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.05];
     _scrollView.delegate = self;
     [self addSubview:_scrollView];
     
@@ -107,12 +107,7 @@
     _pageControl.currentPage = 0;
     _pageControl.numberOfPages = stop.BusIds.count;
     
-    if(_pageControl.numberOfPages > 10)
-    {
-        _pageControl.hidden = YES;
-    }
-    else if(_pageControl.hidden)
-        _pageControl.hidden = NO;
+    _pageControl.hidden = YES;
     
     if(_pageControl.numberOfPages >= 3)
     {
@@ -186,94 +181,26 @@
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     _isAnimating = YES;
+    _isDecelerating = NO;
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
     //scrollView.scrollEnabled = NO;
     _isAnimating = YES;
+    _isDecelerating = YES;
 }
 
 // When animation stops using setContentOffset
 - (void) scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    [self updatedCardPositions];
-#if 0
-    _isAnimating = NO;
-    //scrollView.scrollEnabled = YES;
-    int page = floor((_scrollView.contentOffset.x - _scrollView.frame.size.width / 2) / _scrollView.frame.size.width) + 1;
-    int updateValue = 0;
-    
-    if(page != _pageControl.currentPage)
-    {
-        if(page > _pageControl.currentPage) //next
-        {
-            MTCard *temp = _currentCard;
-            _currentCard = _nextCard;
-            _nextCard = _prevCard;
-            _prevCard = temp;
-            updateValue = 1;
-        }
-        else
-        {
-            MTCard* temp = _currentCard;
-            _currentCard = _prevCard;
-            _prevCard = _nextCard;
-            _nextCard = temp;
-            updateValue = -1;
-        }
         
-        
-        _pageControl.currentPage = page;
-        
-        //[self updatedCardPositions];
-        //[self updateCurrentCard:updateValue];
-    }
-    
-    [self performSelector:@selector(updateCardsBasedOnScroll:) withObject:nil afterDelay:0.5];
-#endif
-    
     _isAnimating = NO;
     [self performSelector:@selector(updateCardsBasedOnScroll:) withObject:nil afterDelay:0.5];
 }
 
 // When animation stops using dragging
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    [self updatedCardPositions];
-#if 0
-    _isAnimating = NO;
-    //scrollView.scrollEnabled = YES;
-    int page = floor((_scrollView.contentOffset.x - _scrollView.frame.size.width / 2) / _scrollView.frame.size.width) + 1;
-    int updateValue = 0;
-    
-    if(page != _pageControl.currentPage)
-    {
-        if(page > _pageControl.currentPage) //next
-        {
-            MTCard *temp = _currentCard;
-            _currentCard = _nextCard;
-            _nextCard = _prevCard;
-            _prevCard = temp;
-            updateValue = 1;
-        }
-        else
-        {
-            MTCard* temp = _currentCard;
-            _currentCard = _prevCard;
-            _prevCard = _nextCard;
-            _nextCard = temp;
-            updateValue = -1;
-        }
         
-        
-        _pageControl.currentPage = page;
-        
-        //[self updatedCardPositions];
-        //[self updateCurrentCard:updateValue];
-    }
-    
-    [self performSelector:@selector(updateCardsBasedOnScroll:) withObject:nil afterDelay:0.5];
-#endif
-    
     _isAnimating = NO;
     [self performSelector:@selector(updateCardsBasedOnScroll:) withObject:nil afterDelay:0.5];
 }
@@ -309,6 +236,9 @@
             _currentCard = _nextCard;
             _nextCard = _prevCard;
             _prevCard = temp;
+            
+            [_nextCard clearData];
+            [_prevCard clearData];
             updateValue = 1;
         }
         else
@@ -317,6 +247,9 @@
             _currentCard = _prevCard;
             _prevCard = _nextCard;
             _nextCard = temp;
+            
+            [_nextCard clearData];
+            [_prevCard clearData];
             updateValue = -1;
         }
         
@@ -338,6 +271,8 @@
     {
         MTBus *busPrev = [_stop.BusIds objectAtIndex:_pageControl.currentPage - 1];
         //MTLog(@"Update Prev Card Details: %@", busPrev.BusNumberDisplay);
+        //if(_prevCard.frame.origin.x <= (_currentCard.frame.origin.x - _scrollView.frame.size.width))
+        //    [_prevCard clearData];
         [self updateCard:_prevCard ForRoute:busPrev AtPage:_pageControl.currentPage UpdateTime:(positionChange == 99) ? YES : NO];
     }
     
@@ -345,6 +280,8 @@
     {
         MTBus *busNext = [_stop.BusIds objectAtIndex:_pageControl.currentPage + 1];
         //MTLog(@"Update Next Card Details: %@", busNext.BusNumberDisplay);
+        //if(_nextCard.frame.origin.x >= (_currentCard.frame.origin.x + _scrollView.frame.size.width))
+        //    [_nextCard clearData];
         [self updateCard:_nextCard ForRoute:busNext AtPage:_pageControl.currentPage + 2 UpdateTime:(positionChange == 99) ? YES : NO];
     }
 }
@@ -359,8 +296,7 @@
         _currentCard = _nextCard;
         _nextCard = _prevCard;
         _prevCard = temp;
-        
-        [self updateCurrentCard:1];
+        //[self updateCurrentCard:1];
     }
     else if(page < _pageControl.currentPage)
     {
@@ -445,7 +381,7 @@
         [card updateStreetName:_stop.StopNameDisplay];
         [card updateBusNumber:route.BusNumberDisplay];
         
-        [card clearData];
+        //[card clearData];
     }
     else
     {

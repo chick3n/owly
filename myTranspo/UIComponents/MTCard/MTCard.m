@@ -127,6 +127,7 @@
     [self updateWeekdayTimes:[_bus getWeekdayTimesForDisplay]];
     [self updateSaturdayTimes:[_bus getSaturdayTimesForDisplay]];
     [self updateSundayTimes:[_bus getSundayTimesForDisplay]];
+    [_tableView reloadData];
     
     [_scrollView setContentOffset:CGPointMake(0, 0)];
     return NO;
@@ -286,17 +287,20 @@
 
 - (void)updateWeekdayTimes:(NSArray*)times
 {
-    [self updateTimes:times WithHeader:NSLocalizedString(@"MTDEF_CARDWEEKDAY", nil)];
+    //[self updateTimes:times WithHeader:NSLocalizedString(@"MTDEF_CARDWEEKDAY", nil)];
+    _timesWeekday = [_bus getWeekdayTimesForDisplay];
 }
 
 - (void)updateSundayTimes:(NSArray*)times
 {
-    [self updateTimes:times WithHeader:NSLocalizedString(@"MTDEF_CARDSUNDAY", nil)];
+    //[self updateTimes:times WithHeader:NSLocalizedString(@"MTDEF_CARDSUNDAY", nil)];
+    _timesSunday = [_bus getSundayTimesForDisplay];
 }
 
 - (void)updateSaturdayTimes:(NSArray*)times
 {
-    [self updateTimes:times WithHeader:NSLocalizedString(@"MTDEF_CARDSATURDAY", nil)];
+    //[self updateTimes:times WithHeader:NSLocalizedString(@"MTDEF_CARDSATURDAY", nil)];
+    _timesSaturday = [_bus getSaturdayTimesForDisplay];
 }
 
 - (void)clearData
@@ -319,6 +323,107 @@
     if(toggle)
         [_loader startAnimating];
     else [_loader stopAnimating];
+}
+
+#pragma mark - Table View
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 3;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSArray* times = nil;
+    if(section == 0)
+    {
+        times = _timesWeekday;
+    }
+    else if(section == 1)
+    {
+        times = _timesSaturday;
+    }
+    else if(section == 2)
+    {
+        times = _timesSunday;
+    }
+    
+    if(times == nil)
+        return 0;
+    
+    return times.count / kRowCount;   
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString* cellIndentifier = @"MTCardRowCell";
+    
+    MTCardRowCell* cell = (MTCardRowCell*)[tableView dequeueReusableCellWithIdentifier:cellIndentifier];
+    if(cell == nil)
+    {
+        cell = (MTCardRowCell*)[[MTCardRowCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndentifier];
+    }
+    
+    NSArray* times = nil;
+    
+    if(indexPath.section == 0)
+        times = _timesWeekday;
+    else if(indexPath.section == 1)
+        times = _timesSaturday;
+    else if(indexPath.section == 2)
+        times = _timesSunday;
+    
+    if(times == nil)
+        return cell;
+    
+    uint sequencedRow = indexPath.row * kRowCount;
+    uint totalRows = times.count;
+    
+    [cell updateRowLabelsRow1:(sequencedRow < totalRows) ? (NSString*)[times objectAtIndex:sequencedRow] : nil
+                         Row2:(sequencedRow+1 < totalRows) ? (NSString*)[times objectAtIndex:sequencedRow+1] : nil 
+                         Row3:(sequencedRow+2 < totalRows) ? (NSString*)[times objectAtIndex:sequencedRow+2] : nil  
+                         Row4:(sequencedRow+3 < totalRows) ? (NSString*)[times objectAtIndex:sequencedRow+3] : nil  
+                         Row5:(sequencedRow+4 < totalRows) ? (NSString*)[times objectAtIndex:sequencedRow+4] : nil 
+     ];
+    [cell updateRowBackgroundColor:(BOOL)(indexPath.row & 0x1)];
+    
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return kCardRowCellHeight;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    NSString *header = nil;
+    if(section == 0)
+        header = NSLocalizedString(@"MTDEF_CARDWEEKDAY", nil);
+    else if(section == 1)
+        header = NSLocalizedString(@"MTDEF_CARDSATURDAY", nil);
+    else if(section == 2)
+        header = NSLocalizedString(@"MTDEF_CARDSUNDAY", nil);
+    
+    if(header == nil)
+        return nil;
+    
+    UIImageView* categoryBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"card_category_bar.png"]];
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, 3, categoryBar.frame.size.width - 24, categoryBar.frame.size.height - 7)];
+    headerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0];
+    headerLabel.textColor = [UIColor whiteColor];
+    headerLabel.backgroundColor = [UIColor clearColor];
+    headerLabel.text = header;
+    headerLabel.shadowColor = [UIColor colorWithRed:38./255. green:154./255. blue:201./255. alpha:1.0];
+    headerLabel.shadowOffset = CGSizeMake(0, 1);
+    [categoryBar addSubview:headerLabel];
+    
+    return categoryBar;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 23;
 }
 
 #pragma mark - Navigation Bar

@@ -94,12 +94,12 @@
     //setup tableview header
     _tableViewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, kMTTRIPHEADERHEIGHT)];
     [_tableViewHeader addSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_category_bar.png"]]];
-    UILabel *tableViewHeadlerLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, 4, 312, 17)];
+    UILabel *tableViewHeadlerLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, 3, 312, 17)];
     tableViewHeadlerLabel.tag = 100;
     tableViewHeadlerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0];
     tableViewHeadlerLabel.textColor = [UIColor whiteColor];
     tableViewHeadlerLabel.backgroundColor = [UIColor clearColor];
-    tableViewHeadlerLabel.shadowColor = [UIColor colorWithRed:38./255. green:154./255. blue:201./255. alpha:1.0];
+    tableViewHeadlerLabel.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:0.1];
     tableViewHeadlerLabel.shadowOffset = CGSizeMake(0, 1);
     [_tableViewHeader addSubview:tableViewHeadlerLabel];
 	

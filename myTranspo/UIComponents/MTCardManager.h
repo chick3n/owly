@@ -31,6 +31,7 @@
     MTStop* __weak          _stop;
     MTLanguage              _language;
     BOOL                    _isAnimating;
+    BOOL                    _isDecelerating;
     BOOL                    _swipeStartedAtBottom;
     
     //ui components

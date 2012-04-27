@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "myTranspo/UIComponents/MTCardManager.m"
-         timestampString = "357104446.189083"
+         timestampString = "357178572.913983"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "358"
-         endingLineNumber = "358"
+         startingLineNumber = "295"
+         endingLineNumber = "295"
          landmarkName = "-updatedCardPositions"
          landmarkType = "5">
       </FileBreakpoint>
@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "myTranspo/UIComponents/MTCardManager.m"
-         timestampString = "357105444.807225"
+         timestampString = "357178572.913983"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "367"
-         endingLineNumber = "367"
+         startingLineNumber = "303"
+         endingLineNumber = "303"
          landmarkName = "-updatedCardPositions"
          landmarkType = "5">
       </FileBreakpoint>
