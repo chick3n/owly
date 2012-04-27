@@ -78,7 +78,7 @@
 
 - (void)updateRowLabelsRow1:(NSString*)row1 Row2:(NSString*)row2 Row3:(NSString*)row3 Row4:(NSString*)row4 Row5:(NSString*)row5
 {
-    NSLog(@"%@ %@ %@ %@ %@", row1, row2, row3, row4, row5);
+    //NSLog(@"%@ %@ %@ %@ %@", row1, row2, row3, row4, row5);
     _row1.text = (row1 == nil) ? @"" : row1;
     _row2.text = (row2 == nil) ? @"" : row2;
     _row3.text = (row3 == nil) ? @"" : row3;
