@@ -224,7 +224,6 @@
 												<string key="NSFrame">{{251, 2}, {41, 37}}</string>
 												<reference key="NSSuperview" ref="17219928"/>
 												<reference key="NSWindow"/>
-												<reference key="NSNextKeyView"/>
 												<bool key="IBUIOpaque">NO</bool>
 												<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 												<int key="IBUIContentHorizontalAlignment">0</int>
@@ -240,8 +239,17 @@
 													<bytes key="NSRGB">MC4zNDkwMTk2MDc4IDAuMzQ5MDE5NjA3OCAwLjM0OTAxOTYwNzgAA</bytes>
 												</object>
 												<reference key="IBUINormalTitleShadowColor" ref="375401672"/>
-												<reference key="IBUIFontDescription" ref="104413532"/>
-												<reference key="IBUIFont" ref="451303636"/>
+												<object class="IBUIFontDescription" key="IBUIFontDescription">
+													<string key="name">HelveticaNeue-Medium</string>
+													<string key="family">Helvetica Neue</string>
+													<int key="traits">0</int>
+													<double key="pointSize">13</double>
+												</object>
+												<object class="NSFont" key="IBUIFont">
+													<string key="NSName">HelveticaNeue-Medium</string>
+													<double key="NSSize">13</double>
+													<int key="NSfFlags">16</int>
+												</object>
 											</object>
 											<object class="IBUILabel" id="1005874186">
 												<reference key="NSNextResponder" ref="17219928"/>

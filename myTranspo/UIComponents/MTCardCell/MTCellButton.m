@@ -75,8 +75,9 @@
     
     if(_useHelperHeading && _helperView)
     {
-        NSLog(@"HELPER HEADING: %@", _helperHeading);
 #if 0
+        NSLog(@"HELPER HEADING: %@", _helperHeading);
+
         _helperHeadingIsHidden = !_helperHeadingIsHidden;
         if(_helperHeadingIsHidden)
             [_helperView removeFromSuperview];
