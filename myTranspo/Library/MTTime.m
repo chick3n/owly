@@ -19,6 +19,7 @@
 @synthesize TripId          = _tripId;
 @synthesize IsLive          = _isLive;
 @synthesize StopSequence    = _stopSequence;
+@synthesize EndStopHeader   = _endStopHeader;
 #if 0
 @synthesize BusSpeed        = _busSpeed;
 @synthesize Destination     = _destination;

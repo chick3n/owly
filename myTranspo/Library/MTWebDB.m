@@ -444,6 +444,7 @@
             time.Time = [dic valueForKey:@"arrival_time"];
             time.StopId = [dic valueForKey:@"stop_id"];
             time.StopSequence = [[dic valueForKey:@"stop_sequence"] intValue];
+            time.EndStopHeader = [dic valueForKey:@"end_stop"];
 
             time.IsLive = NO;
             [dayPointer addObject:time];

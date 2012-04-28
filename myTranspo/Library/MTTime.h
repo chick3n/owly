@@ -33,6 +33,7 @@
 @property (nonatomic, strong)   NSString*       StopId;
 @property (nonatomic)           BOOL            IsLive;
 @property (nonatomic)           int             StopSequence;
+@property (nonatomic, strong)   NSString*       EndStopHeader;
 #if 0
 @property (nonatomic, strong)   NSString*       Destination;
 @property (nonatomic, strong)   NSString*       StartTime;

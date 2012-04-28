@@ -263,7 +263,7 @@
     _lastDate = [_transpo getLastSupportedDate];
     
     [_transpo addWebDBPath:@"http://www.vicestudios.com/apps/owly/oc/"];
-    [_transpo addAPI];
+    //[_transpo addAPI];
 }
 
 - (void)preLoad
@@ -282,10 +282,26 @@
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDir = [paths objectAtIndex:0];
 	NSString *dbPath = [documentsDir stringByAppendingPathComponent:@"OCTranspo.sqlite"];
-
+    BOOL canMigrateFavorites = NO;
+    NSMutableArray* favorites = nil;
+    
     if(![manager fileExistsAtPath:dbPath] || [settings currentDatabaseNeedsUpdate])
     {
+        NSLog(@"ABOUT TO REPLACE DATABASE");
         NSString* sourcePath = [[NSBundle mainBundle] pathForResource:@"OCTranspo.sqlite" ofType:nil];
+        
+        //migrate favorites
+        favorites = [[NSMutableArray alloc] init];
+        MTOCDB* tempDB = [[MTOCDB alloc] initWithDBPath:dbPath And:MTLANGUAGE_ENGLISH];
+        if(tempDB != nil && [tempDB connectToDatabase])
+        {
+            if([tempDB getFavorites:favorites])
+            {
+                canMigrateFavorites = YES;
+            }
+        }
+        
+        [tempDB killDatabase];
         
         if (sourcePath != nil) {
             [manager removeItemAtPath:dbPath error:nil];
@@ -299,6 +315,15 @@
     }
     
     [self setupMyTranspo];
+    
+    if(canMigrateFavorites && favorites != nil)
+    {
+        for(MTStop* favStop in favorites)
+        {
+            [_transpo addFavorite:favStop WithBus:favStop.Bus];
+        }
+    }
+    favorites = nil;
     
     if(_menuTableViewController)
     {

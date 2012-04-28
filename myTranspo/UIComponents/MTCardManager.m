@@ -387,7 +387,7 @@
         [card updateBusHeading:route.DisplayHeading];
         [card updateStreetName:_stop.StopNameDisplay];
         [card updateBusNumber:route.BusNumberDisplay];
-        [card updateNextTime:route.NextTimeDisplay IsLive:NO];
+        [card updateNextTime:[route.NextTimeDisplay getTimeForDisplay] IsLive:NO];
         [card updatePrevTime:route.PrevTimeDisplay];
         [card updateDistance:[_stop getDistanceOfStop]];
         [card updateDirection:[route getBusHeadingShortForm]];

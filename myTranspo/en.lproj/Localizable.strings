@@ -62,11 +62,11 @@
 "MTDEF_REMOVEALL" = "Remove All";
 "MTDEF_REMOVESELECTED" = "Remove Selected";
 "NOTICESTITLE" = "Notices";
-"NOTICEGENSERCHANGE" = "Future Plans";
+"NOTICEGENSERCHANGE" = "General Changes";
 "NOTICEGENMSG" = "Elevators / Accessibility";
 "NOTICECANTRIPS" = "Cancelled Today";
 "NOTICEDETOURS" = "Detours";
-"NOTICEGENSERCHANGEDESC" = "Future Changes and Plans";
+"NOTICEGENSERCHANGEDESC" = "General Changes and Plans";
 "NOTICEGENMSGDESC" = "Elevator Maintenance Schedules";
 "NOTICECANTRIPSDESC" = "View Live Changes for Today";
 "NOTICEDETOURSDESC" = "View All Upcoming Detours";

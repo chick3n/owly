@@ -123,7 +123,7 @@
         [self updateNextTime:_bus.NextTime IsLive:_bus.GPSTime];
 #endif
         [self updatePrevTime:_bus.PrevTimeDisplay];
-        [self updateNextTime:_bus.NextTimeDisplay IsLive:NO];
+        [self updateNextTime:[_bus.NextTimeDisplay getTimeForDisplay] IsLive:NO];
         [self updateDirection:[_bus getBusHeadingShortForm]];
         [self updateDistance:[_stop getDistanceOfStop]];
     }

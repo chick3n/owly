@@ -351,7 +351,7 @@
     return results.count;
 }
 
-- (NSString *)getNextTime
+- (MTTime *)getNextTime
 {
     NSMutableArray* results = [[NSMutableArray alloc] initWithCapacity:1];
     if([self nextTimesForWeek:[MTHelper DayOfWeekForDate:_chosenDate]
@@ -367,12 +367,15 @@
             MTTime* time = [results objectAtIndex:0];
             if(time != nil)
             {
-                return [time getTimeForDisplay];
+                return time;
             }
         }
     }
 
-    return MTDEF_TIMEUNKNOWN;
+    MTTime* time = [[MTTime alloc] init];
+    time.Time = MTDEF_TIMEUNKNOWN;
+    
+    return time;
 }
 
 - (NSArray*)getNextThreeTimes

@@ -36,6 +36,7 @@
 
 - (id)initWithDBPath:(NSString *)dbPath And:(MTLanguage)lang;
 - (BOOL)connectToDatabase;
+- (void)killDatabase;
 
 //updates
 - (BOOL)addScheduleForStop:(MTStop*)stop WithRoute:(MTBus*)bus;

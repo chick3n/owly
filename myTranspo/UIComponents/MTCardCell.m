@@ -67,6 +67,9 @@
     
     _dataScrollView.contentSize = CGSizeMake(_dataScrollView.frame.size.width, _dataScrollView.frame.size.height);
     
+    _nextTime.useSecondaryHeading = NO;
+    _nextTime.useHelperHeading = NO;
+    
     //page 1
     _nextTimes = [[NSMutableArray alloc] initWithCapacity:kElementNextTimesCount*kElementNextTimesElementCount];
     CGRect nextTimesFooterFrame = _prevHeading.frame;
@@ -86,7 +89,9 @@
         nextTimeImage.contentMode = UIViewContentModeCenter;
         [_nextTimes addObject:nextTimeImage];
         
-        UIButton* nextTime = [[UIButton alloc] initWithFrame:nextTimesLabelFrame];
+        MTCellButton* nextTime = [[MTCellButton alloc] initWithFrame:nextTimesLabelFrame];
+        nextTime.useHelperHeading = YES;
+        nextTime.useSecondaryHeading = NO;
         nextTime.titleLabel.font = _prevTime.font;
         nextTime.backgroundColor = _prevTime.backgroundColor;
         nextTime.titleLabel.textAlignment = _prevTime.textAlignment;
@@ -224,7 +229,9 @@
     _direction.text = [stop.Bus getBusHeadingShortForm];
     _distance.text = [stop getDistanceOfStop];
     
-    _nextTimeValue = stop.Bus.NextTimeDisplay;//stop.Bus.NextTime;
+    _nextTimeValue = [stop.Bus.NextTimeDisplay getTimeForDisplay];//stop.Bus.NextTime;
+    _nextTime.originalHeading = _nextTimeValue;
+    _nextTime.helperHeading = stop.Bus.NextTimeDisplay.EndStopHeader;
     [_nextTime setTitle:_nextTimeValue forState:UIControlStateNormal];
     [self viewForPage:1];
     [self viewForPage:2];
@@ -302,6 +309,7 @@
         } completion:^(BOOL finished) {
             _stop.MTCardCellIsAnimating = NO;
             _stop.MTCardCellHelper = YES;
+            //self.clipsToBounds = NO;
         }];
     }
     else
@@ -310,6 +318,7 @@
         _dataScrollView.frame = scrollFrame;
         _stop.MTCardCellIsAnimating = NO;
         _stop.MTCardCellHelper = YES;
+        //self.clipsToBounds = NO;
     }
 }
 
@@ -341,11 +350,13 @@
     
     if(_remaingTimeShown == NO)
     {
+        _busHeading.text = _stop.Bus.NextTimeDisplay.EndStopHeader;
         [_nextTime setTitle:[MTHelper timeRemaingUntilTime:_nextTimeValue] forState:UIControlStateNormal];
         _remaingTimeShown = YES;
     }
     else
     {
+        _busHeading.text = (_stop.Bus.TrueDisplayHeading != nil) ? _stop.Bus.TrueDisplayHeading : _stop.Bus.DisplayHeading;
         [_nextTime setTitle:_nextTimeValue forState:UIControlStateNormal];
         _remaingTimeShown = NO;
     }
@@ -410,7 +421,7 @@
             if(x < times.count)
                 time = [times objectAtIndex:x];
             
-            UIButton* nextTime = [_nextTimes objectAtIndex:ele+1];
+            MTCellButton* nextTime = (MTCellButton*)[_nextTimes objectAtIndex:ele+1];
             if(time == nil)
             {
                 [nextTime setTitle:MTDEF_TIMEUNKNOWN forState:UIControlStateNormal];
@@ -418,6 +429,7 @@
                 continue;
             }
             
+            nextTime.helperHeading = time.EndStopHeader;
             [nextTime setTitle:[time getTimeForDisplay] forState:UIControlStateNormal];
             [_nextTimes replaceObjectAtIndex:ele+3 withObject:[time getTimeForDisplay]];
         }

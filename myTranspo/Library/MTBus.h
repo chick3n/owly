@@ -39,7 +39,7 @@
 @property (nonatomic, strong)   NSString*               BusSpeed; //km/hr
 @property (nonatomic, strong)   NSString*               TrueDisplayHeading;
 
-@property (readonly, getter = getNextTime)          NSString*   NextTime;
+@property (readonly, getter = getNextTime)          MTTime*   NextTime;
 @property (readonly, getter = getPrevTime)          NSString*   PrevTime;
 @property (readonly, getter = getNextThreeTimes)    NSArray*    NextThreeTimes;
 @property (readonly, getter = getCurrentTrip)       MTTime*     CurrentTrip;
@@ -47,7 +47,7 @@
 
 //display vars
 @property (nonatomic, strong)   NSString*               PrevTimeDisplay;
-@property (nonatomic, strong)   NSString*               NextTimeDisplay;
+@property (nonatomic, strong)   MTTime*                 NextTimeDisplay;
 @property (nonatomic, strong)   NSArray*                NextThreeTimesDisplay;
 
 //methods

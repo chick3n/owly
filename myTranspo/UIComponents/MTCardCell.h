@@ -11,6 +11,7 @@
 
 #import "MTStop.h"
 #import "MTDefinitions.h"
+#import "MTCellButton.h"
 
 #define kHiddenHeight 86
 #define kFullHeight 130
@@ -47,7 +48,7 @@
     IBOutlet UILabel*               _busHeading;
     IBOutlet UILabel*               _streetName;
     IBOutlet UILabel*               _prevTime;
-    IBOutlet UIButton*              _nextTime;
+    IBOutlet MTCellButton*          _nextTime;
     IBOutlet UILabel*               _distance;
     IBOutlet UILabel*               _direction;
     IBOutlet UIView*                _titleView;

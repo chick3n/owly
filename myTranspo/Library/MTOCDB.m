@@ -43,6 +43,12 @@
         sqlite3_close(_db);
 }
 
+- (void)killDatabase
+{
+    if(_isConnected)
+        sqlite3_close(_db);
+}
+
 - (BOOL)connectToDatabase
 {
     sqlite3_config(SQLITE_CONFIG_SERIALIZED);
@@ -565,7 +571,6 @@
 						  , longitude
 						  , (NSString*)stopList];
     
-    NSLog(@"getClosestTrip:%@", sqlStmt);
     sqlite3_stmt* _cmpStmt;
     if(sqlite3_prepare_v2(_db, [sqlStmt UTF8String], -1, &_cmpStmt, NULL) == SQLITE_OK)
 	{
@@ -660,7 +665,7 @@
     NSDateFormatter* dateFormatter = [MTHelper MTDateFormatterDashesYYYYMMDD];
     
     NSString *sqlStmt = [NSString stringWithFormat: \
-                         @"select case ft.day_of_week when 'sunday' then 2 when 'saturday' then 1 else 0 end, ft.trip_id, ft.arrival_time, ft.stop_sequence, s.stop_id, s.stop_name, ft.route_id \
+                         @"select case ft.day_of_week when 'sunday' then 2 when 'saturday' then 1 else 0 end, ft.trip_id, ft.arrival_time, ft.stop_sequence, s.stop_id, s.stop_name, ft.route_id, ft.end_stop \
                          from stored_times ft \
                          inner join stops s on s.stop_id = ft.stop_id \
                          where ft.stop_id = '%@'  AND ft.route_id = '%@' AND ft.next_update > '%@' \
@@ -684,6 +689,7 @@
             time.StopId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 4)];
             time.StopSequence = sqlite3_column_int(cmpStmt, 3);
             time.IsLive = NO;
+            time.EndStopHeader = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 7)];
             
             switch (sqlite3_column_int(cmpStmt, 0)) {
                 case 0:
@@ -778,6 +784,8 @@
             bus.BusId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(_cmpStmt, 5)];
             bus.isFavorite = YES;
             [bus updateBusHeadingFromInt:sqlite3_column_int(_cmpStmt, 8)];
+            
+            NSLog(@"BUS REAL HEADING: %@", bus.DisplayHeading);
             
             [stop.BusIds addObject:bus];
             
@@ -1044,9 +1052,9 @@
         {
             NSString * sqlStmt = [NSString stringWithFormat: \
                                   @"insert into stored_times \
-                                  (day_of_week, arrival_time_ori, arrival_time, stop_id, trip_id, stop_sequence, start_date, end_date, next_update, route_id) \
+                                  (day_of_week, arrival_time_ori, arrival_time, stop_id, trip_id, stop_sequence, start_date, end_date, next_update, route_id, end_stop) \
                                   VALUES \
-                                  ('%@', '%@', '%@', '%@', '%@', %@, '%@', '%@', '%@', '%@')"
+                                  ('%@', '%@', '%@', '%@', '%@', %@, '%@', '%@', '%@', '%@', '%@')"
                                   , [dic valueForKey:@"dayOfWeek"]
                                   , [dic valueForKey:@"arrival_time"]
                                   , [dic valueForKey:@"arrival_time"]
@@ -1056,7 +1064,8 @@
                                   , [dic valueForKey:@"start_date"]
                                   , [dic valueForKey:@"end_date"]
                                   , [dic valueForKey:@"next_update"]
-                                  , bus.BusId];
+                                  , bus.BusId
+                                  , [dic valueForKey:@"end_stop"]];
             
             if(sqlite3_prepare_v2(_db
                                   , [sqlStmt UTF8String]

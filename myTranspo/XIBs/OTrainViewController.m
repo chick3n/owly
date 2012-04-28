@@ -345,7 +345,7 @@
         trip.Language = _language;
         trip.TripId = _trip.TripId;
         trip.StopSequence = 0;
-        trip.Time.Time = _stop.Bus.NextTime;
+        trip.Time.Time = _stop.Bus.NextTime.Time;
         trip.Time.TripId = _trip.TripId;
         trip.Time.StopId = _stop.StopId;
         trip.Time.StopSequence = 0;
