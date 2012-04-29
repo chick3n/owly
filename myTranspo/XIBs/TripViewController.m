@@ -75,7 +75,23 @@
     
     //view
     _backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
-	
+	_backgroundImage2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
+    
+    //MTTimeTable
+    CGRect timeTableFrame = _tableView.frame;
+    timeTableFrame.origin.x = self.view.frame.origin.x + self.view.frame.size.width;
+    _timeTableFrame = timeTableFrame.origin;
+    _timeTable = [[MTCardTimes alloc] initWithFrame:timeTableFrame style:UITableViewStylePlain];
+    [_timeTable setTableHeaderView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 0)]];
+    [_timeTable setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 0)]];
+    [_timeTable addSubview:_backgroundImage2];
+    _timeTable.timesWeekday = [_bus getWeekdayTimesForDisplay];
+    _timeTable.timesSaturday = [_bus getSaturdayTimesForDisplay];
+    _timeTable.timesSunday = [_bus getSundayTimesForDisplay];
+    _timeTable.cellDelegate = self;
+    [self.view addSubview:_timeTable];
+    [_timeTable reloadData];
+    
 	//setup tableview
 	[self.tableView setDelaysContentTouches:NO];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
@@ -87,9 +103,12 @@
     CGRect tableViewFrame = self.tableView.frame;
     tableViewFrame.origin.y = _mapView.frame.origin.y + _mapView.frame.size.height;
     self.tableView.frame = tableViewFrame;
+    _tripFrame = tableViewFrame.origin;
+#if 0
     UISwipeGestureRecognizer *gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
     gesture.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.tableView addGestureRecognizer:gesture];
+#endif
     
     //setup tableview header
     _tableViewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, kMTTRIPHEADERHEIGHT)];
@@ -137,6 +156,7 @@
     
     //mapview
     _mapView.delegate = self;
+    
 }
 
 - (void)viewDidUnload
@@ -282,6 +302,51 @@ numberOfRowsInComponent:(NSInteger)component;
 
 - (void)changeTripScheduleTime:(id)sender
 {
+    if(_timeTable.frame.origin.x >= self.view.frame.size.width)
+    {
+        //slide in timetable    
+        CGRect timeTableSlideFrame = _timeTable.frame;
+        timeTableSlideFrame.origin.x = 0;
+        
+        CGRect tripTableSlideOut = _tableView.frame;
+        tripTableSlideOut.origin.x = -self.view.frame.size.width;
+        
+        [UIView animateWithDuration:0.25
+                         animations:^{
+                             _tableView.frame = tripTableSlideOut;
+                             _timeTable.frame = timeTableSlideFrame;
+                         }
+                         completion:^(BOOL finished) {
+                             if(finished)
+                             {
+                                 _tripFrame = _tableView.frame.origin;
+                                 _timeTableFrame = _timeTable.frame.origin;
+                             }
+                         }];
+    }
+    else { //slide in trip
+        CGRect timeTableSlideFrame = _timeTable.frame;
+        timeTableSlideFrame.origin.x = self.view.frame.size.width;
+        
+        CGRect tripTableSlideOut = _tableView.frame;
+        tripTableSlideOut.origin.x = 0;
+        
+        [UIView animateWithDuration:0.25
+                         animations:^{
+                             _tableView.frame = tripTableSlideOut;
+                             _timeTable.frame = timeTableSlideFrame;
+                         }
+                         completion:^(BOOL finished) {
+                             if(finished)
+                             {
+                                 _tripFrame = _tableView.frame.origin;
+                                 _timeTableFrame = _timeTable.frame.origin;
+                             }
+                         }];
+    }
+    
+    return;
+    
     //slide frame up
     CGRect frame = _timesPickerView.frame;
     frame.origin.y = frame.origin.y - frame.size.height;
@@ -832,11 +897,17 @@ numberOfRowsInComponent:(NSInteger)component;
 {
     CGRect newTableFrame = CGRectZero;
     CGRect newMapFrame = CGRectZero;
+    CGRect newTimeTableFrame = CGRectZero;
     
     if(_trips == nil)
     {
-        newMapFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+        newMapFrame = CGRectMake(_tripFrame.x, 0, self.view.frame.size.width, self.view.frame.size.height);
         newTableFrame = CGRectMake(0, self.view.frame.size.height, 320, 0);
+                
+        newTimeTableFrame = CGRectMake(_timeTableFrame.x
+                                       , self.view.frame.size.height - [_timeTable heightForTablesData]
+                                       , self.view.frame.size.width
+                                       , [_timeTable heightForTablesData]);
     }
     else
     {
@@ -844,15 +915,21 @@ numberOfRowsInComponent:(NSInteger)component;
         if(totalTrips < 3)
         {
             int newHeight = 3*kMTTRIPCELLHEIGHT + kMTTRIPHEADERHEIGHT;
-            newTableFrame = CGRectMake(0, self.view.frame.size.height - newHeight, 320, newHeight);
+            newTableFrame = CGRectMake(_tripFrame.x, self.view.frame.size.height - newHeight, 320, newHeight);
             newMapFrame = CGRectMake(0, 0, 320, self.view.frame.size.height - newHeight);
+            
+            newTimeTableFrame = CGRectMake(_timeTableFrame.x
+                                           , self.view.frame.size.height - [_timeTable heightForTablesData]
+                                           , self.view.frame.size.width
+                                           , [_timeTable heightForTablesData]);
         }
         else
         {
             int newHeight = 6*kMTTRIPCELLHEIGHT + kMTTRIPHEADERHEIGHT;
             
-            newTableFrame = CGRectMake(0, self.view.frame.size.height - newHeight, 320, newHeight);
+            newTableFrame = CGRectMake(_tripFrame.x, self.view.frame.size.height - newHeight, 320, newHeight);
             newMapFrame = CGRectMake(0, 0, 320, self.view.frame.size.height - newHeight);
+            newTimeTableFrame = CGRectMake(_timeTableFrame.x, self.view.frame.size.height - newHeight, 320, newHeight);
         }
     }
     
@@ -861,10 +938,15 @@ numberOfRowsInComponent:(NSInteger)component;
     backgroundImageFrame.origin.y = _tableView.contentSize.height;
     _backgroundImage.frame = backgroundImageFrame;    
     
+    backgroundImageFrame.origin.y = _timeTable.contentSize.height;
+    _backgroundImage2.frame = backgroundImageFrame;
+    
     [UIView animateWithDuration:0.5 animations:^(void){
        // _mapView.frame = newMapFrame;
         _tableView.frame = newTableFrame; 
     }];
+    
+    _timeTable.frame = newTimeTableFrame;
 }
 
 #pragma mark - Scroll View Delegate
@@ -879,6 +961,31 @@ numberOfRowsInComponent:(NSInteger)component;
 - (void)goBack:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - CARD CELL DELEGATE
+
+- (void)cardTimesRow:(id)owner ClickedOnCell:(MTCardCellButton *)cell
+{
+    MTTime* time = nil;
+    
+    if(cell.tag < 0)
+        return;
+    
+    if(cell.extraValue1 == 0 && _bus.Times.Times.count > cell.tag) //weekday
+        time = [_bus.Times.Times objectAtIndex:cell.tag];
+    else if(cell.extraValue1 == 1 && _bus.Times.TimesSat.count > cell.tag) //weekday
+        time = [_bus.Times.TimesSat objectAtIndex:cell.tag];
+    else if(cell.extraValue1 == 2 && _bus.Times.TimesSun.count > cell.tag) //weekday
+        time = [_bus.Times.TimesSun objectAtIndex:cell.tag];
+    
+    if(time == nil)
+        return;
+    
+    NSLog(@"Show Heading for Time: %@", [time getTimeForDisplay]);
+    
+    //display notice
+    [_timeTable displayCellAlert:time.EndStopHeader Row:cell.extraValue2 Section:cell.extraValue1 Center:cell.center.x];
 }
 
 @end

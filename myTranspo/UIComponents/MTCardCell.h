@@ -12,6 +12,7 @@
 #import "MTStop.h"
 #import "MTDefinitions.h"
 #import "MTCellButton.h"
+#import "MTCellAlert.h"
 
 #define kHiddenHeight 86
 #define kFullHeight 130
@@ -32,7 +33,7 @@
 - (void)mtCardcellDeleteClicked:(id)cell;
 @end
 
-@interface MTCardCell : UITableViewCell //<UIScrollViewDelegate>
+@interface MTCardCell : UITableViewCell <UIScrollViewDelegate>
 {
     BOOL                            _modeLarge;
     BOOL                            _remaingTimeShown;
@@ -42,6 +43,7 @@
     NSString*                       _nextTimeValue;
     BOOL                            _hasExpanded;
     BOOL                            _isAnimatingEdit;
+    CGPoint                         _lastContentOffset;
     
     //UI Components
     IBOutlet UILabel*               _busNumber;
@@ -64,6 +66,7 @@
     IBOutlet UILabel*               _distanceHeading;
     IBOutlet UILabel*               _directionHeading;
     IBOutlet UIButton*              _delete;
+    IBOutlet MTCellAlert*           _timesAlert;
     //page 1
     NSMutableArray*                 _nextTimes;
     //page 2

@@ -16,11 +16,13 @@
 #import "MTBusAnnotation.h"
 #import "MTStopAnnotation.h"
 #import "MTRightButton.h"
+#import "MTCardTimes.h"
+#import "MTCellAlert.h"
 
 #define kMTBusTimerInterval 60
 
 @interface TripViewController : MTBaseViewController 
-<UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, MTQueueSafe, MyTranspoDelegate, MTTripCellDelegate, MKMapViewDelegate>
+<UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, MTQueueSafe, MyTranspoDelegate, MTTripCellDelegate, MKMapViewDelegate, CardTimesRowCellDelegate>
 {
     NSArray*							_trips;
 	NSArray*							_timesDisplayTimes;
@@ -33,6 +35,8 @@
     MTBusAnnotation*                    _busAnnotation;
     int                                 _busTripLocation;
     NSArray*                            _tripNotifications;
+    CGPoint                             _tripFrame;
+    CGPoint                             _timeTableFrame;
     
 	//ui components
 	IBOutlet UITableView*				_tableView;
@@ -45,6 +49,8 @@
 	UIBarButtonItem*					_initialLeftButton;
     UIView*                             _tableViewHeader;
     UIImageView*                        _backgroundImage;
+    UIImageView*                        _backgroundImage2;
+    MTCardTimes*                        _timeTable;
 }
 
 

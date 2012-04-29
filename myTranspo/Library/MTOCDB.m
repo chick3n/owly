@@ -785,8 +785,6 @@
             bus.isFavorite = YES;
             [bus updateBusHeadingFromInt:sqlite3_column_int(_cmpStmt, 8)];
             
-            NSLog(@"BUS REAL HEADING: %@", bus.DisplayHeading);
-            
             [stop.BusIds addObject:bus];
             
             [favorites addObject:stop];

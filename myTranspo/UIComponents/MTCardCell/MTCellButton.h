@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MTCellAlert.h"
 
 @interface MTCellButton : UIButton
 {

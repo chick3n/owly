@@ -25,6 +25,7 @@
     NSDate*                             _chosenDate;
     NSTimer*                            _poolUpdates;
     NSIndexPath*                        _editedCell;
+    BOOL                                _fadeInCell;
     
     //UIComponents
     UIBarButtonItem*                    _editButton;

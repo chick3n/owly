@@ -30,6 +30,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _editing = NO;
+        _fadeInCell = YES;
         _chosenDate = [NSDate date];
     }
     return self;
@@ -56,11 +57,10 @@
     
     //navigationBar Setup
     //_editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"MTDEF_EDIT", nil) style:UIBarButtonItemStylePlain target:self action:@selector(editFavorites:)];
-    UIButton* timesButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [timesButton setImage:[UIImage imageNamed:@"global_time_btn.png"] forState:UIControlStateNormal];
-    [timesButton addTarget:self action:@selector(changeTripScheduleTime:) forControlEvents:UIControlEventTouchUpInside];
-    [timesButton setFrame:CGRectMake(0, 0, 41, 29)];
-    _editButton = [[UIBarButtonItem alloc] initWithCustomView:timesButton];
+    _editButtonValue = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+    [_editButtonValue setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
+    [_editButtonValue addTarget:self action:@selector(editFavorites:) forControlEvents:UIControlEventTouchUpInside];
+    _editButton = [[UIBarButtonItem alloc] initWithCustomView:_editButtonValue];
     self.navigationItem.rightBarButtonItem = _editButton;
     
     self.title = NSLocalizedString(@"MTDEF_VIEWCONTROLLERMYBUSES", nil);
@@ -210,7 +210,7 @@
     }
     
     //if(stop.IsUpdating == NO) //removed this because IsUpdating = YES until API returns so updates werent happening in between.
-    [cell updateCellDetails:stop New:YES];
+    [cell updateCellDetails:stop New:_fadeInCell];
     
     [cell setIndexRow:indexPath.row];
 
@@ -238,13 +238,12 @@
         [_transpo removeFavorite:favorite WithBus:favorite.Bus];
     }
 }
+#endif
 
 - (UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return UITableViewCellEditingStyleNone;
 }
-
-#endif
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -293,6 +292,7 @@
     
     for(MTStop* stop in _favorites)
     {
+        _chosenDate = [NSDate date]; //always update to now
         stop.IsUpdating = YES;
         stop.cancelQueue = NO;
         [stop restoreQueuesForBuses];
@@ -506,6 +506,7 @@
         return;
     }
     
+    _fadeInCell = YES;
     _loadingCounter = _favorites.count;
     [self updateFavorites];
 }
@@ -513,6 +514,7 @@
 - (void)refreshTableStopLoading
 {
     [_tableView stopLoading];
+    _fadeInCell = NO;
 }
      
 #pragma mark - OPTIONS DELEGATE
@@ -642,32 +644,11 @@
         NSIndexPath* swipedIndexPath = [self.tableView indexPathForRowAtPoint:swipeLocation];
         if(swipedIndexPath != nil)
         {
-            if(_editing)
+            //refresh individual cell
+            if(swipedIndexPath.row < _favorites.count)
             {
-                if(_editedCell != nil && _editedCell.row < _favorites.count)
-                {
-                    MTCardCell* cell = (MTCardCell*)[_tableView cellForRowAtIndexPath:_editedCell];
-                    [cell setEditing:NO animated:YES];
-                }
-                else {
-                    [_tableView reloadData];
-                }
-                _editing = NO;
-            }
-            
-            MTCardCell* cell = (MTCardCell*)[_tableView cellForRowAtIndexPath:swipedIndexPath];
-            if(!cell.editing)
-            {
-                //[_tableView setUserInteractionEnabled:NO];
-                [cell setEditing:YES animated:YES];
-                //[self.view addGestureRecognizer:_editTapGesture];
-                _editedCell = swipedIndexPath;
-                _editing = YES;
-            }
-            else
-            {
-                [cell setEditing:NO animated:YES];
-                [_tableView setUserInteractionEnabled:YES];
+                MTStop* stop = (MTStop*)[_favorites objectAtIndex:swipedIndexPath.row];
+                MTLog(@"REFRESH CELL: %@", stop.Bus.DisplayHeading);
             }
         }
     }

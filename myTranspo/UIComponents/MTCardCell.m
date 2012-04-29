@@ -179,6 +179,11 @@
     _dataScrollView.contentSize = CGSizeMake((nextTimesLabelFrame.origin.x + nextTimesLabelFrame.size.width) - kElementNextTimesSpacer
                                              , _dataScrollView.frame.size.height);
     
+#if 1
+    _timesAlert = [[MTCellAlert alloc] init];
+    _timesAlert.hasButtons = NO;
+    [self addSubview:_timesAlert];
+#endif
 }
 
 - (NSInteger)getCellHeight
@@ -238,20 +243,18 @@
     
     [self toggleLoadingAnimation:NO];
     
-    /*
     if(newData)
     {
-        [UIView animateWithDuration:0.5 animations:^{
-            _prevTime.alpha = 0.0;
-            _nextTime.alpha = 0.0;
-            _distance.alpha = 0.0;
-        } completion:^(BOOL finished){
+        _prevTime.alpha = 0.0;
+        _nextTime.alpha = 0.0;
+        _distance.alpha = 0.0;
+    
+        [UIView animateWithDuration:0.25 animations:^{
             _prevTime.alpha = 1.0;
             _nextTime.alpha = 1.0;
             _distance.alpha = 1.0;
         }];
     }
-     */
 }
 
 - (void)expandCellWithAnimation:(BOOL)animate
@@ -348,43 +351,52 @@
     //if([_delegate conformsToProtocol:@protocol(MTCardCellDelegate)])
     //    [_delegate mtCardCellnextTimeClickedForStop:_stop];
     
+    CGPoint pointInCell = [self convertPoint:_nextTime.center fromView:_dataScrollView];
+    _timesAlert.refrenceObject = _nextTime;
+    [_timesAlert displayAlert:_nextTime.helperHeading AtPos:pointInCell ConstrainedTo:self.frame.size UpsideDown:NO];
+    
+#if 0
     if(_remaingTimeShown == NO)
     {
-        _busHeading.text = _stop.Bus.NextTimeDisplay.EndStopHeader;
+        //_busHeading.text = _stop.Bus.NextTimeDisplay.EndStopHeader;
         [_nextTime setTitle:[MTHelper timeRemaingUntilTime:_nextTimeValue] forState:UIControlStateNormal];
         _remaingTimeShown = YES;
     }
     else
     {
-        _busHeading.text = (_stop.Bus.TrueDisplayHeading != nil) ? _stop.Bus.TrueDisplayHeading : _stop.Bus.DisplayHeading;
+        //_busHeading.text = (_stop.Bus.TrueDisplayHeading != nil) ? _stop.Bus.TrueDisplayHeading : _stop.Bus.DisplayHeading;
         [_nextTime setTitle:_nextTimeValue forState:UIControlStateNormal];
         _remaingTimeShown = NO;
     }
+#endif
 }
 
 #pragma mark - ScrollView Delegate
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if(_timesAlert.hidden == NO)
+    {
+        CGRect timesAlertFrame = _timesAlert.frame;
+        timesAlertFrame.origin.x += _lastContentOffset.x - scrollView.contentOffset.x;
+        _timesAlert.frame = timesAlertFrame;
+        _lastContentOffset = scrollView.contentOffset;
+    }
+    
 #if 0
+    [_timesAlert hideAlertWithSelfInvoke:YES];
+#endif
+}
+
+#if 1
 // When animation stops using setContentOffset
 - (void) scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    
-    int page = floor((_dataScrollView.contentOffset.x - _dataScrollView.frame.size.width / 2) / _dataScrollView.frame.size.width) + 1;
-    
-    if(page > 0)
-    {
-        [self viewForPage:page];
-    }
+    _lastContentOffset = scrollView.contentOffset;
 }
 
 // When animation stops using dragging
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    
-    int page = floor((_dataScrollView.contentOffset.x - _dataScrollView.frame.size.width / 2) / _dataScrollView.frame.size.width) + 1;
-    
-    if(page > 0)
-    {
-        [self viewForPage:page];
-    }
+    _lastContentOffset = scrollView.contentOffset;
 }
 #endif
 
@@ -466,7 +478,13 @@
 
 - (void)nextTimesClicked:(id)sender
 {
-    UIButton* nextTime = (UIButton*)sender;
+    MTCellButton* nextTime = (MTCellButton*)sender;
+    
+    CGPoint pointInCell = [self convertPoint:nextTime.center fromView:_dataScrollView];
+    _timesAlert.refrenceObject = nextTime;
+    [_timesAlert displayAlert:nextTime.helperHeading AtPos:pointInCell ConstrainedTo:self.frame.size UpsideDown:NO];
+
+#if 0    
     char lastChar = [nextTime.titleLabel.text characterAtIndex:nextTime.titleLabel.text.length-1];
     
     if(lastChar == 'm' || lastChar == '+' || lastChar == 'w')
@@ -486,6 +504,7 @@
         NSString *nextTimeString = nextTime.titleLabel.text;
         [nextTime setTitle:[MTHelper timeRemaingUntilTime:nextTimeString] forState:UIControlStateNormal];
     }
+#endif
 }
 
 #pragma mark - EDIT / DELETE MODE
