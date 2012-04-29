@@ -104,6 +104,12 @@
 
 //TRIPS
 "HEADING" = "Destination";
+"TRIPPLANNER" = "Planificateur de voyage";
+"STARTLOCATIONPLACEHOLDER" = "point de départ";
+"ENDLOCATIONPLACEHOLDER" = "Destination finale";
+"STARTLOCATIONLEFT" = "de";
+"ENDLOCATIONLEFT" = "fin";
+"PLANTRIPPREFIX" = "Plan de voyage";
 
 //STOPS
 "AT" = "à";

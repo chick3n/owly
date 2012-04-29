@@ -20,15 +20,8 @@
 @synthesize IsLive          = _isLive;
 @synthesize StopSequence    = _stopSequence;
 @synthesize EndStopHeader   = _endStopHeader;
-#if 0
-@synthesize BusSpeed        = _busSpeed;
-@synthesize Destination     = _destination;
-@synthesize BusType         = _busType;
-@synthesize LastTrip        = _lastTrip;
-@synthesize Latitude        = _latitude;
-@synthesize Longitude       = _longitude;
-@synthesize StartTime       = _startTime;
-#endif
+@synthesize Alert           = _alert;
+@synthesize dayOfWeek       = _dayOfWeek;
 
 - (long)getTimeInSeconds
 {

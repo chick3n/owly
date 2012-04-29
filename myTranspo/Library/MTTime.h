@@ -17,15 +17,6 @@
     NSString*                   _tripId;
     NSString*                   _stopId;
     int                         _stopSequence;
-#if 0  
-    NSString*                   _destination;
-    NSString*                   _startTime; //Can be used as a local start time and _time can be gps time if _isLive = YES
-    BOOL                        _lastTrip;
-    uint                        _busType; //MTBusTypes byte
-    float                       _busSpeed;
-    double                      _longitude; //current location
-    double                      _latitude; //current location
-#endif
 }
 
 @property (nonatomic, strong)   NSString*       Time;
@@ -34,15 +25,8 @@
 @property (nonatomic)           BOOL            IsLive;
 @property (nonatomic)           int             StopSequence;
 @property (nonatomic, strong)   NSString*       EndStopHeader;
-#if 0
-@property (nonatomic, strong)   NSString*       Destination;
-@property (nonatomic, strong)   NSString*       StartTime;
-@property (nonatomic)           BOOL            LastTrip;
-@property (nonatomic)           uint            BusType;
-@property (nonatomic)           float           BusSpeed;
-@property (nonatomic)           double          Longitude;
-@property (nonatomic)           double          Latitude;
-#endif
+@property (nonatomic, weak)     UILocalNotification* Alert;
+@property (nonatomic)           int             dayOfWeek;
 
 - (long)getTimeInSeconds;
 - (long)getStartTimeInSeconds;

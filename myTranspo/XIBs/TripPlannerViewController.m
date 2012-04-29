@@ -12,6 +12,10 @@
 - (void)startLoading:(id)sender;
 - (void)stopLoading:(id)sender;
 - (void)parseTripDetails;
+- (void)startPlanningTrip:(id)sender;
+- (void)addressFieldsValueChanged:(id)sender;
+- (void)removeKeyboard:(id)sender;
+- (void)hideDateChangerView:(id)sender;
 @end
 
 @implementation TripPlannerViewController
@@ -29,18 +33,59 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
-    MTTripPlanner* tripPlanner = [[MTTripPlanner alloc] init];
-    tripPlanner.startingLocation = @"21 Gospel Oak";
-    tripPlanner.endingLocation = @"99 Bank St";
-    tripPlanner.departBy = NO;
-    tripPlanner.arriveBy = [NSDate date];
-    
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    
+    [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
+    [_tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]]];
     _transpo.delegate = self;
-    [_transpo getTripPlanner:tripPlanner];
+    
+    //navigationBar
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Start"
+                                                                              style:UIBarButtonItemStyleDone
+                                                                             target:self
+                                                                             action:@selector(startPlanningTrip:)];
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    
+    //view
+    self.title = NSLocalizedString(@"TRIPPLANNER", nil);
+    
+    //datepicker
+    _changeDateViewer.minimumDate = [NSDate date];
+    [self toggleChangeDateViewer:nil];
+    [self changeTripDate:nil];
+    
+    //textfields
+    _startLocation.placeholder = NSLocalizedString(@"STARTLOCATIONPLACEHOLDER", nil);
+    _endLocation.placeholder = NSLocalizedString(@"ENDLOCATIONPLACEHOLDER", nil);
+    _startLocation.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_train_icon.png"]];
+    _endLocation.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_train_icon.png"]];
+    
+    UILabel* leftView1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 14)];
+    leftView1.text = NSLocalizedString(@"STARTLOCATIONLEFT", nil);
+    leftView1.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
+    leftView1.textColor = [UIColor blackColor];
+    leftView1.backgroundColor = [UIColor clearColor];
+    leftView1.textAlignment = UITextAlignmentRight;
+    
+    UILabel* leftView2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 14)];
+    leftView2.text = NSLocalizedString(@"ENDLOCATIONLEFT", nil);
+    leftView2.font = leftView1.font;
+    leftView2.textColor = leftView1.textColor;
+    leftView2.backgroundColor = leftView1.backgroundColor;
+    leftView2.textAlignment = leftView1.textAlignment;
+    
+    _startLocation.leftView = leftView1;
+    _endLocation.leftView = leftView2;
+    _startLocation.delegate = self;
+    _endLocation.delegate = self;
+    _startLocation.leftViewMode = UITextFieldViewModeAlways;
+    _endLocation.leftViewMode = UITextFieldViewModeAlways;
+    _startLocation.rightViewMode = UITextFieldViewModeUnlessEditing;
+    _endLocation.rightViewMode = UITextFieldViewModeUnlessEditing;
+    _startLocation.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _endLocation.clearButtonMode = UITextFieldViewModeWhileEditing;
+    [_startLocation addTarget:self action:@selector(addressFieldsValueChanged:) forControlEvents:UIControlEventEditingChanged];
+    [_endLocation addTarget:self action:@selector(addressFieldsValueChanged:) forControlEvents:UIControlEventEditingChanged];
 }
 
 - (void)viewDidUnload
@@ -97,18 +142,22 @@
 {
     static NSString *CellIdentifier = @"NoticesCell";
     
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    TripDetailsCell* cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
-        cell.textLabel.numberOfLines = 0;
-        cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
-        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
+        cell = [[TripDetailsCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     }
     
     TripDetailsDisplay* display = (TripDetailsDisplay*)[_data objectAtIndex:indexPath.row];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@%@: %@", ((display.indent) ? @"-" : @""), display.title, display.details];
-
+    cell.text.text = display.details;
+    CGRect textFrame = cell.text.frame;
+    textFrame.size.height = display.detailsSize.height;
+    cell.text.frame = textFrame;
+    
+    cell.rightAccessoryText = display.duration;
+    cell.leftAccessoryImage = display.icon;
+    cell.indent = display.indent;
+    
     return cell;
 }
 
@@ -154,6 +203,7 @@
             departDisplay.details = [depart objectForKey:@"date"];
             departDisplay.duration = [depart objectForKey:@"time"];
             departDisplay.title = [depart objectForKey:@"type"];
+            departDisplay.icon = [UIImage imageNamed:@"global_bell_icon.png"];
             
             [_data addObject:departDisplay];
             statusCount += 1;
@@ -177,6 +227,7 @@
                     stepDisplay.duration = [step objectForKey:@"duration"];
                     stepDisplay.title = [step objectForKey:@"type"];
                     stepDisplay.displaySize = kTripDetialsDisplaySize;
+                    stepDisplay.icon = [UIImage imageNamed:@"global_bell_icon.png"];
                     
                     [_data addObject:stepDisplay];
                     statusCount += 1;
@@ -220,6 +271,7 @@
             arriveDisplay.details = [arrive objectForKey:@"date"];
             arriveDisplay.duration = [arrive objectForKey:@"time"];
             arriveDisplay.title = [arrive objectForKey:@"type"];
+            arriveDisplay.icon = [UIImage imageNamed:@"global_bell_icon.png"];
             
             [_data addObject:arriveDisplay];
             statusCount += 1;
@@ -228,6 +280,115 @@
     
     if(statusCount < 2) //good
         [_data removeAllObjects];
+}
+
+#pragma mark - EDITING STUFF
+
+- (IBAction)flipLocations:(id)sender
+{
+    NSString* value1 = _startLocation.text;
+    NSString* value2 = _endLocation.text;
+    
+    _startLocation.text = value2;
+    _endLocation.text = value1;
+    
+    [self removeKeyboard:nil];
+}
+
+- (void)addressFieldsValueChanged:(id)sender
+{
+    BOOL canStartPlan = NO;
+    
+    if(_startLocation.text.length > 0 && _endLocation.text.length > 0)
+        canStartPlan = YES;
+    
+    self.navigationItem.rightBarButtonItem.enabled = canStartPlan;
+}
+
+- (void)removeKeyboard:(id)sender
+{
+    [_startLocation resignFirstResponder];
+    [_endLocation resignFirstResponder];
+}
+
+#pragma mark - UITextField delegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return NO;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [self hideDateChangerView:nil];
+}
+
+#pragma mark - ACTIONS
+
+- (void)startPlanningTrip:(id)sender
+{
+    [_data removeAllObjects];
+    _tripDetails = nil;
+    [_tableView reloadData];
+    
+    [self removeKeyboard:nil];
+    [self hideDateChangerView:nil];
+    
+    //verify everything is set
+    if(_startLocation.text.length <= 0)
+        return;
+    if(_endLocation.text.length <= 0)
+        return;
+    
+    MTTripPlanner* tripPlanner = [[MTTripPlanner alloc] init];
+    tripPlanner.startingLocation = _startLocation.text;
+    tripPlanner.endingLocation = _endLocation.text;
+    
+    tripPlanner.departBy = NO;
+    tripPlanner.arriveBy = [NSDate date];
+    
+    [_transpo getTripPlanner:tripPlanner];
+}
+
+- (void)toggleChangeDateViewer:(id)sender
+{
+    CGRect newPositionFrame = _changeDateViewer.frame;
+    
+    if(_changeDateViewer.frame.origin.y >= self.view.frame.size.height) //hidden -> show
+    {
+        newPositionFrame.origin.y = self.view.frame.size.height - newPositionFrame.size.height;
+        [self removeKeyboard:nil];
+    }
+    else newPositionFrame.origin.y = self.view.frame.size.height;
+    
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         _changeDateViewer.frame = newPositionFrame;
+                     }];
+}
+
+- (void)hideDateChangerView:(id)sender
+{
+    CGRect newPositionFrame = _changeDateViewer.frame;
+    newPositionFrame.origin.y = self.view.frame.size.height;
+    
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         _changeDateViewer.frame = newPositionFrame;
+                     }];
+}
+
+- (IBAction)changeTripDate:(id)sender
+{
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.timeZone = [NSTimeZone localTimeZone];
+    dateFormatter.dateStyle = NSDateFormatterLongStyle;
+    
+    NSString* startText = NSLocalizedString(@"PLANTRIPPREFIX", nil);
+    NSString* dateText = [dateFormatter stringFromDate:[_changeDateViewer date]];
+    
+    _tripDateLabel.text = [NSString stringWithFormat:@"%@ %@", startText, dateText];
 }
 
 @end

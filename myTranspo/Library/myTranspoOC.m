@@ -791,6 +791,7 @@
             {
                 [_ocDb addTimes:[NSDictionary dictionary] ToLocalDatabaseForStop:stop AndBus:bus]; //will remove times and not add any
                 [self removeUpdateNotificationForStop:stop AndRoute:bus];
+                [self removeTripNotificationsForStop:stop AndRoute:bus];
             }
             stop.IsUpdating = NO;
             
@@ -963,17 +964,55 @@
     return tripNotifications;
 }
 
-- (BOOL)addTripNotificationForTrip:(MTTrip*)trip DayOfWeek:(NSInteger)dayOfWeek ForStop:(MTStop*)stop AndRoute:(MTBus*)route AtStartDate:(NSDate*)startDate
+- (NSArray*)tripNotificationsForStop:(MTStop*)stop AndRoute:(MTBus*)route
 {
-    if(trip == nil || stop == nil || route == nil || startDate == nil)
-        return NO;
+    UIApplication* application = [UIApplication sharedApplication];
+    
+    NSArray* notifications = [application scheduledLocalNotifications];
+    NSMutableArray* tripNotifications = [[NSMutableArray alloc] init];
+    
+    for(UILocalNotification* notification in notifications)
+    {
+        NSDictionary* userInfo = notification.userInfo;
+        
+        if(userInfo == nil)
+            continue;
+        
+        NSString* notificationType = (NSString*)[userInfo valueForKey:kMTNotificationTypeKey];
+        if(notificationType == nil)
+            continue;
+        
+        if([notificationType isEqualToString:kMTNotificationAlertTypeKey])
+        {
+            NSString* stopId = [userInfo valueForKey:kMTNotificationStopKey];
+            NSString* routeId = [userInfo valueForKey:kMTNotificationBusKey];
+            
+            if(stopId == nil || routeId == nil)
+                continue;
+            
+            if([stopId isEqualToString:stop.StopId]
+               && [routeId isEqualToString:route.BusId])
+            {
+                [tripNotifications addObject:notification];
+            }
+        }
+            
+    }
+    
+    return tripNotifications;
+}
+
+- (UILocalNotification*)addTripNotificationForTrip:(MTTrip*)trip DayOfWeek:(NSInteger)dayOfWeek ForStop:(MTStop*)stop AndRoute:(MTBus*)route AtStartDate:(NSDate*)startDate AndTime:(MTTime*)time
+{
+    if(trip == nil || stop == nil || route == nil || startDate == nil || time == nil)
+        return nil;
     
     if(dayOfWeek < 0 || dayOfWeek > 2)
-        return NO;
+        return nil;
     
     NSString* alertTime = [MTSettings notificationAlertTimeString];
     if(alertTime == nil)
-        return NO;
+        return nil;
         
     UILocalNotification* notification = [[UILocalNotification alloc] init];
     notification.timeZone = [NSTimeZone defaultTimeZone];
@@ -983,19 +1022,20 @@
     
     notification.alertBody = [NSString stringWithFormat:@"%@ @ %d: %@ %@ min"
                               , route.BusNumber
-                              , trip.StopNumber
+                              , stop.StopNumber
                               , NSLocalizedString(@"MTDEF_ALERTTIMEMESSAGE", nil)
                               , alertTime];
     
     NSDictionary *userDic = [NSDictionary dictionaryWithObjectsAndKeys:
                              kMTNotificationAlertTypeKey, kMTNotificationTypeKey,
-                             trip.StopId, kMTNotificationStopKey,
+                             stop.StopId, kMTNotificationStopKey,
                              route.BusId, kMTNotificationBusKey,
-                             [NSString stringWithFormat:@"%d", trip.StopNumber], kMTNotificationStopNumberKey,
+                             [NSString stringWithFormat:@"%d", stop.StopNumber], kMTNotificationStopNumberKey,
                              route.BusNumber, kMTNotificationBusNumberKey,
                              trip.TripId, kMTNotificationTripKey,
-                             [trip.Time getTimeForDisplay], kMTNotificationTripTimeKey,
+                             [time getTimeForDisplay], kMTNotificationTripTimeKey,
                              [NSNumber numberWithInt:[MTSettings notificationAlertTimeInt]], kMTNotificationTripAlertTimeKey,
+                             [NSNumber numberWithInt:dayOfWeek], kMTNotificationDayOfWeek,
                              nil];
     notification.userInfo = userDic;
     notification.repeatInterval = NSWeekCalendarUnit;
@@ -1023,11 +1063,11 @@
 
             fireDate = [[NSCalendar currentCalendar] dateByAddingComponents:dateComp toDate:startDate options:0];
             if(fireDate == nil)
-                return NO;
+                return nil;
             
-            fireDate = [self addTime:[trip.Time getTimeForDisplay] toDate:fireDate withInterval:[MTSettings notificationAlertTimeInt]];
+            fireDate = [self addTime:[time getTimeForDisplay] toDate:fireDate withInterval:[MTSettings notificationAlertTimeInt]];
             if(fireDate == nil)
-                return NO;
+                return nil;
             
             notification.fireDate = fireDate;
             [[UIApplication sharedApplication] scheduleLocalNotification:notification];
@@ -1038,11 +1078,11 @@
         [dateComp setDay:7 - currentWeekday];
         fireDate = [[NSCalendar currentCalendar] dateByAddingComponents:weekdayComponents toDate:startDate options:0];
         if(fireDate == nil)
-            return NO;
+            return nil;
         
-        fireDate = [self addTime:[trip.Time getTimeForDisplay] toDate:fireDate withInterval:[MTSettings notificationAlertTimeInt]];
+        fireDate = [self addTime:[time getTimeForDisplay] toDate:fireDate withInterval:[MTSettings notificationAlertTimeInt]];
         if(fireDate == nil)
-            return NO;
+            return nil;
         
         notification.fireDate = fireDate;        
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
@@ -1053,37 +1093,35 @@
         
         fireDate = [[NSCalendar currentCalendar] dateByAddingComponents:dateComp toDate:startDate options:0];
         if(fireDate == nil)
-            return NO;
+            return nil;
         
-        fireDate = [self addTime:[trip.Time getTimeForDisplay] toDate:fireDate withInterval:[MTSettings notificationAlertTimeInt]];
+        fireDate = [self addTime:[time getTimeForDisplay] toDate:fireDate withInterval:[MTSettings notificationAlertTimeInt]];
         if(fireDate == nil)
-            return NO;
+            return nil;
         
         notification.fireDate = fireDate;        
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
     
-    
-    
-    return YES;
+    return notification;
 }
 
-- (BOOL)tripNotificationMatchTrip:(MTTrip*)trip ForStop:(MTStop*)stop AndRoute:(MTBus*)route AgainstUserInfo:(NSDictionary*)dic
+- (BOOL)tripNotificationMatchForStop:(MTStop*)stop AndRoute:(MTBus*)route AndDayOfWeek:(NSInteger)dayOfWeek AndTime:(NSString*)time AgainstUserInfo:(NSDictionary*)dic
 {
-    NSString* tripId = [dic valueForKey:kMTNotificationTripKey];
+    NSNumber* day = [dic valueForKey:kMTNotificationDayOfWeek];
     NSString* stopId = [dic valueForKey:kMTNotificationStopKey];
     NSString* routeId = [dic valueForKey:kMTNotificationBusKey];
     NSString* stopNumber = [dic valueForKey:kMTNotificationStopNumberKey];
     NSString* tripTime = [dic valueForKey:kMTNotificationTripTimeKey];
     
-    if(tripId == nil || stopId == nil || routeId == nil || stopNumber == nil || tripTime == nil)
+    if(day == nil || stopId == nil || routeId == nil || stopNumber == nil || tripTime == nil)
         return NO;
     
-    if([tripId isEqualToString:trip.TripId]
-       && [stopId isEqualToString:trip.StopId]
+    if([day intValue] == dayOfWeek
+       && [stopId isEqualToString:stop.StopId]
        && [routeId isEqualToString:route.BusId]
-       && [stopNumber isEqualToString:[NSString stringWithFormat:@"%d", trip.StopNumber]]
-       && [tripTime isEqualToString:[trip.Time getTimeForDisplay]])
+       && [stopNumber isEqualToString:[NSString stringWithFormat:@"%d", stop.StopNumber]]
+       && [tripTime isEqualToString:time])
     {
         return YES;
     }
@@ -1091,21 +1129,40 @@
     return NO;
 }
 
-- (BOOL)removeTripNotificationForTrip:(MTTrip*)trip ForStop:(MTStop*)stop AndRoute:(MTBus*)route
+- (BOOL)removeTripNotificationForStop:(MTStop*)stop AndRoute:(MTBus*)route AndDayOfWeek:(NSInteger)dayOfWeek AndTime:(NSString*)time
 {
-    if(trip == nil || stop == nil || route == nil)
+    if(stop == nil || route == nil || time == nil)
         return NO;
     
-    NSArray* notifications = [self tripNotifications];
+    if(dayOfWeek < 0 || dayOfWeek > 2)
+        return NO;
+    
+    NSArray* notifications = [self tripNotificationsForStop:stop AndRoute:route];
     
     for(UILocalNotification* notification in notifications)
     {
         NSDictionary* userDic = notification.userInfo;
-        BOOL status = [self tripNotificationMatchTrip:trip ForStop:stop AndRoute:route AgainstUserInfo:userDic];
+        BOOL status = [self tripNotificationMatchForStop:stop AndRoute:route AndDayOfWeek:dayOfWeek AndTime:time AgainstUserInfo:userDic];
         if(status)
         {
             [[UIApplication sharedApplication] cancelLocalNotification:notification];
         }
+    }
+    
+    return YES;
+}
+
+- (BOOL)removeTripNotificationsForStop:(MTStop*)stop AndRoute:(MTBus*)route
+{
+    if(stop == nil || route == nil)
+        return NO;
+    
+    
+    NSArray* notifications = [self tripNotificationsForStop:stop AndRoute:route];
+    
+    for(UILocalNotification* notification in notifications)
+    {
+       [[UIApplication sharedApplication] cancelLocalNotification:notification];
     }
     
     return YES;

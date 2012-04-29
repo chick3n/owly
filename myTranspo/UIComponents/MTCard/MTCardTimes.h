@@ -9,18 +9,29 @@
 #import <UIKit/UIKit.h>
 #import "MTCardTimesRowCell.h"
 #import "MTCellAlert.h"
+#import "MTTime.h"
 
 #define kCardTimesHeaderHeight 23
 
-@interface MTCardTimes : UITableView <UITableViewDataSource, UITableViewDelegate>
+@protocol CardTimesDelegate <NSObject>
 
-@property (nonatomic, strong)     MTCellAlert*        cellAlert;
-@property (nonatomic, strong)     NSArray*            timesWeekday;
-@property (nonatomic, strong)     NSArray*            timesSaturday;
-@property (nonatomic, strong)     NSArray*            timesSunday;
-@property (nonatomic, weak)       id<CardTimesRowCellDelegate> cellDelegate;
+@optional
+- (void)cardTimes:(id)owner AddAlertForTime:(MTTime*)time;
+
+@end
+
+@interface MTCardTimes : UITableView <UITableViewDataSource, UITableViewDelegate, CellAlertDelegate, CardTimesRowCellDelegate>
+
+@property (nonatomic, strong)       MTCellAlert*        cellAlert;
+@property (nonatomic, weak)         NSArray*            timesWeekday;
+@property (nonatomic, weak)         NSArray*            timesSaturday;
+@property (nonatomic, weak)         NSArray*            timesSunday;
+@property (nonatomic, weak)         NSArray*            alertNotifications;
+
+@property (nonatomic, weak)         id<CardTimesDelegate>        cellAlertDelegate;
 
 - (float)heightForTablesData;
-- (void)displayCellAlert:(NSString*)headingForAlert Row:(int)row Section:(int)section Center:(int)center;
+- (void)displayCellAlert:(NSString*)headingForAlert ForCell:(MTCardCellButton*)cell;
+- (void)hideAlert;
 
 @end

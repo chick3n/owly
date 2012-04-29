@@ -287,6 +287,7 @@
     
     if(![manager fileExistsAtPath:dbPath] || [settings currentDatabaseNeedsUpdate])
     {
+        NSLog(@"File Exists: %d OR settings need update: %d", [manager fileExistsAtPath:dbPath], [settings currentDatabaseNeedsUpdate]);
         NSLog(@"ABOUT TO REPLACE DATABASE");
         NSString* sourcePath = [[NSBundle mainBundle] pathForResource:@"OCTranspo.sqlite" ofType:nil];
         

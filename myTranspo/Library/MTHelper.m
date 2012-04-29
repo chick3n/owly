@@ -169,12 +169,12 @@
     NSDateComponents* day1 = [[NSCalendar currentCalendar] components:components fromDate:date];
     NSDateComponents* day2 = [[NSCalendar currentCalendar] components:components fromDate:today];
     
-    day1.hour = 04; //this is OC midngiht time, modify this when using other cities
-    day1.minute = 00;
+    day1.hour = 03; //this is OC midngiht time, modify this when using other cities
+    day1.minute = 30;
     day1.second = 00;
     
-    day2.hour = 04;
-    day2.minute = 00;
+    day2.hour = 03;
+    day2.minute = 30;
     day2.second = 00;
     
     NSDate *newToday = [[NSCalendar currentCalendar] dateFromComponents:day2];

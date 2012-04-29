@@ -693,12 +693,15 @@
             
             switch (sqlite3_column_int(cmpStmt, 0)) {
                 case 0:
+                    time.dayOfWeek = 0;
                     [weekdayPointer addObject:time];
                     break;
                 case 1:
+                    time.dayOfWeek = 1;
                     [saturdayPointer addObject:time];
                     break;
                 case 2:
+                    time.dayOfWeek = 2;
                     [sundayPointer addObject:time];
                     break;
             }            

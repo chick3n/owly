@@ -11,6 +11,7 @@
 @implementation MTCardCellButton
 @synthesize extraValue1 =           _extraValue1;
 @synthesize extraValue2 =           _extraValue2;
+@synthesize reference =             _reference;
 
 - (id)initWithFrame:(CGRect)frame
 {

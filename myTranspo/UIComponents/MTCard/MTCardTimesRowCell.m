@@ -11,6 +11,7 @@
 @interface MTCardTimesRowCell ()
 - (void)initializeUI;
 - (void)cellClicked:(id)sender;
+- (void)updateCellForAlert:(BOOL)alert AndRow:(MTCardCellButton*)row;
 @end
 
 @implementation MTCardTimesRowCell
@@ -89,11 +90,11 @@
     [self.contentView addSubview:_message];
 }
 
-- (void)updateRowLabelsRow1:(NSString*)row1 Row1Seq:(int)seq1
-                       Row2:(NSString*)row2 Row2Seq:(int)seq2
-                       Row3:(NSString*)row3 Row3Seq:(int)seq3
-                       Row4:(NSString*)row4 Row4Seq:(int)seq4
-                       Row5:(NSString*)row5 Row5Seq:(int)seq5 
+- (void)updateRowLabelsRow1:(MTTime*)row1 Row1Seq:(int)seq1
+                       Row2:(MTTime*)row2 Row2Seq:(int)seq2
+                       Row3:(MTTime*)row3 Row3Seq:(int)seq3
+                       Row4:(MTTime*)row4 Row4Seq:(int)seq4
+                       Row5:(MTTime*)row5 Row5Seq:(int)seq5 
                     Section:(int)section 
                         Row:(int)row
 {
@@ -124,18 +125,19 @@
         _row5.hidden = NO;
     
     //NSLog(@"%@ %@ %@ %@ %@", row1, row2, row3, row4, row5);
+    NSString *row1Display, *row2Display, *row3Display, *row4Display, *row5Display;
     
-    if(row1 == nil) row1 = @"", seq1 = 0;
-    if(row2 == nil) row2 = @"", seq2 = 0;
-    if(row3 == nil) row3 = @"", seq3 = 0;
-    if(row4 == nil) row4 = @"", seq4 = 0;
-    if(row5 == nil) row5 = @"", seq5 = 0;
+    if(row1 == nil) row1Display = @"", seq1 = 0; else row1Display = [row1 getTimeForDisplay];
+    if(row2 == nil) row2Display = @"", seq2 = 0; else row2Display = [row2 getTimeForDisplay];
+    if(row3 == nil) row3Display = @"", seq3 = 0; else row3Display = [row3 getTimeForDisplay];
+    if(row4 == nil) row4Display = @"", seq4 = 0; else row4Display = [row4 getTimeForDisplay];
+    if(row5 == nil) row5Display = @"", seq5 = 0; else row5Display = [row5 getTimeForDisplay];
     
-    [_row1 setTitle:row1 forState:_row1.state];
-    [_row2 setTitle:row2 forState:_row2.state];
-    [_row3 setTitle:row3 forState:_row3.state];
-    [_row4 setTitle:row4 forState:_row4.state];
-    [_row5 setTitle:row5 forState:_row5.state];
+    [_row1 setTitle:row1Display forState:UIControlStateNormal];
+    [_row2 setTitle:row2Display forState:UIControlStateNormal];
+    [_row3 setTitle:row3Display forState:UIControlStateNormal];
+    [_row4 setTitle:row4Display forState:UIControlStateNormal];
+    [_row5 setTitle:row5Display forState:UIControlStateNormal];
     
     _row1.tag = seq1;
     _row2.tag = seq2;
@@ -143,11 +145,31 @@
     _row4.tag = seq4;
     _row5.tag = seq5;
     
-    _row1.extraValue1 = section, _row1.extraValue2 = row;
-    _row2.extraValue1 = section, _row2.extraValue2 = row;
-    _row3.extraValue1 = section, _row3.extraValue2 = row;
-    _row4.extraValue1 = section, _row4.extraValue2 = row;
-    _row5.extraValue1 = section, _row5.extraValue2 = row;
+    _row1.extraValue1 = section, _row1.extraValue2 = row, _row1.reference = row1;
+    _row2.extraValue1 = section, _row2.extraValue2 = row, _row2.reference = row2;
+    _row3.extraValue1 = section, _row3.extraValue2 = row, _row3.reference = row3;
+    _row4.extraValue1 = section, _row4.extraValue2 = row, _row4.reference = row4;
+    _row5.extraValue1 = section, _row5.extraValue2 = row, _row5.reference = row5;
+    
+    [self updateCellForAlert:(row1.Alert != nil) ? YES : NO AndRow:_row1];
+    [self updateCellForAlert:(row2.Alert != nil) ? YES : NO AndRow:_row2];
+    [self updateCellForAlert:(row3.Alert != nil) ? YES : NO AndRow:_row3];
+    [self updateCellForAlert:(row4.Alert != nil) ? YES : NO AndRow:_row4];
+    [self updateCellForAlert:(row5.Alert != nil) ? YES : NO AndRow:_row5];
+}
+
+- (void)updateCellForAlert:(BOOL)alert AndRow:(MTCardCellButton*)row
+{
+    
+    if(alert == YES)
+    {
+        row.selected = YES;
+        row.backgroundColor = [UIColor blueColor];
+    }
+    else {
+        row.selected = NO;
+        row.backgroundColor = [UIColor clearColor];
+    }
 }
 
 - (void)updateRowBackgroundColor:(BOOL)alternate

@@ -111,5 +111,6 @@ static NSString* kMTNotificationTripKey = @"MTNotificationTrip";
 static NSString* kMTNotificationTripTimeKey = @"MTNotificationTripTime";
 
 static NSString* kMTNotificationTripAlertTimeKey = @"MTNotificationTripAlertTimeKey";
+static NSString* kMTNotificationDayOfWeek = @"MTNotificationDayOfWeek";
 
 #endif

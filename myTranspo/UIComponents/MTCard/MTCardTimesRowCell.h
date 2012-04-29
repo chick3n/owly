@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MTCardCellButton.h"
+#import "MTTime.h"
 
 #define kCardRowCellHeightLong 28
 #define kCardRowCellWidthLong 64 //61
@@ -34,11 +35,11 @@
 
 @property (nonatomic, weak) id<CardTimesRowCellDelegate> delegate;
 
-- (void)updateRowLabelsRow1:(NSString*)row1 Row1Seq:(int)seq1
-                       Row2:(NSString*)row2 Row2Seq:(int)seq2
-                       Row3:(NSString*)row3 Row3Seq:(int)seq3
-                       Row4:(NSString*)row4 Row4Seq:(int)seq4
-                       Row5:(NSString*)row5 Row5Seq:(int)seq5 
+- (void)updateRowLabelsRow1:(MTTime*)row1 Row1Seq:(int)seq1
+                       Row2:(MTTime*)row2 Row2Seq:(int)seq2
+                       Row3:(MTTime*)row3 Row3Seq:(int)seq3
+                       Row4:(MTTime*)row4 Row4Seq:(int)seq4
+                       Row5:(MTTime*)row5 Row5Seq:(int)seq5 
                     Section:(int)section
                         Row:(int)row;
 - (void)updateRowBackgroundColor:(BOOL)alternate;

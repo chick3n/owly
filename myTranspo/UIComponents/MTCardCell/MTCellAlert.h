@@ -14,6 +14,12 @@
 #define kCellAlertHeightMax 30
 #define kCellAlertIndent 4
 
+
+@protocol CellAlertDelegate <NSObject>
+@required
+- (void)cellAlertAccessoryViewClicked:(id)cellAlert;
+@end
+
 @interface MTCellAlert : UIView
 {
     CGPoint _staticPos;
@@ -23,9 +29,13 @@
 @property (nonatomic, strong)   UILabel     *alert;
 @property (nonatomic)           float       runForLength;
 @property (nonatomic, weak)     id          refrenceObject;
+@property (nonatomic, strong)   UIButton    *accessoryView;
+
+@property (nonatomic, weak)     id<CellAlertDelegate>          delegate;
 
 - (id)init;
 - (void)displayAlert:(NSString*)alertText AtPos:(CGPoint)pos ConstrainedTo:(CGSize)size UpsideDown:(BOOL)bottom;
+- (void)toggleAccessoryButton:(BOOL)toggle;
 - (void)hideAlertWithSelfInvoke:(BOOL)invoke;
 - (void)adjustCoordinates:(CGPoint)coords;
 

@@ -21,6 +21,8 @@
 - (void)resizeTableAndMap;
 - (void)resetTrip;
 - (void)goBack:(id)sender;
+- (void)changeTableViews:(id)sender;
+- (void)parseAlertsNotifications;
 @end
 
 @implementation TripViewController
@@ -67,7 +69,8 @@
             _timesDisplayTimes = [_bus getWeekdayTimesForDisplay];
             break;
     }
-    _tripNotifications = [_transpo tripNotifications];
+    _tripNotifications = [_transpo tripNotificationsForStop:_stop AndRoute:_bus];//[_transpo tripNotifications];
+    [self parseAlertsNotifications];
     
     CGRect frame = _timesPickerView.frame;
     frame.origin.y = _timesPickerView.frame.origin.y + _timesPickerView.frame.size.height;
@@ -81,16 +84,22 @@
     CGRect timeTableFrame = _tableView.frame;
     timeTableFrame.origin.x = self.view.frame.origin.x + self.view.frame.size.width;
     _timeTableFrame = timeTableFrame.origin;
-    _timeTable = [[MTCardTimes alloc] initWithFrame:timeTableFrame style:UITableViewStylePlain];
+    //_timeTable = [[MTCardTimes alloc] initWithFrame:timeTableFrame style:UITableViewStylePlain];
     [_timeTable setTableHeaderView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 0)]];
     [_timeTable setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 0)]];
     [_timeTable addSubview:_backgroundImage2];
-    _timeTable.timesWeekday = [_bus getWeekdayTimesForDisplay];
-    _timeTable.timesSaturday = [_bus getSaturdayTimesForDisplay];
-    _timeTable.timesSunday = [_bus getSundayTimesForDisplay];
-    _timeTable.cellDelegate = self;
-    [self.view addSubview:_timeTable];
+    _timeTable.timesWeekday = _bus.Times.Times; //[_bus getWeekdayTimesForDisplay];
+    _timeTable.timesSaturday = _bus.Times.TimesSat; //[_bus getSaturdayTimesForDisplay];
+    _timeTable.timesSunday = _bus.Times.TimesSun; //[_bus getSundayTimesForDisplay];
+    _timeTable.alertNotifications = _tripNotifications;
+    _timeTable.cellAlertDelegate = self;
+    //[self.view addSubview:_timeTable];
     [_timeTable reloadData];
+#if 1
+    UISwipeGestureRecognizer* gesture2 = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
+    gesture2.direction = UISwipeGestureRecognizerDirectionRight;
+    [_timeTable addGestureRecognizer:gesture2];
+#endif
     
 	//setup tableview
 	[self.tableView setDelaysContentTouches:NO];
@@ -104,7 +113,7 @@
     tableViewFrame.origin.y = _mapView.frame.origin.y + _mapView.frame.size.height;
     self.tableView.frame = tableViewFrame;
     _tripFrame = tableViewFrame.origin;
-#if 0
+#if 1
     UISwipeGestureRecognizer *gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
     gesture.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.tableView addGestureRecognizer:gesture];
@@ -137,7 +146,8 @@
     
     UIButton* navButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [navButton setImage:[UIImage imageNamed:@"global_time_btn.png"] forState:UIControlStateNormal];
-    [navButton addTarget:self action:@selector(changeTripScheduleTime:) forControlEvents:UIControlEventTouchUpInside];
+    //[navButton addTarget:self action:@selector(changeTripScheduleTime:) forControlEvents:UIControlEventTouchUpInside];
+    [navButton addTarget:self action:@selector(changeTableViews:) forControlEvents:UIControlEventTouchUpInside];
     [navButton setFrame:CGRectMake(0, 0, 41, 29)];
     _timesChangeButton = [[UIBarButtonItem alloc] initWithCustomView:navButton];
     self.navigationItem.rightBarButtonItem = _timesChangeButton;
@@ -156,7 +166,6 @@
     
     //mapview
     _mapView.delegate = self;
-    
 }
 
 - (void)viewDidUnload
@@ -298,9 +307,9 @@ numberOfRowsInComponent:(NSInteger)component;
     _pickerViewSelectedRow = -1; //never do this again, as we have run it now once
 }
 
-#pragma mark - UIPickerView Helpers
+#pragma mark - TABLE VIEWS ANIMATIONS
 
-- (void)changeTripScheduleTime:(id)sender
+- (void)changeTableViews:(id)sender
 {
     if(_timeTable.frame.origin.x >= self.view.frame.size.width)
     {
@@ -346,7 +355,12 @@ numberOfRowsInComponent:(NSInteger)component;
     }
     
     return;
-    
+}
+
+#pragma mark - UIPickerView Helpers
+
+- (void)changeTripScheduleTime:(id)sender
+{
     //slide frame up
     CGRect frame = _timesPickerView.frame;
     frame.origin.y = frame.origin.y - frame.size.height;
@@ -525,22 +539,26 @@ numberOfRowsInComponent:(NSInteger)component;
 
 - (void)mtTripCell:(id)tripCell AlertAddedForTrip:(MTTrip *)trip
 {
+#if 0
     if([_transpo addTripNotificationForTrip:trip DayOfWeek:[_timesPickerView selectedRowInComponent:0] ForStop:_stop AndRoute:_stop.Bus AtStartDate:_chosenDate])
     {
         ((MTTripCell*)tripCell).alertSelected = YES;
         _tripNotifications = nil;
         _tripNotifications = [_transpo tripNotifications];
     }
+#endif
 }
 
 - (void)mtTripCell:(id)tripCell AlertRemovedForTrip:(MTTrip *)trip
 {
+#if 0
     if([_transpo removeTripNotificationForTrip:trip ForStop:_stop AndRoute:_stop.Bus])
     {
         ((MTTripCell*)tripCell).alertSelected = NO;
         _tripNotifications = nil;
         _tripNotifications = [_transpo tripNotifications];
     }
+#endif
 }
 
 
@@ -672,37 +690,20 @@ numberOfRowsInComponent:(NSInteger)component;
 
 #pragma mark - MTTrip Cell Stuff
 
-- (void)didSwipe:(UIGestureRecognizer*)gestureRecognizer
+- (void)didSwipe:(UISwipeGestureRecognizer*)gestureRecognizer
 {
     if(gestureRecognizer.state == UIGestureRecognizerStateEnded)
     {
-        CGPoint swipeLocation = [gestureRecognizer locationInView:self.tableView];
-        NSIndexPath* swipedIndexPath = [self.tableView indexPathForRowAtPoint:swipeLocation];
-        if(swipedIndexPath != nil)
+        if(gestureRecognizer.direction == UISwipeGestureRecognizerDirectionRight) //back to trip table
         {
-            MTTripCell* cell = (MTTripCell*)[self.tableView cellForRowAtIndexPath:swipedIndexPath];
-            if(cell)
+            if(_tableView.frame.origin.x < 0)
+                [self changeTableViews:nil];
+        }
+        else if(gestureRecognizer.direction == UISwipeGestureRecognizerDirectionLeft) //back to timetable
+        {
+            if(_timeTable.frame.origin.x >= self.view.frame.size.width)
             {
-                //UIView* detailsView = [cell viewWithTag:kMTTRIPDETAILSVIEWTAG];
-                if(cell.trip == nil)
-                    return;
-                
-                if(cell.trip.TripId == nil)
-                    return;
-                
-                //determine if we have this already set
-                BOOL status = NO;
-                for(UILocalNotification* notification in _tripNotifications)
-                {
-                    if([_transpo tripNotificationMatchTrip:cell.trip ForStop:_stop AndRoute:_stop.Bus AgainstUserInfo:notification.userInfo])
-                    {
-                        status = YES;
-                        break;
-                    }
-                }
-                
-                cell.alertSelected = status;
-                [cell toggleDisplayViews];
+                [self changeTableViews:nil];
             }
         }
     }
@@ -963,29 +964,83 @@ numberOfRowsInComponent:(NSInteger)component;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark - CARD CELL DELEGATE
 
-- (void)cardTimesRow:(id)owner ClickedOnCell:(MTCardCellButton *)cell
+#pragma mark - ALERTS / NOTIFICAITONS
+
+- (void)parseAlertsNotifications
 {
-    MTTime* time = nil;
-    
-    if(cell.tag < 0)
+    if(_tripNotifications == nil)
         return;
     
-    if(cell.extraValue1 == 0 && _bus.Times.Times.count > cell.tag) //weekday
-        time = [_bus.Times.Times objectAtIndex:cell.tag];
-    else if(cell.extraValue1 == 1 && _bus.Times.TimesSat.count > cell.tag) //weekday
-        time = [_bus.Times.TimesSat objectAtIndex:cell.tag];
-    else if(cell.extraValue1 == 2 && _bus.Times.TimesSun.count > cell.tag) //weekday
-        time = [_bus.Times.TimesSun objectAtIndex:cell.tag];
-    
-    if(time == nil)
-        return;
-    
-    NSLog(@"Show Heading for Time: %@", [time getTimeForDisplay]);
-    
-    //display notice
-    [_timeTable displayCellAlert:time.EndStopHeader Row:cell.extraValue2 Section:cell.extraValue1 Center:cell.center.x];
+    for(UILocalNotification* notification in _tripNotifications)
+    {
+        NSDictionary* userInfo = notification.userInfo;
+        
+        NSNumber* dayOfWeek = [userInfo objectForKey:kMTNotificationDayOfWeek];
+        NSString* stopId = [userInfo objectForKey:kMTNotificationStopKey];
+        NSString* routeId = [userInfo objectForKey:kMTNotificationBusKey];
+        NSString* timeValue = [userInfo objectForKey:kMTNotificationTripTimeKey];
+        
+        if(dayOfWeek == nil || stopId == nil || routeId == nil || timeValue == nil)
+            continue;
+        
+        if(![stopId isEqualToString:_stop.StopId])
+            continue;
+        
+        if(![routeId isEqualToString:_bus.BusId])
+            continue;
+        
+        NSArray* times = nil;
+        if([dayOfWeek intValue] == 2) //sunday
+            times = _bus.Times.TimesSun;
+        else if([dayOfWeek intValue] == 1) //saturday
+            times = _bus.Times.TimesSat;
+        else
+            times = _bus.Times.Times;
+        
+        if(times == nil)
+            continue;
+        
+        for(MTTime* time in times)
+        {
+            if([timeValue isEqualToString:[time getTimeForDisplay]])
+            {
+                time.Alert = notification;
+                MTLog(@"Found Alert for: %@ %@ %@", _stop.StopId, _bus.BusId, timeValue);
+            }
+        }
+    }
+}
+
+- (void)cardTimes:(id)owner AddAlertForTime:(MTTime *)time
+{
+    if(time != nil)
+    {
+        NSLog(@"Add Alert for TIME: %@ Has Alert: %d", [time getTimeForDisplay], ((time.Alert == nil) ? 0 : 1));
+        //set time to show we have added alert
+        if(time.Alert == nil)
+        {
+            UILocalNotification* newAlert = [_transpo addTripNotificationForTrip:_currentTrip DayOfWeek:time.dayOfWeek ForStop:_stop AndRoute:_stop.Bus AtStartDate:_chosenDate AndTime:time];
+            if(newAlert != nil)
+            {
+//                time.Alert = newAlert;
+                _tripNotifications = nil;
+                _tripNotifications = [_transpo tripNotificationsForStop:_stop AndRoute:_bus];
+                [self parseAlertsNotifications];
+            }
+        }
+        else {
+            BOOL status = [_transpo removeTripNotificationForStop:_stop
+                                                         AndRoute:_bus
+                                                     AndDayOfWeek:time.dayOfWeek
+                                                          AndTime:[time getTimeForDisplay]];
+            if(status)
+                time.Alert = nil;
+        }
+        
+        [_timeTable hideAlert];
+        [_timeTable reloadData];
+    }
 }
 
 @end

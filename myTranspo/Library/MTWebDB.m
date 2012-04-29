@@ -428,24 +428,26 @@
         return NO;
     
     NSMutableArray *dayPointer = nil;
+    int dayOfWeek = 0;
     for(NSString *day in [json allKeys])
     {
         if([day isEqualToString:@"sunday"])
-            dayPointer = bus.Times.TimesSun;
+            dayPointer = bus.Times.TimesSun, dayOfWeek = 2;
         else if([day isEqualToString:@"saturday"])
-            dayPointer = bus.Times.TimesSat;
-        else dayPointer = bus.Times.Times;
+            dayPointer = bus.Times.TimesSat, dayOfWeek = 1;
+        else dayPointer = bus.Times.Times, dayOfWeek = 0;
         
         for(NSDictionary *dic in [json objectForKey:day])
         {
             MTTime *time = [[MTTime alloc] init];
             
-            time.TripId = [dic valueForKey:@"trip_id"];
-            time.Time = [dic valueForKey:@"arrival_time"];
-            time.StopId = [dic valueForKey:@"stop_id"];
+            time.TripId = ([dic objectForKey:@"trip_id"] == [NSNull null]) ? @"" : [dic valueForKey:@"trip_id"];
+            time.Time = ([dic objectForKey:@"arrival_time"] == [NSNull null]) ? @"" : [dic valueForKey:@"arrival_time"];
+            time.StopId = ([dic objectForKey:@"stop_id"] == [NSNull null]) ? @"" : [dic valueForKey:@"stop_id"];
             time.StopSequence = [[dic valueForKey:@"stop_sequence"] intValue];
-            time.EndStopHeader = [dic valueForKey:@"end_stop"];
-
+            time.EndStopHeader = ([dic objectForKey:@"end_stop"] == [NSNull null]) ? @"" : [dic valueForKey:@"end_stop"];
+            time.dayOfWeek = dayOfWeek;
+            
             time.IsLive = NO;
             [dayPointer addObject:time];
         }
@@ -708,7 +710,9 @@
 		MTLog(@"create file. %@", [error localizedFailureReason]);
 		return NO;
 	}
-    NSURL* postUrl = [NSURL URLWithString:@"http://192.168.0.38/oc/oc_tripPlanner.php"];
+    //http://www.vicestudios.com/apps/owly/oc/oc_tripPlanner.php
+    //http://192.168.0.38/oc/oc_tripPlanner.php
+    NSURL* postUrl = [NSURL URLWithString:@"http://www.vicestudios.com/apps/owly/oc/oc_tripPlanner.php"];
     
 #endif
     

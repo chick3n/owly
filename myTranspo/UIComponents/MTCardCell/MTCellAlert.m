@@ -11,6 +11,7 @@
 @interface MTCellAlert ()
 - (void)initializeUI;
 - (void)hideAlert;
+- (void)accessoryViewClicked:(id)sender;
 @end
 
 @implementation MTCellAlert
@@ -18,6 +19,25 @@
 @synthesize hasButtons          = _hasButtons;
 @synthesize runForLength        = _runForLength;
 @synthesize refrenceObject      = _refrenceObject;
+@synthesize accessoryView       = _accessoryView;
+@synthesize delegate            = _delegate;
+
+- (void)setAccessoryView:(UIButton *)accessoryView
+{
+    if(_accessoryView != nil)
+    {
+        [_accessoryView removeTarget:self action:@selector(accessoryViewClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [_accessoryView removeFromSuperview];
+    }
+    
+    _accessoryView = accessoryView;
+    if(_accessoryView == nil)
+        return;
+    
+    _accessoryView.frame = CGRectMake(0, 0, 30, kCellAlertHeightMax);
+    [_accessoryView addTarget:self action:@selector(accessoryViewClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_accessoryView];
+}
 
 - (id)init
 {
@@ -83,6 +103,14 @@
     
     alertFrame.size.width = alertTextSize.width;
     viewFrame.size.width = alertTextSize.width + (kCellAlertIndent * 2);
+    
+    if(_accessoryView != nil)
+    {
+        viewFrame.size.width += _accessoryView.frame.size.width;
+        CGRect accessoryFrame = _accessoryView.frame;
+        accessoryFrame.origin.x = viewFrame.size.width - accessoryFrame.size.width;
+        _accessoryView.frame = accessoryFrame;
+    }
     
     viewFrame.origin.x = pos.x - (viewFrame.size.width / 2);
     if(bottom == NO)
@@ -159,6 +187,21 @@
     //frame.origin.x += newPos - frame.origin.x;
     //frame.origin.x = coords.x - _staticPos.x;
     self.frame = frame;
+}
+
+- (void)toggleAccessoryButton:(BOOL)toggle
+{
+    if(_accessoryView != nil)
+    {
+        _accessoryView.selected = toggle;
+    }
+}
+
+- (void)accessoryViewClicked:(id)sender
+{
+    NSLog(@"Click accessory view");
+    if([_delegate conformsToProtocol:@protocol(CellAlertDelegate)])
+        [_delegate cellAlertAccessoryViewClicked:self];
 }
 
 @end

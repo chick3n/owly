@@ -145,11 +145,13 @@
 - (BOOL)removeUpdateNotificationForStop:(MTStop*)stop AndRoute:(MTBus*)route;
 - (BOOL)addUpdateNotificationForStop:(MTStop*)stop AndRoute:(MTBus*)route OnDate:(NSDate*)date;
 - (BOOL)updateUpdateNotificationsOnLanguageChange;
-- (BOOL)addTripNotificationForTrip:(MTTrip*)trip DayOfWeek:(NSInteger)dayOfWeek ForStop:(MTStop*)stop AndRoute:(MTBus*)route AtStartDate:(NSDate*)startDate;
-- (BOOL)removeTripNotificationForTrip:(MTTrip*)trip ForStop:(MTStop*)stop AndRoute:(MTBus*)route;
-- (BOOL)tripNotificationMatchTrip:(MTTrip*)trip ForStop:(MTStop*)stop AndRoute:(MTBus*)route AgainstUserInfo:(NSDictionary*)dic;
+- (UILocalNotification*)addTripNotificationForTrip:(MTTrip*)trip DayOfWeek:(NSInteger)dayOfWeek ForStop:(MTStop*)stop AndRoute:(MTBus*)route AtStartDate:(NSDate*)startDate AndTime:(MTTime*)time;
+- (BOOL)removeTripNotificationForStop:(MTStop*)stop AndRoute:(MTBus*)route AndDayOfWeek:(NSInteger)dayOfWeek AndTime:(NSString*)time;
+- (BOOL)tripNotificationMatchForStop:(MTStop*)stop AndRoute:(MTBus*)route AndDayOfWeek:(NSInteger)dayOfWeek AndTime:(NSString*)time AgainstUserInfo:(NSDictionary*)dic;
 - (NSArray*)tripNotifications;
+- (NSArray*)tripNotificationsForStop:(MTStop*)stop AndRoute:(MTBus*)route;
 - (BOOL)removeAllTripNotifications;
+- (BOOL)removeTripNotificationsForStop:(MTStop*)stop AndRoute:(MTBus*)route;
 - (BOOL)removeNotifications:(NSArray*)notifications;
 
 //tripplanner

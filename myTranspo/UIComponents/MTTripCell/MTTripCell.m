@@ -40,14 +40,6 @@
     // Configure the view for the selected state
 }
 
-- (void)setAlertSelected:(BOOL)alertSelected
-{
-    if(alertSelected)
-        _alertImage.alpha = 1.0;
-    else _alertImage.alpha = 0.5;
-    _alertSelected = alertSelected;
-}
-
 - (void)setUseForTrain:(BOOL)useForTrain
 {
     _useForTrain = useForTrain;
@@ -60,53 +52,6 @@
 - (void)initializeUI
 {
     
-}
-
-- (void)toggleDisplayViews
-{
-    if(_alertImage.hidden)
-    {
-        CGRect alertImageFrame = _alertImage.frame;
-        CGRect origAlertImageFrame = _alertImage.frame;
-        CGRect newStopFrame = _stopName.frame;
-        
-        alertImageFrame.origin.x = self.frame.size.width;
-        newStopFrame.size.width = newStopFrame.size.width - origAlertImageFrame.size.width;
-        
-        _alertImage.frame = alertImageFrame;
-        _alertImage.hidden = NO;
-        
-        [UIView animateWithDuration:0.25
-                         animations:^(void){
-                             _alertImage.frame = origAlertImageFrame;
-                             _stopName.frame = newStopFrame;
-                             //_tripTime.alpha = 0.0;
-                         }
-                         completion:^(BOOL finished){
-                             //_tripTime.hidden = YES;
-                         }];
-    }
-    else
-    {
-        CGRect alertImageFrame = _alertImage.frame;
-        CGRect origAlertImageFrame = _alertImage.frame;
-        CGRect newStopFrame = _stopName.frame;
-        
-        alertImageFrame.origin.x = self.frame.size.width;
-        newStopFrame.size.width = newStopFrame.size.width + origAlertImageFrame.size.width;
-        //_tripTime.hidden = NO;
-        
-        [UIView animateWithDuration:0.25
-                         animations:^(void){
-                             _alertImage.frame = alertImageFrame;
-                             _stopName.frame = newStopFrame;
-                             //_tripTime.alpha = 1.0;
-                         }
-                         completion:^(BOOL finished){
-                             _alertImage.hidden = YES;
-                             _alertImage.frame = origAlertImageFrame;
-                         }];
-    }
 }
 
 - (void)updateCellBackgroundWithStopSequence:(MTTripSequence)sequence

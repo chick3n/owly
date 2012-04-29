@@ -11,7 +11,6 @@
 			<string key="NS.object.0">1181</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
-			<string>IBUIButton</string>
 			<string>IBUITableViewCell</string>
 			<string>IBUIImageView</string>
 			<string>IBUIView</string>
@@ -80,7 +79,7 @@
 										<string key="NSFrame">{{48, 12}, {206, 21}}</string>
 										<reference key="NSSuperview" ref="782146381"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="981425200"/>
+										<reference key="NSNextKeyView"/>
 										<object class="NSColor" key="IBUIBackgroundColor" id="984221421">
 											<int key="NSColorSpace">3</int>
 											<bytes key="NSWhite">MCAwAA</bytes>
@@ -144,7 +143,7 @@
 											<bytes key="NSRGB">MC42MTU2ODYyNzQ1IDAuNjE1Njg2Mjc0NSAwLjYxNTY4NjI3NDUAA</bytes>
 										</object>
 										<nil key="IBUIHighlightedColor"/>
-										<object class="NSColor" key="IBUIShadowColor" id="160411285">
+										<object class="NSColor" key="IBUIShadowColor">
 											<int key="NSColorSpace">3</int>
 											<bytes key="NSWhite">MQA</bytes>
 										</object>
@@ -169,40 +168,6 @@
 										<object class="NSCustomResource" key="IBUIImage">
 											<string key="NSClassName">NSImage</string>
 											<string key="NSResourceName">route_cell_bus.png</string>
-										</object>
-									</object>
-									<object class="IBUIButton" id="981425200">
-										<reference key="NSNextResponder" ref="782146381"/>
-										<int key="NSvFlags">-2147483356</int>
-										<string key="NSFrame">{{236, 1}, {31, 41}}</string>
-										<reference key="NSSuperview" ref="782146381"/>
-										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="328977162"/>
-										<bool key="IBUIOpaque">NO</bool>
-										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-										<int key="IBUIContentHorizontalAlignment">0</int>
-										<int key="IBUIContentVerticalAlignment">0</int>
-										<reference key="IBUIHighlightedTitleColor" ref="160411285"/>
-										<object class="NSColor" key="IBUINormalTitleColor">
-											<int key="NSColorSpace">1</int>
-											<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
-										</object>
-										<object class="NSColor" key="IBUINormalTitleShadowColor">
-											<int key="NSColorSpace">3</int>
-											<bytes key="NSWhite">MC41AA</bytes>
-										</object>
-										<object class="NSCustomResource" key="IBUINormalImage">
-											<string key="NSClassName">NSImage</string>
-											<string key="NSResourceName">global_bell_icon.png</string>
-										</object>
-										<object class="IBUIFontDescription" key="IBUIFontDescription">
-											<int key="type">2</int>
-											<double key="pointSize">15</double>
-										</object>
-										<object class="NSFont" key="IBUIFont">
-											<string key="NSName">Helvetica-Bold</string>
-											<double key="NSSize">15</double>
-											<int key="NSfFlags">16</int>
 										</object>
 									</object>
 								</array>
@@ -290,23 +255,6 @@
 					</object>
 					<int key="connectionID">51</int>
 				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">_alertImage</string>
-						<reference key="source" ref="400608726"/>
-						<reference key="destination" ref="981425200"/>
-					</object>
-					<int key="connectionID">74</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">alertButtonClicked:</string>
-						<reference key="source" ref="981425200"/>
-						<reference key="destination" ref="400608726"/>
-						<int key="IBEventType">7</int>
-					</object>
-					<int key="connectionID">75</int>
-				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -344,7 +292,6 @@
 							<reference ref="420324011"/>
 							<reference ref="446250092"/>
 							<reference ref="873894482"/>
-							<reference ref="981425200"/>
 							<reference ref="754268814"/>
 						</array>
 						<reference key="parent" ref="400608726"/>
@@ -381,12 +328,6 @@
 						<string key="objectName">statusImage</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">73</int>
-						<reference key="object" ref="981425200"/>
-						<reference key="parent" ref="782146381"/>
-						<string key="objectName">alertButton</string>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">76</int>
 						<reference key="object" ref="754268814"/>
 						<reference key="parent" ref="782146381"/>
@@ -405,7 +346,6 @@
 				<string key="6.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="65.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="7.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="73.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="76.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>
@@ -431,7 +371,6 @@
 						</object>
 					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="_alertImage">UIButton</string>
 						<string key="_backgroundImage">UIImageView</string>
 						<string key="_busImage">UIImageView</string>
 						<string key="_detailsView">UIView</string>
@@ -440,10 +379,6 @@
 						<string key="_tripTime">UILabel</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="_alertImage">
-							<string key="name">_alertImage</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
 						<object class="IBToOneOutletInfo" key="_backgroundImage">
 							<string key="name">_backgroundImage</string>
 							<string key="candidateClassName">UIImageView</string>
@@ -485,7 +420,6 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="global_bell_icon.png">{16, 20}</string>
 			<string key="route_cell_bus.png">{25, 25}</string>
 			<string key="route_cell_dotfull.png">{31, 44}</string>
 			<string key="route_cell_line.png">{320, 2}</string>

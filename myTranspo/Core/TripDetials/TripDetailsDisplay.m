@@ -37,7 +37,8 @@
     if(!CGSizeEqualToSize(CGSizeZero, _detailsSize))
         return _detailsSize;
     
-    NSString *joined = [NSString stringWithFormat:@"%@%@: %@", ((_indent) ? @"-" : @""), _title, _details];
+    //NSString *joined = [NSString stringWithFormat:@"%@%@: %@", ((_indent) ? @"-" : @""), _title, _details];
+    NSString* joined = _details;
     _detailsSize = [joined sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:16.0]
                                 constrainedToSize:_displaySize
                             lineBreakMode:UILineBreakModeWordWrap];

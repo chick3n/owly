@@ -112,6 +112,12 @@
 
 //TRIPS
 "HEADING" = "Heading";
+"TRIPPLANNER" = "Trip Planner";
+"STARTLOCATIONPLACEHOLDER" = "Starting Point";
+"ENDLOCATIONPLACEHOLDER" = "Final Destination";
+"STARTLOCATIONLEFT" = "Start";
+"ENDLOCATIONLEFT" = "End";
+"PLANTRIPPREFIX" = "Plan Trip for";
 
 //STOPS
 "AT" = "at";

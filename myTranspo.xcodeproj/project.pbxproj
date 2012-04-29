@@ -20,6 +20,7 @@
 		31101F6B1530D14A001D220A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31101F6A1530D148001D220A /* Security.framework */; };
 		3122C281153FC0E600019410 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 3122C27F153FC0E600019410 /* Default.png */; };
 		3122C282153FC0E600019410 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3122C280153FC0E600019410 /* Default@2x.png */; };
+		3132AFF3154DF68B00B588A4 /* TripDetailsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3132AFF2154DF68B00B588A4 /* TripDetailsCell.m */; };
 		313866D4154B7BE6000537F7 /* OCTranspo.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 313866D3154B788D000537F7 /* OCTranspo.sqlite */; };
 		313866D7154B7F7B000537F7 /* MTCellButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 313866D6154B7F7B000537F7 /* MTCellButton.m */; };
 		313866DA154C8194000537F7 /* MTCellAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 313866D9154C8193000537F7 /* MTCellAlert.m */; };
@@ -31,6 +32,7 @@
 		315CD6061548074100B6299D /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 315CD6041548074100B6299D /* icon@2x.png */; };
 		315CD6071548074100B6299D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 315CD6051548074100B6299D /* icon.png */; };
 		317369F6154CCECC0077011E /* MTCardCellButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 317369F5154CCECC0077011E /* MTCardCellButton.m */; };
+		317369FA154DE8990077011E /* TripTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 317369F9154DE8990077011E /* TripTextField.m */; };
 		318095D11543006500B71188 /* TripDetailsDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 318095D01543006500B71188 /* TripDetailsDisplay.m */; };
 		318095E315433F3F00B71188 /* notice_plan_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 318095DB15433F3F00B71188 /* notice_plan_icon.png */; };
 		318095E415433F3F00B71188 /* notice_plan_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 318095DC15433F3F00B71188 /* notice_plan_icon@2x.png */; };
@@ -302,6 +304,8 @@
 		31101F6A1530D148001D220A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		3122C27F153FC0E600019410 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = UIComponents/Assets/Default.png; sourceTree = "<group>"; };
 		3122C280153FC0E600019410 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "UIComponents/Assets/Default@2x.png"; sourceTree = "<group>"; };
+		3132AFF1154DF68B00B588A4 /* TripDetailsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripDetailsCell.h; path = Core/TripDetials/TripDetailsCell.h; sourceTree = "<group>"; };
+		3132AFF2154DF68B00B588A4 /* TripDetailsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TripDetailsCell.m; path = Core/TripDetials/TripDetailsCell.m; sourceTree = "<group>"; };
 		313866D3154B788D000537F7 /* OCTranspo.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = OCTranspo.sqlite; sourceTree = "<group>"; };
 		313866D5154B7F7B000537F7 /* MTCellButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCellButton.h; sourceTree = "<group>"; };
 		313866D6154B7F7B000537F7 /* MTCellButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCellButton.m; sourceTree = "<group>"; };
@@ -319,6 +323,8 @@
 		315CD6051548074100B6299D /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = UIComponents/Assets/icon.png; sourceTree = "<group>"; };
 		317369F4154CCECC0077011E /* MTCardCellButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCardCellButton.h; sourceTree = "<group>"; };
 		317369F5154CCECC0077011E /* MTCardCellButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCardCellButton.m; sourceTree = "<group>"; };
+		317369F8154DE8990077011E /* TripTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripTextField.h; path = Core/TripDetials/TripTextField.h; sourceTree = "<group>"; };
+		317369F9154DE8990077011E /* TripTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TripTextField.m; path = Core/TripDetials/TripTextField.m; sourceTree = "<group>"; };
 		318095CF1543006500B71188 /* TripDetailsDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripDetailsDisplay.h; path = Core/TripDetials/TripDetailsDisplay.h; sourceTree = "<group>"; };
 		318095D01543006500B71188 /* TripDetailsDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TripDetailsDisplay.m; path = Core/TripDetials/TripDetailsDisplay.m; sourceTree = "<group>"; };
 		318095DB15433F3F00B71188 /* notice_plan_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notice_plan_icon.png; sourceTree = "<group>"; };
@@ -651,6 +657,10 @@
 			children = (
 				318095CF1543006500B71188 /* TripDetailsDisplay.h */,
 				318095D01543006500B71188 /* TripDetailsDisplay.m */,
+				317369F8154DE8990077011E /* TripTextField.h */,
+				317369F9154DE8990077011E /* TripTextField.m */,
+				3132AFF1154DF68B00B588A4 /* TripDetailsCell.h */,
+				3132AFF2154DF68B00B588A4 /* TripDetailsCell.m */,
 			);
 			name = TripDetails;
 			sourceTree = "<group>";
@@ -1486,6 +1496,8 @@
 				313866DD154CBCE3000537F7 /* MTCardTimes.m in Sources */,
 				313866E0154CBDB6000537F7 /* MTCardTimesRowCell.m in Sources */,
 				317369F6154CCECC0077011E /* MTCardCellButton.m in Sources */,
+				317369FA154DE8990077011E /* TripTextField.m in Sources */,
+				3132AFF3154DF68B00B588A4 /* TripDetailsCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

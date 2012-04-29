@@ -22,7 +22,7 @@
 #define kMTBusTimerInterval 60
 
 @interface TripViewController : MTBaseViewController 
-<UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, MTQueueSafe, MyTranspoDelegate, MTTripCellDelegate, MKMapViewDelegate, CardTimesRowCellDelegate>
+<UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, MTQueueSafe, MyTranspoDelegate, MTTripCellDelegate, MKMapViewDelegate, CardTimesDelegate>
 {
     NSArray*							_trips;
 	NSArray*							_timesDisplayTimes;
@@ -50,7 +50,7 @@
     UIView*                             _tableViewHeader;
     UIImageView*                        _backgroundImage;
     UIImageView*                        _backgroundImage2;
-    MTCardTimes*                        _timeTable;
+    IBOutlet MTCardTimes*               _timeTable;
 }
 
 

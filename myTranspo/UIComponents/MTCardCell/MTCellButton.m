@@ -29,46 +29,6 @@
     return self;
 }
 
-- (void)setHelperHeading:(NSString *)helperHeading
-{
-    _helperHeading = helperHeading;
-    
-    if(_useHelperHeading)
-    {       
-        UIFont* headingFont = [UIFont fontWithName:@"HelveticaNeue" size:14.];
-        CGSize helperHeadingSize = [helperHeading sizeWithFont:headingFont constrainedToSize:CGSizeMake(100, 20)];
-        
-        if(_helperLabel == nil && _helperView == nil)
-        { 
-            _helperLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 30, 20)];
-            _helperLabel.font = headingFont;
-            _helperLabel.backgroundColor = [UIColor clearColor];
-            _helperLabel.textAlignment = UITextAlignmentCenter;
-            _helperLabel.textColor = [UIColor whiteColor];
-            
-            _helperView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 30)];
-            _helperView.backgroundColor = [UIColor blackColor];
-            
-            [_helperView addSubview:_helperLabel];
-        }
-        
-        CGRect helperLabelFrame = _helperLabel.frame;
-        CGRect helperViewFrame = _helperView.frame;
-        
-        helperLabelFrame.size.width = helperHeadingSize.width;
-        helperViewFrame.size.width = helperHeadingSize.width + 20;
-        
-        helperViewFrame.origin.x = (helperHeadingSize.width / 2) - ((helperHeadingSize.width + 20) / 2);
-        helperViewFrame.origin.y = 30;
-        
-        _helperLabel.frame = helperLabelFrame;
-        _helperView.frame = helperViewFrame;
-        
-    }
-    
-    _helperLabel.text = helperHeading;
-}
-
 - (void)sendAction:(SEL)action to:(id)target forEvent:(UIEvent *)event
 {
     [super sendAction:action to:target forEvent:event];

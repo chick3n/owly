@@ -19,6 +19,7 @@
 @synthesize delegate =          _delegate;
 @synthesize language =          _language;
 @synthesize indexRow =          _indexRow;
+@synthesize stop =              _stop;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier WithLanguage:(MTLanguage)language
 {

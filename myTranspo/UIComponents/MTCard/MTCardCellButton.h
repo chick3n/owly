@@ -12,5 +12,6 @@
 
 @property (nonatomic)   int     extraValue1;
 @property (nonatomic)   int     extraValue2;
+@property (nonatomic, weak) id  reference;
 
 @end

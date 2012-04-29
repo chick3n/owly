@@ -352,6 +352,7 @@
                 [_favorites removeObjectAtIndex:x];
                 [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:x inSection:0]]
                                   withRowAnimation:UITableViewRowAnimationLeft];
+                
                 break;
             }
         }
@@ -464,11 +465,11 @@
 {
     MTCardCell* c = (MTCardCell*)cell;
     
-    MTStop* favorite = [_favorites objectAtIndex:c.indexRow];
-    if(favorite == nil)
+    int row = [_favorites indexOfObject:c.stop];
+    if(row == NSNotFound)
         return;
-    
-    [_transpo removeFavorite:favorite WithBus:favorite.Bus];
+
+    [_transpo removeFavorite:c.stop WithBus:c.stop.Bus];
 }
 
 #pragma mark - MTRefreshTableView

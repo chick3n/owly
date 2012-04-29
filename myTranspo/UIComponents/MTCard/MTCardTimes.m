@@ -8,26 +8,52 @@
 
 #import "MTCardTimes.h"
 
+@interface MTCardTimes ()
+- (void)initParameters;
+@end
+
 @implementation MTCardTimes
 @synthesize timesWeekday =          _timesWeekday;
 @synthesize timesSaturday =         _timesSaturday;
 @synthesize timesSunday =           _timesSunday;
-@synthesize cellDelegate =          _cellDelegate;
 @synthesize cellAlert =             _cellAlert;
+@synthesize alertNotifications =    _alertNotifications;
+@synthesize cellAlertDelegate =     _cellAlertDelegate;
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style
 {
     self = [super initWithFrame:frame style:style];
     if (self) {
-        self.separatorStyle = UITableViewCellSeparatorStyleNone;
-        self.backgroundColor = [UIColor clearColor];
-        self.delegate = self;
-        self.dataSource = self;
-        
-        _cellAlert = [[MTCellAlert alloc] init];
-        [self addSubview:_cellAlert];
+        [self initParameters];
     }
     return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self initParameters];
+    }
+    return self;
+}
+
+- (void)initParameters
+{
+    self.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.backgroundColor = [UIColor clearColor];
+    self.delegate = self;
+    self.dataSource = self;
+    
+    _cellAlert = [[MTCellAlert alloc] init];
+    _cellAlert.runForLength = 5.0;
+    _cellAlert.delegate = self;
+    UIButton* accessoryView = [UIButton buttonWithType:UIButtonTypeCustom];
+    [accessoryView setImage:[UIImage imageNamed:@"card_arrow_left.png"] forState:UIControlStateNormal];
+    [accessoryView setImage:[UIImage imageNamed:@"card_arrow_right.png"] forState:UIControlStateSelected];
+    _cellAlert.accessoryView = accessoryView;
+    
+    [self addSubview:_cellAlert];
 }
 
 - (void)layoutSubviews
@@ -80,8 +106,7 @@
     if(cell == nil)
     {
         cell = (MTCardTimesRowCell*)[[MTCardTimesRowCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndentifier];
-        if(_cellDelegate != nil)
-            cell.delegate = _cellDelegate;
+        cell.delegate = self;
     }
     
     NSArray* times = nil;
@@ -102,11 +127,17 @@
     uint sequencedRow = indexPath.row * kRowCount;
     uint totalRows = times.count;
     
-    [cell updateRowLabelsRow1:(sequencedRow < totalRows) ? (NSString*)[times objectAtIndex:sequencedRow] : nil Row1Seq:sequencedRow
-                         Row2:(sequencedRow+1 < totalRows) ? (NSString*)[times objectAtIndex:sequencedRow+1] : nil Row2Seq:sequencedRow+1
-                         Row3:(sequencedRow+2 < totalRows) ? (NSString*)[times objectAtIndex:sequencedRow+2] : nil Row3Seq:sequencedRow+2
-                         Row4:(sequencedRow+3 < totalRows) ? (NSString*)[times objectAtIndex:sequencedRow+3] : nil Row4Seq:sequencedRow+3
-                         Row5:(sequencedRow+4 < totalRows) ? (NSString*)[times objectAtIndex:sequencedRow+4] : nil Row5Seq:sequencedRow+4 
+    MTTime* time1 = (sequencedRow < totalRows) ? [times objectAtIndex:sequencedRow] : nil;
+    MTTime* time2 = (sequencedRow+1 < totalRows) ? [times objectAtIndex:sequencedRow+1] : nil;
+    MTTime* time3 = (sequencedRow+2 < totalRows) ? [times objectAtIndex:sequencedRow+2] : nil;
+    MTTime* time4 = (sequencedRow+3 < totalRows) ? [times objectAtIndex:sequencedRow+3] : nil;
+    MTTime* time5 = (sequencedRow+4 < totalRows) ? [times objectAtIndex:sequencedRow+4] : nil;
+    
+    [cell updateRowLabelsRow1:time1 Row1Seq:sequencedRow
+                         Row2:time2 Row2Seq:sequencedRow+1
+                         Row3:time3 Row3Seq:sequencedRow+2
+                         Row4:time4 Row4Seq:sequencedRow+3
+                         Row5:time5 Row5Seq:sequencedRow+4 
                       Section:indexPath.section 
                           Row:indexPath.row
      ];
@@ -176,10 +207,12 @@
     return timeTableHeight;
 }
 
-- (void)displayCellAlert:(NSString*)headingForAlert Row:(int)row Section:(int)section Center:(int)center
+- (void)displayCellAlert:(NSString*)headingForAlert ForCell:(MTCardCellButton*)cell
 {
     CGPoint pos = CGPointZero;
     BOOL bottom = NO;
+    int row = cell.extraValue2;
+    int section = cell.extraValue1;
     
     int sectionHeight = 0;
     for(int x=0; x<section; x++)
@@ -191,7 +224,7 @@
     
     NSLog(@"off:%f row:%d secheight:%d", self.contentOffset.y, rowHeight, sectionHeight);
     
-    pos.x = center;
+    pos.x = cell.center.x;
     pos.y = sectionHeight + rowHeight + _cellAlert.frame.size.height;    
     
     if(rowHeight + sectionHeight <= self.contentOffset.y + kCardRowCellHeightLong || row == 0)
@@ -204,11 +237,70 @@
                        AtPos:pos
                ConstrainedTo:self.bounds.size 
                   UpsideDown:bottom];
+    
+    
+    if(cell.reference != nil && [cell.reference class] == [MTTime class])
+    {
+        MTTime* time = (MTTime*)cell.reference;
+        
+        _cellAlert.refrenceObject = cell.reference;
+        [_cellAlert toggleAccessoryButton:(time.Alert != nil) ? YES : NO];
+    }
+    else {
+        [_cellAlert toggleAccessoryButton:NO];
+    }
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     [_cellAlert hideAlertWithSelfInvoke:YES];
+}
+
+- (void)hideAlert
+{
+    [_cellAlert hideAlertWithSelfInvoke:YES];
+}
+
+#pragma mark - Cell Alert Delegate
+
+- (void)cardTimesRow:(id)owner ClickedOnCell:(MTCardCellButton *)cell
+{
+    MTTime* time = nil;
+    
+    if(cell.tag < 0)
+        return;
+    
+    if(cell.extraValue1 == 0 && _timesWeekday.count > cell.tag) //weekday
+        time = [_timesWeekday objectAtIndex:cell.tag];
+    else if(cell.extraValue1 == 1 && _timesSaturday.count > cell.tag) //weekday
+        time = [_timesSaturday objectAtIndex:cell.tag];
+    else if(cell.extraValue1 == 2 && _timesSunday.count > cell.tag) //weekday
+        time = [_timesSunday objectAtIndex:cell.tag];
+    
+    if(time == nil)
+        return;
+    
+    NSLog(@"Show Heading for Time: %@", [time getTimeForDisplay]);
+    
+    //display notice
+    [self displayCellAlert:time.EndStopHeader ForCell:cell];
+}
+
+- (void)cellAlertAccessoryViewClicked:(id)cellAlert
+{
+    if(cellAlert == nil)
+        return;
+    
+    MTCellAlert* alert = (MTCellAlert*)cellAlert;
+    
+    if(alert.refrenceObject == nil)
+        return;
+    
+    if([alert.refrenceObject class] == [MTTime class])
+    {
+        if([_cellAlertDelegate respondsToSelector:@selector(cardTimes:AddAlertForTime:)])
+            [_cellAlertDelegate cardTimes:self AddAlertForTime:(MTTime*)alert.refrenceObject];
+    }
 }
 
 @end

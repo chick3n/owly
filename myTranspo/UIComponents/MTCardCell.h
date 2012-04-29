@@ -37,7 +37,7 @@
 {
     BOOL                            _modeLarge;
     BOOL                            _remaingTimeShown;
-    MTStop*                         _stop;
+    MTStop* __weak                  _stop;
     id<MTCardCellDelegate> __weak   _delegate;
     MTLanguage                      _language;
     NSString*                       _nextTimeValue;
@@ -76,6 +76,7 @@
 @property (weak) id<MTCardCellDelegate>     delegate;
 @property (nonatomic)   MTLanguage          language;
 @property (nonatomic)   int                 indexRow;
+@property (nonatomic, weak) MTStop          *stop;
 
 - (IBAction)nextTimeClicked:(id)sender;
 - (IBAction)deleteClicked:(id)sender;

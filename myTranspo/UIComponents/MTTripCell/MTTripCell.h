@@ -36,7 +36,7 @@ typedef enum
     //ui components
     IBOutlet UILabel*                           _stopName;
     IBOutlet UIImageView*                       _statusImage;
-    IBOutlet UIButton*                          _alertImage;
+
     IBOutlet UIImageView*                       _backgroundImage;
     IBOutlet UIView*                            _detailsView;
     IBOutlet UILabel*                           _tripTime;
@@ -52,7 +52,6 @@ typedef enum
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier WithLanguage:(MTLanguage)language AndOwner:(id)owner;
 
-- (void)toggleDisplayViews;
 - (void)updateCellBackgroundWithStopSequence:(MTTripSequence)sequence;
 - (void)updateCellDetails:(MTTrip*)trip;
 - (void)updateCellDetailsQuick:(NSString*)title ForSecond:(NSString*)second;
