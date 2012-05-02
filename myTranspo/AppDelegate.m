@@ -128,6 +128,17 @@
 {
     if(_navigationController.visibleViewController != nil)
     {
+        //check if already open and just show it instead of reload
+        UIViewController* viewController = [_navigationController.viewControllers objectAtIndex:0];
+        if([viewController class] == [MTBaseViewController class])
+        {
+            if(((MTBaseViewController*)viewController).viewControllerType == view)
+            {
+                [_menuController revealToggle:nil];
+                return;
+            }
+        }
+        
         [_navigationController.visibleViewController.view removeGestureRecognizer:_panGesture];
         [_navigationController.visibleViewController.view removeGestureRecognizer:_tap];
         [_navigationController.navigationBar removeGestureRecognizer:_panGesture];
@@ -175,6 +186,7 @@
     newView.panGesture = _panGesture;
     newView.navPanGesture = _navPanGesture;
     newView.menuControl = _menuController;
+    newView.viewControllerType = view;
     /*newView.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:_menuController action:@selector(revealToggle:)];*/
     UIButton* navButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [navButton setImage:[UIImage imageNamed:@"global_menu_btn.png"] forState:UIControlStateNormal];
@@ -263,7 +275,7 @@
     _lastDate = [_transpo getLastSupportedDate];
     
     [_transpo addWebDBPath:@"http://www.vicestudios.com/apps/owly/oc/"];
-    //[_transpo addAPI];
+    [_transpo addAPI];
 }
 
 - (void)preLoad

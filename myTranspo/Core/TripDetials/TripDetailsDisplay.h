@@ -8,6 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+#define kActionAt @"AT"
+#define kActionWait @"WAIT"
+#define kActionTransfer @"TRANSFER"
+#define kActionWalk @"WALK"
+#define kActionNote @"NOTE"
+#define kActionArrive @"ARRIVE"
+#define kActionUnknown @"UNKNOWN"
+
 @interface TripDetailsDisplay : NSObject
 {
     CGSize                  _detailsSize;

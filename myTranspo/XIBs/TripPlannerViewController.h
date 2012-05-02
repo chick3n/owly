@@ -13,14 +13,31 @@
 #import "TripDetailsDisplay.h"
 #import "TripTextField.h"
 #import "TripDetailsCell.h"
+#import "SettingsMultiType.h"
+#import "SettingsListMultiViewController.h"
 
-#define kTripDetialsDisplaySize CGSizeMake(210, 2000)
+#define kTripDetialsDisplaySize CGSizeMake(216, 2000)
+
+#define kAccessible NSLocalizedString(@"ACCESSIBLE", nil)
+#define kRegularFare NSLocalizedString(@"REGULAREFARE", nil)
+#define kExcludeSTO NSLocalizedString(@"EXCLUDESTO", nil)
+#define kBikeRacks NSLocalizedString(@"BIKERACK", nil)
+
+typedef struct
+{
+    BOOL accessible;
+    BOOL regularFare;
+    BOOL excludeSto;
+    BOOL bikeRacks;
+} TPOptions;
 
 @interface TripPlannerViewController : MTBaseViewController <MyTranspoDelegate, UITableViewDelegate, UITableViewDataSource, MTQueueSafe, UITextFieldDelegate>
 {
     NSDictionary*               _tripDetails;
     MTTripPlanner*              _tripPlanner;
     NSMutableArray*             _data; //TripDetailsDisplay;
+   // TPOptions                   _options;
+    SettingsMultiType*          _options;
     
     //UIComponents
     IBOutlet UITableView*               _tableView;
@@ -30,10 +47,13 @@
     IBOutlet UILabel*                   _tripDateLabel;
     IBOutlet UIButton*                  _changeDate;
     IBOutlet UIDatePicker*              _changeDateViewer;
+    IBOutlet UIView*                    _headerView;
+    IBOutlet UIButton*                  _optionsButton;
 }
 
 - (IBAction)flipLocations:(id)sender;
 - (IBAction)changeTripDate:(id)sender;
 - (IBAction)toggleChangeDateViewer:(id)sender;
+- (IBAction)changeOptions:(id)sender;
 
 @end

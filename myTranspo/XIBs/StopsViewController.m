@@ -49,7 +49,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+#if 0
     //mapview
     _mapView.delegate = self;
     
@@ -112,6 +112,7 @@
     //searchTableView[self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]]];
     [self.searchDisplayController.searchResultsTableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]]];
     [self.searchDisplayController.searchResultsTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+#endif
 }
 
 - (void)viewDidUnload
@@ -131,11 +132,12 @@
     [super viewWillAppear:animated];
     
     _transpo.delegate = self;
-    
+#if 0    
     if(_mapView.annotations.count <= 0)
     {
         [self updateCloseStops:nil];
     }
+#endif
 }
 
 - (void)viewWillDisappear:(BOOL)animated

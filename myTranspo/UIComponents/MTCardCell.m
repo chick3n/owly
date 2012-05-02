@@ -258,6 +258,30 @@
     }
 }
 
+- (void)setFrame:(CGRect)frame
+{
+    [super setFrame:frame];
+    
+    if(frame.size.height != kFullHeight)
+        return;
+    
+//    NSLog(@"New Frame: %f %f", frame.origin.y, frame.size.height);
+    CGRect detailsBackgroundFrame = _detailsBackground.frame;
+    CGRect detailsScrollView = _dataScrollView.frame;
+    
+    if(detailsScrollView.origin.y == 0 || detailsBackgroundFrame.origin.y == 0)
+        return;
+    
+    detailsBackgroundFrame.origin.y = 0;
+    detailsScrollView.origin.y = 0;
+    
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         _detailsBackground.frame = detailsBackgroundFrame;
+                         _dataScrollView.frame = detailsScrollView;
+                     }];
+}
+
 - (void)expandCellWithAnimation:(BOOL)animate
 {
     if(_modeLarge)
@@ -354,6 +378,15 @@
     
     CGPoint pointInCell = [self convertPoint:_nextTime.center fromView:_dataScrollView];
     _timesAlert.refrenceObject = _nextTime;
+    
+    NSString* heading = @"";
+    
+    //api time doesnt save that data
+    if(_nextTime.helperHeading == nil)
+        heading = _busHeading.text;
+    else if(_nextTime.helperHeading.length <= 0)
+        heading = _busHeading.text;
+        
     [_timesAlert displayAlert:_nextTime.helperHeading AtPos:pointInCell ConstrainedTo:self.frame.size UpsideDown:NO];
     
 #if 0
@@ -376,6 +409,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+#if 0
     if(_timesAlert.hidden == NO)
     {
         CGRect timesAlertFrame = _timesAlert.frame;
@@ -383,8 +417,8 @@
         _timesAlert.frame = timesAlertFrame;
         _lastContentOffset = scrollView.contentOffset;
     }
-    
-#if 0
+#endif
+#if 1
     [_timesAlert hideAlertWithSelfInvoke:YES];
 #endif
 }

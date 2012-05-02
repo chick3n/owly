@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+#define kMinTripCellHeight 44
+
 @interface TripDetailsCell : UITableViewCell
 {
     UIImageView*            _leftAccessory;
     UILabel*                _rightAccessory;
     UILabel*                _text;
+    UIImageView*            _seperator;
 }
 
 @property (nonatomic, weak)     UIImage*        leftAccessoryImage;

@@ -15,6 +15,8 @@
 - (id)jsonData:(NSData *)data WithClassType:(Class)class;
 - (NSMutableURLRequest *) multipartRequestWithURL:(NSURL *)url andDataDictionary:(NSDictionary *) dictionary;
 - (NSData*)webDataWithURLRequest:(NSURLRequest*)request;
+- (void)sanitizeJsonDictionary:(NSMutableDictionary*)dic;
+- (void)sanitizeJsonArray:(NSMutableArray*)arr;
 @end
 
 @implementation MTWebDB
@@ -118,6 +120,14 @@
     
     if(![json isKindOfClass:class])
         json = nil;
+    
+    if(json != nil)
+    {
+        if(class == [NSArray class])
+            [self sanitizeJsonArray:json];
+        else if(class == [NSDictionary class])
+            [self sanitizeJsonDictionary:json];
+    }
     
     return json;
 }
@@ -727,12 +737,58 @@
     
     if(json != nil)
     {
+        
         [results addEntriesFromDictionary:json];
         return YES;
     }
     
     MTLog(@"getOCTripPlanner json failed.");
     return NO;
+}
+
+- (void)sanitizeJsonDictionary:(NSMutableDictionary*)dic
+{
+    if(dic == nil)
+        return;
+    
+    MTLog(@"Sanitizing Dictionary");
+    NSArray* keys = [dic allKeys];
+    for(NSString* key in keys)
+    {
+        id obj = [dic objectForKey:key];
+        
+        if([obj class] == [NSMutableArray class])
+            [self sanitizeJsonArray:(NSMutableArray*)obj];
+        else if([obj class] == [NSMutableDictionary class])
+            [self sanitizeJsonDictionary:(NSMutableDictionary*)obj];
+        else if([obj class] == [NSNull class])
+        {
+            MTLog(@"Santizing Key: %@", key);
+            [dic setValue:@"" forKey:key];
+        }
+    }
+}
+
+- (void)sanitizeJsonArray:(NSMutableArray*)arr
+{
+    if(arr == nil)
+        return;
+    
+    MTLog(@"Sanitizing Array");
+    for(int x=0; x<arr.count; x++)
+    {
+        id obj = [arr objectAtIndex:x];
+        
+        if([obj class] == [NSMutableArray class])
+            [self sanitizeJsonArray:(NSMutableArray*)obj];
+        else if([obj class] == [NSMutableDictionary class])
+            [self sanitizeJsonDictionary:(NSMutableDictionary*)obj];
+        else if([obj class] == [NSNull class])
+        {
+            MTLog(@"Sanitizing index: %d", x);
+            [arr replaceObjectAtIndex:x withObject:@""];
+        }
+    }
 }
 
 @end

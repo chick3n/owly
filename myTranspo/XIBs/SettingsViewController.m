@@ -223,6 +223,8 @@
         case STCHOICE:
             [cell setAccessoryView:[setting accessoryView]];
             break;
+        case STMULTI:
+            break;
     }
     
     CGRect detailFrame = cell.detailTextLabel.frame;

@@ -14,7 +14,7 @@
 @synthesize panGesture              = _panGesture;
 @synthesize navPanGesture           = _navPanGesture;
 @synthesize menuControl             = _menuControl;
-
+@synthesize viewControllerType      = _viewControllerType;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {

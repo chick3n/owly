@@ -17,6 +17,32 @@
 @synthesize indent          = _indent;
 @synthesize displaySize     = _displaySize;
 
+- (void)setTitle:(NSString *)title
+{
+    _title = title;
+    
+    if(_title != nil)
+    {
+        if([_title isEqualToString:kActionAt])
+            _icon = [UIImage imageNamed:@"tripplanner_bus_icon.png"];
+        else if([_title isEqualToString:kActionArrive])
+            _icon = [UIImage imageNamed:@"tripplanner_destination_icon.png"];
+        else if([_title isEqualToString:kActionTransfer])
+            _icon = [UIImage imageNamed:@"tripplanner_route_icon.png"];
+        else if([_title isEqualToString:kActionWait])
+            _icon = [UIImage imageNamed:@"tripplanner_time_icon.png"];
+        else if([_title isEqualToString:kActionWalk])
+            _icon = [UIImage imageNamed:@"tripplanner_walking_icon.png"];
+        else if([_title isEqualToString:kActionNote])
+            _icon = [UIImage imageNamed:@"tripplanner_attention_icon.png"];
+        else _icon = nil;
+    }
+    else _icon = nil;
+    
+    if(_indent == YES && ![_title isEqualToString:kActionNote])
+        _icon = nil;
+}
+
 - (id)init
 {
     self = [super init];

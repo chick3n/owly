@@ -111,6 +111,11 @@
 "STARTLOCATIONLEFT" = "de";
 "ENDLOCATIONLEFT" = "fin";
 "PLANTRIPPREFIX" = "Plan de voyage";
+"ACCESSIBLE" = "Accessible";
+"REGULAREFARE" = "Tarif Régulier";
+"EXCLUDESTO" = "Exclure STO";
+"BIKERACK" = "Vélos-bus";
+"FILTER" = "Filtrer";
 
 //STOPS
 "AT" = "à";

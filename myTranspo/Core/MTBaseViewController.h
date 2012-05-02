@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "myTranspoOC.h"
 #import "ZUUIRevealController.h"
+#import "ViewControllers.h"
 
 @interface MTBaseViewController : UIViewController
 {
@@ -26,5 +27,6 @@
 @property (nonatomic, weak)     UIPanGestureRecognizer*     panGesture;
 @property (nonatomic, weak)     UIPanGestureRecognizer*     navPanGesture;
 @property (nonatomic, weak)     ZUUIRevealController*       menuControl;
+@property (nonatomic)           MTViewControllers           viewControllerType;
 
 @end

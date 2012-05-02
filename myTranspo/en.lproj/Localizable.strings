@@ -118,6 +118,11 @@
 "STARTLOCATIONLEFT" = "Start";
 "ENDLOCATIONLEFT" = "End";
 "PLANTRIPPREFIX" = "Plan Trip for";
+"ACCESSIBLE" = "Accessible";
+"REGULAREFARE" = "Regulare Fare";
+"EXCLUDESTO" = "Exclude STO";
+"BIKERACK" = "Bike Rack";
+"FILTER" = "Filtrer";
 
 //STOPS
 "AT" = "at";

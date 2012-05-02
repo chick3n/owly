@@ -26,6 +26,27 @@
 		313866DA154C8194000537F7 /* MTCellAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 313866D9154C8193000537F7 /* MTCellAlert.m */; };
 		313866DD154CBCE3000537F7 /* MTCardTimes.m in Sources */ = {isa = PBXBuildFile; fileRef = 313866DC154CBCE3000537F7 /* MTCardTimes.m */; };
 		313866E0154CBDB6000537F7 /* MTCardTimesRowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 313866DF154CBDB6000537F7 /* MTCardTimesRowCell.m */; };
+		3144839C154F7744008CCE37 /* tripplanner_walking_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3144838A154F7744008CCE37 /* tripplanner_walking_icon.png */; };
+		3144839D154F7744008CCE37 /* tripplanner_route_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3144838B154F7744008CCE37 /* tripplanner_route_icon.png */; };
+		3144839E154F7744008CCE37 /* tripplanner_time_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3144838C154F7744008CCE37 /* tripplanner_time_icon.png */; };
+		3144839F154F7744008CCE37 /* tripplanner_attention_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3144838D154F7744008CCE37 /* tripplanner_attention_icon.png */; };
+		314483A0154F7744008CCE37 /* tripplanner_destination_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3144838E154F7744008CCE37 /* tripplanner_destination_icon.png */; };
+		314483A1154F7744008CCE37 /* tripplanner_bus_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3144838F154F7744008CCE37 /* tripplanner_bus_icon.png */; };
+		314483A2154F7744008CCE37 /* tripplanner_walking_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31448390154F7744008CCE37 /* tripplanner_walking_icon@2x.png */; };
+		314483A3154F7744008CCE37 /* tripplanner_route_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31448391154F7744008CCE37 /* tripplanner_route_icon@2x.png */; };
+		314483A4154F7744008CCE37 /* tripplanner_time_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31448392154F7744008CCE37 /* tripplanner_time_icon@2x.png */; };
+		314483A5154F7744008CCE37 /* tripplanner_attention_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31448393154F7744008CCE37 /* tripplanner_attention_icon@2x.png */; };
+		314483A6154F7744008CCE37 /* tripplanner_destination_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31448394154F7744008CCE37 /* tripplanner_destination_icon@2x.png */; };
+		314483A7154F7744008CCE37 /* tripplanner_bus_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31448395154F7744008CCE37 /* tripplanner_bus_icon@2x.png */; };
+		314483A8154F7744008CCE37 /* tripplanner_timechange_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 31448396154F7744008CCE37 /* tripplanner_timechange_btn.png */; };
+		314483A9154F7744008CCE37 /* tripplanner_timechange_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31448397154F7744008CCE37 /* tripplanner_timechange_btn@2x.png */; };
+		314483AA154F7744008CCE37 /* tripplanner_togglesearch_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 31448398154F7744008CCE37 /* tripplanner_togglesearch_btn.png */; };
+		314483AB154F7744008CCE37 /* tripplanner_togglesearch_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31448399154F7744008CCE37 /* tripplanner_togglesearch_btn@2x.png */; };
+		314483AC154F7744008CCE37 /* tripplanner_destinationsearch_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3144839A154F7744008CCE37 /* tripplanner_destinationsearch_icon.png */; };
+		314483AD154F7744008CCE37 /* tripplanner_destinationsearch_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3144839B154F7744008CCE37 /* tripplanner_destinationsearch_icon@2x.png */; };
+		314483B21550B5F0008CCE37 /* SettingsListMultiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 314483B01550B5EE008CCE37 /* SettingsListMultiViewController.m */; };
+		314483B31550B5F0008CCE37 /* SettingsListMultiViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 314483B11550B5EF008CCE37 /* SettingsListMultiViewController.xib */; };
+		314483B61550B77E008CCE37 /* SettingsMultiType.m in Sources */ = {isa = PBXBuildFile; fileRef = 314483B51550B77D008CCE37 /* SettingsMultiType.m */; };
 		3155124E1549F2640071F186 /* MTCardRowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3155124D1549F2640071F186 /* MTCardRowCell.m */; };
 		31551251154A23F20071F186 /* global_pullbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 3155124F154A23F20071F186 /* global_pullbar.png */; };
 		31551252154A23F20071F186 /* global_pullbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31551250154A23F20071F186 /* global_pullbar@2x.png */; };
@@ -315,6 +336,29 @@
 		313866DC154CBCE3000537F7 /* MTCardTimes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCardTimes.m; sourceTree = "<group>"; };
 		313866DE154CBDB5000537F7 /* MTCardTimesRowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCardTimesRowCell.h; sourceTree = "<group>"; };
 		313866DF154CBDB6000537F7 /* MTCardTimesRowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCardTimesRowCell.m; sourceTree = "<group>"; };
+		3144838A154F7744008CCE37 /* tripplanner_walking_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_walking_icon.png; sourceTree = "<group>"; };
+		3144838B154F7744008CCE37 /* tripplanner_route_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_route_icon.png; sourceTree = "<group>"; };
+		3144838C154F7744008CCE37 /* tripplanner_time_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_time_icon.png; sourceTree = "<group>"; };
+		3144838D154F7744008CCE37 /* tripplanner_attention_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_attention_icon.png; sourceTree = "<group>"; };
+		3144838E154F7744008CCE37 /* tripplanner_destination_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_destination_icon.png; sourceTree = "<group>"; };
+		3144838F154F7744008CCE37 /* tripplanner_bus_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_bus_icon.png; sourceTree = "<group>"; };
+		31448390154F7744008CCE37 /* tripplanner_walking_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tripplanner_walking_icon@2x.png"; sourceTree = "<group>"; };
+		31448391154F7744008CCE37 /* tripplanner_route_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tripplanner_route_icon@2x.png"; sourceTree = "<group>"; };
+		31448392154F7744008CCE37 /* tripplanner_time_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tripplanner_time_icon@2x.png"; sourceTree = "<group>"; };
+		31448393154F7744008CCE37 /* tripplanner_attention_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tripplanner_attention_icon@2x.png"; sourceTree = "<group>"; };
+		31448394154F7744008CCE37 /* tripplanner_destination_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tripplanner_destination_icon@2x.png"; sourceTree = "<group>"; };
+		31448395154F7744008CCE37 /* tripplanner_bus_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tripplanner_bus_icon@2x.png"; sourceTree = "<group>"; };
+		31448396154F7744008CCE37 /* tripplanner_timechange_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_timechange_btn.png; sourceTree = "<group>"; };
+		31448397154F7744008CCE37 /* tripplanner_timechange_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tripplanner_timechange_btn@2x.png"; sourceTree = "<group>"; };
+		31448398154F7744008CCE37 /* tripplanner_togglesearch_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_togglesearch_btn.png; sourceTree = "<group>"; };
+		31448399154F7744008CCE37 /* tripplanner_togglesearch_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tripplanner_togglesearch_btn@2x.png"; sourceTree = "<group>"; };
+		3144839A154F7744008CCE37 /* tripplanner_destinationsearch_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_destinationsearch_icon.png; sourceTree = "<group>"; };
+		3144839B154F7744008CCE37 /* tripplanner_destinationsearch_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tripplanner_destinationsearch_icon@2x.png"; sourceTree = "<group>"; };
+		314483AF1550B5EE008CCE37 /* SettingsListMultiViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsListMultiViewController.h; path = XIBs/SettingsListMultiViewController.h; sourceTree = "<group>"; };
+		314483B01550B5EE008CCE37 /* SettingsListMultiViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsListMultiViewController.m; path = XIBs/SettingsListMultiViewController.m; sourceTree = "<group>"; };
+		314483B11550B5EF008CCE37 /* SettingsListMultiViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SettingsListMultiViewController.xib; path = XIBs/SettingsListMultiViewController.xib; sourceTree = "<group>"; };
+		314483B41550B77C008CCE37 /* SettingsMultiType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsMultiType.h; path = Core/SettingsMultiType.h; sourceTree = "<group>"; };
+		314483B51550B77D008CCE37 /* SettingsMultiType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsMultiType.m; path = Core/SettingsMultiType.m; sourceTree = "<group>"; };
 		3155124C1549F2640071F186 /* MTCardRowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCardRowCell.h; sourceTree = "<group>"; };
 		3155124D1549F2640071F186 /* MTCardRowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCardRowCell.m; sourceTree = "<group>"; };
 		3155124F154A23F20071F186 /* global_pullbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = global_pullbar.png; sourceTree = "<group>"; };
@@ -749,6 +793,24 @@
 		319D781115371B5A00542ED3 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				3144838A154F7744008CCE37 /* tripplanner_walking_icon.png */,
+				3144838B154F7744008CCE37 /* tripplanner_route_icon.png */,
+				3144838C154F7744008CCE37 /* tripplanner_time_icon.png */,
+				3144838D154F7744008CCE37 /* tripplanner_attention_icon.png */,
+				3144838E154F7744008CCE37 /* tripplanner_destination_icon.png */,
+				3144838F154F7744008CCE37 /* tripplanner_bus_icon.png */,
+				31448390154F7744008CCE37 /* tripplanner_walking_icon@2x.png */,
+				31448391154F7744008CCE37 /* tripplanner_route_icon@2x.png */,
+				31448392154F7744008CCE37 /* tripplanner_time_icon@2x.png */,
+				31448393154F7744008CCE37 /* tripplanner_attention_icon@2x.png */,
+				31448394154F7744008CCE37 /* tripplanner_destination_icon@2x.png */,
+				31448395154F7744008CCE37 /* tripplanner_bus_icon@2x.png */,
+				31448396154F7744008CCE37 /* tripplanner_timechange_btn.png */,
+				31448397154F7744008CCE37 /* tripplanner_timechange_btn@2x.png */,
+				31448398154F7744008CCE37 /* tripplanner_togglesearch_btn.png */,
+				31448399154F7744008CCE37 /* tripplanner_togglesearch_btn@2x.png */,
+				3144839A154F7744008CCE37 /* tripplanner_destinationsearch_icon.png */,
+				3144839B154F7744008CCE37 /* tripplanner_destinationsearch_icon@2x.png */,
 				3155124F154A23F20071F186 /* global_pullbar.png */,
 				31551250154A23F20071F186 /* global_pullbar@2x.png */,
 				31B138BD15447783002DEB70 /* settings_singlecell@2x.png */,
@@ -1101,6 +1163,9 @@
 				31101F621530A5AD001D220A /* SettingsListViewController.h */,
 				31101F631530A5AE001D220A /* SettingsListViewController.m */,
 				31101F641530A5AF001D220A /* SettingsListViewController.xib */,
+				314483AF1550B5EE008CCE37 /* SettingsListMultiViewController.h */,
+				314483B01550B5EE008CCE37 /* SettingsListMultiViewController.m */,
+				314483B11550B5EF008CCE37 /* SettingsListMultiViewController.xib */,
 				310D691E15329183000C4A89 /* SettingsManageNotificationsViewController.h */,
 				310D691F15329183000C4A89 /* SettingsManageNotificationsViewController.m */,
 				310D692015329183000C4A89 /* SettingsManageNotificationsViewController.xib */,
@@ -1143,6 +1208,8 @@
 				31101F6015308E46001D220A /* SettingsType.m */,
 				31EE5575153B27D400C83552 /* MTRightButton.h */,
 				31EE5576153B27D400C83552 /* MTRightButton.m */,
+				314483B41550B77C008CCE37 /* SettingsMultiType.h */,
+				314483B51550B77D008CCE37 /* SettingsMultiType.m */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -1428,6 +1495,25 @@
 				31551251154A23F20071F186 /* global_pullbar.png in Resources */,
 				31551252154A23F20071F186 /* global_pullbar@2x.png in Resources */,
 				313866D4154B7BE6000537F7 /* OCTranspo.sqlite in Resources */,
+				3144839C154F7744008CCE37 /* tripplanner_walking_icon.png in Resources */,
+				3144839D154F7744008CCE37 /* tripplanner_route_icon.png in Resources */,
+				3144839E154F7744008CCE37 /* tripplanner_time_icon.png in Resources */,
+				3144839F154F7744008CCE37 /* tripplanner_attention_icon.png in Resources */,
+				314483A0154F7744008CCE37 /* tripplanner_destination_icon.png in Resources */,
+				314483A1154F7744008CCE37 /* tripplanner_bus_icon.png in Resources */,
+				314483A2154F7744008CCE37 /* tripplanner_walking_icon@2x.png in Resources */,
+				314483A3154F7744008CCE37 /* tripplanner_route_icon@2x.png in Resources */,
+				314483A4154F7744008CCE37 /* tripplanner_time_icon@2x.png in Resources */,
+				314483A5154F7744008CCE37 /* tripplanner_attention_icon@2x.png in Resources */,
+				314483A6154F7744008CCE37 /* tripplanner_destination_icon@2x.png in Resources */,
+				314483A7154F7744008CCE37 /* tripplanner_bus_icon@2x.png in Resources */,
+				314483A8154F7744008CCE37 /* tripplanner_timechange_btn.png in Resources */,
+				314483A9154F7744008CCE37 /* tripplanner_timechange_btn@2x.png in Resources */,
+				314483AA154F7744008CCE37 /* tripplanner_togglesearch_btn.png in Resources */,
+				314483AB154F7744008CCE37 /* tripplanner_togglesearch_btn@2x.png in Resources */,
+				314483AC154F7744008CCE37 /* tripplanner_destinationsearch_icon.png in Resources */,
+				314483AD154F7744008CCE37 /* tripplanner_destinationsearch_icon@2x.png in Resources */,
+				314483B31550B5F0008CCE37 /* SettingsListMultiViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1498,6 +1584,8 @@
 				317369F6154CCECC0077011E /* MTCardCellButton.m in Sources */,
 				317369FA154DE8990077011E /* TripTextField.m in Sources */,
 				3132AFF3154DF68B00B588A4 /* TripDetailsCell.m in Sources */,
+				314483B21550B5F0008CCE37 /* SettingsListMultiViewController.m in Sources */,
+				314483B61550B77E008CCE37 /* SettingsMultiType.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

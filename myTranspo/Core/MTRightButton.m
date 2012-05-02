@@ -33,7 +33,10 @@
     self.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     self.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     
-    UIImage *defaultBackground = (_type == kRightButtonTypeBack) ? [UIImage imageNamed:@"global_backempty_btn.png"] : [UIImage imageNamed:@"global_right_btn.png"];
+    UIImage *defaultBackground = nil;
+    if(_type == kRightButtonTypeBack)
+        defaultBackground = [UIImage imageNamed:@"global_backempty_btn.png"];
+    else defaultBackground = [UIImage imageNamed:@"global_right_btn.png"];
     
     //resize it
     UIImage *strechBackground = [defaultBackground resizableImageWithCapInsets:UIEdgeInsetsMake(0, 20, 0, 20)];

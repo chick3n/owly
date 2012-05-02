@@ -19,6 +19,7 @@
 - (void)firstGetFavorites:(id)sender;
 - (void)changeTripScheduleTime:(id)sender;
 - (void)didSwipe:(UIGestureRecognizer*)gestureRecognizer;
+- (void)expandCells:(id)sender;
 @end
 
 @implementation MyBusesViewController
@@ -32,6 +33,7 @@
         _editing = NO;
         _fadeInCell = YES;
         _chosenDate = [NSDate date];
+        _expandCells = NO;
     }
     return self;
 }
@@ -55,16 +57,14 @@
 {
     [super viewDidLoad];
     
+    self.title = NSLocalizedString(@"MTDEF_VIEWCONTROLLERMYBUSES", nil);
+
     //navigationBar Setup
-    //_editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"MTDEF_EDIT", nil) style:UIBarButtonItemStylePlain target:self action:@selector(editFavorites:)];
     _editButtonValue = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
     [_editButtonValue setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
     [_editButtonValue addTarget:self action:@selector(editFavorites:) forControlEvents:UIControlEventTouchUpInside];
     _editButton = [[UIBarButtonItem alloc] initWithCustomView:_editButtonValue];
     self.navigationItem.rightBarButtonItem = _editButton;
-    
-    self.title = NSLocalizedString(@"MTDEF_VIEWCONTROLLERMYBUSES", nil);
-    //[self.navigationController.navigationBar addGestureRecognizer:_navPanGesture];
     
     //setup tableview
     [self.tableView setDelaysContentTouches:YES];
@@ -194,7 +194,6 @@
     
     MTStop* stop = (MTStop*)[_favorites objectAtIndex:indexPath.row];
     
-    [cell updateCellHeader:stop];
 #if 0
     if(stop.MTCardCellHelper == NO && stop.UpdateCount > 0)
     {
@@ -202,16 +201,17 @@
         stop.MTCardCellHelper = YES;
     }
     else 
-#endif
+
     if(stop.UpdateCount > 0)
     {
         [cell expandCellWithAnimation:YES];
         stop.MTCardCellHelper = YES;
     }
-    
+#endif    
     //if(stop.IsUpdating == NO) //removed this because IsUpdating = YES until API returns so updates werent happening in between.
+
+    [cell updateCellHeader:stop];
     [cell updateCellDetails:stop New:_fadeInCell];
-    
     [cell setIndexRow:indexPath.row];
 
     return cell;
@@ -247,11 +247,16 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    int height = kHiddenHeight;
+#if 0
     int height = kFullHeight;
-    
+
     MTStop* stop = (MTStop*)[_favorites objectAtIndex:indexPath.row];
     if(stop.UpdateCount == 0)
         height = kHiddenHeight;
+#endif
+    if(_expandCells)
+        height = kFullHeight;
     
     return height;
 }
@@ -337,6 +342,13 @@
     }
 }
 
+- (void)expandCells:(id)sender
+{
+    _expandCells = YES;
+    [_tableView beginUpdates];
+    [_tableView endUpdates];
+}
+
 #pragma mark - Favorites Delegate
 
 - (void)myTranspo:(MTResultState)state removedFavorite:(MTStop *)favorite WithBus:(MTBus *)bus
@@ -416,7 +428,7 @@
         [favorite.Bus updateDisplayObjects];
     }
     
-    for(int x=0; x<_favorites.count; x++)
+    /*for(int x=0; x<_favorites.count; x++)
     {
         MTStop* stop = [_favorites objectAtIndex:x];
         
@@ -430,13 +442,17 @@
             
             break;
         }
-    }
+    }*/
+    
+    
     
     _loadingCounter -= 1;
     
     if(_loadingCounter <= 0)
     {
         [self refreshTableStopLoading];
+        [_tableView reloadData];
+        [self performSelector:@selector(expandCells:) withObject:nil afterDelay:0.25];
     }
 }
 

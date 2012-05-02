@@ -24,6 +24,7 @@ typedef enum
     , STTEXTBOX
     , STPASSWORD
     , STOTHER
+    , STMULTI
 } SettingTypes;
 
 @protocol SettingsTypeDelegate <NSObject>

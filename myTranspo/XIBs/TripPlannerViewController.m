@@ -16,6 +16,7 @@
 - (void)addressFieldsValueChanged:(id)sender;
 - (void)removeKeyboard:(id)sender;
 - (void)hideDateChangerView:(id)sender;
+- (void)addOptions;
 @end
 
 @implementation TripPlannerViewController
@@ -25,6 +26,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _data = [[NSMutableArray alloc] init];
+        _options = [[SettingsMultiType alloc] init];
+        [self addOptions];
     }
     return self;
 }
@@ -32,11 +35,23 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+
+    //tableview
+    [_headerView removeFromSuperview];
+    [_optionsButton removeFromSuperview];
+    _tableView.tableHeaderView = _headerView;
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
     [_tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]]];
+    
+    CGRect optionsFrame = _optionsButton.frame;
+    optionsFrame.origin.y = -optionsFrame.size.height;
+    _optionsButton.frame = optionsFrame;
+    [_tableView addSubview:_optionsButton];
+
+    
+    //mytranspo
     _transpo.delegate = self;
     
     //navigationBar
@@ -54,11 +69,13 @@
     [self toggleChangeDateViewer:nil];
     [self changeTripDate:nil];
     
+    
+    
     //textfields
     _startLocation.placeholder = NSLocalizedString(@"STARTLOCATIONPLACEHOLDER", nil);
     _endLocation.placeholder = NSLocalizedString(@"ENDLOCATIONPLACEHOLDER", nil);
-    _startLocation.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_train_icon.png"]];
-    _endLocation.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_train_icon.png"]];
+    //_startLocation.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_train_icon.png"]];
+    _endLocation.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tripplanner_destinationsearch_icon.png"]];
     
     UILabel* leftView1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 14)];
     leftView1.text = NSLocalizedString(@"STARTLOCATIONLEFT", nil);
@@ -93,6 +110,17 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    _tableView.contentInset = UIEdgeInsetsMake(_optionsButton.frame.size.height, 0, 0, 0);
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         _tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+                     }];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -165,7 +193,34 @@
 {
     TripDetailsDisplay* display = (TripDetailsDisplay*)[_data objectAtIndex:indexPath.row];
 
-    return display.detailsSize.height;
+    if(display.detailsSize.height > kMinTripCellHeight)
+        return display.detailsSize.height + ((kMinTripCellHeight/2) + 8); //8 is from font height / 2
+    return kMinTripCellHeight;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self hideDateChangerView:nil];
+    [self removeKeyboard:nil];
+}
+
+#pragma mark - ScrollView
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self hideDateChangerView:nil];
+    [self removeKeyboard:nil];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if(scrollView.contentOffset.y < _optionsButton.frame.origin.y)
+    {
+        [UIView animateWithDuration:0.25
+                         animations:^{
+                             _tableView.contentInset = UIEdgeInsetsMake(_optionsButton.frame.size.height, 0, 0, 0);
+                         }];
+    }
 }
 
 #pragma mark - loading
@@ -203,7 +258,7 @@
             departDisplay.details = [depart objectForKey:@"date"];
             departDisplay.duration = [depart objectForKey:@"time"];
             departDisplay.title = [depart objectForKey:@"type"];
-            departDisplay.icon = [UIImage imageNamed:@"global_bell_icon.png"];
+            //departDisplay.icon = [UIImage imageNamed:@"global_bell_icon.png"];
             
             [_data addObject:departDisplay];
             statusCount += 1;
@@ -227,7 +282,7 @@
                     stepDisplay.duration = [step objectForKey:@"duration"];
                     stepDisplay.title = [step objectForKey:@"type"];
                     stepDisplay.displaySize = kTripDetialsDisplaySize;
-                    stepDisplay.icon = [UIImage imageNamed:@"global_bell_icon.png"];
+                    //stepDisplay.icon = [UIImage imageNamed:@"global_bell_icon.png"];
                     
                     [_data addObject:stepDisplay];
                     statusCount += 1;
@@ -244,10 +299,10 @@
                                ([subStep objectForKey:@"duration"] != nil))
                             {
                                 TripDetailsDisplay* subStepDisplay = [[TripDetailsDisplay alloc] init];
+                                subStepDisplay.indent = YES;
                                 subStepDisplay.details = [subStep objectForKey:@"desc"];
                                 subStepDisplay.duration = [subStep objectForKey:@"duration"];
                                 subStepDisplay.title = [subStep objectForKey:@"type"];
-                                subStepDisplay.indent = YES;
                                 subStepDisplay.displaySize = kTripDetialsDisplaySize;
                                 
                                 [_data addObject:subStepDisplay];
@@ -271,7 +326,7 @@
             arriveDisplay.details = [arrive objectForKey:@"date"];
             arriveDisplay.duration = [arrive objectForKey:@"time"];
             arriveDisplay.title = [arrive objectForKey:@"type"];
-            arriveDisplay.icon = [UIImage imageNamed:@"global_bell_icon.png"];
+            //arriveDisplay.icon = [UIImage imageNamed:@"global_bell_icon.png"];
             
             [_data addObject:arriveDisplay];
             statusCount += 1;
@@ -389,6 +444,27 @@
     NSString* dateText = [dateFormatter stringFromDate:[_changeDateViewer date]];
     
     _tripDateLabel.text = [NSString stringWithFormat:@"%@ %@", startText, dateText];
+}
+
+#pragma mark - Options
+
+- (void)addOptions
+{
+    [_options addOption:kAccessible WithValue:0];
+    [_options addOption:kRegularFare WithValue:0];
+    [_options addOption:kExcludeSTO WithValue:0];
+    [_options addOption:kBikeRacks WithValue:0];
+}
+
+- (void)changeOptions:(id)sender
+{
+    SettingsListMultiViewController *mvc = [[SettingsListMultiViewController alloc] initWithNibName:@"SettingsListMultiViewController" bundle:nil];
+    mvc.multiSettings = _options;
+    mvc.language = _language;
+    mvc.navPanGesture = _navPanGesture;
+    mvc.panGesture = _panGesture;
+    
+    [self.navigationController pushViewController:mvc animated:YES];
 }
 
 @end

@@ -352,7 +352,10 @@
             
             NSString *destination = [trip valueForKey:@"TripDestination"];
             if(destination != nil)
+            {
                 bus.TrueDisplayHeading = destination;
+                newTrip.EndStopHeader = destination;
+            }
             
             NSString *GPSSpeed = [trip valueForKey:@"GPSSpeed"];
             if(GPSSpeed != nil)
