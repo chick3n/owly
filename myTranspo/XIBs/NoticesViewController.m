@@ -158,6 +158,7 @@
         cellSubTitle.shadowOffset = CGSizeMake(0, 1);
         
         UIImageView* cellIcon = [[UIImageView alloc] initWithFrame:CGRectMake(15, 13, 48, 48)];
+        cell.contentMode = UIViewContentModeCenter;
         cellIcon.tag = kNoticesCellImageTag;
         
         UIImageView* cellBackground = [[UIImageView alloc] initWithFrame:CGRectMake(6, 0, 308, 72)];

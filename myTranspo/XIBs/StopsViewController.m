@@ -49,7 +49,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-#if 0
+#if 1
     //mapview
     _mapView.delegate = self;
     
@@ -132,7 +132,7 @@
     [super viewWillAppear:animated];
     
     _transpo.delegate = self;
-#if 0    
+#if 1    
     if(_mapView.annotations.count <= 0)
     {
         [self updateCloseStops:nil];

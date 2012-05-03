@@ -55,10 +55,10 @@
     _transpo.delegate = self;
     
     //navigationBar
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Start"
-                                                                              style:UIBarButtonItemStyleDone
-                                                                             target:self
-                                                                             action:@selector(startPlanningTrip:)];
+    MTRightButton* startButton = [[MTRightButton alloc] initWithType:kRightButtonTypeAction];
+    [startButton addTarget:self action:@selector(startPlanningTrip:) forControlEvents:UIControlEventTouchUpInside];
+    [startButton setTitle:NSLocalizedString(@"START", nil) forState:UIControlStateNormal];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:startButton];
     self.navigationItem.rightBarButtonItem.enabled = NO;
     
     //view
@@ -77,14 +77,14 @@
     //_startLocation.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_train_icon.png"]];
     _endLocation.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tripplanner_destinationsearch_icon.png"]];
     
-    UILabel* leftView1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 14)];
+    UILabel* leftView1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 40, 14)];
     leftView1.text = NSLocalizedString(@"STARTLOCATIONLEFT", nil);
     leftView1.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
     leftView1.textColor = [UIColor blackColor];
     leftView1.backgroundColor = [UIColor clearColor];
     leftView1.textAlignment = UITextAlignmentRight;
     
-    UILabel* leftView2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 14)];
+    UILabel* leftView2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 40, 14)];
     leftView2.text = NSLocalizedString(@"ENDLOCATIONLEFT", nil);
     leftView2.font = leftView1.font;
     leftView2.textColor = leftView1.textColor;
@@ -191,11 +191,31 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+#if 1
     TripDetailsDisplay* display = (TripDetailsDisplay*)[_data objectAtIndex:indexPath.row];
 
-    if(display.detailsSize.height > kMinTripCellHeight)
+    if(display.detailsSize.height + 12 > kMinTripCellHeight) //12 is the origin y it is starting at in the cell have to count that or double lines dont work.
         return display.detailsSize.height + ((kMinTripCellHeight/2) + 8); //8 is from font height / 2
     return kMinTripCellHeight;
+#endif
+    
+#if 0
+    TripDetailsDisplay* display = (TripDetailsDisplay*)[_data objectAtIndex:indexPath.row];
+    
+    UILabel *text = [[UILabel alloc] initWithFrame:CGRectMake(38, 12, 216, 16)];
+    text.backgroundColor = [UIColor clearColor];
+    text.numberOfLines = 0;
+    text.lineBreakMode = UILineBreakModeWordWrap;
+    text.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
+    text.text = display.details;
+    [text sizeToFit];
+    
+    NSLog(@"%f", text.frame.size.height);
+    
+    if(text.frame.size.height > kMinTripCellHeight)
+        return text.frame.size.height + ((kMinTripCellHeight / 2) + 8);
+    return kMinTripCellHeight;
+#endif
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

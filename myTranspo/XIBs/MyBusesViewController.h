@@ -27,6 +27,7 @@
     NSIndexPath*                        _editedCell;
     BOOL                                _fadeInCell;
     BOOL                                _expandCells;
+    BOOL                                _firstLoadComplete;
     
     //UIComponents
     UIBarButtonItem*                    _editButton;

@@ -15,6 +15,7 @@
 #import "TripDetailsCell.h"
 #import "SettingsMultiType.h"
 #import "SettingsListMultiViewController.h"
+#import "MTRightButton.h"
 
 #define kTripDetialsDisplaySize CGSizeMake(216, 2000)
 

@@ -37,6 +37,8 @@
     NSArray*                        _routeNotices; //stores all the routes that have a notice
     NSDate*                         _lastDate;
     UIImageView*                    _rainbowBar;
+    
+    BOOL                            _disableClick;
 }
 
 @property (strong, nonatomic) UIWindow *window;

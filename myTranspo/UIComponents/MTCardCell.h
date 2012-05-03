@@ -44,6 +44,7 @@
     BOOL                            _hasExpanded;
     BOOL                            _isAnimatingEdit;
     CGPoint                         _lastContentOffset;
+    BOOL                            _isAnimating;
     
     //UI Components
     IBOutlet UILabel*               _busNumber;
@@ -77,6 +78,7 @@
 @property (nonatomic)   MTLanguage          language;
 @property (nonatomic)   int                 indexRow;
 @property (nonatomic, weak) MTStop          *stop;
+@property (nonatomic)   BOOL                hasExpanded;
 
 - (IBAction)nextTimeClicked:(id)sender;
 - (IBAction)deleteClicked:(id)sender;

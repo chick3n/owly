@@ -10,6 +10,7 @@
 
 #define kRightButtonTypeBack 0
 #define kRightButtonTypeSingle 1
+#define kRightButtonTypeAction 2
 
 #define kRightButtonViewTag 101
 

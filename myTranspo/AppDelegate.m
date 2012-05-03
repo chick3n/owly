@@ -130,7 +130,8 @@
     {
         //check if already open and just show it instead of reload
         UIViewController* viewController = [_navigationController.viewControllers objectAtIndex:0];
-        if([viewController class] == [MTBaseViewController class])
+        NSLog(@"%@", [[viewController class] superclass]);
+        if([[viewController class] superclass] == [MTBaseViewController class])
         {
             if(((MTBaseViewController*)viewController).viewControllerType == view)
             {
@@ -238,6 +239,8 @@
         [navController.visibleViewController.view setUserInteractionEnabled:YES];
         [navController.view removeGestureRecognizer:_tap];
     }
+    
+    _disableClick = NO;
 }
 
 - (void)revealController:(ZUUIRevealController *)revealController didRevealRightViewController:(UIViewController *)rightViewController
@@ -275,7 +278,7 @@
     _lastDate = [_transpo getLastSupportedDate];
     
     [_transpo addWebDBPath:@"http://www.vicestudios.com/apps/owly/oc/"];
-    [_transpo addAPI];
+    //[_transpo addAPI];
 }
 
 - (void)preLoad
@@ -354,8 +357,12 @@
 
 - (void)menuTable:(id)menuView selectedNewOption:(MTViewControllers)view
 {
+    if(_disableClick)
+        return;
+    
     if(view != MTVCUNKNOWN)
         [self launchNewView:view];
+    _disableClick = YES;
 }
 
 #pragma mark - GLOBAL NOTIFICATIONS

@@ -894,7 +894,7 @@
         sqlStmt = [NSString stringWithFormat: \
                    @"INSERT INTO `favorites` \
                    (`stop_id`, `route_id`, `route_direction`, `route_tripheading`, `display_sequence`) \
-                   VALUES ('%@','%@',%d,'%@',%d);"
+                   VALUES ('%@','%@',%d,\"%@\",%d);"
                    , stop.StopId
                    , bus.BusId
                    , [bus getBusHeadingForFavorites]

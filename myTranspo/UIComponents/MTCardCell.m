@@ -20,6 +20,7 @@
 @synthesize language =          _language;
 @synthesize indexRow =          _indexRow;
 @synthesize stop =              _stop;
+@synthesize hasExpanded =       _hasExpanded;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier WithLanguage:(MTLanguage)language
 {
@@ -279,6 +280,12 @@
                      animations:^{
                          _detailsBackground.frame = detailsBackgroundFrame;
                          _dataScrollView.frame = detailsScrollView;
+                     } completion:^(BOOL finished) {
+                         if(finished)
+                         {
+                             _hasExpanded = YES;
+                         }
+                         
                      }];
 }
 

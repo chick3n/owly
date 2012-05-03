@@ -48,6 +48,7 @@
     _cellAlert = [[MTCellAlert alloc] init];
     _cellAlert.runForLength = 5.0;
     _cellAlert.delegate = self;
+
     UIButton* accessoryView = [UIButton buttonWithType:UIButtonTypeCustom];
     [accessoryView setImage:[UIImage imageNamed:@"card_arrow_left.png"] forState:UIControlStateNormal];
     [accessoryView setImage:[UIImage imageNamed:@"card_arrow_right.png"] forState:UIControlStateSelected];

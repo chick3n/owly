@@ -107,14 +107,15 @@
 "TRIPPLANNER" = "Planificateur de voyage";
 "STARTLOCATIONPLACEHOLDER" = "point de départ";
 "ENDLOCATIONPLACEHOLDER" = "Destination finale";
-"STARTLOCATIONLEFT" = "de";
-"ENDLOCATIONLEFT" = "fin";
+"STARTLOCATIONLEFT" = "de:";
+"ENDLOCATIONLEFT" = "fin:";
 "PLANTRIPPREFIX" = "Plan de voyage";
 "ACCESSIBLE" = "Accessible";
 "REGULAREFARE" = "Tarif Régulier";
 "EXCLUDESTO" = "Exclure STO";
 "BIKERACK" = "Vélos-bus";
 "FILTER" = "Filtrer";
+"START" = "aller";
 
 //STOPS
 "AT" = "à";

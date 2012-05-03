@@ -34,6 +34,7 @@
         _fadeInCell = YES;
         _chosenDate = [NSDate date];
         _expandCells = NO;
+        _firstLoadComplete = NO;
     }
     return self;
 }
@@ -428,7 +429,8 @@
         [favorite.Bus updateDisplayObjects];
     }
     
-    /*for(int x=0; x<_favorites.count; x++)
+#if 0
+    for(int x=0; x<_favorites.count; x++)
     {
         MTStop* stop = [_favorites objectAtIndex:x];
         
@@ -442,17 +444,27 @@
             
             break;
         }
-    }*/
-    
-    
+    }
+#endif
     
     _loadingCounter -= 1;
     
     if(_loadingCounter <= 0)
     {
         [self refreshTableStopLoading];
-        [_tableView reloadData];
-        [self performSelector:@selector(expandCells:) withObject:nil afterDelay:0.25];
+        if(!_expandCells)
+        {
+            [_tableView reloadData];
+            _expandCells = YES;
+            [self performSelector:@selector(expandCells:) withObject:nil afterDelay:0.25];
+        }
+        else if(_firstLoadComplete)
+        {
+            [_tableView reloadData];
+        }
+        else {
+            [self startPoolUpdate:nil];
+        }
     }
 }
 
@@ -566,7 +578,7 @@
     }
     
     
-    _poolUpdates = [NSTimer scheduledTimerWithTimeInterval:0.8 target:self selector:@selector(poolUpdateTick:) userInfo:nil repeats:NO];
+    _poolUpdates = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(poolUpdateTick:) userInfo:nil repeats:YES];
 }
 
 - (void)stopPoolUpdate:(id)sender
@@ -580,6 +592,7 @@
 
 - (void)poolUpdateTick:(id)sender
 {
+#if 0
     BOOL update = YES;
     for(MTStop* fav in _favorites)
     {
@@ -602,6 +615,27 @@
         [self stopPoolUpdate:nil];
         [self startPoolUpdate:nil]; //try again
     }    
+#endif
+
+    BOOL hasUpdated = YES;
+    NSArray* visibleCells = [_tableView visibleCells];
+    
+    for(MTCardCell* cell in visibleCells)
+    {
+        if(!cell.hasExpanded)
+            hasUpdated = NO;
+    }
+    
+    if(hasUpdated)
+    {
+        [_tableView reloadData];
+        [self stopPoolUpdate:nil];
+        _firstLoadComplete = YES;
+        MTLog(@"Reloading pool update.");
+    }
+    else {
+        MTLog(@"Restarting Pool");
+    }
 }
 
 #pragma mark - Date Pickerview Delegate

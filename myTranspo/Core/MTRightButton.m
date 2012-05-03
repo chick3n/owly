@@ -36,6 +36,8 @@
     UIImage *defaultBackground = nil;
     if(_type == kRightButtonTypeBack)
         defaultBackground = [UIImage imageNamed:@"global_backempty_btn.png"];
+    else if(_type == kRightButtonTypeAction)
+        defaultBackground = [UIImage imageNamed:@"global_alt_btn.png"];
     else defaultBackground = [UIImage imageNamed:@"global_right_btn.png"];
     
     //resize it
