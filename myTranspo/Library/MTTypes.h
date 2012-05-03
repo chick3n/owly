@@ -51,6 +51,7 @@ typedef enum
 {
     MTRESULTSTATE_SUCCESS = 0
     , MTRESULTSTATE_FAILED
+    , MTRESULTSTATE_DONE
 } MTResultState;
 
 typedef enum

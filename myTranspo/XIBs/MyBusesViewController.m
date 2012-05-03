@@ -17,6 +17,7 @@
 - (void)stopPoolUpdate:(id)sender;
 - (void)poolUpdateTick:(id)sender;
 - (void)firstGetFavorites:(id)sender;
+- (void)firstUpdateFavorites:(id)sender;
 - (void)changeTripScheduleTime:(id)sender;
 - (void)didSwipe:(UIGestureRecognizer*)gestureRecognizer;
 - (void)expandCells:(id)sender;
@@ -311,6 +312,11 @@
     [_transpo getFavorites];
 }
 
+- (void)firstUpdateFavorites:(id)sender
+{
+    [_transpo updateAllFavorites:_favorites];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(!tableView.editing && !_editing)
@@ -389,8 +395,7 @@
         {
             _favorites = favorites;
             [_tableView reloadData];
-            
-            [self performSelector:@selector(updateFavorites) withObject:nil afterDelay:0.2];
+            [self firstUpdateFavorites:nil];
         }
     }
     else
@@ -419,52 +424,24 @@
 
 - (void)myTranspo:(MTResultState)state UpdateType:(MTUpdateType)updateType updatedFavorite:(MTStop*)favorite
 {
-    if(state == MTRESULTSTATE_FAILED)
+    if(state == MTRESULTSTATE_DONE)
     {
-        MTLog(@"Failed to update Favorite...");//if failed still ahve to stop the loading!
+        [self refreshTableStopLoading];
+        [self performSelector:@selector(expandCells:) withObject:nil afterDelay:0.25];
+        return;
     }
 
     if(favorite != nil)
     {
         [favorite.Bus updateDisplayObjects];
     }
+
+    int index = [_favorites indexOfObject:favorite];
     
-#if 0
-    for(int x=0; x<_favorites.count; x++)
+    if(index >= 0)
     {
-        MTStop* stop = [_favorites objectAtIndex:x];
-        
-        if(stop == favorite)
-        {
-            if(stop.MTCardCellIsAnimating == NO)
-                [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:x inSection:0]]
-                              withRowAnimation:UITableViewRowAnimationNone];
-            else
-                [self startPoolUpdate:nil];
-            
-            break;
-        }
-    }
-#endif
-    
-    _loadingCounter -= 1;
-    
-    if(_loadingCounter <= 0)
-    {
-        [self refreshTableStopLoading];
-        if(!_expandCells)
-        {
-            [_tableView reloadData];
-            _expandCells = YES;
-            [self performSelector:@selector(expandCells:) withObject:nil afterDelay:0.25];
-        }
-        else if(_firstLoadComplete)
-        {
-            [_tableView reloadData];
-        }
-        else {
-            [self startPoolUpdate:nil];
-        }
+        [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:0]]
+                          withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
