@@ -74,17 +74,17 @@
 "MTDEF_FRIDAY" = "Vendredi";
 "MTDEF_SATURDAY" = "samedi";
 "MTDEF_SUNDAY" = "Dimanche";
-"MTDEF_REPEATS" = "répète chaque ";
+"MTDEF_REPEATS" = "et se répète chaque";
 
 //SETTINGS
 "MTDEF_ACCOUNTNAME" = "Nom du compte";
 "MTDEF_ACCOUNTPASSWORD" = "mot de passe";
 "MTDEF_LANGUAGE" = "langue";
-"MTDEF_CITY" = "ville";
-"MTDEF_HELPERCARDS" = "Afficher l'aide des avis";
-"MTDEF_ALERTSCHOICE" = "Notifications";
-"MTDEF_UPDATEALERT" = "Mises à jour des alertes nécessaires";
-"MTDEF_MANAGENOTIFICATIONS" = "Notifications";
+"MTDEF_CITY" = "ma ville";
+"MTDEF_HELPERCARDS" = "Afficher des conseils utiles";
+"MTDEF_ALERTSCHOICE" = "M'avertir avant d'...";
+"MTDEF_UPDATEALERT" = "M'avertir des mises à jour";
+"MTDEF_MANAGENOTIFICATIONS" = "Gérer les alertes";
 "MTDEF_ACCOUNTINFOHEADER" = "intégration compte";
 "MTDEF_APPSETTINGSHEADER" = "Paramètres de l'application";
 "MTDEF_MANAGEDATAHEADER" = "gestion des données";
@@ -99,8 +99,8 @@
 
 //ALERTS
 "MTDEF_ALERTUPDATETITLE" = "Route mise à jour";
-"MTDEF_ALERTUPDATEMESSAGE" = "le temps stocké localement doit être mis à jour aujourd'hui.";
-"MTDEF_ALERTTIMEMESSAGE" = "est prévue pour arriver à";
+"MTDEF_ALERTUPDATEMESSAGE" = "Le %@, le à l'arrêt de %d, les temps doivent être mis à jour. Assurez-vous que vous êtes connecté en ligne pour le faire.";
+"MTDEF_ALERTTIMEMESSAGE" = "Le %@, en direction de %@, est programmé pour arriver à l'arrêt %d à %@.";
 
 //TRIPS
 "HEADING" = "Destination";
@@ -119,3 +119,6 @@
 
 //STOPS
 "AT" = "à";
+
+//Alert Manager
+"BEGINS" = "commence";

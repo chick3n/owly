@@ -29,4 +29,7 @@
 + (NSString*)convertNoticeIdToSubtitleString:(NSString*)notice;
 + (NSString*)convertNoticeIdToIconString:(NSString*)notice;
 
+//dates
++ (NSString*)PrettyDate:(NSDate*)date;
+
 @end

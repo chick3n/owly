@@ -130,7 +130,6 @@
     {
         //check if already open and just show it instead of reload
         UIViewController* viewController = [_navigationController.viewControllers objectAtIndex:0];
-        NSLog(@"%@", [[viewController class] superclass]);
         if([[viewController class] superclass] == [MTBaseViewController class])
         {
             if(((MTBaseViewController*)viewController).viewControllerType == view)

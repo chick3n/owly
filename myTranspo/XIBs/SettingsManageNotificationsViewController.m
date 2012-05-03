@@ -17,6 +17,7 @@
 @end
 
 @implementation SettingsManageNotificationsViewController
+@synthesize sortNotifications           = _sortNotifications;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -46,7 +47,15 @@
 {
     [super viewDidLoad];
     
-    _data = [_transpo tripNotifications];
+    _sortNotifications = ^NSComparisonResult(id obj1, id obj2) {
+        UILocalNotification* alert1 = obj1, *alert2 = obj2;
+        NSString *stop1 = [alert1.userInfo valueForKey:kMTNotificationTripTimeKey];
+        NSString *stop2 = [alert2.userInfo valueForKey:kMTNotificationTripTimeKey];
+        
+        return [stop1 compare:stop2];
+    };
+    
+    _data = [[_transpo tripNotifications]sortedArrayUsingComparator:_sortNotifications];
     
     //table view
     _tableView.delegate = self;
@@ -64,7 +73,7 @@
     [editButton setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
     _editButton = [[UIBarButtonItem alloc] initWithCustomView:editButton];
     
-    MTRightButton* doneButton = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+    MTRightButton* doneButton = [[MTRightButton alloc] initWithType:kRightButtonTypeAction];
     [doneButton addTarget:self action:@selector(doneEditTableView:) forControlEvents:UIControlEventTouchUpInside];
     [doneButton setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
     _doneButton = [[UIBarButtonItem alloc] initWithCustomView:doneButton];
@@ -169,11 +178,9 @@
     
     UILocalNotification* notification = [_data objectAtIndex:indexPath.row];
     
-    cell.textLabel.text = notification.alertBody;
-    
-    NSMutableString* repeat = [NSMutableString string];
+    NSMutableString* repeat = [NSMutableString stringWithFormat:@", %@ ", NSLocalizedString(@"MTDEF_REPEATS", nil)];
     //display notification data properly
-    if(notification.repeatInterval == NSWeekdayCalendarUnit)
+    if(notification.repeatInterval == NSWeekCalendarUnit)
     {
         int dayOfWeek = [MTHelper DayOfWeekForDate:notification.fireDate];
         switch (dayOfWeek) {
@@ -199,13 +206,19 @@
                 [repeat appendString:NSLocalizedString(@"MTDEF_SATURDAY", nil)];
                 break;
         }
-        
-        if(repeat.length > 0)
-        {
-            [repeat insertString:NSLocalizedString(@"MTDEF_REPEATS", nil) atIndex:0];
-        }
     }
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@", notification.fireDate.description, repeat];
+
+    NSDictionary *userDic = notification.userInfo;
+    
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ at stop %@, %@ mins before %@"
+                           , [userDic valueForKey:kMTNotificationBusNumberKey]
+                           , [userDic valueForKey:kMTNotificationStopNumberKey]
+                           , [userDic valueForKey:kMTNotificationTripAlertTimeKey]
+                           , [userDic valueForKey:kMTNotificationTripTimeKey]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@: %@%@"
+                                 , NSLocalizedString(@"BEGINS", nil)
+                                 , [MTHelper PrettyDate:notification.fireDate]
+                                 , [repeat lowercaseString]];
     
     return cell;
 }
@@ -305,7 +318,7 @@
 - (IBAction)removeAllNotificationsClicked:(id)sender
 {
     [_transpo removeAllTripNotifications];
-    _data = [_transpo tripNotifications];
+    _data = [[_transpo tripNotifications] sortedArrayUsingComparator:_sortNotifications];
     
     if(_data.count <= 0)
     {
@@ -334,7 +347,7 @@
         _removeSelectedButton.enabled = NO;
         
         _data = nil;
-        _data = [_transpo tripNotifications];
+        _data = [[_transpo tripNotifications] sortedArrayUsingComparator:_sortNotifications];
         [_tableView reloadData];
         
         if(_data.count <= 0)
@@ -352,6 +365,13 @@
 - (void)goBack:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - SORT
+
+- (void)sortNotifications:(NSComparisonResult (^)(id, id))block
+{
+    
 }
 
 @end

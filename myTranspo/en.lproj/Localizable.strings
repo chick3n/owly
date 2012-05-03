@@ -82,17 +82,17 @@
 "MTDEF_FRIDAY" = "Friday";
 "MTDEF_SATURDAY" = "Saturday";
 "MTDEF_SUNDAY" = "Sunday";
-"MTDEF_REPEATS" = "repeats every ";
+"MTDEF_REPEATS" = "and repeats every";
 
 //SETTINGS
 "MTDEF_ACCOUNTNAME" = "Account Name";
 "MTDEF_ACCOUNTPASSWORD" = "Password";
 "MTDEF_LANGUAGE" = "Language";
-"MTDEF_CITY" = "City";
-"MTDEF_HELPERCARDS" = "Display help notices";
-"MTDEF_ALERTSCHOICE" = "Notifications";
-"MTDEF_UPDATEALERT" = "Updates necessary alerts";
-"MTDEF_MANAGENOTIFICATIONS" = "Notifications";
+"MTDEF_CITY" = "My City";
+"MTDEF_HELPERCARDS" = "Display helpful hints";
+"MTDEF_ALERTSCHOICE" = "Alert me before...";
+"MTDEF_UPDATEALERT" = "Warn me about updates";
+"MTDEF_MANAGENOTIFICATIONS" = "Manage alerts";
 "MTDEF_ACCOUNTINFOHEADER" = "Account Integration";
 "MTDEF_APPSETTINGSHEADER" = "Application Settings";
 "MTDEF_MANAGEDATAHEADER" = "Data Management";
@@ -100,15 +100,15 @@
 "MTDEF_APPSETTINGSFOOTER" = "";
 "MTDEF_MANAGEDATAFOOTER" = "";
 "MTDEF_SETTINGSTITLE" = "Settings";
-"MTDEF_FIRSTLAUNCHSCREEN" = "First launch screen";
+"MTDEF_FIRSTLAUNCHSCREEN" = "Start on...";
 "BACKBUTTON" = "Back";
 "CLOSE" = "Close";
 "GATHERINGSCHEDULE" = "Gathering schedule information.";
 
 //ALERTS
 "MTDEF_ALERTUPDATETITLE" = "Route Update";
-"MTDEF_ALERTUPDATEMESSAGE" = "locally stored time needs to be updated now.";
-"MTDEF_ALERTTIMEMESSAGE" = "is scheduled to arrive in";
+"MTDEF_ALERTUPDATEMESSAGE" = "The %@'s, at stop %d, times need to be updated. Make sure your are connected online to do so.";
+"MTDEF_ALERTTIMEMESSAGE" = "The %@, heading towards %@, is scheduled to arrive at stop %d in %@.";
 
 //TRIPS
 "HEADING" = "Heading";
@@ -127,3 +127,6 @@
 
 //STOPS
 "AT" = "at";
+
+//ALERT MANAGER
+"BEGINS" = "Begins";

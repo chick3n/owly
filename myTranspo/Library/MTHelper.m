@@ -148,6 +148,18 @@
     return dateFormatter;
 }
 
++ (NSString*)PrettyDate:(NSDate*)date
+{
+    if(date == nil)
+        return @"";
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterLongStyle];
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
+    return [dateFormatter stringFromDate:date];
+}
+
 + (NSDateFormatter*)TimeFormatter
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

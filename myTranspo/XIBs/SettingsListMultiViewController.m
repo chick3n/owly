@@ -62,7 +62,10 @@
     _tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]];
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)]];
     
-    //[self.view addGestureRecognizer:_panGesture];
+    MTRightButton* doneButton = [[MTRightButton alloc] initWithType:kRightButtonTypeAction];
+    [doneButton addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
+    [doneButton setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:doneButton];
 }
 
 - (void)viewDidUnload

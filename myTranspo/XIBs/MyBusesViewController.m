@@ -62,11 +62,16 @@
     self.title = NSLocalizedString(@"MTDEF_VIEWCONTROLLERMYBUSES", nil);
 
     //navigationBar Setup
-    _editButtonValue = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
-    [_editButtonValue setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
-    [_editButtonValue addTarget:self action:@selector(editFavorites:) forControlEvents:UIControlEventTouchUpInside];
-    _editButton = [[UIBarButtonItem alloc] initWithCustomView:_editButtonValue];
+    MTRightButton* editButton = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+    [editButton setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
+    [editButton addTarget:self action:@selector(editFavorites:) forControlEvents:UIControlEventTouchUpInside];
+    _editButton = [[UIBarButtonItem alloc] initWithCustomView:editButton];
     self.navigationItem.rightBarButtonItem = _editButton;
+    
+    MTRightButton* doneButton = [[MTRightButton alloc] initWithType:kRightButtonTypeAction];
+    [doneButton setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
+    [doneButton addTarget:self action:@selector(editFavorites:) forControlEvents:UIControlEventTouchUpInside];
+    _doneButton = [[UIBarButtonItem alloc] initWithCustomView:doneButton];
     
     //setup tableview
     [self.tableView setDelaysContentTouches:YES];
@@ -270,15 +275,12 @@
     if(_editing)
     {
         [_tableView setEditing:YES animated:YES];
-        [_editButtonValue setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
-        _editButton.style = UIBarButtonItemStyleDone;
-        //[self.view removeGestureRecognizer:_panGesture];
+        self.navigationItem.rightBarButtonItem = _doneButton;
     }
     else
     {
         [_tableView setEditing:NO animated:YES];
-        [_editButtonValue setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
-        _editButton.style = UIBarButtonItemStylePlain;
+        self.navigationItem.rightBarButtonItem = _editButton;
         //[self.view addGestureRecognizer:_panGesture];
     }
 }

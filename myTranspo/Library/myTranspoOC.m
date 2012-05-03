@@ -1011,7 +1011,7 @@
     notification.soundName = UILocalNotificationDefaultSoundName;
     notification.applicationIconBadgeNumber = 1;
     
-    notification.alertBody = [NSString stringWithFormat:@"%@ @ %d: %@", route.BusNumber, stop.StopNumber, NSLocalizedString(@"MTDEF_ALERTUPDATEMESSAGE", nil)];
+    notification.alertBody = [NSString stringWithFormat:NSLocalizedString(@"MTDEF_ALERTUPDATEMESSAGE", nil), route.BusNumber, stop.StopNumber];
     
     NSDictionary *userDic = [NSDictionary dictionaryWithObjectsAndKeys:
                              kMTNotificationUpdateTypeKey, kMTNotificationTypeKey,
@@ -1056,7 +1056,7 @@
         if(busNumber.length <= 0 || stopNumber.length <= 0)
             return NO;
         
-        notification.alertBody = [NSString stringWithFormat:@"%@ @ %d: %@", busNumber, stopNumber, NSLocalizedString(@"MTDEF_ALERTUPDATEMESSAGE", nil)];
+        notification.alertBody = [NSString stringWithFormat:NSLocalizedString(@"MTDEF_ALERTUPDATEMESSAGE", nil), busNumber, stopNumber];
     }
     
     return YES;
@@ -1143,10 +1143,10 @@
     notification.applicationIconBadgeNumber = 1;
     
     
-    notification.alertBody = [NSString stringWithFormat:@"%@ @ %d: %@ %@ min"
+    notification.alertBody = [NSString stringWithFormat:NSLocalizedString(@"MTDEF_ALERTTIMEMESSAGE", nil)
                               , route.BusNumber
+                              , route.DisplayHeading
                               , stop.StopNumber
-                              , NSLocalizedString(@"MTDEF_ALERTTIMEMESSAGE", nil)
                               , alertTime];
     
     NSDictionary *userDic = [NSDictionary dictionaryWithObjectsAndKeys:

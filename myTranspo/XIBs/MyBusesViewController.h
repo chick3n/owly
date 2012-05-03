@@ -31,6 +31,7 @@
     
     //UIComponents
     UIBarButtonItem*                    _editButton;
+    UIBarButtonItem*                    _doneButton;
     MTRightButton*                      _editButtonValue;
     IBOutlet UIDatePicker*              _dateSelector;
 }
