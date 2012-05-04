@@ -62,6 +62,7 @@
 @property (nonatomic, strong)   NSMutableArray*     TimesSun;
 @property (nonatomic)           BOOL                TimesAdded;
 @property (nonatomic, strong)   NSString*           NextUpdate;
+@property (nonatomic, readonly) NSDate*             TimesAddedOn;
 
 - (void)clearTimes;
 

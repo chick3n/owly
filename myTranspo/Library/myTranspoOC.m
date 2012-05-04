@@ -695,8 +695,9 @@
     [stop.Bus clearLiveTimes];
     
     BOOL status = NO;
-    if(!stop.Bus.Times.TimesAdded)
+    if(![MTHelper IsDateToday:stop.Bus.Times.TimesAddedOn])
     {
+        MTLog(@"GETTING TIMES LOCAL");
         //get stop information
         if(_hasDB)
         {

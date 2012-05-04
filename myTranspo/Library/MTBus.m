@@ -380,7 +380,7 @@
 
 - (NSArray*)getNextThreeTimes
 {
-    return [self getNextTimesOfAmount:3 IncludeLiveTime:NO];
+    return [self getNextTimesOfAmount:3 IncludeLiveTime:YES];
 }
 
 - (NSArray*)getNextTimesOfAmount:(int)count IncludeLiveTime:(BOOL)useLive

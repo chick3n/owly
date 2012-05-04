@@ -141,6 +141,7 @@
 @synthesize TimesAdded      = _timesHaveBeenAdded;
 @synthesize NextUpdate;
 
+
 - (id)init
 {
     self = [super init];
@@ -162,6 +163,11 @@
     [_times removeAllObjects];
     [_timesSat removeAllObjects];
     [_timesSun removeAllObjects];
+}
+
+- (NSDate*)TimesAddedOn
+{
+    return _timesAdded;
 }
 
 - (void)setTimesAdded:(BOOL)TimesAdded

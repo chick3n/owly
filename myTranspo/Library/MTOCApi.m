@@ -332,12 +332,12 @@
         }
         
         //didnt break, didnt find it
-        if([bus.BusNumber isEqualToString:routeNumber] && [[bus getBusHeadingOCStyle] isEqualToString:routeHeading])
+        /*if([bus.BusNumber isEqualToString:routeNumber] && [[bus getBusHeadingOCStyle] isEqualToString:routeHeading])
         {
             trips = [routeDirection valueForKeyPath:@"Trips.Trip.node"];
             if(trips != nil)
                 break;
-        }
+        }*/
     }
 
     NSMutableArray *_trips = [[NSMutableArray alloc] init];
