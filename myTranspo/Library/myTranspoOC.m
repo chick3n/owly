@@ -14,7 +14,7 @@
 
 @interface myTranspoOC ()
 - (void)initializeLocationManager;
-- (BOOL)updateFavoriteHeader:(MTStop*)stop;
+- (BOOL)updateFavoriteHeader:(MTStop*)stop FullUpdate:(BOOL)fullUpdate;
 - (BOOL)updateFavorite:(MTStop*)stop ForDate:(NSDate*)date StoreTimes:(BOOL)store;
 @end
 
@@ -635,12 +635,17 @@
 
 - (BOOL)updateAllFavorites:(NSArray*)favorites
 {
+    return [self updateAllFavorites:favorites FullUpdate:YES];
+}
+
+- (BOOL)updateAllFavorites:(NSArray*)favorites FullUpdate:(BOOL)fullUpdate
+{
     dispatch_async(_queue
                    , ^{
                        NSDate* today = [NSDate date];
                        for(MTStop* favorite in favorites)
                        {
-                           [self updateFavoriteHeader:favorite];
+                           [self updateFavoriteHeader:favorite FullUpdate:fullUpdate];
                            [self updateFavorite:favorite ForDate:today StoreTimes:YES];
                        }
                        
@@ -650,18 +655,22 @@
                        });
                    });
     
-    return YES;
+    return YES;    
 }
 
-- (BOOL)updateFavoriteHeader:(MTStop*)stop
+- (BOOL)updateFavoriteHeader:(MTStop*)stop FullUpdate:(BOOL)fullUpdate
 {
     //get stop information
     if(_hasDB)
     {
         stop.IsUpdating = YES;
         
-        [_ocDb getStop:stop];
-        [_ocDb getBus:stop.Bus ForStop:stop];
+        if(fullUpdate)
+        {
+            [_ocDb getStop:stop];
+            [_ocDb getBus:stop.Bus ForStop:stop];
+        }
+        
         if(_hasRealCoordinates)
         {
             stop.CurrentLat = _coordinates.latitude;
@@ -716,22 +725,6 @@
             stop.IsUpdating = NO;
         }
     } 
-    else //information updates only
-    {
-        if(_hasDB)
-        {
-            stop.IsUpdating = YES;
-            
-            if(_hasRealCoordinates)
-            {
-                stop.CurrentLat = _coordinates.latitude;
-                stop.CurrentLon = _coordinates.longitude;
-                [_ocDb getDistanceFromStop:stop];
-            }
-            
-            stop.IsUpdating = NO;
-        }
-    }
     
     if(_hasAPI && [MTHelper IsDateToday:date]) //get next times live
     {

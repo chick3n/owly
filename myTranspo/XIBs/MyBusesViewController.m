@@ -299,6 +299,7 @@
         return;
     }
     
+    /*
     for(MTStop* stop in _favorites)
     {
         _chosenDate = [NSDate date]; //always update to now
@@ -306,7 +307,9 @@
         stop.cancelQueue = NO;
         [stop restoreQueuesForBuses];
         [_transpo updateFavoriteData:stop ForDate:_chosenDate];
-    }
+    }*/
+    _chosenDate = [NSDate date];
+    [_transpo updateAllFavorites:_favorites FullUpdate:NO];
 }
 
 - (void)firstGetFavorites:(id)sender
@@ -482,7 +485,7 @@
 #pragma mark - MTRefreshTableView
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if(_editing)
+    /*if(_editing)
     {
         if(_editedCell != nil && _editedCell.row < _favorites.count)
         {
@@ -493,7 +496,7 @@
             [_tableView reloadData];
         }
         _editing = NO;
-    }
+    }*/
     [_tableView scrollViewWillBeginDragging:scrollView];
 }
 
