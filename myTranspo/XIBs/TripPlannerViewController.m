@@ -546,6 +546,8 @@
     tripPlanner.startingLocation = ([_startLocation.placeholder isEqualToString:CurrentLocation]) ? _currentLocation : _startLocation.text;
     tripPlanner.endingLocation = ([_endLocation.placeholder isEqualToString:CurrentLocation]) ? _currentLocation : _endLocation.text;
     
+    _startLocation.text = tripPlanner.startingLocation;
+    _endLocation.text = tripPlanner.endingLocation;
    
     tripPlanner.departBy = YES;
     tripPlanner.arriveBy = _changeDateViewer.date;
