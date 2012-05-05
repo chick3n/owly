@@ -674,6 +674,15 @@
     
     NSString* hour;
     NSString* nightTime; //am
+    
+    //modify minute to be in future based on OC 10 min intervals
+    int remainder = comp.minute % 10;
+    if(remainder > 0)
+    {
+        int diff = 10 - remainder;
+        comp.minute += diff;
+    }
+    
     if(comp.hour > 12) //pm
     {
         nightTime = @"True";
@@ -685,6 +694,7 @@
         nightTime = @"False"; //am
         hour = [NSString stringWithFormat:@"%d", comp.hour];
     }
+    
     NSString *day;
     NSString *month;
     
@@ -697,8 +707,8 @@
     else month = [NSString stringWithFormat:@"%d", comp.month];
     
     NSURL* callUrl = [self appendQuery:url
-                      , tripPlanner.startingLocation
-                      , tripPlanner.endingLocation
+                      , [tripPlanner.startingLocation URLEncodedString]
+                      , [tripPlanner.endingLocation URLEncodedString]
                       , (tripPlanner.departBy) ? @"3" : @"4"
                       , hour
                       , [NSString stringWithFormat:@"%d", comp.minute]
@@ -710,9 +720,17 @@
                       , (tripPlanner.bikeRack) ? @"on" : @"off"
                       , (_language == MTLANGUAGE_FRENCH) ? @"fr" : @"en"];
     
+#if 1
+    NSData *data = [self webData:callUrl];
+    if(data == nil)
+    {
+        return NO;
+    }
+    
+    NSString *file = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+#endif
 
-
-#if 1 //used for basic testing
+#if 0 //used for basic testing
     NSError* error = nil;
     NSString* file = [[NSString alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tripplanner.html" ofType:nil] encoding:NSUTF8StringEncoding error:&error];
     if(error)
@@ -722,9 +740,11 @@
 	}
     //http://www.vicestudios.com/apps/owly/oc/oc_tripPlanner.php
     //http://192.168.0.38/oc/oc_tripPlanner.php
-    NSURL* postUrl = [NSURL URLWithString:@"http://www.vicestudios.com/apps/owly/oc/oc_tripPlanner.php"];
-    
 #endif
+    NSURL* postUrl = nil;
+    if(_language == MTLANGUAGE_FRENCH)
+        postUrl = [NSURL URLWithString:@"http://www.vicestudios.com/apps/owly/oc/oc_tripPlannerFr.php"];
+    else postUrl = [NSURL URLWithString:@"http://www.vicestudios.com/apps/owly/oc/oc_tripPlanner.php"];
     
     if(tripPlanner.cancelQueue)
         return NO;
@@ -737,7 +757,6 @@
     
     if(json != nil)
     {
-        
         [results addEntriesFromDictionary:json];
         return YES;
     }

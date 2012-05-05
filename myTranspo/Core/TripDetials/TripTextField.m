@@ -9,6 +9,7 @@
 #import "TripTextField.h"
 
 @implementation TripTextField
+@synthesize hasTyped;
 
 - (id)initWithFrame:(CGRect)frame
 {

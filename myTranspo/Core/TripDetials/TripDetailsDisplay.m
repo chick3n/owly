@@ -53,7 +53,7 @@
         _details = @"";
         _duration = @"";
         _indent = NO;
-        _displaySize = CGSizeZero;
+        _displaySize = kTripDetialsDisplaySize;
     }
     return self;
 }

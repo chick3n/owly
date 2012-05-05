@@ -10,4 +10,6 @@
 
 @interface TripTextField : UITextField
 
+@property (nonatomic)   BOOL    hasTyped;
+
 @end

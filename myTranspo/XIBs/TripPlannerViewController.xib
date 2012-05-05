@@ -17,6 +17,7 @@
 			<string>IBUIDatePicker</string>
 			<string>IBUIImageView</string>
 			<string>IBUITextField</string>
+			<string>IBUIActivityIndicatorView</string>
 			<string>IBUITableView</string>
 			<string>IBUIButton</string>
 		</array>
@@ -68,7 +69,6 @@
 						<string key="NSFrame">{{0, 200}, {320, 216}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
@@ -101,7 +101,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 						<object class="NSDate" key="IBUIDate">
 							<double key="NS.time">357430071.44780803</double>
 						</object>
-						<int key="IBUIMinuteInterval">15</int>
+						<int key="IBUIMinuteInterval">10</int>
 					</object>
 					<object class="IBUIView" id="186504645">
 						<reference key="NSNextResponder" ref="191373211"/>
@@ -362,6 +362,21 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 						<reference key="IBUIFontDescription" ref="134995913"/>
 						<reference key="IBUIFont" ref="842425346"/>
 					</object>
+					<object class="IBUIActivityIndicatorView" id="562927173">
+						<reference key="NSNextResponder" ref="191373211"/>
+						<int key="NSvFlags">-2147483356</int>
+						<string key="NSFrame">{{142, 242}, {37, 37}}</string>
+						<reference key="NSSuperview" ref="191373211"/>
+						<reference key="NSWindow"/>
+						<string key="NSReuseIdentifierKey">_NS:9</string>
+						<bool key="IBUIOpaque">NO</bool>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<int key="IBUIStyle">0</int>
+						<object class="NSColor" key="IBUIColor">
+							<int key="NSColorSpace">1</int>
+							<bytes key="NSRGB">MCAwIDAAA</bytes>
+						</object>
+					</object>
 				</array>
 				<string key="NSFrame">{{0, 64}, {320, 416}}</string>
 				<reference key="NSSuperview"/>
@@ -462,6 +477,14 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 					<int key="connectionID">35</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">_loadingView</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="562927173"/>
+					</object>
+					<int key="connectionID">41</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">flipLocations:</string>
 						<reference key="source" ref="695342678"/>
@@ -514,6 +537,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 							<reference ref="1047520818"/>
 							<reference ref="186504645"/>
 							<reference ref="209075374"/>
+							<reference ref="562927173"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -608,6 +632,11 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 						<reference key="object" ref="736033096"/>
 						<reference key="parent" ref="186504645"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">40</int>
+						<reference key="object" ref="562927173"/>
+						<reference key="parent" ref="191373211"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -625,6 +654,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 				<string key="38.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="39.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="4.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="40.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="6.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="7.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="8.CustomClassName">TripTextField</string>
@@ -636,7 +666,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">39</int>
+			<int key="maxID">41</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -681,6 +711,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 						<string key="_endLocation">TripTextField</string>
 						<string key="_flipLocations">UIButton</string>
 						<string key="_headerView">UIView</string>
+						<string key="_loadingView">UIActivityIndicatorView</string>
 						<string key="_optionsButton">UIButton</string>
 						<string key="_startLocation">TripTextField</string>
 						<string key="_tableView">UITableView</string>
@@ -706,6 +737,10 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 						<object class="IBToOneOutletInfo" key="_headerView">
 							<string key="name">_headerView</string>
 							<string key="candidateClassName">UIView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="_loadingView">
+							<string key="name">_loadingView</string>
+							<string key="candidateClassName">UIActivityIndicatorView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="_optionsButton">
 							<string key="name">_optionsButton</string>

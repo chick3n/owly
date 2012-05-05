@@ -16,6 +16,8 @@
 #define kActionArrive @"ARRIVE"
 #define kActionUnknown @"UNKNOWN"
 
+#define kTripDetialsDisplaySize CGSizeMake(216, 2000)
+
 @interface TripDetailsDisplay : NSObject
 {
     CGSize                  _detailsSize;

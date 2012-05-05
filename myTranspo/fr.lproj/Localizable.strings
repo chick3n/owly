@@ -117,6 +117,7 @@
 "BIKERACK" = "Vélos-bus";
 "FILTER" = "Filtrer";
 "START" = "aller";
+"TPERROR" = "Leur était un problème de communication avec le serveur, s'il vous plaît essayer à nouveau plus tard.";
 
 //STOPS
 "AT" = "à";

@@ -17,6 +17,8 @@
 - (void)removeKeyboard:(id)sender;
 - (void)hideDateChangerView:(id)sender;
 - (void)addOptions;
+- (void)getCurrentAddress;
+- (void)updateToCurrentLoaction;
 @end
 
 @implementation TripPlannerViewController
@@ -74,6 +76,8 @@
     //textfields
     _startLocation.placeholder = NSLocalizedString(@"STARTLOCATIONPLACEHOLDER", nil);
     _endLocation.placeholder = NSLocalizedString(@"ENDLOCATIONPLACEHOLDER", nil);
+    _startLocation.hasTyped = NO;
+    _endLocation.hasTyped = NO;
     //_startLocation.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_train_icon.png"]];
     _endLocation.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tripplanner_destinationsearch_icon.png"]];
     
@@ -103,6 +107,8 @@
     _endLocation.clearButtonMode = UITextFieldViewModeWhileEditing;
     [_startLocation addTarget:self action:@selector(addressFieldsValueChanged:) forControlEvents:UIControlEventEditingChanged];
     [_endLocation addTarget:self action:@selector(addressFieldsValueChanged:) forControlEvents:UIControlEventEditingChanged];
+    
+    [self getCurrentAddress];
 }
 
 - (void)viewDidUnload
@@ -132,10 +138,17 @@
 
 - (void)myTranspo:(id)transpo State:(MTResultState)state receivedTripPlan:(NSDictionary*)trip
 {
+    _tripDetails = nil;
     if(state == MTRESULTSTATE_SUCCESS)
     {
         if(trip != nil)
             _tripDetails = trip;
+    }
+    else {
+        _tripDetails = [NSDictionary dictionaryWithObject:
+                                                   [NSDictionary dictionaryWithObject:NSLocalizedString(@"TPERROR", nil)
+                                                                               forKey:@"error"]
+                                                   forKey:@"error"];
     }
     
     [self parseTripDetails];
@@ -246,12 +259,12 @@
 
 - (void)startLoading:(id)sender
 {
-    
+    [_loadingView startAnimating];
 }
 
 - (void)stopLoading:(id)sender
 {
-    
+    [_loadingView stopAnimating];
 }
 
 - (void)parseTripDetails
@@ -259,11 +272,39 @@
     if(_tripDetails == nil)
         return;
     
-    NSArray* keys = [_tripDetails allKeys];
-    if(keys.count != 3)
-        return;
-    
     int statusCount = 0;
+    
+    //error
+    NSDictionary* error = [_tripDetails objectForKey:@"error"];
+    if(error != nil)
+    {
+        [_data removeAllObjects];
+        
+        TripDetailsDisplay* errorDisplay = [[TripDetailsDisplay alloc] init];
+        errorDisplay.details = [error valueForKey:@"error"];
+        errorDisplay.title = kActionNote;
+        
+        [_data addObject:errorDisplay];
+        
+        NSArray* subErrors = [error objectForKey:@"subErrors"];
+        if(subErrors != nil)
+        {
+            for(int x=0; x<subErrors.count; x++)
+            {
+                NSString* errorContent = [subErrors objectAtIndex:x];
+                if(errorContent == nil)
+                    continue;
+                
+                TripDetailsDisplay *errorSubDisplay = [[TripDetailsDisplay alloc] init];
+                errorSubDisplay.details = errorContent;
+                errorSubDisplay.indent = YES;
+                
+                [_data addObject:errorSubDisplay];
+            }
+        }
+        
+        return;
+    }
     
     //depart
     NSDictionary* depart = [_tripDetails objectForKey:@"depart"];
@@ -274,7 +315,21 @@
            ([depart objectForKey:@"type"] != nil))
         {
             TripDetailsDisplay* departDisplay = [[TripDetailsDisplay alloc] init];
-            departDisplay.details = [depart objectForKey:@"date"];
+            NSArray* details = [depart objectForKey:@"details"];
+            if(details && details.count > 0)
+            {
+                NSMutableString *detailsResult = [[NSMutableString alloc] init];
+                NSString *newLine = @"\n";
+                for(int x=0; x<details.count; x++)
+                {
+                    NSString * result = [(NSString*)[details objectAtIndex:x] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                    [detailsResult appendFormat:@"%@%@", ((x>0) ? newLine : @""), result];
+                }
+                departDisplay.details = (NSString*)detailsResult;
+            }
+            else {
+                departDisplay.details = [depart objectForKey:@"date"];
+            }
             departDisplay.duration = [depart objectForKey:@"time"];
             departDisplay.title = [depart objectForKey:@"type"];
             //departDisplay.icon = [UIImage imageNamed:@"global_bell_icon.png"];
@@ -342,7 +397,21 @@
            ([arrive objectForKey:@"type"] != nil))
         {
             TripDetailsDisplay* arriveDisplay = [[TripDetailsDisplay alloc] init];
-            arriveDisplay.details = [arrive objectForKey:@"date"];
+            NSArray* details = [arrive objectForKey:@"details"];
+            if(details && details.count > 0)
+            {
+                NSMutableString *detailsResult = [[NSMutableString alloc] init];
+                NSString *newLine = @"\n";
+                for(int x=0; x<details.count; x++)
+                {
+                    NSString * result = [(NSString*)[details objectAtIndex:x] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                    [detailsResult appendFormat:@"%@%@", ((x>0) ? newLine : @""), result];
+                }
+                arriveDisplay.details = (NSString*)detailsResult;
+            }
+            else {
+                arriveDisplay.details = [depart objectForKey:@"date"];
+            }
             arriveDisplay.duration = [arrive objectForKey:@"time"];
             arriveDisplay.title = [arrive objectForKey:@"type"];
             //arriveDisplay.icon = [UIImage imageNamed:@"global_bell_icon.png"];
@@ -366,6 +435,25 @@
     _startLocation.text = value2;
     _endLocation.text = value1;
     
+    if(value1.length <= 0)
+        _endLocation.hasTyped = NO;
+    
+    if(value2.length <= 0)
+        _startLocation.hasTyped = NO;
+    
+    if([_startLocation.placeholder isEqualToString:CurrentLocation])
+    {
+        _startLocation.placeholder = NSLocalizedString(@"STARTLOCATIONPLACEHOLDER", nil);
+        _endLocation.placeholder = CurrentLocation;
+    }
+    else if([_endLocation.placeholder isEqualToString:CurrentLocation])
+    {
+        _endLocation.placeholder = NSLocalizedString(@"ENDLOCATIONPLACEHOLDER", nil);
+        _startLocation.placeholder = CurrentLocation;
+    }
+    
+    [self addressFieldsValueChanged:nil];
+    
     [self removeKeyboard:nil];
 }
 
@@ -373,10 +461,11 @@
 {
     BOOL canStartPlan = NO;
     
-    if(_startLocation.text.length > 0 && _endLocation.text.length > 0)
+    if((_startLocation.text.length > 0 || [_startLocation.placeholder isEqualToString:CurrentLocation])
+       && (_endLocation.text.length > 0 || [_endLocation.placeholder isEqualToString:CurrentLocation]))
         canStartPlan = YES;
     
-    self.navigationItem.rightBarButtonItem.enabled = canStartPlan;
+     self.navigationItem.rightBarButtonItem.enabled = canStartPlan;
 }
 
 - (void)removeKeyboard:(id)sender
@@ -395,32 +484,87 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
+    TripTextField* field = (TripTextField*)textField;
+    field.hasTyped = YES;
+    
+    if(field == _startLocation)
+        _startLocation.placeholder = NSLocalizedString(@"STARTLOCATIONPLACEHOLDER", nil);
+    else if(field == _endLocation)
+        _endLocation.placeholder = NSLocalizedString(@"ENDLOCATIONPLACEHOLDER", nil);
+    
     [self hideDateChangerView:nil];
 }
 
 #pragma mark - ACTIONS
+
+- (void)getCurrentAddress
+{
+    if(_geoCoder == nil)
+    {
+        _geoCoder = [[CLGeocoder alloc] init];
+    }
+    
+    if(_transpo.hasRealCoordinates)
+    {
+        [_geoCoder reverseGeocodeLocation:_transpo.clLocation
+                        completionHandler:^(NSArray *placemarks, NSError *error) {
+                            CLPlacemark *placeMark = [placemarks objectAtIndex:0];
+                            
+                            _currentLocation = [placeMark.addressDictionary valueForKey:@"Street"];
+                            
+                            [self updateToCurrentLoaction];
+                        }];
+    }
+}
+
+- (void)updateToCurrentLoaction
+{
+    if(_currentLocation != nil && _startLocation.hasTyped == NO)
+    {
+        _startLocation.placeholder = CurrentLocation;
+    }
+}
 
 - (void)startPlanningTrip:(id)sender
 {
     [_data removeAllObjects];
     _tripDetails = nil;
     [_tableView reloadData];
+    [self startLoading:nil];
     
     [self removeKeyboard:nil];
     [self hideDateChangerView:nil];
     
     //verify everything is set
-    if(_startLocation.text.length <= 0)
+    if(_startLocation.text.length <= 0 && ![_startLocation.placeholder isEqualToString:CurrentLocation])
         return;
-    if(_endLocation.text.length <= 0)
+    if(_endLocation.text.length <= 0 && ![_endLocation.placeholder isEqualToString:CurrentLocation])
         return;
     
     MTTripPlanner* tripPlanner = [[MTTripPlanner alloc] init];
-    tripPlanner.startingLocation = _startLocation.text;
-    tripPlanner.endingLocation = _endLocation.text;
     
-    tripPlanner.departBy = NO;
-    tripPlanner.arriveBy = [NSDate date];
+    tripPlanner.startingLocation = ([_startLocation.placeholder isEqualToString:CurrentLocation]) ? _currentLocation : _startLocation.text;
+    tripPlanner.endingLocation = ([_endLocation.placeholder isEqualToString:CurrentLocation]) ? _currentLocation : _endLocation.text;
+    
+   
+    tripPlanner.departBy = YES;
+    tripPlanner.arriveBy = _changeDateViewer.date;
+    
+    //parse options
+    NSDictionary* options = _options.options;
+    for(NSString* key in [options allKeys])
+    {
+        NSNumber* option = [options objectForKey:key];
+        
+        if([key isEqualToString:kAccessible])
+            tripPlanner.accessible = [option boolValue];
+        else if([key isEqualToString:kRegularFare])
+            tripPlanner.regulareFare = [option boolValue];
+        else if([key isEqualToString:kExcludeSTO])
+            tripPlanner.excludeSTO = [option boolValue];
+        else if([key isEqualToString:kBikeRacks])
+            tripPlanner.bikeRack = [option boolValue];
+    }
     
     [_transpo getTripPlanner:tripPlanner];
 }

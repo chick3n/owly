@@ -623,6 +623,24 @@
         
         return annotationView;
     }
+    else if([annotation isKindOfClass:[MKUserLocation class]]) //replace blue dot
+    {
+        static NSString *identifier = @"MTPersonAnnotation";
+        MKAnnotationView* annotiationView = (MKAnnotationView*)[_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        
+        if(annotiationView == nil)
+            annotiationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+        else
+        {
+            annotiationView.annotation = annotation;
+            
+            annotiationView.enabled = YES;
+            annotiationView.canShowCallout = NO;
+            annotiationView.image = [UIImage imageNamed:@"person_location_pin.png"];   
+        }
+        
+        return annotiationView;
+    }
     
     return nil;    
 }

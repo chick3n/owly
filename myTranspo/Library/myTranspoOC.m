@@ -27,6 +27,15 @@
 @synthesize delegate       = _delegate;
 @synthesize coordinates    = _coordinates;
 @synthesize City           = _city;
+@synthesize hasRealCoordinates = _hasRealCoordinates;
+@synthesize clLocation;
+
+- (CLLocation*)clLocation
+{
+    if(_locationManager != nil)
+        return _locationManager.location;
+    return nil;
+}
 
 - (id)initWithLanguage:(MTLanguage)lang 
              AndDBPath:(NSString *)dbpath 

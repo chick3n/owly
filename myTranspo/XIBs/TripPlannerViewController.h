@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
+
 #import "MTBaseViewController.h"
 #import "MTTripPlanner.h"
 #import "MTQueueSafe.h"
@@ -17,12 +20,12 @@
 #import "SettingsListMultiViewController.h"
 #import "MTRightButton.h"
 
-#define kTripDetialsDisplaySize CGSizeMake(216, 2000)
-
 #define kAccessible NSLocalizedString(@"ACCESSIBLE", nil)
 #define kRegularFare NSLocalizedString(@"REGULAREFARE", nil)
 #define kExcludeSTO NSLocalizedString(@"EXCLUDESTO", nil)
 #define kBikeRacks NSLocalizedString(@"BIKERACK", nil)
+
+static NSString* CurrentLocation = @"(Current Location)";
 
 typedef struct
 {
@@ -39,6 +42,9 @@ typedef struct
     NSMutableArray*             _data; //TripDetailsDisplay;
    // TPOptions                   _options;
     SettingsMultiType*          _options;
+    CLGeocoder*                 _geoCoder;
+    NSString*                   _currentLocation;
+    BOOL                        _hasInputtedText;
     
     //UIComponents
     IBOutlet UITableView*               _tableView;
@@ -50,6 +56,7 @@ typedef struct
     IBOutlet UIDatePicker*              _changeDateViewer;
     IBOutlet UIView*                    _headerView;
     IBOutlet UIButton*                  _optionsButton;
+    IBOutlet UIActivityIndicatorView*   _loadingView;
 }
 
 - (IBAction)flipLocations:(id)sender;

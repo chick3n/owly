@@ -99,6 +99,8 @@
 @property (nonatomic, strong)   NSString*               WebDBPath;
 @property (nonatomic, weak)     id<MyTranspoDelegate>   delegate;
 @property (nonatomic)           CLLocationCoordinate2D  coordinates;
+@property (nonatomic,readonly)  BOOL                    hasRealCoordinates;
+@property (nonatomic, readonly) CLLocation*             clLocation;
 
 //methods
 - (id)initWithLanguage:(MTLanguage)lang AndDBPath:(NSString *)dbpath ForCity:(MTCity)city;
