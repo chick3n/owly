@@ -228,6 +228,7 @@
         return; //no need for an update!
 #endif
     //details have changed scroll back
+    [_timesAlert hideAlertWithSelfInvoke:YES];
     [_dataScrollView setContentOffset:CGPointMake(0, 0) animated:YES];    
     
     _stop = stop;
@@ -266,7 +267,6 @@
     if(frame.size.height != kFullHeight)
         return;
     
-//    NSLog(@"New Frame: %f %f", frame.origin.y, frame.size.height);
     CGRect detailsBackgroundFrame = _detailsBackground.frame;
     CGRect detailsScrollView = _dataScrollView.frame;
     
@@ -426,7 +426,8 @@
     }
 #endif
 #if 1
-    [_timesAlert hideAlertWithSelfInvoke:YES];
+    if(!_isScrollingAutomatically)
+        [_timesAlert hideAlertWithSelfInvoke:YES];
 #endif
 }
 
@@ -434,11 +435,13 @@
 // When animation stops using setContentOffset
 - (void) scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     _lastContentOffset = scrollView.contentOffset;
+    _isScrollingAutomatically = NO;
 }
 
 // When animation stops using dragging
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     _lastContentOffset = scrollView.contentOffset;
+    _isScrollingAutomatically = NO;
 }
 #endif
 
@@ -522,7 +525,23 @@
 {
     MTCellButton* nextTime = (MTCellButton*)sender;
     
+    //determine if the btton is half hidden and scroll over the remaining amount
+    CGFloat scrollBy = 0.0;
+    if((nextTime.frame.origin.x + nextTime.frame.size.width) > (_dataScrollView.contentOffset.x + _dataScrollView.frame.size.width))
+    {        
+        scrollBy = (nextTime.frame.origin.x + nextTime.frame.size.width) - (_dataScrollView.contentOffset.x + _dataScrollView.frame.size.width);
+        CGRect scrollOffset = _dataScrollView.frame;
+        scrollOffset.origin = _dataScrollView.contentOffset;
+        scrollOffset.origin.x += scrollBy;
+        
+        _isScrollingAutomatically = YES;
+        [_dataScrollView scrollRectToVisible:scrollOffset animated:YES];
+    }
+    
+    
+    
     CGPoint pointInCell = [self convertPoint:nextTime.center fromView:_dataScrollView];
+    pointInCell.x -= scrollBy;
     _timesAlert.refrenceObject = nextTime;
     [_timesAlert displayAlert:nextTime.helperHeading AtPos:pointInCell ConstrainedTo:self.frame.size UpsideDown:NO];
 

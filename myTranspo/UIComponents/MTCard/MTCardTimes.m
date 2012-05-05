@@ -49,9 +49,15 @@
     _cellAlert.runForLength = 5.0;
     _cellAlert.delegate = self;
 
+#if 0
     UIButton* accessoryView = [UIButton buttonWithType:UIButtonTypeCustom];
     [accessoryView setImage:[UIImage imageNamed:@"card_arrow_left.png"] forState:UIControlStateNormal];
     [accessoryView setImage:[UIImage imageNamed:@"card_arrow_right.png"] forState:UIControlStateSelected];
+    _cellAlert.accessoryView = accessoryView;
+#endif
+    DCRoundSwitch* accessoryView = [[DCRoundSwitch alloc] initWithFrame:CGRectMake(0, 0, 77, 27)];
+    accessoryView.iconText = @"global_bell_icon.png";
+    accessoryView.onTintColor = [UIColor colorWithRed:30./255. green:77./255. blue:43./255. alpha:1.0];
     _cellAlert.accessoryView = accessoryView;
     
     [self addSubview:_cellAlert];
@@ -223,15 +229,13 @@
     
     int rowHeight = row * kCardRowCellHeightLong;
     
-    NSLog(@"off:%f row:%d secheight:%d", self.contentOffset.y, rowHeight, sectionHeight);
-    
     pos.x = cell.center.x;
-    pos.y = sectionHeight + rowHeight + _cellAlert.frame.size.height;    
+    pos.y = sectionHeight + rowHeight + _cellAlert.frame.size.height - ((kCardRowCellHeightLong / 2) - 4);    
     
     if(rowHeight + sectionHeight <= self.contentOffset.y + kCardRowCellHeightLong || row == 0)
     {
         bottom = YES;
-        pos.y -= (kCardRowCellHeightLong / 2);
+        //pos.y -= (kCardRowCellHeightLong / 2);
     }
     
     [_cellAlert displayAlert:headingForAlert
@@ -262,6 +266,11 @@
     [_cellAlert hideAlertWithSelfInvoke:YES];
 }
 
+- (void)resumeAlert
+{
+    
+}
+
 #pragma mark - Cell Alert Delegate
 
 - (void)cardTimesRow:(id)owner ClickedOnCell:(MTCardCellButton *)cell
@@ -280,8 +289,6 @@
     
     if(time == nil)
         return;
-    
-    NSLog(@"Show Heading for Time: %@", [time getTimeForDisplay]);
     
     //display notice
     [self displayCellAlert:time.EndStopHeader ForCell:cell];

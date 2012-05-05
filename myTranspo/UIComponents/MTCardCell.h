@@ -45,6 +45,7 @@
     BOOL                            _isAnimatingEdit;
     CGPoint                         _lastContentOffset;
     BOOL                            _isAnimating;
+    BOOL                            _isScrollingAutomatically;
     
     //UI Components
     IBOutlet UILabel*               _busNumber;

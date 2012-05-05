@@ -36,7 +36,6 @@
     if(_useHelperHeading && _helperView)
     {
 #if 0
-        NSLog(@"HELPER HEADING: %@", _helperHeading);
 
         _helperHeadingIsHidden = !_helperHeadingIsHidden;
         if(_helperHeadingIsHidden)
@@ -47,7 +46,6 @@
     
     if(_useSecondaryHeading)
     {
-        NSLog(@"SECONDARY HEADING: %@", _secondaryHeading);
     }
 }
 

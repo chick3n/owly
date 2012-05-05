@@ -193,7 +193,7 @@
     NSDate *newDate = [[NSCalendar currentCalendar] dateFromComponents:day1];
     
     NSDateComponents* component = [[NSCalendar currentCalendar] components:components fromDate:newToday toDate:newDate options:0];
-    //NSLog(@"newToday: %@, day: %d, newDate: %@", newToday, component.day, newDate);
+
     return (component.day == 0) ? YES : NO;
 
 }

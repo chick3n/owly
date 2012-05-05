@@ -51,7 +51,6 @@
     if(passMidnight) //add 240000 hours to time
         nTime2 += 240000;
     
-    //NSLog(@"time1: %d time2: %d", nTime1, nTime2);
     
     if(nTime1 > nTime2)
         return (orderBy == 1) ? -1 : 1;

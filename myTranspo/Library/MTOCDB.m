@@ -536,7 +536,6 @@
             stop.Longitude = sqlite3_column_double(_cmpStmt, 4);
             stop.DistanceFromOrigin = sqlite3_column_double(_cmpStmt, 5);
 
-            //NSLog(@"%f", stop.DistanceFromOrigin);
             [stops addObject:stop];
         }
     }

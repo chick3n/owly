@@ -706,7 +706,6 @@
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
     //MKCoordinateSpan span = mapView.region.span;
-    //NSLog(@" 1 = ~111 km -> %f = ~ %f km ",span.latitudeDelta,span.latitudeDelta*111);
     if(_searchBar.text.length <= 0)
         [_transpo getMoreStopsNearBy:mapView.centerCoordinate.latitude Lon:mapView.centerCoordinate.longitude Distance:0];
 }

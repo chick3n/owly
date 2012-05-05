@@ -152,7 +152,6 @@
 	didUpdateToLocation:(CLLocation *)newLocation 
 		   fromLocation:(CLLocation *)oldLocation 
 {
-    MTLog(@"Received location, update variables");
     _coordinates = newLocation.coordinate;
     _hasRealCoordinates = YES;
     if([_delegate respondsToSelector:@selector(myTranspo:State:updatedUserCoordinates:)])
@@ -162,7 +161,6 @@
 - (void)locationManager:(CLLocationManager *)manager 
 	   didFailWithError:(NSError *)error 
 {
-    MTLog(@"Location Manager Error: %@", [error description]);
     //_coordinates = kDefaultCoordinatesOttawa;
     //retain old coordinates
     _hasRealCoordinates = NO;
@@ -1349,9 +1347,6 @@
         return nil;
     
     NSDateFormatter* dateFormatter = [MTHelper MTDateFormatterDashesYYYYMMDD];
-    
-    //NSLog(@"Set Date: %@", [dateFormatter dateFromString:nextDate]);
-    //NSLog(@"Test Date: %@", [[NSDate date] dateByAddingTimeInterval:60]);
     
     return [dateFormatter dateFromString:nextDate];
 }

@@ -12,6 +12,7 @@
 - (void)initializeUI;
 - (void)hideAlert;
 - (void)accessoryViewClicked:(id)sender;
+- (void)drawCalloutForFrame:(CGRect)size AtPos:(CGPoint)pos IsBelow:(BOOL)below;
 @end
 
 @implementation MTCellAlert
@@ -22,11 +23,11 @@
 @synthesize accessoryView       = _accessoryView;
 @synthesize delegate            = _delegate;
 
-- (void)setAccessoryView:(UIButton *)accessoryView
+- (void)setAccessoryView:(DCRoundSwitch *)accessoryView
 {
     if(_accessoryView != nil)
     {
-        [_accessoryView removeTarget:self action:@selector(accessoryViewClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [_accessoryView removeTarget:self action:@selector(accessoryViewClicked:) forControlEvents:UIControlEventValueChanged];
         [_accessoryView removeFromSuperview];
     }
     
@@ -34,8 +35,11 @@
     if(_accessoryView == nil)
         return;
     
-    _accessoryView.frame = CGRectMake(0, 0, 30, kCellAlertHeightMax);
-    [_accessoryView addTarget:self action:@selector(accessoryViewClicked:) forControlEvents:UIControlEventTouchUpInside];
+    //_accessoryView.frame = CGRectMake(0, 0, 30, kCellAlertHeightMax);
+    CGRect accessoryViewFrame = accessoryView.frame;
+    accessoryViewFrame.origin.y = (self.frame.size.height/2) - (accessoryViewFrame.size.height/2);
+    accessoryView.frame = accessoryViewFrame;
+    [_accessoryView addTarget:self action:@selector(accessoryViewClicked:) forControlEvents:UIControlEventValueChanged];
     [self addSubview:_accessoryView];
 }
 
@@ -66,9 +70,9 @@
 {
     //self.clipsToBounds = YES;
     self.hidden = YES;
-    self.backgroundColor = [UIColor blackColor];    
+    self.backgroundColor = [UIColor clearColor];    
     
-    UIFont* headingFont = [UIFont fontWithName:@"HelveticaNeue" size:14.];
+    UIFont* headingFont = [UIFont fontWithName:@"HelveticaNeue" size:16.];
 
     CGRect alertFrame = CGRectZero;
     alertFrame.origin.x = kCellAlertIndent;
@@ -76,11 +80,30 @@
     alertFrame.size.width = self.frame.size.width - (alertFrame.origin.x * 2);
     alertFrame.size.height = self.frame.size.height - (alertFrame.origin.y * 2);
     
-    _alert = [[UILabel alloc] initWithFrame:alertFrame];
+    UIImage* alertBaseImage = [UIImage imageNamed:@"flyout_plain_top.png"];
+    _alertBase = [[UIImageView alloc] initWithFrame:alertFrame];
+    _alertBase.contentMode = UIViewContentModeScaleToFill;
+    _alertBase.image = [alertBaseImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, kCellAlertLeftOffset, 0, kCellAlertLeftOffset)];
+    [self addSubview:_alertBase];
+    
+    _alertArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"flyout_plain_arrow.png"]];
+    _alertArrow.contentMode = UIViewContentModeTop;
+    CGFloat scale = 0.0;
+    if(_alertArrow.image.scale == 1) //non retina
+        scale = 2.0;
+    else scale = 1.0;
+    _alertArrow.frame = CGRectMake(kCellAlertLeftOffset, kCellAlertHeightMax-scale, _alertArrow.frame.size.width, _alertArrow.frame.size.height);
+    [self addSubview:_alertArrow];
+    
+    CGRect labelFrame = alertFrame;
+    labelFrame.origin.x = 8;
+    _alert = [[UILabel alloc] initWithFrame:labelFrame];
     _alert.font = headingFont;
     _alert.backgroundColor = [UIColor clearColor];
-    _alert.textAlignment = UITextAlignmentCenter;
+    _alert.textAlignment = UITextAlignmentLeft;
     _alert.textColor = [UIColor whiteColor];
+    _alert.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:0.2];
+    _alert.shadowOffset = CGSizeMake(0, -1);
     //_alert.clipsToBounds = YES;
     
     [self addSubview:_alert];
@@ -94,9 +117,20 @@
     if(alertText.length <= 0)
         return;
     
+    CGPoint alertArrowPoint = CGPointZero;
+    
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideAlert) object:nil];
     
     CGSize alertTextSize = [alertText sizeWithFont:_alert.font constrainedToSize:CGSizeMake(kCellAlertWidthMax, kCellAlertHeightMax)];
+    if(alertTextSize.width < kCellAlertWidthMin)
+    {
+        alertTextSize.width = kCellAlertWidthMin;
+        _alert.textAlignment = UITextAlignmentCenter;
+    }
+    else {
+        _alert.textAlignment = UITextAlignmentLeft;
+    }
+    
     
     CGRect alertFrame = _alert.frame;
     CGRect viewFrame = self.frame;
@@ -106,41 +140,43 @@
     
     if(_accessoryView != nil)
     {
-        viewFrame.size.width += _accessoryView.frame.size.width;
+        viewFrame.size.width += (_accessoryView.frame.size.width + 8);
         CGRect accessoryFrame = _accessoryView.frame;
-        accessoryFrame.origin.x = viewFrame.size.width - accessoryFrame.size.width;
+        accessoryFrame.origin.x = viewFrame.size.width - (accessoryFrame.size.width + 8);
         _accessoryView.frame = accessoryFrame;
     }
     
     viewFrame.origin.x = pos.x - (viewFrame.size.width / 2);
+    alertArrowPoint.x = (viewFrame.size.width / 2) - (_alertArrow.frame.size.width / 2);
+    
     if(bottom == NO)
         viewFrame.origin.y = pos.y - (viewFrame.size.height + (kCellAlertIndent * 2));
     else {
-        viewFrame.origin.y = pos.y + (viewFrame.size.height + (kCellAlertIndent * 2));
+        viewFrame.origin.y = pos.y + (kCellAlertIndent * 2);
         //rotate arrow
     }
     
+   
     if(viewFrame.origin.x + viewFrame.size.width > size.width)
-        viewFrame.origin.x += size.width - (viewFrame.origin.x + viewFrame.size.width); //always be negative
+    {
+        float newOrigin = size.width - ((viewFrame.origin.x + viewFrame.size.width) + 2);
+        alertArrowPoint.x -= newOrigin; //this is a negative value newOrigin
+        viewFrame.origin.x += newOrigin; //always be negative, 4 is to show corner not at edge
+    }
     if(viewFrame.origin.x < 0)
-        viewFrame.origin.x = 0;
+    {
+        float newOrigin = fabs(viewFrame.origin.x) + 2;
+        viewFrame.origin.x += newOrigin;
+        alertArrowPoint.x -= newOrigin;
+    }
     
     _alert.frame = alertFrame;
     _alert.text = alertText;
+    [self drawCalloutForFrame:viewFrame AtPos:alertArrowPoint IsBelow:bottom];
     self.frame = viewFrame;
     
     self.hidden = NO;
-#if 0
-    self.alpha = 0.0;
-    
-    [UIView animateWithDuration:0.25
-                     animations:^{
-                         self.alpha = 1.0;
-                     } 
-                     completion:^(BOOL finished) {
-                         [self performSelector:@selector(hideAlert) withObject:nil afterDelay:_runForLength];
-                     }];
-#endif
+
     self.layer.transform = CATransform3DMakeScale(0.5, 0.5, 1.0);
     
     CAKeyframeAnimation *bounceAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
@@ -155,7 +191,7 @@
     
     self.layer.transform = CATransform3DIdentity;
     
-    [self performSelector:@selector(hideAlert) withObject:nil afterDelay:_runForLength];
+    //[self performSelector:@selector(hideAlert) withObject:nil afterDelay:_runForLength];
 }
 
 - (void)hideAlert
@@ -168,6 +204,7 @@
     if(invoke)
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideAlert) object:nil];
     
+#if 0
     [UIView animateWithDuration:0.25
                      animations:^{
                          self.alpha = 0.0;
@@ -176,6 +213,16 @@
                         self.hidden = YES;
                         self.alpha = 1.0;
                     }];
+#endif
+    
+    self.hidden = YES;
+}
+
+- (void)resumeAlertWithSelfInvoke:(BOOL)invoke
+{
+    if(invoke)
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideAlert) object:nil];
+    [self performSelector:@selector(hideAlert) withObject:nil afterDelay:_runForLength];
 }
 
 - (void)adjustCoordinates:(CGPoint)coords
@@ -193,15 +240,50 @@
 {
     if(_accessoryView != nil)
     {
-        _accessoryView.selected = toggle;
+        //_accessoryView.selected = toggle;
+        [_accessoryView setOn:toggle animated:NO ignoreControlEvents:YES];
     }
 }
 
 - (void)accessoryViewClicked:(id)sender
 {
-    NSLog(@"Click accessory view");
     if([_delegate conformsToProtocol:@protocol(CellAlertDelegate)])
         [_delegate cellAlertAccessoryViewClicked:self];
+}
+
+- (void)drawCalloutForFrame:(CGRect)size AtPos:(CGPoint)pos IsBelow:(BOOL)below
+{
+    size.origin.x = 0;
+    size.origin.y = 0;
+    
+    _alertBase.frame = size;
+    
+#if 0
+    CGPoint arrowPoint = pos;
+    if(self.frame.origin.x == 0)
+        arrowPoint.x = (self.frame.size.width / 2) - (_alertArrow.frame.size.width / 2);
+    else
+        arrowPoint.x = fabs(pos.x - self.frame.origin.x);
+    arrowPoint.y = kCellAlertHeightMax;
+    
+
+    _alertArrow.center = arrowPoint;
+#endif
+    
+    if((pos.x + _alertArrow.frame.size.width) > (size.size.width - kCellAlertLeftOffset))
+        pos.x = (size.size.width - kCellAlertLeftOffset) - (_alertArrow.frame.size.width);
+    
+    CGRect arrow = _alertArrow.frame;
+    arrow.origin.x = pos.x;
+    _alertArrow.frame = arrow;
+
+#if 0
+    if(below)
+    {
+        _alertBase.transform = CGAffineTransformMakeRotation(M_PI);
+        _alertArrow.transform = CGAffineTransformMakeRotation(M_PI);
+    }
+#endif
 }
 
 @end

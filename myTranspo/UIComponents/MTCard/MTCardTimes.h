@@ -33,5 +33,6 @@
 - (float)heightForTablesData;
 - (void)displayCellAlert:(NSString*)headingForAlert ForCell:(MTCardCellButton*)cell;
 - (void)hideAlert;
+- (void)resumeAlert;
 
 @end

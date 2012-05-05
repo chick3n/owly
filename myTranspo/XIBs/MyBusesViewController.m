@@ -159,14 +159,21 @@
     if(_favorites == nil)
     {
         self.navigationItem.rightBarButtonItem = nil;
+        _tableView.editing = NO;
     }
     else if(_favorites.count <= 0)
     {
         self.navigationItem.rightBarButtonItem = nil;
+        _tableView.editing = NO;
+    }
+    else if(_tableView.editing)
+    {
+        self.navigationItem.rightBarButtonItem = _doneButton;
     }
     else
     {
         self.navigationItem.rightBarButtonItem = _editButton;
+        _tableView.editing = NO;
     }
 }
 

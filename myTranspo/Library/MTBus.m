@@ -317,7 +317,7 @@
         {
             if(results.count > count)
                 break;
-            
+#if 1
             if(nextDay)
             {
                 nextTime = time;
@@ -326,13 +326,16 @@
             }
             else
             {
+#endif
                 if([time compareTimesHHMMSS:currentTime Ordering:1 PassedMidnight:nextDay] > 0)
                 {
                     nextTime = time;
                     if(nextTime != nil)
                         [results addObject:nextTime];
                 }
+#if 1
             }
+#endif
         }
     }
     

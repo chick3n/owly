@@ -111,7 +111,6 @@
     if(_row5.hidden)
         _row5.hidden = NO;
     
-    //NSLog(@"%@ %@ %@ %@ %@", row1, row2, row3, row4, row5);
     _row1.text = (row1 == nil) ? @"" : row1;
     _row2.text = (row2 == nil) ? @"" : row2;
     _row3.text = (row3 == nil) ? @"" : row3;

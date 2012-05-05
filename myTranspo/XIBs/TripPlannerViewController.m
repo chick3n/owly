@@ -210,7 +210,6 @@
     text.text = display.details;
     [text sizeToFit];
     
-    NSLog(@"%f", text.frame.size.height);
     
     if(text.frame.size.height > kMinTripCellHeight)
         return text.frame.size.height + ((kMinTripCellHeight / 2) + 8);

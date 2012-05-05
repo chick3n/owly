@@ -954,7 +954,6 @@ numberOfRowsInComponent:(NSInteger)component;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-   // NSLog(@"%f", scrollView.contentOffset.y);
 }
 
 #pragma mark - Navigation UI
@@ -1016,7 +1015,6 @@ numberOfRowsInComponent:(NSInteger)component;
 {
     if(time != nil)
     {
-        NSLog(@"Add Alert for TIME: %@ Has Alert: %d", [time getTimeForDisplay], ((time.Alert == nil) ? 0 : 1));
         //set time to show we have added alert
         if(time.Alert == nil)
         {
@@ -1038,7 +1036,7 @@ numberOfRowsInComponent:(NSInteger)component;
                 time.Alert = nil;
         }
         
-        [_timeTable hideAlert];
+        [_timeTable resumeAlert];
         [_timeTable reloadData];
     }
 }

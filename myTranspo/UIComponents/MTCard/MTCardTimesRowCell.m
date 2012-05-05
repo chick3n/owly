@@ -124,7 +124,6 @@
     if(_row5.hidden)
         _row5.hidden = NO;
     
-    //NSLog(@"%@ %@ %@ %@ %@", row1, row2, row3, row4, row5);
     NSString *row1Display, *row2Display, *row3Display, *row4Display, *row5Display;
     
     if(row1 == nil) row1Display = @"", seq1 = 0; else row1Display = [row1 getTimeForDisplay];
