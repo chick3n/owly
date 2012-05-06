@@ -95,6 +95,11 @@
     _alertArrow.frame = CGRectMake(kCellAlertLeftOffset, kCellAlertHeightMax-scale, _alertArrow.frame.size.width, _alertArrow.frame.size.height);
     [self addSubview:_alertArrow];
     
+    _alertArrowTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"flyout_plaindown_arrow.png"]];
+    _alertArrowTop.contentMode = UIViewContentModeTop;
+    _alertArrowTop.frame = CGRectMake(kCellAlertLeftOffset, -_alertArrowTop.frame.size.height+2.0, _alertArrowTop.frame.size.width, _alertArrowTop.frame.size.height);
+    [self addSubview:_alertArrowTop];
+    
     CGRect labelFrame = alertFrame;
     labelFrame.origin.x = 8;
     _alert = [[UILabel alloc] initWithFrame:labelFrame];
@@ -152,7 +157,7 @@
     if(bottom == NO)
         viewFrame.origin.y = pos.y - (viewFrame.size.height + (kCellAlertIndent * 2));
     else {
-        viewFrame.origin.y = pos.y + (kCellAlertIndent * 2);
+        viewFrame.origin.y = pos.y + (kCellAlertIndent/2 + (kCellAlertIndent * 2));
         //rotate arrow
     }
     
@@ -191,7 +196,7 @@
     
     self.layer.transform = CATransform3DIdentity;
     
-    //[self performSelector:@selector(hideAlert) withObject:nil afterDelay:_runForLength];
+    [self performSelector:@selector(hideAlert) withObject:nil afterDelay:_runForLength];
 }
 
 - (void)hideAlert
@@ -258,24 +263,29 @@
     
     _alertBase.frame = size;
     
-#if 0
-    CGPoint arrowPoint = pos;
-    if(self.frame.origin.x == 0)
-        arrowPoint.x = (self.frame.size.width / 2) - (_alertArrow.frame.size.width / 2);
-    else
-        arrowPoint.x = fabs(pos.x - self.frame.origin.x);
-    arrowPoint.y = kCellAlertHeightMax;
-    
-
-    _alertArrow.center = arrowPoint;
-#endif
-    
-    if((pos.x + _alertArrow.frame.size.width) > (size.size.width - kCellAlertLeftOffset))
-        pos.x = (size.size.width - kCellAlertLeftOffset) - (_alertArrow.frame.size.width);
-    
-    CGRect arrow = _alertArrow.frame;
-    arrow.origin.x = pos.x;
-    _alertArrow.frame = arrow;
+    if(below)
+    {
+        _alertArrow.hidden = YES;
+        _alertArrowTop.hidden = NO;
+        
+        if((pos.x + _alertArrowTop.frame.size.width) > (size.size.width - kCellAlertLeftOffset))
+            pos.x = (size.size.width - kCellAlertLeftOffset) - (_alertArrowTop.frame.size.width);
+        
+        CGRect arrow = _alertArrowTop.frame;
+        arrow.origin.x = pos.x;
+        _alertArrowTop.frame = arrow;
+    }
+    else {
+        _alertArrowTop.hidden = YES;
+        _alertArrow.hidden = NO;
+        
+        if((pos.x + _alertArrow.frame.size.width) > (size.size.width - kCellAlertLeftOffset))
+            pos.x = (size.size.width - kCellAlertLeftOffset) - (_alertArrow.frame.size.width);
+        
+        CGRect arrow = _alertArrow.frame;
+        arrow.origin.x = pos.x;
+        _alertArrow.frame = arrow;
+    }
 
 #if 0
     if(below)

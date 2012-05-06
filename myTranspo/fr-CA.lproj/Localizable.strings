@@ -109,7 +109,7 @@
 "ENDLOCATIONPLACEHOLDER" = "Destination finale";
 "STARTLOCATIONLEFT" = "de:";
 "ENDLOCATIONLEFT" = "fin:";
-"PLANTRIPPREFIX" = "Plan de voyage";
+"PLANTRIPPREFIX" = "'voyage pour' MMMM d, yyyy 'à' hh:mm a";
 "ACCESSIBLE" = "Accessible";
 "REGULAREFARE" = "Tarif Régulier";
 "EXCLUDESTO" = "Exclure STO";

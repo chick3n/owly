@@ -48,7 +48,7 @@
     [_tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]]];
     
     CGRect optionsFrame = _optionsButton.frame;
-    optionsFrame.origin.y = -optionsFrame.size.height;
+    optionsFrame.origin.y = -(optionsFrame.size.height + kOptionsIndent);
     _optionsButton.frame = optionsFrame;
     [_tableView addSubview:_optionsButton];
 
@@ -81,14 +81,14 @@
     //_startLocation.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_train_icon.png"]];
     _endLocation.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tripplanner_destinationsearch_icon.png"]];
     
-    UILabel* leftView1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 40, 14)];
+    UILabel* leftView1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 45, 24)];
     leftView1.text = NSLocalizedString(@"STARTLOCATIONLEFT", nil);
-    leftView1.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
-    leftView1.textColor = [UIColor blackColor];
+    leftView1.font = _startLocation.font;
+    leftView1.textColor = [UIColor colorWithRed:157./255. green:157./255. blue:157./255. alpha:1.0];
     leftView1.backgroundColor = [UIColor clearColor];
     leftView1.textAlignment = UITextAlignmentRight;
     
-    UILabel* leftView2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 40, 14)];
+    UILabel* leftView2 = [[UILabel alloc] initWithFrame:leftView1.frame];
     leftView2.text = NSLocalizedString(@"ENDLOCATIONLEFT", nil);
     leftView2.font = leftView1.font;
     leftView2.textColor = leftView1.textColor;
@@ -250,7 +250,7 @@
     {
         [UIView animateWithDuration:0.25
                          animations:^{
-                             _tableView.contentInset = UIEdgeInsetsMake(_optionsButton.frame.size.height, 0, 0, 0);
+                             _tableView.contentInset = UIEdgeInsetsMake(_optionsButton.frame.size.height + (kOptionsIndent*2), 0, 0, 0);
                          }];
     }
 }
@@ -332,7 +332,7 @@
             }
             departDisplay.duration = [depart objectForKey:@"time"];
             departDisplay.title = [depart objectForKey:@"type"];
-            //departDisplay.icon = [UIImage imageNamed:@"global_bell_icon.png"];
+            departDisplay.icon = [UIImage imageNamed:@"tripplanner_start_icon.png"];
             
             [_data addObject:departDisplay];
             statusCount += 1;
@@ -603,12 +603,9 @@
 {
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.timeZone = [NSTimeZone localTimeZone];
-    dateFormatter.dateStyle = NSDateFormatterLongStyle;
-    
-    NSString* startText = NSLocalizedString(@"PLANTRIPPREFIX", nil);
-    NSString* dateText = [dateFormatter stringFromDate:[_changeDateViewer date]];
-    
-    _tripDateLabel.text = [NSString stringWithFormat:@"%@ %@", startText, dateText];
+    dateFormatter.dateFormat = NSLocalizedString(@"PLANTRIPPREFIX", nil);
+        
+    _tripDateLabel.text = [dateFormatter stringFromDate:[_changeDateViewer date]];
 }
 
 #pragma mark - Options

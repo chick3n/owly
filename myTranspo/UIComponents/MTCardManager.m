@@ -115,6 +115,10 @@
         [self performSelector:@selector(bounceQuickView:) withObject:nil afterDelay:0.25];
     }
     
+    if(_pageControl.numberOfPages <= 2)
+        _quickTable.hidden = YES;
+    else _quickTable.hidden = NO;
+    
     if(_chosenDate == nil)
         _chosenDate = [NSDate date];
     

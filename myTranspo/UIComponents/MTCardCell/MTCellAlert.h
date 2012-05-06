@@ -28,6 +28,7 @@
     CGPoint _staticPos;
     UIImageView* _alertBase;
     UIImageView* _alertArrow;
+    UIImageView* _alertArrowTop;
 }
 
 @property (nonatomic)           BOOL        hasButtons;

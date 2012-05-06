@@ -25,6 +25,8 @@
 #define kExcludeSTO NSLocalizedString(@"EXCLUDESTO", nil)
 #define kBikeRacks NSLocalizedString(@"BIKERACK", nil)
 
+#define kOptionsIndent 4
+
 static NSString* CurrentLocation = @"(Current Location)";
 
 typedef struct

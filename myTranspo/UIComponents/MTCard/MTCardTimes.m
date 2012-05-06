@@ -56,8 +56,8 @@
     _cellAlert.accessoryView = accessoryView;
 #endif
     DCRoundSwitch* accessoryView = [[DCRoundSwitch alloc] initWithFrame:CGRectMake(0, 0, 77, 27)];
-    accessoryView.iconText = @"global_bell_icon.png";
-    accessoryView.onTintColor = [UIColor colorWithRed:30./255. green:77./255. blue:43./255. alpha:1.0];
+    accessoryView.iconText = @"alert_slider_icon.png";
+    accessoryView.onTintColor = [UIColor colorWithRed:155./255. green:217./255. blue:34./255. alpha:1.0];
     _cellAlert.accessoryView = accessoryView;
     
     [self addSubview:_cellAlert];
