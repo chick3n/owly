@@ -34,6 +34,9 @@ static NSString* kMTHelperStops = @"HelperStopsShown";
 static NSString* kMTISettingsVersion = @"Settings Version";
 static NSString* kMTIDatabaseVersion = @"Database Version";
 
+//Reachability
+static NSString* kMTRConnectionWarning = @"ConnectionWarningSent";
+
 //DATA SETS
 #define kMTDLanguage [NSArray arrayWithObjects:kMTLANGUAGEENGLISH, kMTLANGUAGEFRENCH, nil]
 #define kMTDCity [NSArray arrayWithObjects:kMTCITYOTTAWA, nil]
@@ -71,6 +74,7 @@ static NSString* kMTIDatabaseVersion = @"Database Version";
 - (NSString*)cityString;
 - (NSString*)notificationAlertTimeString;
 - (NSString*)startupScreenString;
+- (BOOL)networkNotification;
 
 //setters
 - (void)updateDatabaseVersionToBundle;
@@ -83,6 +87,7 @@ static NSString* kMTIDatabaseVersion = @"Database Version";
 - (void)updateNotificationAlertTime:(MTAlertTimes)time;
 - (void)updateNotificationUpdateTimes:(BOOL)choice;
 - (void)updateStartupScreen:(MTViewControllers)choice;
+- (void)updateNetworkNotification:(BOOL)toggle;
 
 //quick calls - TODO doesnt work
 + (BOOL)showMyBusesHelper;
@@ -96,5 +101,7 @@ static NSString* kMTIDatabaseVersion = @"Database Version";
 + (NSString*)notificationAlertTimeString;
 + (int)notificationAlertTimeInt;
 + (int)startupScreen;
++ (BOOL)networkNotification;
++ (void)networkNotificationStatus:(BOOL)status;
 
 @end

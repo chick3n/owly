@@ -57,7 +57,7 @@
         [self.contentView addSubview:_text];
         
         
-        _rightAccessory = [[UILabel alloc] initWithFrame:CGRectMake(245, 12, 65, 16)];
+        _rightAccessory = [[UILabel alloc] initWithFrame:CGRectMake(242, 12, 65, 16)];
         _rightAccessory.backgroundColor = [UIColor clearColor];
         _rightAccessory.textColor = [UIColor colorWithRed:157./255. green:157./255. blue:157./255. alpha:1.0];
         _rightAccessory.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];

@@ -22,6 +22,7 @@
 }
 
 @property (nonatomic, strong)   NSString*               UrlPath;
+@property (nonatomic)           BOOL                    isSet;
 
 - (id)initWithLanguage:(MTLanguage)lang AndUrlPath:(NSString*)urlPath UsingAPIKey:(NSString*)apiKey UsingApplicationID:(NSString*)appId;
 - (BOOL)getNextTrips:(NSMutableArray*)_trips ForTrip:(MTTrip*)stop ForRoute:(MTBus*)bus;

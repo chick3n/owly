@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Vice Interactive. All rights reserved.
 //
 
+//ToDo: make this a singleton
+
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "MTTypes.h"
@@ -103,13 +105,19 @@
 @property (nonatomic, readonly) CLLocation*             clLocation;
 
 //methods
++ (myTranspoOC*)sharedSingleton;
+
+- (void)initialize;
 - (id)initWithLanguage:(MTLanguage)lang AndDBPath:(NSString *)dbpath ForCity:(MTCity)city;
+- (BOOL)addDBPath:(NSString*)dbPath;
 - (BOOL)addWebDBPath:(NSString*)urlPath;
 - (BOOL)addAPI;
 - (BOOL)validateData;
 - (void)turnOnLocationTracking;
 - (void)turnOffLocationTracking;
 - (void)kill;
+- (void)turnOffNetworkMethods;
+- (void)turnOnNetworkMethods;
 
 //general data
 - (BOOL)getScheduleForStop:(MTStop*)stop WithRoute:(MTBus*)bus;

@@ -20,6 +20,7 @@
 @end
 
 @implementation MTWebDB
+@synthesize isSet;
 
 #pragma mark - INITILIZATION
 

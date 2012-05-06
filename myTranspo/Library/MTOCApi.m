@@ -16,7 +16,7 @@
 @implementation MTOCApi
 
 @synthesize UrlPath                     = _urlPath;
-
+@synthesize isSet;
 
 #pragma mark - INITILIZATION
 

@@ -20,6 +20,8 @@
 #import "NoticesViewController.h"
 #import "TripPlannerViewController.h"
 
+#import "Reachability.h"
+
 #include "Core/ViewControllers.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, ZUUIRevealControllerDelegate, MenuTableViewDelegate>
@@ -39,8 +41,15 @@
     UIImageView*                    _rainbowBar;
     
     BOOL                            _disableClick;
+    
+    Reachability*                   _hostReach;
+    Reachability*                   _internetReach;
+    Reachability*                   _wifiReach;
 }
 
 @property (strong, nonatomic) UIWindow *window;
+
+
+- (void) reachabilityChanged:(NSNotification *)note;
 
 @end

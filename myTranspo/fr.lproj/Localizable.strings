@@ -124,3 +124,8 @@
 
 //Alert Manager
 "BEGINS" = "commence";
+
+//REACHABILITY
+"NETWORKDOWNTITLE" = "Connexion réseau n'est pas disponible";
+"NETWORKDOWNDETAILS" = "Une connexion Internet active est nécessaire de recueillir l'emplacement, gps, et informations sur l'itinéraire.";
+"NETWORKDOWNDETAILSEXTRA" = "OC Transpo GPS de service est actuellement indisponible.";

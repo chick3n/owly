@@ -80,10 +80,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    /*
-     Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-     If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-     */
+    [MTSettings networkNotificationStatus:NO];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -290,6 +287,7 @@
     MTSettings* settings = [[MTSettings alloc] init];
     
     _language = [settings languagePreference];
+    [settings updateNetworkNotification:NO];
     
     //MOVE SQLDB
     NSFileManager *manager = [NSFileManager defaultManager];
@@ -349,7 +347,14 @@
 
 - (void)postLoad
 {
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
     
+    _hostReach = [Reachability reachabilityWithHostName: @"www.google.com"];
+	_internetReach = [Reachability reachabilityForInternetConnection];
+	_wifiReach = [Reachability reachabilityForLocalWiFi];
+	[_hostReach startNotifier];
+	[_internetReach startNotifier];
+	[_wifiReach startNotifier];
 }
 
 #pragma mark - MENUVIEWCONTROLLER DELEGATE
@@ -413,6 +418,65 @@
 
     self.window.rootViewController = _menuController;
     //[self.window makeKeyAndVisible];   
+}
+
+#pragma mark Reachability
+
+
+- (void) reachabilityChanged:(NSNotification *)note
+{
+	Reachability* curReach = [note object];
+	NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+	
+	NetworkStatus netStatus = [curReach currentReachabilityStatus];
+    BOOL connectionRequired= [curReach connectionRequired];
+    switch (netStatus)
+    {
+        case NotReachable:
+        {
+            //Minor interface detail- connectionRequired may return yes, even when the host is unreachable.  We cover that up here...
+            connectionRequired = NO;  
+			if(![MTSettings networkNotification])
+			{
+				UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"NETWORKDOWNTITLE", nil)
+															 message:NSLocalizedString(@"NETWORKDOWNDETAILS", nil)
+															delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+				[av show];
+                
+                [MTSettings networkNotificationStatus:YES];
+			}
+            
+            if(_transpo)
+                [_transpo turnOffNetworkMethods];
+            
+            break;
+        }
+            
+        case ReachableViaWWAN:
+		case ReachableViaWiFi:
+        {
+            if(_transpo)
+                [_transpo turnOnNetworkMethods];
+            break;
+        }
+    }
+	
+	if(connectionRequired)
+	{
+		if(![MTSettings networkNotification])
+		{
+			UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"NETWORKDOWNTITLE", nil)
+                                                         message:NSLocalizedString(@"NETWORKDOWNDETAILS", nil)
+                                                        delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+			[av show];
+            
+            [MTSettings networkNotificationStatus:YES];
+            
+            if(_transpo)
+                [_transpo turnOffNetworkMethods];
+		}
+	}
+	
 }
 
 @end

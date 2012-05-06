@@ -26,6 +26,7 @@
 		313866DA154C8194000537F7 /* MTCellAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 313866D9154C8193000537F7 /* MTCellAlert.m */; };
 		313866DD154CBCE3000537F7 /* MTCardTimes.m in Sources */ = {isa = PBXBuildFile; fileRef = 313866DC154CBCE3000537F7 /* MTCardTimes.m */; };
 		313866E0154CBDB6000537F7 /* MTCardTimesRowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 313866DF154CBDB6000537F7 /* MTCardTimesRowCell.m */; };
+		3139F5D71556B6030019B8AF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3139F5D61556B6030019B8AF /* SystemConfiguration.framework */; };
 		3144839C154F7744008CCE37 /* tripplanner_walking_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3144838A154F7744008CCE37 /* tripplanner_walking_icon.png */; };
 		3144839D154F7744008CCE37 /* tripplanner_route_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3144838B154F7744008CCE37 /* tripplanner_route_icon.png */; };
 		3144839E154F7744008CCE37 /* tripplanner_time_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3144838C154F7744008CCE37 /* tripplanner_time_icon.png */; };
@@ -268,6 +269,7 @@
 		31D64D9515561716001B0B2D /* tripplanner_search_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31D64D9115561716001B0B2D /* tripplanner_search_bg@2x.png */; };
 		31D64D9615561716001B0B2D /* tripplanner_time_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 31D64D9215561716001B0B2D /* tripplanner_time_bg.png */; };
 		31D64D9715561716001B0B2D /* tripplanner_time_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31D64D9315561716001B0B2D /* tripplanner_time_bg@2x.png */; };
+		31D807B41556AADC00B5A8B5 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 31D807B31556AADC00B5A8B5 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		31D9573B1540CD930033D3FB /* global_celldelete_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 31D957391540CD930033D3FB /* global_celldelete_btn.png */; };
 		31D9573C1540CD930033D3FB /* global_celldelete_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31D9573A1540CD930033D3FB /* global_celldelete_btn@2x.png */; };
 		31D957401540DA3D0033D3FB /* global_searchfilter_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31D9573E1540DA3D0033D3FB /* global_searchfilter_bg@2x.png */; };
@@ -357,6 +359,7 @@
 		313866DC154CBCE3000537F7 /* MTCardTimes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCardTimes.m; sourceTree = "<group>"; };
 		313866DE154CBDB5000537F7 /* MTCardTimesRowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCardTimesRowCell.h; sourceTree = "<group>"; };
 		313866DF154CBDB6000537F7 /* MTCardTimesRowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCardTimesRowCell.m; sourceTree = "<group>"; };
+		3139F5D61556B6030019B8AF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3144838A154F7744008CCE37 /* tripplanner_walking_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_walking_icon.png; sourceTree = "<group>"; };
 		3144838B154F7744008CCE37 /* tripplanner_route_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_route_icon.png; sourceTree = "<group>"; };
 		3144838C154F7744008CCE37 /* tripplanner_time_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_time_icon.png; sourceTree = "<group>"; };
@@ -655,6 +658,8 @@
 		31D64D9115561716001B0B2D /* tripplanner_search_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tripplanner_search_bg@2x.png"; sourceTree = "<group>"; };
 		31D64D9215561716001B0B2D /* tripplanner_time_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_time_bg.png; sourceTree = "<group>"; };
 		31D64D9315561716001B0B2D /* tripplanner_time_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tripplanner_time_bg@2x.png"; sourceTree = "<group>"; };
+		31D807B21556AADC00B5A8B5 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		31D807B31556AADC00B5A8B5 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		31D957391540CD930033D3FB /* global_celldelete_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = global_celldelete_btn.png; sourceTree = "<group>"; };
 		31D9573A1540CD930033D3FB /* global_celldelete_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "global_celldelete_btn@2x.png"; sourceTree = "<group>"; };
 		31D9573E1540DA3D0033D3FB /* global_searchfilter_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "global_searchfilter_bg@2x.png"; sourceTree = "<group>"; };
@@ -727,6 +732,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3139F5D71556B6030019B8AF /* SystemConfiguration.framework in Frameworks */,
 				3180960C15437AD400B71188 /* CoreImage.framework in Frameworks */,
 				31101F6B1530D14A001D220A /* Security.framework in Frameworks */,
 				31DF2E251523C4E20035BE2F /* CoreLocation.framework in Frameworks */,
@@ -1138,6 +1144,7 @@
 		31ADE8BB151FDFA30029C964 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3139F5D61556B6030019B8AF /* SystemConfiguration.framework */,
 				3180960B15437AD300B71188 /* CoreImage.framework */,
 				31ADE8D5151FDFD20029C964 /* libsqlite3.0.dylib */,
 				31101F6A1530D148001D220A /* Security.framework */,
@@ -1192,6 +1199,7 @@
 		31ADE9ED151FE07B0029C964 /* ExternalLibs */ = {
 			isa = PBXGroup;
 			children = (
+				31D807B11556AADC00B5A8B5 /* Reachability */,
 				31D64D731554D4D5001B0B2D /* DCRoundSwitch */,
 				319D77B515371A6B00542ED3 /* KeychainWrapper */,
 				319D77B815371A6B00542ED3 /* XML-to-NSDictionary */,
@@ -1300,6 +1308,15 @@
 				31D64D7B1554D4D5001B0B2D /* DCRoundSwitchToggleLayer.m */,
 			);
 			path = DCRoundSwitch;
+			sourceTree = "<group>";
+		};
+		31D807B11556AADC00B5A8B5 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				31D807B21556AADC00B5A8B5 /* Reachability.h */,
+				31D807B31556AADC00B5A8B5 /* Reachability.m */,
+			);
+			path = Reachability;
 			sourceTree = "<group>";
 		};
 		31DF2E291523C7120035BE2F /* Map */ = {
@@ -1686,6 +1703,7 @@
 				31D64D7D1554D4D5001B0B2D /* DCRoundSwitchKnobLayer.m in Sources */,
 				31D64D7E1554D4D5001B0B2D /* DCRoundSwitchOutlineLayer.m in Sources */,
 				31D64D7F1554D4D5001B0B2D /* DCRoundSwitchToggleLayer.m in Sources */,
+				31D807B41556AADC00B5A8B5 /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

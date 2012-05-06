@@ -9,6 +9,8 @@
 
 #import "myTranspoOC.h"
 
+static myTranspoOC *gInstance = NULL;
+
 #define MTLDEF_BGQUEUE dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 #define MTLDEF_MAINQUEUE dispatch_get_main_queue()
 
@@ -35,6 +37,21 @@
     if(_locationManager != nil)
         return _locationManager.location;
     return nil;
+}
+
+//Do not use
++ (myTranspoOC*)sharedSingleton
+{
+    @synchronized(self)
+    {
+        if(gInstance == NULL)
+        {
+            gInstance = [[self alloc] init];
+            [gInstance initialize];
+        }
+    }
+    
+    return gInstance;
 }
 
 - (id)initWithLanguage:(MTLanguage)lang 
@@ -71,6 +88,11 @@
 
 #pragma mark - INTERNAL METHOD CHECKS
 
+- (void)initialize
+{
+    
+}
+
 - (BOOL)validateData
 {
     
@@ -79,6 +101,24 @@
         MTLog(@"Transpo Type was set to unknown");
         return NO;
     }
+    
+    if(![[NSFileManager defaultManager] fileExistsAtPath:_dbPath])
+    {
+        _hasDB = NO;
+        MTLog(@"Database was not found: %@", _dbPath);
+    }
+    else
+    {
+        _ocDb = [[MTOCDB alloc] initWithDBPath:_dbPath And:_language];
+        _hasDB = YES;
+    }
+    
+    return YES;
+}
+
+- (BOOL)addDBPath:(NSString*)dbPath
+{
+    _dbPath = [NSString stringWithString:dbPath];
     
     if(![[NSFileManager defaultManager] fileExistsAtPath:_dbPath])
     {
@@ -104,6 +144,7 @@
         return NO;
     
     _hasWebDb = YES;
+    _ocWebDb.isSet = YES;
     return YES;
 }
 
@@ -114,6 +155,7 @@
         case MTTRANSPOTYPE_OC:
             _hasAPI = YES;
             _ocApi = [[MTOCApi alloc] initWithLanguage:_language AndUrlPath:@"https://api.octranspo1.com/v1.0/" UsingAPIKey:@"2010d75153a9bbfd1d4db0a1db70fcd0" UsingApplicationID:@"4d8b9165"];
+            _ocApi.isSet = YES;
             return YES;
         default: break;
     }
@@ -131,6 +173,21 @@
     
     dispatch_suspend(_queue);
     dispatch_release(_queue);
+}
+
+- (void)turnOffNetworkMethods
+{
+    _hasWebDb = NO;
+    _hasAPI = NO;
+}
+
+- (void)turnOnNetworkMethods
+{
+    if(_ocApi && _ocApi.isSet)
+        _hasAPI = YES;
+    
+    if(_ocWebDb && _ocWebDb.isSet)
+        _hasWebDb = YES;
 }
 
 #pragma mark - LOCATION MANAGER

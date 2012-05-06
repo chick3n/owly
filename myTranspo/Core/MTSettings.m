@@ -265,6 +265,11 @@
     return @"";
 }
 
+- (BOOL)networkNotification
+{
+    return [userDefaults boolForKey:kMTRConnectionWarning];
+}
+
 #pragma mark - SETTERS
 
 - (void)updateDatabaseVersionToBundle
@@ -383,6 +388,12 @@
 - (void)updateStartupScreen:(MTViewControllers)choice
 {
     [userDefaults setInteger:choice forKey:kMTNotificationStartupView];
+    [userDefaults synchronize];
+}
+
+- (void)updateNetworkNotification:(BOOL)toggle
+{
+    [userDefaults setBool:toggle forKey:kMTRConnectionWarning];
     [userDefaults synchronize];
 }
 
@@ -592,6 +603,20 @@
     NSUserDefaults* userDefaults = [MTSettings settingsUserDefault];
     
     return [userDefaults integerForKey:kMTNotificationStartupView];
+}
+
++ (BOOL)networkNotification
+{
+    NSUserDefaults* userDefaults = [MTSettings settingsUserDefault];
+    
+    return [userDefaults boolForKey:kMTRConnectionWarning];
+}
+
++ (void)networkNotificationStatus:(BOOL)status
+{
+    NSUserDefaults* userDefaults = [MTSettings settingsUserDefault];
+    [userDefaults setBool:status forKey:kMTRConnectionWarning];
+    [userDefaults synchronize];
 }
 
 @end

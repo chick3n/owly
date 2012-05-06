@@ -131,3 +131,10 @@
 
 //ALERT MANAGER
 "BEGINS" = "Begins";
+
+//REACHABILITY
+"NETWORKDOWNTITLE" = "Network Connection Unavailable";
+"NETWORKDOWNDETAILS" = "An active internet connection is required to garner location, gps, and route information.";
+"NETWORKDOWNDETAILSEXTRA" = "OCTranspo's GPS service is currently unavailable.";
+
+

@@ -24,6 +24,8 @@
     float               _locationDistance;
 }
 
+@property (nonatomic) BOOL      isSet;
+
 - (id)initWithUrlPath:(NSString*)urlPath And:(MTLanguage)lang;
 - (BOOL)connectToServer;
 
