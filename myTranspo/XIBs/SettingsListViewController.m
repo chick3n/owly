@@ -23,15 +23,13 @@
         // Custom initialization
         MTRightButton* backButton = [[MTRightButton alloc] initWithType:kRightButtonTypeBack];
         [backButton setTitle:NSLocalizedString(@"BACKBUTTON", nil) forState:UIControlStateNormal];
-#if 0 //debugging for button
-        [backButton setTitle:@"Reserved" forState:UIControlStateReserved];
-        [backButton setTitle:@"Selected" forState:UIControlStateSelected];
-        [backButton setTitle:@"Highlighted" forState:UIControlStateHighlighted];
-        [backButton setTitle:@"Disabled" forState:UIControlStateDisabled];
-        [backButton setTitle:@"Application" forState:UIControlStateApplication];
-#endif
         [backButton addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+        
+        MTRightButton* doneButton = [[MTRightButton alloc] initWithType:kRightButtonTypeAction];
+        [doneButton addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
+        [doneButton setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:doneButton];
     }
     return self;
 }
@@ -152,8 +150,9 @@
     [_setting setSelected:indexPath.row];
     [_setting selectedSettingHasChanged];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [tableView reloadData];
     
-    [self.navigationController popViewControllerAnimated:YES];
+    //[self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma  mark - Navigation bar

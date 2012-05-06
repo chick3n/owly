@@ -49,6 +49,7 @@
     
     _tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]];
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)]];
+    [_tableView setTableHeaderView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 10)]];
 }
 
 - (void)viewDidUnload
@@ -307,6 +308,13 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([[_data objectAtIndex:indexPath.section] count] - 1 == indexPath.row)
+        return 39;
+    return 44;
 }
 
 #pragma mark - Table view delegate

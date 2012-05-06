@@ -349,7 +349,7 @@
     
     UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 23)];
     [header addSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_category_bar.png"]]];
-    UILabel *tableViewHeadlerLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, 4, 312, 17)];
+    UILabel *tableViewHeadlerLabel = [[UILabel alloc] initWithFrame:CGRectMake(6, 2, 312, 17)];
     tableViewHeadlerLabel.tag = 100;
     tableViewHeadlerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0];
     tableViewHeadlerLabel.textColor = [UIColor whiteColor];

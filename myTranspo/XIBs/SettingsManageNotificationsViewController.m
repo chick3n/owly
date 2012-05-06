@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Vice Interactive. All rights reserved.
 //
 
+//ToDo: join all into one cell for each one and later we will add more functionallity to only delete a per day basis.
+
 #import "SettingsManageNotificationsViewController.h"
 
 @interface SettingsManageNotificationsViewController ()

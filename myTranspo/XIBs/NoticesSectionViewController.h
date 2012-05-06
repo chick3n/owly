@@ -15,6 +15,7 @@
 {
     //UI Components
     IBOutlet UITableView*           _tableView;
+    IBOutlet UILabel*               _emptyTable;
 }
 
 @property (nonatomic, weak)     NSArray*        data;

@@ -97,6 +97,10 @@
     _data = notices;
     _keys = [[_data allKeys] sortedArrayUsingSelector:@selector(compare:)];
     
+    NSMutableArray* keys = [[NSMutableArray alloc] initWithArray:[[_data allKeys] sortedArrayUsingSelector:@selector(compare:)]];
+    [keys exchangeObjectAtIndex:2 withObjectAtIndex:3];
+    _keys = (NSArray*)keys;
+    
     UIView *headerSpacing = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
 #if 0    
     //update tableview header to adjust height
@@ -157,7 +161,7 @@
         cellSubTitle.shadowColor = [UIColor whiteColor];
         cellSubTitle.shadowOffset = CGSizeMake(0, 1);
         
-        UIImageView* cellIcon = [[UIImageView alloc] initWithFrame:CGRectMake(15, 13, 48, 48)];
+        UIImageView* cellIcon = [[UIImageView alloc] initWithFrame:CGRectMake(12, 5, 58, 58)];
         cell.contentMode = UIViewContentModeCenter;
         cellIcon.tag = kNoticesCellImageTag;
         
@@ -225,6 +229,8 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(indexPath.row == _keys.count - 1)
+        return kNoticesCellHeight - (81 - kNoticesCellHeight);
     return kNoticesCellHeight;
 }
 

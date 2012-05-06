@@ -52,8 +52,8 @@
     CGRect deleteFrame = _delete.frame;
     //CGRect detailsFrame = _detailsView.frame;
     
-    frame.origin.y = 0 - 40;
-    scrollFrame.origin.y = 0 - 40;
+    frame.origin.y = 0 - 42;
+    scrollFrame.origin.y = 0 - 42;
     deleteFrame.origin.x = 52;
     //detailsFrame.size.height = 10;
     
@@ -263,7 +263,7 @@
 - (void)setFrame:(CGRect)frame
 {
     [super setFrame:frame];
-    
+
     if(frame.size.height != kFullHeight)
         return;
     

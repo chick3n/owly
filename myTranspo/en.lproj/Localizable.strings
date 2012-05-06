@@ -100,7 +100,7 @@
 "MTDEF_APPSETTINGSFOOTER" = "";
 "MTDEF_MANAGEDATAFOOTER" = "";
 "MTDEF_SETTINGSTITLE" = "Settings";
-"MTDEF_FIRSTLAUNCHSCREEN" = "Start on...";
+"MTDEF_FIRSTLAUNCHSCREEN" = "Start screen";
 "BACKBUTTON" = "Back";
 "CLOSE" = "Close";
 "GATHERINGSCHEDULE" = "Gathering schedule information.";
@@ -137,4 +137,5 @@
 "NETWORKDOWNDETAILS" = "An active internet connection is required to garner location, gps, and route information.";
 "NETWORKDOWNDETAILSEXTRA" = "OCTranspo's GPS service is currently unavailable.";
 
-
+//NOTICES
+"EMPTYNOTICES" = "No results found for today.";

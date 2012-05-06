@@ -78,14 +78,36 @@
      , nil] forState:UIControlStateNormal];*/
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    for(UIView* view in self.subviews)
+    {
+        if([view isKindOfClass:[UITextField class]])
+        {
+            UITextField* text = (UITextField*)view;
+            text.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:14];
+            text.textColor = [UIColor colorWithRed:89./255. green:89./255. blue:89./255. alpha:1.0];
+        }
+        else if([view isKindOfClass:[UIButton class]]) //make cancel button bigger
+        {
+            CGRect btnFrame = view.frame;
+            btnFrame.size.width += 10;
+            btnFrame.origin.x -= 10;
+            view.frame = btnFrame;
+        }
+    }
+}
+
 - (void)didAddSubview:(UIView *)subview
 {
     [super didAddSubview:subview];
     
     if([subview isKindOfClass:[UIButton class]])
     {
-        [(UIButton*)subview setBackgroundImage:[UIImage imageNamed:@"global_right_btn.png"] forState:UIControlStateNormal];
-        [(UIButton*)subview setBackgroundImage:[UIImage imageNamed:@"global_right_btn.png"] forState:UIControlStateHighlighted];
+        [(UIButton*)subview setBackgroundImage:[UIImage imageNamed:@"global_alt_btn.png"] forState:UIControlStateNormal];
+        [(UIButton*)subview setBackgroundImage:[UIImage imageNamed:@"global_alt_btn.png"] forState:UIControlStateHighlighted];
+        [((UIButton*)subview).titleLabel setShadowOffset:CGSizeMake(0, 1)];
     }
 }
 

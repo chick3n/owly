@@ -40,18 +40,17 @@
 
     //tableview
     [_headerView removeFromSuperview];
-    [_optionsButton removeFromSuperview];
+    [_optionsView removeFromSuperview];
     _tableView.tableHeaderView = _headerView;
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
     [_tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]]];
     
-    CGRect optionsFrame = _optionsButton.frame;
-    optionsFrame.origin.y = -(optionsFrame.size.height + kOptionsIndent);
-    _optionsButton.frame = optionsFrame;
-    [_tableView addSubview:_optionsButton];
-
+    CGRect optionsFrame = _optionsView.frame;
+    optionsFrame.origin.y = -optionsFrame.size.height;//-(optionsFrame.size.height + kOptionsIndent);
+    _optionsView.frame = optionsFrame;
+    [_tableView addSubview:_optionsView];
     
     //mytranspo
     _transpo.delegate = self;
@@ -70,8 +69,6 @@
     _changeDateViewer.minimumDate = [NSDate date];
     [self toggleChangeDateViewer:nil];
     [self changeTripDate:nil];
-    
-    
     
     //textfields
     _startLocation.placeholder = NSLocalizedString(@"STARTLOCATIONPLACEHOLDER", nil);
@@ -246,11 +243,11 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    if(scrollView.contentOffset.y < _optionsButton.frame.origin.y)
+    if(scrollView.contentOffset.y < _optionsView.frame.origin.y)
     {
         [UIView animateWithDuration:0.25
                          animations:^{
-                             _tableView.contentInset = UIEdgeInsetsMake(_optionsButton.frame.size.height + (kOptionsIndent*2), 0, 0, 0);
+                             _tableView.contentInset = UIEdgeInsetsMake(_optionsView.frame.size.height, 0, 0, 0);
                          }];
     }
 }

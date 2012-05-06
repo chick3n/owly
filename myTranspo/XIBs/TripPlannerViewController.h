@@ -58,6 +58,7 @@ typedef struct
     IBOutlet UIDatePicker*              _changeDateViewer;
     IBOutlet UIView*                    _headerView;
     IBOutlet UIButton*                  _optionsButton;
+    IBOutlet UIView*                    _optionsView;
     IBOutlet UIActivityIndicatorView*   _loadingView;
 }
 

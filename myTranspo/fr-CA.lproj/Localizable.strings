@@ -128,3 +128,6 @@
 "NETWORKDOWNTITLE" = "Connexion réseau n'est pas disponible";
 "NETWORKDOWNDETAILS" = "Une connexion Internet active est nécessaire de recueillir l'emplacement, gps, et informations sur l'itinéraire.";
 "NETWORKDOWNDETAILSEXTRA" = "OC Transpo GPS de service est actuellement indisponible.";
+
+//NOTICES
+"EMPTYNOTICES" = "Aucun résultat trouvé pour aujourd'hui.";

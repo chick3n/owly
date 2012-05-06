@@ -94,6 +94,8 @@
     [self updatedCardPositions];
 }
 
+//ToDo: move card down when showing toggle bar
+//ToDo: hide heart when dragging down
 - (void)updateStop:(MTStop*)stop UsingLanguage:(MTLanguage)language
 {
     _stop = stop;

@@ -144,12 +144,12 @@
     [backButton addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     
-    UIButton* navButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [navButton setImage:[UIImage imageNamed:@"global_time_btn.png"] forState:UIControlStateNormal];
+    _rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_rightButton setImage:[UIImage imageNamed:@"alarm_dark_btn.png"] forState:UIControlStateNormal];
     //[navButton addTarget:self action:@selector(changeTripScheduleTime:) forControlEvents:UIControlEventTouchUpInside];
-    [navButton addTarget:self action:@selector(changeTableViews:) forControlEvents:UIControlEventTouchUpInside];
-    [navButton setFrame:CGRectMake(0, 0, 41, 29)];
-    _timesChangeButton = [[UIBarButtonItem alloc] initWithCustomView:navButton];
+    [_rightButton addTarget:self action:@selector(changeTableViews:) forControlEvents:UIControlEventTouchUpInside];
+    [_rightButton setFrame:CGRectMake(0, 0, 41, 29)];
+    _timesChangeButton = [[UIBarButtonItem alloc] initWithCustomView:_rightButton];
     self.navigationItem.rightBarButtonItem = _timesChangeButton;
     
     MTRightButton* cancelButton = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
@@ -332,6 +332,8 @@ numberOfRowsInComponent:(NSInteger)component;
                                  _timeTableFrame = _timeTable.frame.origin;
                              }
                          }];
+        [_rightButton setImage:[UIImage imageNamed:@"global_time_btn.png"] forState:UIControlStateNormal];
+        
     }
     else { //slide in trip
         CGRect timeTableSlideFrame = _timeTable.frame;
@@ -352,6 +354,8 @@ numberOfRowsInComponent:(NSInteger)component;
                                  _timeTableFrame = _timeTable.frame.origin;
                              }
                          }];
+        
+        [_rightButton setImage:[UIImage imageNamed:@"alarm_dark_btn.png"] forState:UIControlStateNormal];
     }
     
     return;

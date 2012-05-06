@@ -47,6 +47,7 @@
 	UIBarButtonItem*					_timesDoneButton;
 	UIBarButtonItem*					_timesCancelButton;
 	UIBarButtonItem*					_initialLeftButton;
+    UIButton*                           _rightButton;
     UIView*                             _tableViewHeader;
     UIImageView*                        _backgroundImage;
     UIImageView*                        _backgroundImage2;

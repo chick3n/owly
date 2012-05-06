@@ -54,12 +54,21 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    //emptyTable Label
+    _emptyTable.text = NSLocalizedString(@"EMPTYNOTICES", nil);
     
     //tableView
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    
     _tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
+    
+    if(_data == nil)
+        _emptyTable.hidden = NO;
+    
+    if(_data.count > 0)
+        _emptyTable.hidden = YES;
+    else _emptyTable.hidden = NO;
 }
 
 - (void)viewDidUnload

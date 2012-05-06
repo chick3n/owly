@@ -13,12 +13,12 @@
 #define kMTSEARCHCELLSHAPEHEIGHT 45
 #define kMTSEARCHCELLSHAPEWIDTH 45
 
-#define kOffSetOriginX 8
+#define kOffSetOriginX 0
 #define kOffSetOriginY 13
 #define kOffSetSubtitleOriginX kOffSetOriginX + 45
 #define kOffSetSubtitleOriginY kOffSetOriginY
 
-#define kOffSetBusDrawOriginX 8
+#define kOffSetBusDrawOriginX 0
 #define kOffSetBusDrawOriginY -2
 
 typedef enum
