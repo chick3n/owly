@@ -65,7 +65,7 @@
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, 2)]];
     [_tableView setOpaque:NO];
     [_tableView setBackgroundColor:[UIColor clearColor]];
-    [_tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]]];
+    [_tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_bg2.png"]]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [_tableView setupRefresh:_language];
     [_tableView addPullToRefreshHeader];
