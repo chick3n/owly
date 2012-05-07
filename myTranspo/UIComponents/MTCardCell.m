@@ -231,6 +231,7 @@
     [_timesAlert hideAlertWithSelfInvoke:YES];
     [_dataScrollView setContentOffset:CGPointMake(0, 0) animated:YES];    
     
+    stop.MTCardCellHelper = NO;
     _stop = stop;
     
     _prevTime.text = stop.Bus.PrevTimeDisplay;//stop.Bus.PrevTime;

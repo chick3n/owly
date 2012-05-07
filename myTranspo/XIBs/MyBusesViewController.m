@@ -225,8 +225,10 @@
     //if(stop.IsUpdating == NO) //removed this because IsUpdating = YES until API returns so updates werent happening in between.
 
     [cell updateCellHeader:stop];
-    [cell updateCellDetails:stop New:_fadeInCell];
+    [cell updateCellDetails:stop New:stop.MTCardCellHelper];
     [cell setIndexRow:indexPath.row];
+    
+    stop.MTCardCellHelper = NO;
 
     return cell;
 }

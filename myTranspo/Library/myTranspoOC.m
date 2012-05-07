@@ -759,6 +759,7 @@ static myTranspoOC *gInstance = NULL;
     [stop.Bus clearLiveTimes];
     
     BOOL status = NO;
+    stop.MTCardCellHelper = YES;
     if(![MTHelper IsDateToday:stop.Bus.Times.TimesAddedOn])
     {
         MTLog(@"GETTING TIMES LOCAL");

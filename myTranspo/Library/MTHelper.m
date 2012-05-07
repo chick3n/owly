@@ -222,11 +222,11 @@
 
 + (MTDirection)convertOCBusHeading:(NSString*)heading
 {
-    if([heading isEqualToString:@"Northbound"])
+    if([heading isEqualToString:@"Northbound"] || [heading isEqualToString:@"Inbound"])
     {
         return MTDIRECTION_NORTH;
     }
-    else if([heading isEqualToString:@"Southbound"])
+    else if([heading isEqualToString:@"Southbound"] || [heading isEqualToString:@"Outbound"])
         return MTDIRECTION_SOUTH;
     else if([heading isEqualToString:@"Eastbound"])
         return MTDIRECTION_EAST;
