@@ -105,7 +105,7 @@
     _alert = [[UILabel alloc] initWithFrame:labelFrame];
     _alert.font = headingFont;
     _alert.backgroundColor = [UIColor clearColor];
-    _alert.textAlignment = UITextAlignmentLeft;
+    _alert.textAlignment = UITextAlignmentCenter;
     _alert.textColor = [UIColor whiteColor];
     _alert.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:0.2];
     _alert.shadowOffset = CGSizeMake(0, -1);

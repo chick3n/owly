@@ -318,6 +318,8 @@
         NSString *routeLabel = [routeDirection valueForKey:@"RouteLabel"];
         NSString *routeHeading = [routeDirection valueForKey:@"Direction"];
         
+        MTLog(@"ROUTE HEADING FROM API: %@", routeHeading);
+        
         if(routeNumber == nil || routeLabel == nil) //not possible?
             continue;
         

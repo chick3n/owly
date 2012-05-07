@@ -42,4 +42,6 @@
     IBOutlet UIDatePicker*                  _dateSelector;
 }
 
+- (IBAction)findMe:(id)sender;
+
 @end

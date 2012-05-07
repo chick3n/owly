@@ -730,6 +730,9 @@ numberOfRowsInComponent:(NSInteger)component;
         [_mapView addAnnotation:stopAnnotation];
     }
     
+    [_mapView removeAnnotation:_mapView.userLocation];
+    [_mapView addAnnotation:_mapView.userLocation];
+    
     MKCoordinateRegion mapRegion;
     mapRegion.center = CLLocationCoordinate2DMake(_stop.Latitude - 0.002, _stop.Longitude);
     mapRegion.span.latitudeDelta = 0.004;
@@ -838,14 +841,12 @@ numberOfRowsInComponent:(NSInteger)component;
         
         if(annotiationView == nil)
             annotiationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
-        else
-        {
-            annotiationView.annotation = annotation;
-            
-            annotiationView.enabled = YES;
-            annotiationView.canShowCallout = NO;
-            annotiationView.image = [UIImage imageNamed:@"person_location_pin.png"];   
-        }
+        
+        annotiationView.annotation = annotation;
+        
+        annotiationView.enabled = YES;
+        annotiationView.canShowCallout = NO;
+        annotiationView.image = [UIImage imageNamed:@"person_location_pin.png"];  
         
         return annotiationView;
     }

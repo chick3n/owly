@@ -526,8 +526,14 @@
 
 - (void)updateMapAnnotations:(NSArray*)annotations animated:(BOOL)animated
 {
-    if(animated)
-        [_mapView removeAnnotations:[_mapView annotations]];
+    for(id<MKAnnotation> annotation in _mapView.annotations)
+    {
+        if([annotation isKindOfClass:[MTStopAnnotation class]])
+        {
+            if(animated)
+                [_mapView removeAnnotation:annotation];
+        }
+    }
     
     if(annotations == nil)
         return;
@@ -575,6 +581,7 @@
     {
         
     }
+    
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation 
@@ -629,15 +636,15 @@
         MKAnnotationView* annotiationView = (MKAnnotationView*)[_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
         
         if(annotiationView == nil)
-            annotiationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
-        else
         {
-            annotiationView.annotation = annotation;
-            
-            annotiationView.enabled = YES;
-            annotiationView.canShowCallout = NO;
-            annotiationView.image = [UIImage imageNamed:@"person_location_pin.png"];   
+            annotiationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
         }
+        
+        annotiationView.annotation = annotation;
+        
+        annotiationView.enabled = YES;
+        annotiationView.canShowCallout = NO;
+        annotiationView.image = [UIImage imageNamed:@"person_location_pin.png"]; 
         
         return annotiationView;
     }
@@ -729,6 +736,16 @@
 }
 
 - (void)moveMapBackToLocation:(id)sender
+{
+    MKCoordinateRegion mapRegion;
+    mapRegion.center = CLLocationCoordinate2DMake(_transpo.coordinates.latitude, _transpo.coordinates.longitude);
+    mapRegion.span.latitudeDelta = MTDEF_SPANLATITUDEDELTA;
+    mapRegion.span.longitudeDelta = MTDEF_SPANLONGITUDEDELTA;
+    [_mapView setRegion:mapRegion animated:YES];
+    _mapAutomaticAnimation = YES;
+}
+
+- (IBAction)findMe:(id)sender
 {
     MKCoordinateRegion mapRegion;
     mapRegion.center = CLLocationCoordinate2DMake(_transpo.coordinates.latitude, _transpo.coordinates.longitude);
