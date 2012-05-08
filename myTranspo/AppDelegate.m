@@ -160,9 +160,11 @@
     switch (view) {
         case MTVCMENU:
             newView = [[MenuTableViewController alloc] initWithNibName:@"MenuTableViewController" bundle:nil];
+            [_transpo turnOffLocationTracking];
             break; //should never happen
         case MTVCMYBUSES:
             newView = [[MyBusesViewController alloc] initWithNibName:@"MyBusesViewController" bundle:nil];
+            [_transpo turnOnLocationTracking];
             /*optionsView = [[MTOptionsDate alloc] initWithNibName:@"MTOptionsDate" bundle:nil];
             optionsView.lastDate = _lastDate;
             optionsView.selectedDate = [NSDate date];
@@ -170,6 +172,7 @@
             break;
         case MTVCSTOPS:
             newView = [[StopsViewController alloc] initWithNibName:@"StopsViewController" bundle:nil];
+            [_transpo turnOnLocationTracking];
             //optionsView = [[MTOptionsDate alloc] initWithNibName:@"MTOptionsDate" bundle:nil];
             //optionsView.lastDate = _lastDate;
             //optionsView.selectedDate = [NSDate date];
@@ -177,17 +180,22 @@
             break;
         case MTVCSETTINGS:
             newView = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil];
+            [_transpo turnOffLocationTracking];
             break;
         case MTVCTRAIN:
             newView = [[OTrainViewController alloc] initWithNibName:@"OTrainViewController" bundle:nil];
+            [_transpo turnOffLocationTracking];
             break;
         case MTVCNOTICIES:
             newView = [[NoticesViewController alloc] initWithNibName:@"NoticesViewController" bundle:nil];
+            [_transpo turnOffLocationTracking];
             break;
         case MTVCTRIPPLANNER:
+            [_transpo turnOnLocationTracking];
             newView = [[TripPlannerViewController alloc] initWithNibName:@"TripPlannerViewController" bundle:nil];
             break;
         case MTVCUNKNOWN:
+            [_transpo turnOffLocationTracking];
             return;
     }
     
