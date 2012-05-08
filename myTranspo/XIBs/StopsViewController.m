@@ -175,6 +175,8 @@
     _searchBar.selectedScopeButtonIndex = 0;
     _searchBar.text = @"";
     _searchResults = nil;
+    
+    _findMe.hidden = YES;
 }
 
 - (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
@@ -192,6 +194,8 @@
         [_mapView removeAnnotations:_mapView.annotations];
         [self mapView:_mapView regionDidChangeAnimated:YES]; //update to near by stops as we arent search anything anymore?
     }
+    
+    _findMe.hidden = NO;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar

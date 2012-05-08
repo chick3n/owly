@@ -40,6 +40,7 @@
     UIBarButtonItem*                        _leftBarButton;
     UIBarButtonItem*                        _resetMapLocationButton;
     IBOutlet UIDatePicker*                  _dateSelector;
+    IBOutlet UIButton*                      _findMe;
 }
 
 - (IBAction)findMe:(id)sender;

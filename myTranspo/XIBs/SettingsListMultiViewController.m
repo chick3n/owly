@@ -59,7 +59,7 @@
     
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_bg2.png"]];
+    _tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]];
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)]];
     
     MTRightButton* doneButton = [[MTRightButton alloc] initWithType:kRightButtonTypeAction];
