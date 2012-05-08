@@ -22,6 +22,9 @@
 #import <sqlite3.h>
 #import "sqlite3_distance.c"
 
+#include <mach/mach_time.h>
+#include <stdint.h>
+
 @interface MTOCDB : NSObject <MTInteraction>
 {
     NSString*           _dbPath;
@@ -33,6 +36,8 @@
     uint                _busLimit;
     float               _locationDistance;
 }
+
+@property (nonatomic)   BOOL isConnected;
 
 - (id)initWithDBPath:(NSString *)dbPath And:(MTLanguage)lang;
 - (BOOL)connectToDatabase;
@@ -47,6 +52,10 @@
 - (BOOL)getStopsForBus:(MTBus *)bus ByDistanceLat:(double)latitude Lon:(double)longitude;
 - (BOOL)getBus:(MTBus *)bus ForStop:(MTStop *)stop;
 - (MTTrip*)getClosestTrip:(NSArray*)trips ToLat:(double)latitude Lon:(double)longitude;
+- (BOOL)getOfflineStop:(MTStop*)stop 
+          Route:(MTBus*)bus 
+          Times:(NSDate*)date
+        Results:(NSDictionary*)results;
 
 //favorites
 - (BOOL)getFavorites:(NSMutableArray*)favorites;

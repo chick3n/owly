@@ -30,7 +30,7 @@ static myTranspoOC *gInstance = NULL;
 @synthesize coordinates    = _coordinates;
 @synthesize City           = _city;
 @synthesize hasRealCoordinates = _hasRealCoordinates;
-@synthesize clLocation;
+
 
 - (CLLocation*)clLocation
 {
@@ -132,6 +132,41 @@ static myTranspoOC *gInstance = NULL;
     }
     
     return YES;
+}
+
+- (BOOL)addOfflineTimes
+{
+    NSString* dbName = nil;
+    
+    switch (_city) {
+        case MTCITYOTTAWA:
+            dbName = @"OCTranspoOffline.sqlite";
+            break;
+            
+        default:
+            break;
+    }
+    
+    _hasOfflineTimes = NO;
+    _ocOfflineTimes = nil;
+    
+    if(dbName == nil)
+        return NO;
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDir = [paths objectAtIndex:0];
+	NSString *dbPath = [documentsDir stringByAppendingPathComponent:dbName];
+    
+    if([[NSFileManager defaultManager] fileExistsAtPath:dbPath])
+    {
+        _hasOfflineTimes = YES;
+        _ocOfflineTimes = [[MTOCDB alloc] initWithDBPath:dbPath And:_language];
+        
+        if(_ocOfflineTimes.isConnected)
+            return YES;
+    }
+    
+    return NO;
 }
 
 - (BOOL)addWebDBPath:(NSString*)urlPath
@@ -762,10 +797,16 @@ static myTranspoOC *gInstance = NULL;
     stop.MTCardCellHelper = YES;
     if(![MTHelper IsDateToday:stop.Bus.Times.TimesAddedOn])
     {
-        MTLog(@"GETTING TIMES LOCAL");
-        //get stop information
-        if(_hasDB)
+        if(_hasOfflineTimes)
         {
+            MTLog(@"GETTING OFFLINE TIMES");
+            status = [_ocOfflineTimes getOfflineStop:stop Route:stop.Bus Times:date Results:nil];
+        }
+        
+        //get stop information
+        if(status == NO && _hasDB)
+        {
+            MTLog(@"GETTING TIMES LOCAL");
             status = [_ocDb getStop:stop Route:stop.Bus Times:date Results:nil];
         }
         

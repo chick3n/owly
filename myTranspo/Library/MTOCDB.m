@@ -13,6 +13,19 @@
 @end
 
 @implementation MTOCDB 
+@synthesize isConnected = _isConnected;
+
+
+- (BOOL)isConnected
+{
+    if(_isConnected == NO)
+    {
+        //lets try to reconnect it once as we may have lost our connection
+        [self connectToDatabase];
+    }
+    
+    return _isConnected;
+}
 
 #pragma mark - INITILIZATION
 
@@ -644,6 +657,118 @@
 }
 
 #pragma mark - TIMES
+
+- (BOOL)getOfflineStop:(MTStop*)stop 
+          Route:(MTBus*)bus 
+          Times:(NSDate*)date
+        Results:(NSDictionary*)results
+{
+    if(!_isConnected)
+        return NO;
+    
+    static double ticksToNanoseconds = 0.0;
+    uint64_t startTime = mach_absolute_time();
+    
+    
+    sqlite3_stmt* cmpStmt;
+    BOOL foundTime = NO;
+    NSMutableArray *weekdayPointer = bus.Times.Times;
+    NSMutableArray *saturdayPointer = bus.Times.TimesSat;
+    NSMutableArray *sundayPointer = bus.Times.TimesSun;
+    
+    [bus.Times clearTimes];
+    
+    NSDateFormatter* dateFormatter = [MTHelper MTDateFormatterDashesYYYYMMDD];
+    
+    NSString* current_next_update = nil;
+    NSString* sqlPreStmt = [NSString stringWithFormat:@"SELECT MIN(next_update) FROM offline_times WHERE stop_id = '%@' and route_id = '%@' and next_update > '%@';"
+                            , stop.StopId
+                            , bus.BusId
+                            , [dateFormatter stringFromDate:date]];
+    if(sqlite3_prepare_v2(_db
+                          , [sqlPreStmt UTF8String]
+                          , -1
+                          , &cmpStmt
+                          , NULL) == SQLITE_OK)
+    {
+        if(sqlite3_step(cmpStmt) == SQLITE_ROW)
+        {
+            current_next_update = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 0)];
+        }
+    }
+    sqlite3_reset(cmpStmt);
+        
+    if(current_next_update == nil)
+        return NO;
+    
+    NSString *sqlStmt = [NSString stringWithFormat: \
+                         @"select case ft.day_of_week when 'su' then 2 when 's' then 1 else 0 end, ft.trip_id, ft.arrival_time_ori, ft.stop_sequence, ft.stop_id, ft.route_id, ft.end_stop \
+                         from offline_times ft \
+                         where ft.stop_id = '%@'  AND ft.route_id = '%@' AND (ft.next_update > '%@' AND ft.next_update <= '%@') \
+                         order by ft.day_of_week asc, ft.id asc"
+                         , stop.StopId
+                         , bus.BusId
+                         , [dateFormatter stringFromDate:date]
+                         , current_next_update];
+    
+    if(sqlite3_prepare_v2(_db
+                          , [sqlStmt UTF8String]
+                          , -1
+                          , &cmpStmt
+                          , NULL) == SQLITE_OK)
+    {
+        while(sqlite3_step(cmpStmt) == SQLITE_ROW)
+        {
+            MTTime *time = [[MTTime alloc] init];
+            
+            time.TripId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 1)];
+            time.Time = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 2)];
+            time.StopId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 4)];
+            time.StopSequence = sqlite3_column_int(cmpStmt, 3);
+            time.IsLive = NO;
+            time.EndStopHeader = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 6)];
+            
+            switch (sqlite3_column_int(cmpStmt, 0)) {
+                case 0:
+                    time.dayOfWeek = 0;
+                    [weekdayPointer addObject:time];
+                    break;
+                case 1:
+                    time.dayOfWeek = 1;
+                    [saturdayPointer addObject:time];
+                    break;
+                case 2:
+                    time.dayOfWeek = 2;
+                    [sundayPointer addObject:time];
+                    break;
+            }            
+            
+            foundTime = YES;
+        }
+        
+        sqlite3_reset(cmpStmt);
+        
+        uint64_t endTime = mach_absolute_time();
+        uint64_t elapsedTime = endTime - startTime;
+        if(0.0 == ticksToNanoseconds)
+        {
+            mach_timebase_info_data_t timebase;
+            mach_timebase_info(&timebase);
+            ticksToNanoseconds = (double)timebase.numer / timebase.denom;
+        }
+        
+        NSLog(@"Time Elapsed: %f", elapsedTime * ticksToNanoseconds);
+        
+        if(foundTime)
+        {
+            bus.Times.TimesAdded = YES;
+            return YES;
+        }
+    }
+    NSLog(@"%s", sqlite3_errmsg(_db));
+    sqlite3_reset(cmpStmt);
+    return NO;
+}
 
 - (BOOL)getStop:(MTStop*)stop 
           Route:(MTBus*)bus 

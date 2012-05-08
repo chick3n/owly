@@ -81,12 +81,14 @@
     BOOL                    _hasDB;
     BOOL                    _hasAPI;
     BOOL                    _hasWebDb;
+    BOOL                    _hasOfflineTimes;
     BOOL                    _isConnected;
     BOOL                    _hasRealCoordinates;
     
     MTOCApi*                _ocApi;
     MTOCDB*                 _ocDb;
     MTWebDB*                _ocWebDb;
+    MTOCDB*                 _ocOfflineTimes;
     CLLocationManager*      _locationManager;
     
 //    NSOperationQueue*       _queue;
@@ -112,6 +114,7 @@
 - (BOOL)addDBPath:(NSString*)dbPath;
 - (BOOL)addWebDBPath:(NSString*)urlPath;
 - (BOOL)addAPI;
+- (BOOL)addOfflineTimes;
 - (BOOL)validateData;
 - (void)turnOnLocationTracking;
 - (void)turnOffLocationTracking;

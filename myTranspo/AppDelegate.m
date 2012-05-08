@@ -97,7 +97,20 @@
      */
     if(_transpo)
     {
-        [_transpo turnOnLocationTracking];
+        UIViewController* viewController = [_navigationController.viewControllers objectAtIndex:0];
+        if([[viewController class] superclass] == [MTBaseViewController class])
+        {
+            MTViewControllers view = ((MTBaseViewController*)viewController).viewControllerType;
+            switch (view) {
+                case MTVCMYBUSES:
+                case MTVCSTOPS:
+                case MTVCTRIPPLANNER:
+                    [_transpo turnOnLocationTracking];
+                    break;
+                default:
+                    break;
+            }
+        }
     }
     
     application.applicationIconBadgeNumber = 0;
@@ -275,6 +288,7 @@
     
     [_transpo addWebDBPath:@"http://www.vicestudios.com/apps/owly/oc/"];
     [_transpo addAPI];
+    [_transpo addOfflineTimes];
 }
 
 - (void)preLoad
