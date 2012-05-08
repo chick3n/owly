@@ -922,6 +922,8 @@
     mapFrame.size.height += _searchBar.frame.size.height;
     mapFrame.origin.y = 0;
     
+    _findMe.hidden = YES;
+    
     [UIView animateWithDuration:0.25
                      animations:^{
                          _searchBar.frame = searchFrame;
@@ -936,6 +938,8 @@
     CGRect mapFrame = _mapView.frame;
     mapFrame.size.height -= _searchBar.frame.size.height;
     mapFrame.origin.y = 44;
+    
+    _findMe.hidden = NO;
     
     [UIView animateWithDuration:0.25
                      animations:^{

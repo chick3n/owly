@@ -70,8 +70,8 @@
         MTCardCellButton *row = [labels objectAtIndex:x];
         [row addSubview:divider];
         [row setTitleColor:timeColor forState:UIControlStateNormal];
-        [row setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
-        [row setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
+        [row setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+        [row setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
         [row addTarget:self action:@selector(cellClicked:) forControlEvents:UIControlEventTouchUpInside];
         row.backgroundColor = [UIColor clearColor];
         row.titleLabel.font = timeFont;
@@ -163,11 +163,13 @@
     if(alert == YES)
     {
         row.selected = YES;
-        row.backgroundColor = [UIColor blueColor];
+        row.backgroundColor = [UIColor colorWithRed:155./255. green:217./255. blue:34./255. alpha:1.0];
+        //[row setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
     else {
         row.selected = NO;
         row.backgroundColor = [UIColor clearColor];
+        //[row setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
 }
 
