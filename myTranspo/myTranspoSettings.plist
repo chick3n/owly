@@ -10,6 +10,8 @@
 	<integer>0</integer>
 	<key>ConnectionWarningSent</key>
 	<false/>
+	<key>OCOfflineVersion</key>
+	<real>0</real>
 	<key>ConnectionAvailable</key>
 	<false/>
 	<key>SettingsVersion</key>

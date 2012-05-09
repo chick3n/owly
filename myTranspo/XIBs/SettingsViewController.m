@@ -22,6 +22,9 @@
     {
         _data = [[NSMutableArray alloc] init];
         _settings = [[MTSettings alloc] init];
+        _offlineManager = [[OfflineManager alloc] init];
+        _offlineManager.delegate = self;
+        [_offlineManager getLatestVersion];
     }
     return self;
 }
@@ -121,6 +124,7 @@
     //data management access
     NSMutableArray* groupManagement = [[NSMutableArray alloc] init];
     [groupManagement addObject:[SettingsType settingsTypeForGroup:SGDATA Type:STOTHER Title:NSLocalizedString(@"MTDEF_MANAGENOTIFICATIONS", nil) SubTitle:nil Data:nil Selected:0 ModificationCaller:nil Delegate:self]];
+    [groupManagement addObject:[SettingsType settingsTypeForGroup:SGDATA Type:STDOWNLOAD Title:@"DOWNLOAD" SubTitle:nil Data:nil Selected:0 ModificationCaller:nil Delegate:self]];
     
     [_data addObject:groupManagement];
 }
@@ -226,6 +230,7 @@
             [cell setAccessoryView:[setting accessoryView]];
             break;
         case STMULTI:
+        case STDOWNLOAD:
             break;
     }
     
@@ -347,6 +352,15 @@
         [self.navigationController pushViewController:nvc animated:YES];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
+    else if(setting.type == STDOWNLOAD) //begin download!
+    {
+        if(!_offlineManager.inProgress && _offlineManager.newVersionAvailable)
+        {
+            //ToDo: Lock app to this screen!
+            [_offlineManager downloadLatestVersion];
+        }
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
     else if(setting.type == STCHECKBOX)
     {
         setting.selected = !setting.selected;
@@ -426,6 +440,18 @@
     }
     
     
+}
+
+#pragma  mark - OFFLINE Manager Delegate
+
+- (void)offlineManager:(id)offlineMgr didFinishWithResult:(BOOL)result ForState:(OfflineState)state
+{
+    NSLog(@"Manager finished with result %d for state %d", result, state);
+}
+
+- (void)offlineManagerTotalReceived:(CGFloat)received ForSize:(CGFloat)size
+{
+    NSLog(@"Manager received %f of %f", received, size);
 }
 
 @end

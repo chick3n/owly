@@ -68,6 +68,7 @@
 		315CD6071548074100B6299D /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 315CD6051548074100B6299D /* icon.png */; };
 		317369F6154CCECC0077011E /* MTCardCellButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 317369F5154CCECC0077011E /* MTCardCellButton.m */; };
 		317369FA154DE8990077011E /* TripTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 317369F9154DE8990077011E /* TripTextField.m */; };
+		317E3E001559EE48000A3B16 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 317E3DFF1559EE48000A3B16 /* OfflineManager.m */; };
 		318095D11543006500B71188 /* TripDetailsDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 318095D01543006500B71188 /* TripDetailsDisplay.m */; };
 		318095E315433F3F00B71188 /* notice_plan_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 318095DB15433F3F00B71188 /* notice_plan_icon.png */; };
 		318095E415433F3F00B71188 /* notice_plan_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 318095DC15433F3F00B71188 /* notice_plan_icon@2x.png */; };
@@ -395,6 +396,8 @@
 		317369F5154CCECC0077011E /* MTCardCellButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCardCellButton.m; sourceTree = "<group>"; };
 		317369F8154DE8990077011E /* TripTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripTextField.h; path = Core/TripDetials/TripTextField.h; sourceTree = "<group>"; };
 		317369F9154DE8990077011E /* TripTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TripTextField.m; path = Core/TripDetials/TripTextField.m; sourceTree = "<group>"; };
+		317E3DFE1559EE48000A3B16 /* OfflineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OfflineManager.h; path = Core/Offline/OfflineManager.h; sourceTree = "<group>"; };
+		317E3DFF1559EE48000A3B16 /* OfflineManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OfflineManager.m; path = Core/Offline/OfflineManager.m; sourceTree = "<group>"; };
 		318095CF1543006500B71188 /* TripDetailsDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripDetailsDisplay.h; path = Core/TripDetials/TripDetailsDisplay.h; sourceTree = "<group>"; };
 		318095D01543006500B71188 /* TripDetailsDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TripDetailsDisplay.m; path = Core/TripDetials/TripDetailsDisplay.m; sourceTree = "<group>"; };
 		318095DB15433F3F00B71188 /* notice_plan_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notice_plan_icon.png; sourceTree = "<group>"; };
@@ -727,6 +730,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		317E3DFC1559EE2A000A3B16 /* Offline */ = {
+			isa = PBXGroup;
+			children = (
+				317E3DFE1559EE48000A3B16 /* OfflineManager.h */,
+				317E3DFF1559EE48000A3B16 /* OfflineManager.m */,
+			);
+			name = Offline;
+			sourceTree = "<group>";
+		};
 		318095CD1543004000B71188 /* TripDetails */ = {
 			isa = PBXGroup;
 			children = (
@@ -1227,6 +1239,7 @@
 		31ADEA31151FE3220029C964 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				317E3DFC1559EE2A000A3B16 /* Offline */,
 				318095CD1543004000B71188 /* TripDetails */,
 				31DF2E291523C7120035BE2F /* Map */,
 				31ADEA40151FEF6F0029C964 /* ViewControllers.h */,
@@ -1662,6 +1675,7 @@
 				31D64D7F1554D4D5001B0B2D /* DCRoundSwitchToggleLayer.m in Sources */,
 				31D807B41556AADC00B5A8B5 /* Reachability.m in Sources */,
 				31A773E61556E5D500F59604 /* MTUserAnnotation.m in Sources */,
+				317E3E001559EE48000A3B16 /* OfflineManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

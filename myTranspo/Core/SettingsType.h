@@ -25,6 +25,7 @@ typedef enum
     , STPASSWORD
     , STOTHER
     , STMULTI
+    , STDOWNLOAD
 } SettingTypes;
 
 @protocol SettingsTypeDelegate <NSObject>

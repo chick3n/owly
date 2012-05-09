@@ -318,8 +318,6 @@
         NSString *routeLabel = [routeDirection valueForKey:@"RouteLabel"];
         NSString *routeHeading = [routeDirection valueForKey:@"Direction"];
         
-        MTLog(@"ROUTE HEADING FROM API: %@", routeHeading);
-        
         if(routeNumber == nil || routeLabel == nil) //not possible?
             continue;
         
@@ -373,7 +371,6 @@
                     NSTimeInterval minutesAdjusted = ([trip objectForKey:@"AdjustedScheduleTime"] != nil) ? [[trip objectForKey:@"AdjustedScheduleTime"] doubleValue] * 60 : 0;
                     newTrip.Time = [dateFormatter stringFromDate:[[NSDate date] dateByAddingTimeInterval:minutesAdjusted]];
                     newTrip.Time = [MTHelper convertOC24HourTime:newTrip.Time];
-                    MTLog(@"GPS Live Time: %@", newTrip.Time);
                 }
                 else
                 {
@@ -382,7 +379,6 @@
                     NSTimeInterval minutesAdjusted = ([trip objectForKey:@"AdjustedScheduleTime"] != nil) ? [[trip objectForKey:@"AdjustedScheduleTime"] doubleValue] * 60 : 0;
                     newTrip.Time = [dateFormatter stringFromDate:[[NSDate date] dateByAddingTimeInterval:minutesAdjusted]];
                     newTrip.Time = [MTHelper convertOC24HourTime:newTrip.Time];
-                    MTLog(@"GPS Schedule Time: %@", newTrip.Time);
                 }
             }
             else

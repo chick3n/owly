@@ -619,4 +619,11 @@
     [userDefaults synchronize];
 }
 
++ (CGFloat)ocOfflineVersion
+{
+    NSUserDefaults* userDefaults = [MTSettings settingsUserDefault];
+    CGFloat version = [userDefaults floatForKey:kMTOCOfflineVersion];
+    return version;
+}
+
 @end

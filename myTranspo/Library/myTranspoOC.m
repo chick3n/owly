@@ -812,6 +812,7 @@ static myTranspoOC *gInstance = NULL;
         
         if(status == NO && _hasWebDb) //couldnt get the full schedule locally try non locally
         {
+            MTLog(@"GETTING TIMES WEB");
             stop.IsUpdating = YES;
             NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
             status = [_ocWebDb getStop:stop Route:stop.Bus Times:date Results:results];
@@ -835,6 +836,7 @@ static myTranspoOC *gInstance = NULL;
     
     if(_hasAPI && [MTHelper IsDateToday:date]) //get next times live
     {
+        MTLog(@"GETTING TIMES API");
         stop.IsUpdating = YES;
         status = [_ocApi getStop:stop Route:stop.Bus Times:date Results:nil];
         if(status && _hasDB && [stop.Bus getBusHeadingForFavorites] != MTDIRECTION_UNKNOWN)

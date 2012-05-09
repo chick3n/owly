@@ -24,6 +24,7 @@ static NSString* kMTPassword = @"Password";
 static NSString* kMTNotificationTime = @"NotificationTime";
 static NSString* kMTNotificationUpdate = @"NotificationUpdate";
 static NSString* kMTNotificationStartupView = @"kMTNotificationStartupView";
+static NSString* kMTOCOfflineVersion = @"OCOfflineVersion";
 
 //helper cards
 static NSString* kMTHelperMyBuses = @"HelperMyBusesShown";
@@ -103,5 +104,6 @@ static NSString* kMTRConnectionWarning = @"ConnectionWarningSent";
 + (int)startupScreen;
 + (BOOL)networkNotification;
 + (void)networkNotificationStatus:(BOOL)status;
++ (CGFloat)ocOfflineVersion;
 
 @end

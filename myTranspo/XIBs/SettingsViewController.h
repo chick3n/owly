@@ -16,13 +16,15 @@
 #import "SettingsListViewController.h"
 #import "MTSettingsTableView.h"
 #import "SettingsManageNotificationsViewController.h"
+#import "OfflineManager.h"
 
 #define kFullAppRefresh @"MTAPPREFRESH"
 
-@interface SettingsViewController : MTBaseViewController<UITableViewDataSource, UITableViewDelegate, SettingsTypeDelegate>
+@interface SettingsViewController : MTBaseViewController<UITableViewDataSource, UITableViewDelegate, SettingsTypeDelegate, OfflineManagerDelegate>
 {
     MTSettings*                 _settings;
     NSMutableArray*             _data;
+    OfflineManager*             _offlineManager;
     
     //ui compinents
     IBOutlet UITextField*       _keyboardDismisser;

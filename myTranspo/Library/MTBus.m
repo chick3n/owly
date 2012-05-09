@@ -313,6 +313,7 @@
     NSString* currentTime = [MTHelper CurrentTimeHHMMSS];
     if(timesToParse != nil && timesToParse.count > 0)
     {
+        //ToDo: Crashed here : was mutated while being enumerated
         for(MTTime *time in timesToParse)
         {
             if(results.count > count)
