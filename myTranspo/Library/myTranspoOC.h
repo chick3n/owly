@@ -149,6 +149,7 @@
 - (BOOL)getFavorites;
 - (BOOL)updateAllFavorites:(NSArray*)favorites;
 - (BOOL)updateAllFavorites:(NSArray*)favorites FullUpdate:(BOOL)fullUpdate;
+- (BOOL)updateFavorite:(MTStop*)favorite FullUpdate:(BOOL)fullUpdate;
 - (BOOL)updateFavoriteData:(MTStop*)stop; //stop acts as favorite, firstBus in busids = bus for favorite
 - (BOOL)updateFavoriteData:(MTStop*)stop ForDate:(NSDate*)date;
 - (BOOL)updateFavoriteData:(MTStop*)stop ForDate:(NSDate*)date StoreTimes:(BOOL)store;

@@ -95,6 +95,8 @@
 - (void)toggleLoadingAnimation:(BOOL)toggle;
 - (void)initializeUI;
 
+- (void)updateCellBusNumber:(NSString*)busNumber AndBusDisplayHeading:(NSString*)busDisplayHeading AndStopStreentName:(NSString*)stopStreetName;
+
 - (void)editMode:(id)sender;
 - (void)defaultMode:(id)sender;
 

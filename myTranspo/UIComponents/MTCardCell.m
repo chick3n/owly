@@ -206,6 +206,13 @@
     }
 }
 
+- (void)updateCellBusNumber:(NSString*)busNumber AndBusDisplayHeading:(NSString*)busDisplayHeading AndStopStreentName:(NSString*)stopStreetName
+{
+    _busNumber.text = busNumber;
+    _busHeading.text = busDisplayHeading;
+    _streetName.text = stopStreetName;
+}
+
 - (void)updateCellHeader:(MTStop*)stop
 {
     _stop = stop;

@@ -757,13 +757,38 @@ static myTranspoOC *gInstance = NULL;
     return YES;    
 }
 
+- (BOOL)updateFavorite:(MTStop *)favorite FullUpdate:(BOOL)fullUpdate
+{
+    dispatch_async(_queue, ^{
+#if 0
+        int r = arc4random() % 45;
+        sleep(r);
+#endif
+        if(!favorite.isUpdating)
+        {
+            favorite.isUpdating = YES;
+            
+            NSDate *today = [NSDate date];
+            [self updateFavoriteHeader:favorite FullUpdate:fullUpdate];
+            [self updateFavorite:favorite ForDate:today StoreTimes:YES];
+            
+            favorite.isUpdating = NO;
+        }
+        
+        dispatch_async(MTLDEF_MAINQUEUE, ^{
+            if([_delegate respondsToSelector:@selector(myTranspo:UpdateType:updatedFavorite:)])
+                [_delegate myTranspo:MTRESULTSTATE_DONE UpdateType:MTUPDATETYPE_ALL updatedFavorite:favorite];
+        });
+    });
+    
+    return YES;
+}
+
 - (BOOL)updateFavoriteHeader:(MTStop*)stop FullUpdate:(BOOL)fullUpdate
 {
     //get stop information
     if(_hasDB)
-    {
-        stop.IsUpdating = YES;
-        
+    {        
         if(fullUpdate)
         {
             [_ocDb getStop:stop];
@@ -777,13 +802,6 @@ static myTranspoOC *gInstance = NULL;
             [_ocDb getDistanceFromStop:stop];
         }
         
-        stop.IsUpdating = NO;
-        
-        //this update will give us all the header info
-        dispatch_async(MTLDEF_MAINQUEUE, ^(void){
-            if(!stop.cancelQueue && [_delegate respondsToSelector:@selector(myTranspo:UpdateType:updatedFavorite:)])
-                [_delegate myTranspo:MTRESULTSTATE_SUCCESS UpdateType:MTUPDATETYPE_TITLE_AND_DISTANCE updatedFavorite:stop];
-        });
         return YES;
     }
     return NO;
@@ -794,7 +812,6 @@ static myTranspoOC *gInstance = NULL;
     [stop.Bus clearLiveTimes];
     
     BOOL status = NO;
-    stop.MTCardCellHelper = YES;
     if(![MTHelper IsDateToday:stop.Bus.Times.TimesAddedOn])
     {
         if(_hasOfflineTimes)
@@ -813,7 +830,6 @@ static myTranspoOC *gInstance = NULL;
         if(status == NO && _hasWebDb) //couldnt get the full schedule locally try non locally
         {
             MTLog(@"GETTING TIMES WEB");
-            stop.IsUpdating = YES;
             NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
             status = [_ocWebDb getStop:stop Route:stop.Bus Times:date Results:results];
             if(status == YES && _hasDB && store == YES)
@@ -830,28 +846,18 @@ static myTranspoOC *gInstance = NULL;
                 }
             }
             results = nil;
-            stop.IsUpdating = NO;
         }
     } 
     
     if(_hasAPI && [MTHelper IsDateToday:date]) //get next times live
     {
         MTLog(@"GETTING TIMES API");
-        stop.IsUpdating = YES;
         status = [_ocApi getStop:stop Route:stop.Bus Times:date Results:nil];
         if(status && _hasDB && [stop.Bus getBusHeadingForFavorites] != MTDIRECTION_UNKNOWN)
         {
             [_ocDb updateFavorite:stop AndBus:stop.Bus];
-        }
-        stop.IsUpdating = NO;       
-    }      
-    
-    stop.IsUpdating = NO;
-    dispatch_async(MTLDEF_MAINQUEUE, ^(void){
-        if(!stop.cancelQueue && [_delegate respondsToSelector:@selector(myTranspo:UpdateType:updatedFavorite:)])
-            [_delegate myTranspo:[MTHelper QuickResultState:status] UpdateType:MTUPDATETYPE_API updatedFavorite:stop];
-    });
-    
+        }  
+    }     
     
     return NO;
 }
