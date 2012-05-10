@@ -18,12 +18,19 @@
 #import "MTRightButton.h"
 #import "CardCellManager.h"
 
-@interface MyBuses2ViewController : MTBaseViewController <MyTranspoDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface MyBuses2ViewController : MTBaseViewController <MyTranspoDelegate, UITableViewDataSource, UITableViewDelegate, MTCardCellDelegate, MTRefreshDelegate>
 {
     NSMutableArray*         _favorites; //cardcellmanager
+    BOOL                    _updateInProgress;
+    int                     _updateCount;
     
     //UI Components
-    IBOutlet UITableView    *_tableView;
+    IBOutlet 
+        MTRefreshTableView  *_tableView;
+    UIBarButtonItem         *_editButton;
+    UIBarButtonItem         *_doneButton;
+    MTCardCell              *_editedIndividualCell;
+    UITapGestureRecognizer  *_editingSingleCellOverideTap;
 }
 
 @property (nonatomic, strong)   UINib*                          cellLoader;

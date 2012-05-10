@@ -23,6 +23,7 @@
 @synthesize nextTime            = _nextTime;
 @synthesize additionalNextTimes = _additionalNextTimes;
 @synthesize busSpeed            = _busSpeed;
+@synthesize individualUpdate    = _individualUpdate;
 
 - (id)init
 {
@@ -33,10 +34,13 @@
         _status = CMS_IDLE;
         _hasAnimated = NO;
         _isAnimating = NO;
+        _individualUpdate = NO;
         
         _busNumber = @"";
         _stopStreetName = @"";
         _busHeadingDisplay = @"";
+        
+        _busSpeed = MTDEF_STOPDISTANCEUNKNOWN;
     }
     return self;
 }
@@ -60,9 +64,10 @@
     _heading = [_stop.Bus getBusHeadingShortForm];
     _nextTime = _stop.Bus.NextTimeDisplay;
     _additionalNextTimes = _stop.Bus.NextThreeTimesDisplay;
+    _busSpeed = _stop.Bus.BusSpeed;
     
     _state = CCM_FULL;
-    _status = CMS_IDLE;
+    _status = CMS_NEWUPDATE;
 }
 
 @end

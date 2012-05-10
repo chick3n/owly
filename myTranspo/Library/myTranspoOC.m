@@ -761,7 +761,7 @@ static myTranspoOC *gInstance = NULL;
 {
     dispatch_async(_queue, ^{
 #if 0
-        int r = arc4random() % 45;
+        int r = arc4random() % 15;
         sleep(r);
 #endif
         if(!favorite.isUpdating)

@@ -9,10 +9,15 @@
 #import "MyBuses2ViewController.h"
 
 @interface MyBuses2ViewController()
-- (void)generateFavorites:(NSArray*)listOfFavorites;
+- (void)generateFavorites:(NSArray*)listOfFavorites WithUpdate:(BOOL)update;
 - (void)updateAllFavorites;
 - (void)updateFavorite:(CardCellManager*)cellManager;
 - (int)findCellManagerForStop:(MTStop*)stop;
+- (void)editFavorites:(id)sender;
+- (void)doneEditingFavorites:(id)sender;
+- (void)didSwipe:(UIGestureRecognizer*)gestureRecognizer;
+- (void)singleCellTapOveride:(UIGestureRecognizer*)gestureRecognizer;
+- (void)doneUpdatingFavorites;
 @end
 
 @implementation MyBuses2ViewController
@@ -22,7 +27,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        _updateInProgress = NO;
     }
     return self;
 }
@@ -46,7 +51,35 @@
     //UINib
     _cellLoader = [UINib nibWithNibName:@"MTCardCell" bundle:nil];
     
+    //navigationBar Setup
+    MTRightButton* editButton = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+    [editButton setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
+    [editButton addTarget:self action:@selector(editFavorites:) forControlEvents:UIControlEventTouchUpInside];
+    _editButton = [[UIBarButtonItem alloc] initWithCustomView:editButton];
+    self.navigationItem.rightBarButtonItem = _editButton;
+    
+    MTRightButton* doneButton = [[MTRightButton alloc] initWithType:kRightButtonTypeAction];
+    [doneButton setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
+    [doneButton addTarget:self action:@selector(doneEditingFavorites:) forControlEvents:UIControlEventTouchUpInside];
+    _doneButton = [[UIBarButtonItem alloc] initWithCustomView:doneButton];
+    
+    //tableView
+    [_tableView setDelaysContentTouches:YES];
+    [_tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]]];
+    [_tableView setTableHeaderView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)]];
+    [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)]];
+    [_tableView setupRefresh:_language];
+    [_tableView addPullToRefreshHeader];
+    [_tableView setRefreshDelegate:self];
+    UISwipeGestureRecognizer *gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
+    gesture.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight;
+    [_tableView addGestureRecognizer:gesture];
+    
+    //single cell edit override
+    _editingSingleCellOverideTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleCellTapOveride:)];
+    
     _transpo.delegate = self;
+    _updateInProgress = YES;
     [_transpo getFavorites];
 }
 
@@ -70,13 +103,15 @@
 {
     if(state == MTRESULTSTATE_SUCCESS)
     {
-        [self generateFavorites:favorites];
-        [_tableView reloadData]; //add all cells to page      
+        [self generateFavorites:favorites WithUpdate:YES];
+        [_tableView reloadData]; //add all cells to page   
+        [_tableView startLoadingWithoutDelegate]; //show loading on first view
         [self performSelector:@selector(updateAllFavorites) withObject:nil afterDelay:0.25];
     }
     else
     {
         MTLog(@"Failed to get Favorites...");
+        [self doneUpdatingFavorites];
     }
 }
 
@@ -91,17 +126,51 @@
             
             cellManager.state = CCM_FULL;
             cellManager.status = CMS_IDLE;
+            cellManager.individualUpdate = NO;
             [cellManager updateDisplayObjects];
             
             [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:0]]
                           withRowAnimation:UITableViewRowAnimationNone];
         }
+        
+        _updateCount -= 1;
+        
+        if(_updateCount <= 0)
+        {
+            [self doneUpdatingFavorites];
+        }
+    }
+}
+
+- (void)myTranspo:(MTResultState)state removedFavorite:(MTStop *)favorite WithBus:(MTBus *)bus
+{
+    if(state == MTRESULTSTATE_SUCCESS)
+    {
+        int x = [self findCellManagerForStop:favorite];
+        if(x >= 0)
+        {
+            BOOL singleCellEdit = NO;
+            
+            if(_editedIndividualCell != nil)
+                singleCellEdit = YES;
+            
+            [_favorites removeObjectAtIndex:x];
+            [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:x inSection:0]]
+                              withRowAnimation:UITableViewRowAnimationLeft];
+            
+            [self singleCellTapOveride:nil];
+        }
+    }
+    else
+    {
+        MTLog(@"Failed to remove Favorite...");
+        [_tableView reloadData];
     }
 }
 
 #pragma mark - Managing Favorites
 
-- (void)generateFavorites:(NSArray *)listOfFavorites
+- (void)generateFavorites:(NSArray *)listOfFavorites WithUpdate:(BOOL)update
 {
     if(listOfFavorites == nil)
         return;
@@ -115,10 +184,10 @@
         
         CardCellManager* cardCellManager = [[CardCellManager alloc] init];
         cardCellManager.stop = favorite;
+        [cardCellManager updateDisplayObjects]; //sets state = full, reset it back to empty as we havent called a real update
         cardCellManager.state = CCM_EMPTY;
+        //cardCellManager.status = (update == NO) ? CMS_IDLE : CMS_UPDATING; //will next call be an update
         cardCellManager.status = CMS_IDLE;
-        
-        [cardCellManager updateDisplayObjects];
         
         [_favorites addObject:cardCellManager];
     }
@@ -129,6 +198,11 @@
     for(CardCellManager* cellManager in _favorites)
     {
         [self updateFavorite:cellManager];
+    }
+    
+    if(_updateCount <= 0)
+    {
+        [self doneUpdatingFavorites];
     }
 }
 
@@ -143,8 +217,21 @@
     if(cellManager.stop.isUpdating)
         return;
     
+    if(cellManager.status == CMS_UPDATING)
+        return; //already updating this one
+    
     cellManager.status = CMS_UPDATING;
     [_transpo updateFavorite:cellManager.stop FullUpdate:NO];
+    _updateCount += 1;
+}
+
+- (void)doneUpdatingFavorites
+{
+    _updateCount = 0;
+    _updateInProgress = NO;
+    [_tableView stopLoading];
+    
+    NSLog(@"Done Updating Favorite(s)");
 }
 
 - (int)findCellManagerForStop:(MTStop*)stop
@@ -191,6 +278,7 @@
     if (cell == nil) {
         cell = [[_cellLoader instantiateWithOwner:self options:nil] objectAtIndex:0];
         cell.language = _language;
+        cell.delegate = self;
         [cell initializeUI];
     }
     
@@ -200,9 +288,228 @@
          AndBusDisplayHeading:cellManager.busHeadingDisplay 
            AndStopStreentName:cellManager.stopStreetName];
     
+    if(cellManager.state == CCM_FULL)
+    {
+        [cell updateCellPrevTime:cellManager.prevTime
+                     AndDistance:cellManager.distance
+                    AndDirection:cellManager.heading
+                     AndNextTime:cellManager.nextTime
+                    AndNextTimes:cellManager.additionalNextTimes
+                        AndSpeed:cellManager.busSpeed];
+        
+        if(cellManager.status == CMS_NEWUPDATE && cellManager.state != CCM_EMPTY)
+        {
+            [cell updateCellDetailsWithFlash];
+            cellManager.status = CMS_IDLE;
+        }
+        
+        if(cell.hasExpanded == NO && cell.isExpanding == NO)
+            [cell updateCellDetailsAnimation:!cellManager.hasAnimated];
+        
+        cellManager.hasAnimated = YES;
+        
+        [cell updateCellForIndividualUpdate:cellManager.individualUpdate];
+    }
+    
+    if(cellManager.status != CMS_UPDATING)
+        [cell toggleLoadingAnimation:NO];
+    else [cell toggleLoadingAnimation:YES];
     
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(tableView.editing)
+    {
+        return;
+    }
+    else if(_editedIndividualCell != nil)
+    {
+        [self singleCellTapOveride:nil];
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+}
+
+#pragma mark - TableView Editing & Refreshing
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (BOOL)tableView:(UITableView *)tableview shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
+    return NO;
+}
+- (UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleNone;
+}
+
+- (void)editFavorites:(id)sender
+{
+    if(_updateInProgress)
+        return;
+    
+    [_tableView setEditing:YES animated:YES];
+    self.navigationItem.rightBarButtonItem = _doneButton;
+}
+
+- (void)doneEditingFavorites:(id)sender
+{
+    if(_editedIndividualCell != nil)
+    {
+        [_tableView setUserInteractionEnabled:YES];
+        [self.view removeGestureRecognizer:_editingSingleCellOverideTap];
+        [_editedIndividualCell setEditing:NO animated:YES];
+        _editedIndividualCell = nil;
+    }
+    [_tableView setEditing:NO animated:YES];
+    self.navigationItem.rightBarButtonItem = _editButton;
+}
+
+- (void)singleCellTapOveride:(UIGestureRecognizer *)gestureRecognizer
+{
+    if(gestureRecognizer != nil)
+    {
+        //determine if button was clicked and send its action
+        UIView* view = gestureRecognizer.view;
+        UIView* clickedView = [view hitTest:[gestureRecognizer locationInView:view] withEvent:nil];
+        if(clickedView)
+        {
+            if([clickedView class] == [UIButton class])
+            {
+                [(UIButton*)clickedView sendActionsForControlEvents:UIControlEventTouchUpInside];
+            }
+        }
+    }
+    
+    if(_editedIndividualCell != nil)
+        [self doneEditingFavorites:nil];
+    else {
+        [_tableView setUserInteractionEnabled:YES];
+        [self.view removeGestureRecognizer:_editingSingleCellOverideTap];
+    }
+}
+
+- (void)didSwipe:(UIGestureRecognizer*)gestureRecognizer
+{
+    if(_updateInProgress)
+        return;
+    
+    if(gestureRecognizer.state == UIGestureRecognizerStateEnded)
+    {
+        CGPoint swipeLocation = [gestureRecognizer locationInView:_tableView];
+        NSIndexPath* swipedIndexPath = [_tableView indexPathForRowAtPoint:swipeLocation];
+        if(swipedIndexPath != nil)
+        {
+            //refresh individual cell
+            if(swipedIndexPath.row < _favorites.count)
+            {
+                MTCardCell* cell = (MTCardCell*)[_tableView cellForRowAtIndexPath:swipedIndexPath];
+                
+                if(cell)
+                {
+                    if(_editedIndividualCell == cell) //same cell so just remove it
+                    {
+                        [self singleCellTapOveride:nil];
+                        return;
+                    }
+                    else if(_editedIndividualCell != nil) //another cell so remove it
+                    {
+                        [self singleCellTapOveride:nil];
+                    }
+                    
+                    //[_tableView setUserInteractionEnabled:NO];
+                    [self.view addGestureRecognizer:_editingSingleCellOverideTap];
+                    self.navigationItem.rightBarButtonItem = _doneButton;
+                    [cell setEditing:YES animated:YES];
+                    _editedIndividualCell = cell;
+                    
+                }
+                else if(_editedIndividualCell != nil)
+                {
+                    [self singleCellTapOveride:nil];
+                }
+            }
+            else if(_editedIndividualCell != nil)
+            {
+                [self singleCellTapOveride:nil];
+            }
+        }
+        else if(_editedIndividualCell != nil)
+        {
+            [self singleCellTapOveride:nil];
+        }
+    }
+}
+
+#pragma mark - MTCardCell Delegate
+
+- (void)mtCardcellDeleteClicked:(id)cell
+{
+    NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
+    
+    if(indexPath == nil)
+    {
+        MTLog(@"Delete row failed");
+        return;
+    }
+    
+    CardCellManager* cellManager = [_favorites objectAtIndex:indexPath.row];
+    [_transpo removeFavorite:cellManager.stop WithBus:cellManager.stop.Bus];
+}
+
+- (void)cardCellRefreshRequestedForDisplayedData:(id)cell
+{
+    NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
+    
+    if(indexPath == nil)
+    {
+        MTLog(@"Update row failed");
+        [(MTCardCell*)cell updateCellForIndividualUpdate:NO];
+        return;
+    }
+    
+    CardCellManager* cellManager = [_favorites objectAtIndex:indexPath.row];
+    
+    if(cellManager.status == CMS_UPDATING) //already updating
+    {
+        MTLog(@"Update row individual but already doing an update");
+        [(MTCardCell*)cell updateCellForIndividualUpdate:NO];
+        return;
+    }
+    
+    if(cellManager.individualUpdate == YES) //already updating, havent received response
+        return;
+    
+    cellManager.individualUpdate = YES;
+    [self updateFavorite:cellManager];
+}
+
+#pragma mark - MTRefreshTableView
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if(_editedIndividualCell != nil)
+    {
+        [self singleCellTapOveride:nil];
+    }
+    
+    [_tableView scrollViewWillBeginDragging:scrollView];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [_tableView scrollViewDidScroll:scrollView];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    [_tableView scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+}
+
+- (void)refreshTableViewNeedsRefresh
+{
+    [self updateAllFavorites];
 }
 
 @end

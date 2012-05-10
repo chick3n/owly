@@ -12,7 +12,8 @@
 - (void)viewForPage:(int)page;
 - (void)pageOneHelperEmptyTimes;
 - (void)nextTimesClicked:(id)sender;
-
+- (void)updateNextTimes:(NSArray*)nextTimes;
+- (void)updateSpeed:(NSString*)speed;
 @end
 
 @implementation MTCardCell
@@ -21,6 +22,7 @@
 @synthesize indexRow =          _indexRow;
 @synthesize stop =              _stop;
 @synthesize hasExpanded =       _hasExpanded;
+@synthesize isExpanding =       _isExpanding;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier WithLanguage:(MTLanguage)language
 {
@@ -43,6 +45,7 @@
 
 - (void)initializeUI
 {       
+    _isExpanding = NO;
     _hasExpanded = NO;
     _detailsView.hidden = NO;
     _arrowImage.hidden = YES;    
@@ -268,12 +271,100 @@
     }
 }
 
+- (void)updateCellPrevTime:(NSString*)prevTime AndDistance:(NSString*)distance AndDirection:(NSString*)direction AndNextTime:(MTTime*)nextTime AndNextTimes:(NSArray*)nextTimes AndSpeed:(NSString*)speed
+{
+    [_timesAlert hideAlertWithSelfInvoke:YES];
+    
+    _prevTime.text = prevTime;
+    _direction.text = direction;
+    _distance.text = distance;
+    
+    _nextTimeValue = [nextTime getTimeForDisplay];//stop.Bus.NextTime;
+    _nextTime.originalHeading = _nextTimeValue;
+    _nextTime.helperHeading = nextTime.EndStopHeader;
+    [_nextTime setTitle:_nextTimeValue forState:UIControlStateNormal];
+    
+    [self updateNextTimes:nextTimes];
+    [self updateSpeed:speed];
+}
+
+- (void)updateCellDetailsWithFlash
+{
+    _prevTime.alpha = 0.0;
+    _nextTime.alpha = 0.0;
+    _distance.alpha = 0.0;
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        _prevTime.alpha = 1.0;
+        _nextTime.alpha = 1.0;
+        _distance.alpha = 1.0;
+    }];
+}
+
+- (void)updateCellDetailsAnimation:(BOOL)animate
+{
+    CGRect detailsBackgroundFrame = _detailsBackground.frame;
+    CGRect detailsScrollView = _dataScrollView.frame;
+    
+    if(detailsScrollView.origin.y == 0 || detailsBackgroundFrame.origin.y == 0)
+        return;
+    
+    detailsBackgroundFrame.origin.y = 0;
+    detailsScrollView.origin.y = 0;
+    
+    _isExpanding = YES;
+    
+    if(animate)
+    {
+        [UIView animateWithDuration:0.25
+                         animations:^{
+                             _detailsBackground.frame = detailsBackgroundFrame;
+                             _dataScrollView.frame = detailsScrollView;
+                         } completion:^(BOOL finished) {
+                             if(finished)
+                             {
+                                 _hasExpanded = YES;
+                                 _isExpanding = NO;
+                             }
+                             
+                         }];
+    }
+    else {
+        _detailsBackground.frame = detailsBackgroundFrame;
+        _dataScrollView.frame = detailsScrollView;
+        _hasExpanded = YES;
+        _isExpanding = NO;
+    }
+}
+
+- (void)updateCellForIndividualUpdate:(BOOL)update
+{
+    UIEdgeInsets edgeInset = UIEdgeInsetsZero;
+    
+    if(update)
+    {
+        edgeInset = UIEdgeInsetsMake(0, (kScrollToRefreshPoint*-1), 0, 0);
+        NSLog(@"EDGEINSET FOR UPDATE");
+    }
+    else {
+        edgeInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        NSLog(@"EDGEINSET FOR DONE");
+    }
+    
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         _dataScrollView.contentInset = edgeInset;
+                     }];
+}
+
 - (void)setFrame:(CGRect)frame
 {
     [super setFrame:frame];
-
+#if 0
     if(frame.size.height != kFullHeight)
+    {
         return;
+    }
     
     CGRect detailsBackgroundFrame = _detailsBackground.frame;
     CGRect detailsScrollView = _dataScrollView.frame;
@@ -284,17 +375,20 @@
     detailsBackgroundFrame.origin.y = 0;
     detailsScrollView.origin.y = 0;
     
-    [UIView animateWithDuration:0.25
+    [UIView animateWithDuration:10.25
                      animations:^{
+                         NSLog(@"Animating Cell Frame");
                          _detailsBackground.frame = detailsBackgroundFrame;
                          _dataScrollView.frame = detailsScrollView;
                      } completion:^(BOOL finished) {
                          if(finished)
                          {
+                             NSLog(@"Animating Cell Frame Finished");
                              _hasExpanded = YES;
                          }
                          
                      }];
+#endif
 }
 
 - (void)expandCellWithAnimation:(BOOL)animate
@@ -423,35 +517,38 @@
 #pragma mark - ScrollView Delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-#if 0
-    if(_timesAlert.hidden == NO)
-    {
-        CGRect timesAlertFrame = _timesAlert.frame;
-        timesAlertFrame.origin.x += _lastContentOffset.x - scrollView.contentOffset.x;
-        _timesAlert.frame = timesAlertFrame;
-        _lastContentOffset = scrollView.contentOffset;
-    }
-#endif
-#if 1
+{    
     if(!_isScrollingAutomatically)
         [_timesAlert hideAlertWithSelfInvoke:YES];
-#endif
 }
 
-#if 1
-// When animation stops using setContentOffset
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView 
+                     withVelocity:(CGPoint)velocity 
+              targetContentOffset:(inout CGPoint*)targetContentOffset
+{
+    if(scrollView.contentOffset.x <= kScrollToRefreshPoint)
+    {
+        if([_delegate conformsToProtocol:@protocol(MTCardCellDelegate)])
+        {
+            NSLog(@"Refreshing Cell");
+            [UIView animateWithDuration:0.25 animations:^(void){
+                scrollView.contentInset = UIEdgeInsetsMake(0, (kScrollToRefreshPoint*-1), 0, 0);
+            }];
+        
+            [_delegate cardCellRefreshRequestedForDisplayedData:self];
+        }
+    }
+}
+
 - (void) scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     _lastContentOffset = scrollView.contentOffset;
     _isScrollingAutomatically = NO;
 }
 
-// When animation stops using dragging
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     _lastContentOffset = scrollView.contentOffset;
     _isScrollingAutomatically = NO;
 }
-#endif
 
 - (void)viewForPage:(int)page
 {
@@ -517,6 +614,64 @@
             
             _dataScrollView.contentSize = CGSizeMake(speedFrame.origin.x + speedFrame.size.width + 10, _dataScrollView.frame.size.height);
         }
+    }
+}
+
+- (void)updateNextTimes:(NSArray*)nextTimes
+{
+    if(nextTimes == nil)
+    {
+        [self pageOneHelperEmptyTimes];
+        return;
+    }
+    
+    if(nextTimes.count <= 0)
+    {
+        [self pageOneHelperEmptyTimes];
+        return;
+    }
+    
+    //skip first one as we have it already
+    for(int x=1, ele=0; ele<_nextTimes.count; x++, ele+=kElementNextTimesElementCount)
+    {
+        MTTime* time = nil;
+        if(x < nextTimes.count)
+            time = [nextTimes objectAtIndex:x];
+        
+        MTCellButton* nextTime = (MTCellButton*)[_nextTimes objectAtIndex:ele+1];
+        if(time == nil)
+        {
+            [nextTime setTitle:MTDEF_TIMEUNKNOWN forState:UIControlStateNormal];
+            [_nextTimes replaceObjectAtIndex:ele+3 withObject:MTDEF_TIMEUNKNOWN];
+            continue;
+        }
+        
+        nextTime.helperHeading = time.EndStopHeader;
+        [nextTime setTitle:[time getTimeForDisplay] forState:UIControlStateNormal];
+        [_nextTimes replaceObjectAtIndex:ele+3 withObject:[time getTimeForDisplay]];
+    }
+}
+
+- (void)updateSpeed:(NSString*)speed
+{
+    UILabel* speedLabel = [_moreDetails objectAtIndex:0+1];
+    
+    if(speed == nil)
+    {
+        speedLabel.text = MTDEF_STOPDISTANCEUNKNOWN;
+        return;
+    }
+    
+    CGSize size = [speed sizeWithFont:speedLabel.font];
+    speedLabel.text = speed;
+    
+    if(speedLabel.frame.size.width < size.width)
+    {
+        CGRect speedFrame = speedLabel.frame;
+        speedFrame.size.width = size.width;
+        speedLabel.frame = speedFrame;
+        
+        _dataScrollView.contentSize = CGSizeMake(speedFrame.origin.x + speedFrame.size.width + 10, _dataScrollView.frame.size.height);
     }
 }
 

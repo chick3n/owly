@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MTStop.h"
+#import "MTDefinitions.h"
 
 typedef enum
 {
@@ -19,6 +20,7 @@ typedef enum
 {
     CMS_IDLE = 0
     , CMS_UPDATING
+    , CMS_NEWUPDATE
 } CellManagerStatus;
 
 @interface CardCellManager : NSObject
@@ -27,6 +29,7 @@ typedef enum
 @property (nonatomic)           CellManagerStatus               status;
 @property (nonatomic)           BOOL                            isAnimating;
 @property (nonatomic)           BOOL                            hasAnimated;
+@property (nonatomic)           BOOL                            individualUpdate;
 @property (nonatomic, strong)   MTStop                          *stop;
 
 //ui values

@@ -27,10 +27,13 @@
 #define kDetailsViewFrameHeight 57
 #define kDataScrollViewFrameHeight 55
 
+#define kScrollToRefreshPoint -60
+
 @protocol MTCardCellDelegate <NSObject>
 @required
-- (void)mtCardCellnextTimeClickedForStop:(MTStop*)stop;
+//- (void)mtCardCellnextTimeClickedForStop:(MTStop*)stop;
 - (void)mtCardcellDeleteClicked:(id)cell;
+- (void)cardCellRefreshRequestedForDisplayedData:(id)cell;
 @end
 
 @interface MTCardCell : UITableViewCell <UIScrollViewDelegate>
@@ -75,11 +78,13 @@
     NSMutableArray*                 _moreDetails;
 }
 
-@property (weak) id<MTCardCellDelegate>     delegate;
-@property (nonatomic)   MTLanguage          language;
-@property (nonatomic)   int                 indexRow;
-@property (nonatomic, weak) MTStop          *stop;
-@property (nonatomic)   BOOL                hasExpanded;
+@property (weak)            id<MTCardCellDelegate>  delegate;
+@property (nonatomic)       MTLanguage              language;
+@property (nonatomic)       int                     indexRow;
+@property (nonatomic, weak) MTStop                  *stop;
+
+@property (nonatomic)       BOOL                    hasExpanded;
+@property (nonatomic)       BOOL                    isExpanding;
 
 - (IBAction)nextTimeClicked:(id)sender;
 - (IBAction)deleteClicked:(id)sender;
@@ -95,7 +100,12 @@
 - (void)toggleLoadingAnimation:(BOOL)toggle;
 - (void)initializeUI;
 
+//NEW for mybuses v2
 - (void)updateCellBusNumber:(NSString*)busNumber AndBusDisplayHeading:(NSString*)busDisplayHeading AndStopStreentName:(NSString*)stopStreetName;
+- (void)updateCellPrevTime:(NSString*)prevTime AndDistance:(NSString*)distance AndDirection:(NSString*)direction AndNextTime:(MTTime*)nextTime AndNextTimes:(NSArray*)nextTimes AndSpeed:(NSString*)speed;
+- (void)updateCellDetailsWithFlash;
+- (void)updateCellDetailsAnimation:(BOOL)animate;
+- (void)updateCellForIndividualUpdate:(BOOL)update;
 
 - (void)editMode:(id)sender;
 - (void)defaultMode:(id)sender;

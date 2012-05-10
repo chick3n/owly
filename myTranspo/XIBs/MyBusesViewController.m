@@ -686,6 +686,7 @@
         NSIndexPath* swipedIndexPath = [self.tableView indexPathForRowAtPoint:swipeLocation];
         if(swipedIndexPath != nil)
         {
+            
             //refresh individual cell
             if(swipedIndexPath.row < _favorites.count)
             {
