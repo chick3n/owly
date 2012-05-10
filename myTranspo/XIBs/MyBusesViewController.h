@@ -16,27 +16,23 @@
 #import "MenuTableViewController.h"
 //#import "MTOptionsDate.h"
 #import "MTRightButton.h"
+#import "CardCellManager.h"
 
-@interface MyBusesViewController : MTBaseViewController<MyTranspoDelegate, MTCardCellDelegate, MTQueueSafe, UITableViewDataSource, UITableViewDelegate, MTRefreshDelegate>//, MTOptionsDateProtocol>
+@interface MyBusesViewController : MTBaseViewController <MyTranspoDelegate, UITableViewDataSource, UITableViewDelegate, MTCardCellDelegate, MTRefreshDelegate, MTQueueSafe>
 {
-    NSMutableArray*                     _favorites;
-    BOOL                                _editing;
-    int                                 _loadingCounter;
-    NSDate*                             _chosenDate;
-    NSTimer*                            _poolUpdates;
-    NSIndexPath*                        _editedCell;
-    BOOL                                _fadeInCell;
-    BOOL                                _expandCells;
-    BOOL                                _firstLoadComplete;
+    NSMutableArray*         _favorites; //cardcellmanager
+    BOOL                    _updateInProgress;
+    int                     _updateCount;
     
-    //UIComponents
-    UIBarButtonItem*                    _editButton;
-    UIBarButtonItem*                    _doneButton;
-    MTRightButton*                      _editButtonValue;
-    IBOutlet UIDatePicker*              _dateSelector;
+    //UI Components
+    IBOutlet 
+    MTRefreshTableView      *_tableView;
+    UIBarButtonItem         *_editButton;
+    UIBarButtonItem         *_doneButton;
+    MTCardCell              *_editedIndividualCell;
+    UITapGestureRecognizer  *_editingSingleCellOverideTap;
 }
 
-@property (nonatomic, weak)     IBOutlet MTRefreshTableView*    tableView;
 @property (nonatomic, strong)   UINib*                          cellLoader;
 
 @end

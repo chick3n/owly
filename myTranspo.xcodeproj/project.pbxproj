@@ -316,8 +316,6 @@
 		31EE55BB153D19A700C83552 /* NoticesDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31EE55B9153D19A100C83552 /* NoticesDataViewController.m */; };
 		31EE55BC153D19A700C83552 /* NoticesDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31EE55BA153D19A400C83552 /* NoticesDataViewController.xib */; };
 		31FFC49E153FCD85003E5061 /* cardcell_top_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31FFC49D153FCD85003E5061 /* cardcell_top_background@2x.png */; };
-		CECFCD02155AA80800E28D09 /* MyBuses2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CECFCD00155AA80700E28D09 /* MyBuses2ViewController.m */; };
-		CECFCD03155AA80800E28D09 /* MyBuses2ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CECFCD01155AA80700E28D09 /* MyBuses2ViewController.xib */; };
 		CECFCD07155AA89A00E28D09 /* CardCellManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CECFCD06155AA89A00E28D09 /* CardCellManager.m */; };
 /* End PBXBuildFile section */
 
@@ -710,9 +708,6 @@
 		31EE55B9153D19A100C83552 /* NoticesDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoticesDataViewController.m; path = XIBs/NoticesDataViewController.m; sourceTree = "<group>"; };
 		31EE55BA153D19A400C83552 /* NoticesDataViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NoticesDataViewController.xib; path = XIBs/NoticesDataViewController.xib; sourceTree = "<group>"; };
 		31FFC49D153FCD85003E5061 /* cardcell_top_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cardcell_top_background@2x.png"; sourceTree = "<group>"; };
-		CECFCCFF155AA80700E28D09 /* MyBuses2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyBuses2ViewController.h; path = XIBs/MyBuses2ViewController.h; sourceTree = "<group>"; };
-		CECFCD00155AA80700E28D09 /* MyBuses2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyBuses2ViewController.m; path = XIBs/MyBuses2ViewController.m; sourceTree = "<group>"; };
-		CECFCD01155AA80700E28D09 /* MyBuses2ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MyBuses2ViewController.xib; path = XIBs/MyBuses2ViewController.xib; sourceTree = "<group>"; };
 		CECFCD05155AA89A00E28D09 /* CardCellManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardCellManager.h; path = Core/CardCellManager.h; sourceTree = "<group>"; };
 		CECFCD06155AA89A00E28D09 /* CardCellManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CardCellManager.m; path = Core/CardCellManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1204,9 +1199,6 @@
 				31ADEA3B151FE9710029C964 /* MyBusesViewController.h */,
 				31ADEA3C151FE9710029C964 /* MyBusesViewController.m */,
 				31ADEA3D151FE9710029C964 /* MyBusesViewController.xib */,
-				CECFCCFF155AA80700E28D09 /* MyBuses2ViewController.h */,
-				CECFCD00155AA80700E28D09 /* MyBuses2ViewController.m */,
-				CECFCD01155AA80700E28D09 /* MyBuses2ViewController.xib */,
 				31EAED721522756200533AC6 /* TripViewController.h */,
 				31EAED731522756200533AC6 /* TripViewController.m */,
 				31EAED741522756200533AC6 /* TripViewController.xib */,
@@ -1610,7 +1602,6 @@
 				31A773E21556E2A100F59604 /* global_findme_btn.png in Resources */,
 				31D668F51557E10500BE7B82 /* global_dark_bg2@2x.png in Resources */,
 				31D668F71557E15800BE7B82 /* global_dark_bg2.png in Resources */,
-				CECFCD03155AA80800E28D09 /* MyBuses2ViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1690,7 +1681,6 @@
 				31D807B41556AADC00B5A8B5 /* Reachability.m in Sources */,
 				31A773E61556E5D500F59604 /* MTUserAnnotation.m in Sources */,
 				317E3E001559EE48000A3B16 /* OfflineManager.m in Sources */,
-				CECFCD02155AA80800E28D09 /* MyBuses2ViewController.m in Sources */,
 				CECFCD07155AA89A00E28D09 /* CardCellManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

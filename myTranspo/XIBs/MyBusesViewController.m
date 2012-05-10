@@ -1,41 +1,34 @@
 //
-//  MyBusesViewController.m
+//  MyBuses2ViewController.m
 //  myTranspo
 //
-//  Created by Vincent Mancini on 12-03-25.
+//  Created by Lion User on 09/05/2012.
 //  Copyright (c) 2012 Vice Interactive. All rights reserved.
 //
 
 #import "MyBusesViewController.h"
 
-@interface MyBusesViewController ()
+@interface MyBusesViewController()
+- (void)generateFavorites:(NSArray*)listOfFavorites WithUpdate:(BOOL)update;
+- (void)updateAllFavorites;
+- (void)updateFavorite:(CardCellManager*)cellManager;
+- (int)findCellManagerForStop:(MTStop*)stop;
 - (void)editFavorites:(id)sender;
-- (void)updateFavorites;
-- (void)refreshTableStopLoading;
-- (void)updateNavigationBar;
-- (void)startPoolUpdate:(id)sender;
-- (void)stopPoolUpdate:(id)sender;
-- (void)poolUpdateTick:(id)sender;
-- (void)firstGetFavorites:(id)sender;
-- (void)firstUpdateFavorites:(id)sender;
-- (void)changeTripScheduleTime:(id)sender;
+- (void)doneEditingFavorites:(id)sender;
 - (void)didSwipe:(UIGestureRecognizer*)gestureRecognizer;
-- (void)expandCells:(id)sender;
+- (void)singleCellTapOveride:(UIGestureRecognizer*)gestureRecognizer;
+- (void)doneUpdatingFavorites;
+- (void)updateNavigationController;
 @end
 
 @implementation MyBusesViewController
-@synthesize tableView                   = _tableView;
-@synthesize cellLoader                  = _cellLoader;
+@synthesize cellLoader  =               _cellLoader;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        _editing = NO;
-        _fadeInCell = YES;
-        _chosenDate = [NSDate date];
-        _expandCells = NO;
-        _firstLoadComplete = NO;
+        _updateInProgress = NO;
     }
     return self;
 }
@@ -48,11 +41,6 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
-- (void)dealloc
-{
-    [self cancelQueues];
-}
-
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -60,7 +48,10 @@
     [super viewDidLoad];
     
     self.title = NSLocalizedString(@"MTDEF_VIEWCONTROLLERMYBUSES", nil);
-
+    
+    //UINib
+    _cellLoader = [UINib nibWithNibName:@"MTCardCell" bundle:nil];
+    
     //navigationBar Setup
     MTRightButton* editButton = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
     [editButton setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
@@ -70,46 +61,37 @@
     
     MTRightButton* doneButton = [[MTRightButton alloc] initWithType:kRightButtonTypeAction];
     [doneButton setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
-    [doneButton addTarget:self action:@selector(editFavorites:) forControlEvents:UIControlEventTouchUpInside];
+    [doneButton addTarget:self action:@selector(doneEditingFavorites:) forControlEvents:UIControlEventTouchUpInside];
     _doneButton = [[UIBarButtonItem alloc] initWithCustomView:doneButton];
     
-    //setup tableview
-    [self.tableView setDelaysContentTouches:YES];
-    [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]]];
-    [self.tableView setDelegate:self];
-    [self.tableView setDataSource:self];
-    [self.tableView setTableHeaderView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)]];
-    [self.tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)]];
-    [self.tableView setupRefresh:_language];
-    [self.tableView addPullToRefreshHeader];
-    [self.tableView setRefreshDelegate:self];
+    //tableView
+    [_tableView setDelaysContentTouches:YES];
+    [_tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]]];
+    [_tableView setTableHeaderView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)]];
+    [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)]];
+    [_tableView setDelegate:self];
+    [_tableView setDataSource:self];
+    [_tableView setupRefresh:_language];
+    [_tableView addPullToRefreshHeader];
+    [_tableView setRefreshDelegate:self];
+    [_tableView setRefreshExtendedDurationText:NSLocalizedString(@"EXTENDEDLOADING", nil)];
     UISwipeGestureRecognizer *gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
     gesture.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight;
-    [self.tableView addGestureRecognizer:gesture];
+    [_tableView addGestureRecognizer:gesture];
     
-    //UINib
-    _cellLoader = [UINib nibWithNibName:@"MTCardCell" bundle:nil];
-    //static NSString *CellIdentifier = @"MTCardCell";    
-    //[_tableView registerNib:_cellLoader forCellReuseIdentifier:CellIdentifier];
-    
-    //date selector
-    _dateSelector.minimumDate = _chosenDate;
-    _dateSelector.frame = CGRectMake(0, self.view.frame.size.height, _dateSelector.frame.size.width, _dateSelector.frame.size.height);
-    //[_dateSelector addTarget:self action:@selector(dateHasChanged:) forControlEvents:UIControlEventValueChanged];
-    
-    //view
-    //[self.view addGestureRecognizer:_panGesture];
+    //single cell edit override
+    _editingSingleCellOverideTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleCellTapOveride:)];
     
     _transpo.delegate = self;
-    [_tableView startLoadingWithoutDelegate];
-    [self performSelector:@selector(firstGetFavorites:) withObject:nil afterDelay:0.5];
+    _updateInProgress = YES;
+    [_transpo getFavorites];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    
-    [self cancelQueues];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -117,277 +99,110 @@
     [super viewWillAppear:animated];
     
     _transpo.delegate = self;
-    //[self.view addGestureRecognizer:_panGesture];
-    
-#if 0
+}
+
+- (void)cancelQueues
+{
     if(_favorites == nil)
+        return;
+    
+    for(CardCellManager* cellManager in _favorites)
     {
-        [_transpo getFavorites];
+        if(cellManager.stop != nil)
+        {
+            [cellManager.stop cancelQueuesForBuses];
+            [cellManager.stop setCancelQueue:YES];
+        }
     }
-    else
-    {
-        [self updateFavorites];
-        [self updateNavigationBar];
-    }
-#endif
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    
-    //[self.view removeGestureRecognizer:_panGesture];
-    
-    if(_editing)
-    {
-        [self editFavorites:nil];
-    }
-    
-    [self cancelQueues];
-    //_favorites = nil;
-}
+#pragma mark - Generic View 
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (void)updateNavigationController
 {
-    // Return YES for supported orientations
-    return ((interfaceOrientation == UIInterfaceOrientationPortrait) || 
-            (interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown));
-}
-
-- (void)updateNavigationBar
-{
+    UIBarButtonItem* currentButton = self.navigationItem.rightBarButtonItem;
+    
     if(_favorites == nil)
     {
         self.navigationItem.rightBarButtonItem = nil;
-        _tableView.editing = NO;
     }
     else if(_favorites.count <= 0)
     {
         self.navigationItem.rightBarButtonItem = nil;
-        _tableView.editing = NO;
-    }
-    else if(_tableView.editing)
-    {
-        self.navigationItem.rightBarButtonItem = _doneButton;
-    }
-    else
-    {
-        self.navigationItem.rightBarButtonItem = _editButton;
-        _tableView.editing = NO;
-    }
-}
-
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    // Return the number of sections.
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    // Return the number of rows in the section.
-    return (_favorites == nil) ? 0 : _favorites.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"MTCardCell";
-    
-    MTCardCell *cell = (MTCardCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        //cell = [[MTCardCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier WithLanguage:_language];
-        //NSArray* mtCardCellXib = [[NSBundle mainBundle] loadNibNamed:@"MTCardCell" owner:self options:nil];
-        //cell = [mtCardCellXib objectAtIndex:0];
-        cell = [[_cellLoader instantiateWithOwner:self options:nil] objectAtIndex:0];
-        cell.delegate = self;
-        cell.language = _language;
-        [cell initializeUI];
-    }
-    
-    MTStop* stop = (MTStop*)[_favorites objectAtIndex:indexPath.row];
-    
-#if 0
-    if(stop.MTCardCellHelper == NO && stop.UpdateCount > 0)
-    {
-        [cell expandCellWithAnimation:YES];
-        stop.MTCardCellHelper = YES;
     }
     else 
-
-    if(stop.UpdateCount > 0)
     {
-        [cell expandCellWithAnimation:YES];
-        stop.MTCardCellHelper = YES;
-    }
-#endif    
-    //if(stop.IsUpdating == NO) //removed this because IsUpdating = YES until API returns so updates werent happening in between.
-
-    [cell updateCellHeader:stop];
-    [cell updateCellDetails:stop New:stop.MTCardCellHelper];
-    [cell setIndexRow:indexPath.row];
-    
-    stop.MTCardCellHelper = NO;
-
-    return cell;
-}
-
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
-- (BOOL)tableView:(UITableView *)tableview shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    return NO;
-}
-
-#if 0
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if(editingStyle == UITableViewCellEditingStyleDelete)
-    {
-        MTStop* favorite = [_favorites objectAtIndex:indexPath.row];
-        if(favorite == nil)
-            return;
-        
-        [_transpo removeFavorite:favorite WithBus:favorite.Bus];
+        self.navigationItem.rightBarButtonItem = currentButton;
     }
 }
-#endif
 
-- (UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+#pragma mark - My Transpo Delegate
+
+- (void)myTranspo:(MTResultState)state receivedFavorites:(NSMutableArray*)favorites
 {
-    return UITableViewCellEditingStyleNone;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    int height = kHiddenHeight;
-#if 0
-    int height = kFullHeight;
-
-    MTStop* stop = (MTStop*)[_favorites objectAtIndex:indexPath.row];
-    if(stop.UpdateCount == 0)
-        height = kHiddenHeight;
-#endif
-    if(_expandCells)
-        height = kFullHeight;
+    [_tableView setEmptyTableText:NSLocalizedString(@"EMPTYTABLEFORFAVORITES", nil)];
     
-    return height;
-}
-                                              
-- (void)editFavorites:(id)sender
-{
-    _editing = !_editing;
-    
-    if(_editing)
+    if(state == MTRESULTSTATE_SUCCESS)
     {
-        [_tableView setEditing:YES animated:YES];
-        self.navigationItem.rightBarButtonItem = _doneButton;
+        [self generateFavorites:favorites WithUpdate:YES];
+        [_tableView reloadData]; //add all cells to page   
+        [_tableView startLoadingWithoutDelegate]; //show loading on first view
+        [self performSelector:@selector(updateAllFavorites) withObject:nil afterDelay:0.25];
     }
     else
     {
-        [_tableView setEditing:NO animated:YES];
-        self.navigationItem.rightBarButtonItem = _editButton;
-        //[self.view addGestureRecognizer:_panGesture];
-    }
-}
-
-- (void)updateFavorites
-{
-    if(_favorites == nil)
-    {
-        [self refreshTableStopLoading];
-        return;
+        MTLog(@"Failed to get Favorites...");
+        [self doneUpdatingFavorites];
     }
     
-    if(_favorites.count <= 0)
-    {
-        [self refreshTableStopLoading];
-        return;
-    }
+    [self updateNavigationController];
     
-    /*
-    for(MTStop* stop in _favorites)
+}
+
+- (void)myTranspo:(MTResultState)state UpdateType:(MTUpdateType)updateType updatedFavorite:(MTStop*)favorite
+{
+    if(state == MTRESULTSTATE_DONE)
     {
-        _chosenDate = [NSDate date]; //always update to now
-        stop.IsUpdating = YES;
-        stop.cancelQueue = NO;
-        [stop restoreQueuesForBuses];
-        [_transpo updateFavoriteData:stop ForDate:_chosenDate];
-    }*/
-    _chosenDate = [NSDate date];
-    [_transpo updateAllFavorites:_favorites FullUpdate:NO];
-}
-
-- (void)firstGetFavorites:(id)sender
-{
-    [_transpo getFavorites];
-}
-
-- (void)firstUpdateFavorites:(id)sender
-{
-    [_transpo updateAllFavorites:_favorites];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if(!tableView.editing && !_editing)
-    {
-        MTStop* stop = [_favorites objectAtIndex:indexPath.row];
-        
-        TripViewController* tvc = [[TripViewController alloc] initWithNibName:@"TripViewController" bundle:nil];
-        tvc.transpo = _transpo;
-        tvc.language = _language;
-        tvc.stop = stop;
-        tvc.bus = stop.Bus;
-        tvc.chosenDate = _chosenDate;
-        tvc.panGesture = _panGesture;
-        tvc.futureTrip = ![MTHelper IsDateToday:_chosenDate];
-        
-        //[tvc.view addGestureRecognizer:_panGesture];
-        //[tvc.navigationController.navigationBar addGestureRecognizer:_panGesture];
-        
-        [self.navigationController pushViewController:tvc animated:YES];
-        
-        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-    }
-    else {
-        if(_editedCell != nil && _editedCell.row < _favorites.count)
+        int index = [self findCellManagerForStop:favorite];
+        if(index>-1)
         {
-            MTCardCell* cell = (MTCardCell*)[tableView cellForRowAtIndexPath:_editedCell];
-            [cell setEditing:NO animated:YES];
+            CardCellManager* cellManager = [_favorites objectAtIndex:index];
+            
+            cellManager.state = CCM_FULL;
+            cellManager.status = CMS_IDLE;
+            cellManager.individualUpdate = NO;
+            [cellManager updateDisplayObjects];
+            
+            [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:0]]
+                              withRowAnimation:UITableViewRowAnimationNone];
         }
-        _editing = NO;
+        
+        _updateCount -= 1;
+        
+        if(_updateCount <= 0)
+        {
+            [self doneUpdatingFavorites];
+        }
     }
 }
-
-- (void)expandCells:(id)sender
-{
-    _expandCells = YES;
-    [_tableView beginUpdates];
-    [_tableView endUpdates];
-}
-
-#pragma mark - Favorites Delegate
 
 - (void)myTranspo:(MTResultState)state removedFavorite:(MTStop *)favorite WithBus:(MTBus *)bus
 {
     if(state == MTRESULTSTATE_SUCCESS)
     {
-        for(int x=0; x<_favorites.count; x++)
+        int x = [self findCellManagerForStop:favorite];
+        if(x >= 0)
         {
-            MTStop* stop = [_favorites objectAtIndex:x];
+            BOOL singleCellEdit = NO;
             
-            if(stop == favorite)
-            {
-                [_favorites removeObjectAtIndex:x];
-                [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:x inSection:0]]
-                                  withRowAnimation:UITableViewRowAnimationLeft];
-                
-                break;
-            }
+            if(_editedIndividualCell != nil)
+                singleCellEdit = YES;
+            
+            [_favorites removeObjectAtIndex:x];
+            [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:x inSection:0]]
+                              withRowAnimation:UITableViewRowAnimationLeft];
+            
+            [self singleCellTapOveride:nil];
         }
     }
     else
@@ -396,116 +211,337 @@
         [_tableView reloadData];
     }
     
-    //
-    
-    [self updateNavigationBar];
+    [self updateNavigationController];
 }
 
-- (void)myTranspo:(MTResultState)state receivedFavorites:(NSMutableArray*)favorites
-{
-    if(state == MTRESULTSTATE_SUCCESS)
-    {
-        if(favorites != nil)
-        {
-            _favorites = favorites;
-            [_tableView reloadData];
-            [self firstUpdateFavorites:nil];
-        }
-    }
-    else
-    {
-        MTLog(@"Failed to get Favorites...");
-    }
-    
-    [self updateNavigationBar];
-}
+#pragma mark - Managing Favorites
 
-- (void)myTranspo:(MTResultState)state addedFavorite:(MTStop*)favorite
+- (void)generateFavorites:(NSArray *)listOfFavorites WithUpdate:(BOOL)update
 {
-    if(state == MTRESULTSTATE_SUCCESS)
-    {
-        [_favorites addObject:favorite];
-        [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:_favorites.count inSection:0]]
-                          withRowAnimation:UITableViewRowAnimationBottom];
-    }
-    else
-    {
-        MTLog(@"Failed to add Favorite...");
-    }
-    
-    [self updateNavigationBar];
-}
-
-- (void)myTranspo:(MTResultState)state UpdateType:(MTUpdateType)updateType updatedFavorite:(MTStop*)favorite
-{
-    if(state == MTRESULTSTATE_DONE)
-    {
-        [self refreshTableStopLoading];
-        [self performSelector:@selector(expandCells:) withObject:nil afterDelay:0.25];
+    if(listOfFavorites == nil)
         return;
-    }
-
-    if(favorite != nil)
-    {
-        [favorite.Bus updateDisplayObjects];
-    }
-
-    int index = [_favorites indexOfObject:favorite];
     
-    if(index >= 0)
+    if(_favorites == nil)
+        _favorites = [[NSMutableArray alloc] initWithCapacity:listOfFavorites.count];
+    
+    for(int x=0; x<listOfFavorites.count; x++)
     {
-        [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:0]]
-                          withRowAnimation:UITableViewRowAnimationNone];
+        MTStop *favorite = (MTStop*)[listOfFavorites objectAtIndex:x];
+        
+        CardCellManager* cardCellManager = [[CardCellManager alloc] init];
+        cardCellManager.stop = favorite;
+        [cardCellManager updateDisplayObjects]; //sets state = full, reset it back to empty as we havent called a real update
+        cardCellManager.state = CCM_EMPTY;
+        //cardCellManager.status = (update == NO) ? CMS_IDLE : CMS_UPDATING; //will next call be an update
+        cardCellManager.status = CMS_IDLE;
+        
+        [_favorites addObject:cardCellManager];
     }
 }
 
-#pragma mark - QUEUE SAFE
+- (void)updateAllFavorites
+{
+    for(CardCellManager* cellManager in _favorites)
+    {
+        [self updateFavorite:cellManager];
+    }
+    
+    if(_updateCount <= 0)
+    {
+        [self doneUpdatingFavorites];
+    }
+}
 
-- (void)cancelQueues
+- (void)updateFavorite:(CardCellManager *)cellManager
+{
+    if(cellManager == nil)
+        return;
+    
+    if(cellManager.stop == nil)
+        return;
+    
+    if(cellManager.stop.isUpdating)
+        return;
+    
+    if(cellManager.status == CMS_UPDATING)
+        return; //already updating this one
+    
+    cellManager.status = CMS_UPDATING;
+    [_transpo updateFavorite:cellManager.stop FullUpdate:NO];
+    _updateCount += 1;
+}
+
+- (void)doneUpdatingFavorites
+{
+    _updateCount = 0;
+    _updateInProgress = NO;
+    [_tableView stopLoading];
+    
+    NSLog(@"Done Updating Favorite(s)");
+}
+
+- (int)findCellManagerForStop:(MTStop*)stop
+{
+    for(int x=0; x<_favorites.count; x++)
+    {
+        CardCellManager* cellManager = [_favorites objectAtIndex:x];
+        if(cellManager.stop == stop)
+            return x;
+    }
+    
+    return -1;
+}
+
+#pragma mark - Table View DataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     if(_favorites == nil)
+        return 0;
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return _favorites.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CardCellManager* cellManager = [_favorites objectAtIndex:indexPath.row];
+    
+    if(cellManager.state == CCM_EMPTY)
+        return kHiddenHeight;
+    
+    return kFullHeight;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"MTCardCell";
+    
+    MTCardCell *cell = (MTCardCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[_cellLoader instantiateWithOwner:self options:nil] objectAtIndex:0];
+        cell.language = _language;
+        cell.delegate = self;
+        [cell initializeUI];
+    }
+    
+    CardCellManager* cellManager = [_favorites objectAtIndex:indexPath.row];
+    
+    [cell updateCellBusNumber:cellManager.busNumber 
+         AndBusDisplayHeading:cellManager.busHeadingDisplay 
+           AndStopStreentName:cellManager.stopStreetName];
+    
+    if(cellManager.state == CCM_FULL)
+    {
+        [cell updateCellPrevTime:cellManager.prevTime
+                     AndDistance:cellManager.distance
+                    AndDirection:cellManager.heading
+                     AndNextTime:cellManager.nextTime
+                    AndNextTimes:cellManager.additionalNextTimes
+                        AndSpeed:cellManager.busSpeed];
+        
+        if(cellManager.status == CMS_NEWUPDATE && cellManager.state != CCM_EMPTY)
+        {
+            [cell updateCellDetailsWithFlash];
+            cellManager.status = CMS_IDLE;
+        }
+        
+        if(cell.hasExpanded == NO && cell.isExpanding == NO)
+            [cell updateCellDetailsAnimation:!cellManager.hasAnimated];
+        
+        cellManager.hasAnimated = YES;
+        
+        [cell updateCellForIndividualUpdate:cellManager.individualUpdate];
+    }
+    
+    if(cellManager.status != CMS_UPDATING)
+        [cell toggleLoadingAnimation:NO];
+    else [cell toggleLoadingAnimation:YES];
+    
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(tableView.editing)
+    {
+        return;
+    }
+    else if(_editedIndividualCell != nil)
+    {
+        [self singleCellTapOveride:nil];
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+}
+
+#pragma mark - TableView Editing & Refreshing
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (BOOL)tableView:(UITableView *)tableview shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
+    return NO;
+}
+- (UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleNone;
+}
+
+- (void)editFavorites:(id)sender
+{
+    if(_updateInProgress)
         return;
     
-    for(MTStop* stop in _favorites)
+    [_tableView setEditing:YES animated:YES];
+    self.navigationItem.rightBarButtonItem = _doneButton;
+}
+
+- (void)doneEditingFavorites:(id)sender
+{
+    if(_editedIndividualCell != nil)
     {
-        stop.cancelQueue = YES;
-        [stop cancelQueuesForBuses];
+        [_tableView setUserInteractionEnabled:YES];
+        [self.view removeGestureRecognizer:_editingSingleCellOverideTap];
+        [_editedIndividualCell setEditing:NO animated:YES];
+        _editedIndividualCell = nil;
+    }
+    [_tableView setEditing:NO animated:YES];
+    self.navigationItem.rightBarButtonItem = _editButton;
+}
+
+- (void)singleCellTapOveride:(UIGestureRecognizer *)gestureRecognizer
+{
+    if(gestureRecognizer != nil)
+    {
+        //determine if button was clicked and send its action
+        UIView* view = gestureRecognizer.view;
+        UIView* clickedView = [view hitTest:[gestureRecognizer locationInView:view] withEvent:nil];
+        if(clickedView)
+        {
+            if([clickedView class] == [UIButton class])
+            {
+                [(UIButton*)clickedView sendActionsForControlEvents:UIControlEventTouchUpInside];
+            }
+        }
+    }
+    
+    if(_editedIndividualCell != nil)
+        [self doneEditingFavorites:nil];
+    else {
+        [_tableView setUserInteractionEnabled:YES];
+        [self.view removeGestureRecognizer:_editingSingleCellOverideTap];
+    }
+}
+
+- (void)didSwipe:(UIGestureRecognizer*)gestureRecognizer
+{
+    if(_updateInProgress)
+        return;
+    
+    if(gestureRecognizer.state == UIGestureRecognizerStateEnded)
+    {
+        CGPoint swipeLocation = [gestureRecognizer locationInView:_tableView];
+        NSIndexPath* swipedIndexPath = [_tableView indexPathForRowAtPoint:swipeLocation];
+        if(swipedIndexPath != nil)
+        {
+            //refresh individual cell
+            if(swipedIndexPath.row < _favorites.count)
+            {
+                MTCardCell* cell = (MTCardCell*)[_tableView cellForRowAtIndexPath:swipedIndexPath];
+                
+                if(cell)
+                {
+                    if(_editedIndividualCell == cell) //same cell so just remove it
+                    {
+                        [self singleCellTapOveride:nil];
+                        return;
+                    }
+                    else if(_editedIndividualCell != nil) //another cell so remove it
+                    {
+                        [self singleCellTapOveride:nil];
+                    }
+                    
+                    //[_tableView setUserInteractionEnabled:NO];
+                    [self.view addGestureRecognizer:_editingSingleCellOverideTap];
+                    self.navigationItem.rightBarButtonItem = _doneButton;
+                    [cell setEditing:YES animated:YES];
+                    _editedIndividualCell = cell;
+                    
+                }
+                else if(_editedIndividualCell != nil)
+                {
+                    [self singleCellTapOveride:nil];
+                }
+            }
+            else if(_editedIndividualCell != nil)
+            {
+                [self singleCellTapOveride:nil];
+            }
+        }
+        else if(_editedIndividualCell != nil)
+        {
+            [self singleCellTapOveride:nil];
+        }
     }
 }
 
 #pragma mark - MTCardCell Delegate
 
-- (void)mtCardCellnextTimeClickedForStop:(MTStop*)stop
-{
-    //do nothing now
-}
-
 - (void)mtCardcellDeleteClicked:(id)cell
 {
-    MTCardCell* c = (MTCardCell*)cell;
+    NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
     
-    int row = [_favorites indexOfObject:c.stop];
-    if(row == NSNotFound)
+    if(indexPath == nil)
+    {
+        MTLog(@"Delete row failed");
         return;
+    }
+    
+    CardCellManager* cellManager = [_favorites objectAtIndex:indexPath.row];
+    [_transpo removeFavorite:cellManager.stop WithBus:cellManager.stop.Bus];
+}
 
-    [_transpo removeFavorite:c.stop WithBus:c.stop.Bus];
+- (void)cardCellRefreshRequestedForDisplayedData:(id)cell
+{
+    NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
+    
+    if(indexPath == nil)
+    {
+        MTLog(@"Update row failed");
+        [(MTCardCell*)cell updateCellForIndividualUpdate:NO];
+        return;
+    }
+    
+    CardCellManager* cellManager = [_favorites objectAtIndex:indexPath.row];
+    
+    if(cellManager.status == CMS_UPDATING) //already updating
+    {
+        MTLog(@"Update row individual but already doing an update");
+        [(MTCardCell*)cell updateCellForIndividualUpdate:NO];
+        return;
+    }
+    
+    if(cellManager.individualUpdate == YES) //already updating, havent received response
+        return;
+    
+    cellManager.individualUpdate = YES;
+    [self updateFavorite:cellManager];
 }
 
 #pragma mark - MTRefreshTableView
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    /*if(_editing)
+    if(_editedIndividualCell != nil)
     {
-        if(_editedCell != nil && _editedCell.row < _favorites.count)
-        {
-            MTCardCell* cell = (MTCardCell*)[_tableView cellForRowAtIndexPath:_editedCell];
-            [cell setEditing:NO animated:YES];
-        }
-        else {
-            [_tableView reloadData];
-        }
-        _editing = NO;
-    }*/
+        [self singleCellTapOveride:nil];
+    }
+    
     [_tableView scrollViewWillBeginDragging:scrollView];
 }
 
@@ -517,184 +553,9 @@
     [_tableView scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
 }
 
-//ToDo: not very reliable, might be better to play it safe and do _favorites.count/2
 - (void)refreshTableViewNeedsRefresh
 {
-    if(_tableView.editing)
-    {
-        [_tableView stopLoading];
-        return;
-    }
-    
-    _fadeInCell = YES;
-    _loadingCounter = _favorites.count;
-    [self updateFavorites];
-}
-
-- (void)refreshTableStopLoading
-{
-    [_tableView stopLoading];
-    _fadeInCell = NO;
-}
-     
-#pragma mark - OPTIONS DELEGATE
-
-- (void)optionsDate:(id)options dateHasChanged:(NSDate *)newDate
-{
-    //do something
-    
-    _chosenDate = newDate;
-
-    for(MTStop* stop in _favorites)
-    {
-        MTBus* bus = stop.Bus;
-        
-        [bus clearLiveTimes];
-        [bus.Times clearTimes];
-        bus.Times.TimesAdded = NO;
-        bus.chosenDate = _chosenDate;
-    }
-    
-    [_tableView automaticallyStartLoading:YES];
-}
-
-#pragma mark - Pool Update
-
-- (void)startPoolUpdate:(id)sender
-{
-    if(_poolUpdates != nil && [_poolUpdates isValid])
-    {
-        MTLog(@"Pool already Running!");
-        return;
-    }
-    
-    
-    _poolUpdates = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(poolUpdateTick:) userInfo:nil repeats:YES];
-}
-
-- (void)stopPoolUpdate:(id)sender
-{
-    if(_poolUpdates != nil)
-    {
-        [_poolUpdates invalidate];
-        _poolUpdates = nil;
-    }
-}
-
-- (void)poolUpdateTick:(id)sender
-{
-#if 0
-    BOOL update = YES;
-    for(MTStop* fav in _favorites)
-    {
-        if(fav.MTCardCellIsAnimating == YES)
-        {
-            update = NO;
-            break;
-        }
-    }
-    
-    if(update)
-    {
-        [_tableView reloadData];
-        [self stopPoolUpdate:nil];
-        MTLog(@"Reloading Pool Update");
-    }
-    else
-    {
-        MTLog(@"Adding Another Pool Update");
-        [self stopPoolUpdate:nil];
-        [self startPoolUpdate:nil]; //try again
-    }    
-#endif
-
-    BOOL hasUpdated = YES;
-    NSArray* visibleCells = [_tableView visibleCells];
-    
-    for(MTCardCell* cell in visibleCells)
-    {
-        if(!cell.hasExpanded)
-            hasUpdated = NO;
-    }
-    
-    if(hasUpdated)
-    {
-        [_tableView reloadData];
-        [self stopPoolUpdate:nil];
-        _firstLoadComplete = YES;
-        MTLog(@"Reloading pool update.");
-    }
-    else {
-        MTLog(@"Restarting Pool");
-    }
-}
-
-#pragma mark - Date Pickerview Delegate
-
-- (void)dateHasChanged:(id)sender
-{
-    [self optionsDate:nil dateHasChanged:_dateSelector.date];
-}
-
-- (void)changeTripScheduleTime:(id)sender
-{
-    if(_tableView.isEditing)
-        return;
-    
-    CGRect datePickerFrame = _dateSelector.frame;
-    
-    if(datePickerFrame.origin.y == self.view.frame.size.height)
-    {
-        UIView *fadedView = [[UIView alloc] initWithFrame:self.view.frame];
-        fadedView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
-        fadedView.tag = 20123;
-        [self.view insertSubview:fadedView belowSubview:_dateSelector];
-        
-        datePickerFrame.origin.y -= _dateSelector.frame.size.height;
-        _tableView.userInteractionEnabled = NO;
-    }
-    else
-    {
-        UIView* fadedView = [self.view viewWithTag:20123];
-        if(fadedView != nil)
-            [fadedView removeFromSuperview];
-        datePickerFrame.origin.y = self.view.frame.size.height;
-        _tableView.userInteractionEnabled = YES;
-        
-        if(_dateSelector.date != _chosenDate)
-            [self dateHasChanged:_dateSelector];
-    }
-    
-    
-    [UIView animateWithDuration:0.25
-                     animations:^{
-                         _dateSelector.frame = datePickerFrame;
-                     }];
-    
-#if 0
-    [_menuControl revealOptions:nil];
-#endif
-}
-
-#pragma mark - SWIPES
-
-- (void)didSwipe:(UIGestureRecognizer*)gestureRecognizer
-{
-    if(gestureRecognizer.state == UIGestureRecognizerStateEnded)
-    {
-        CGPoint swipeLocation = [gestureRecognizer locationInView:self.tableView];
-        NSIndexPath* swipedIndexPath = [self.tableView indexPathForRowAtPoint:swipeLocation];
-        if(swipedIndexPath != nil)
-        {
-            
-            //refresh individual cell
-            if(swipedIndexPath.row < _favorites.count)
-            {
-                MTStop* stop = (MTStop*)[_favorites objectAtIndex:swipedIndexPath.row];
-                MTLog(@"REFRESH CELL: %@", stop.Bus.DisplayHeading);
-            }
-        }
-    }
+    [self updateAllFavorites];
 }
 
 @end

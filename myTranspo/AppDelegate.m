@@ -163,7 +163,7 @@
             [_transpo turnOffLocationTracking];
             break; //should never happen
         case MTVCMYBUSES:
-            newView = [[MyBuses2ViewController alloc] initWithNibName:@"MyBuses2ViewController" bundle:nil];
+            newView = [[MyBusesViewController alloc] initWithNibName:@"MyBusesViewController" bundle:nil];
             [_transpo turnOnLocationTracking];
             /*optionsView = [[MTOptionsDate alloc] initWithNibName:@"MTOptionsDate" bundle:nil];
             optionsView.lastDate = _lastDate;

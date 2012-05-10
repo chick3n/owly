@@ -19,7 +19,6 @@
 #import "OTrainViewController.h"
 #import "NoticesViewController.h"
 #import "TripPlannerViewController.h"
-#import "MyBuses2ViewController.h"
 
 #import "Reachability.h"
 
