@@ -87,9 +87,9 @@
     [self addSubview:_quickTable];
     [self addGestureRecognizer:_swipGesture];
     
-    _currentCard = [_cards objectAtIndex:0];
-    _prevCard = [_cards objectAtIndex:2];
-    _nextCard = [_cards objectAtIndex:1];
+    _currentCard = (MTCard*)[_cards objectAtIndex:0];
+    _prevCard = (MTCard*)[_cards objectAtIndex:2];
+    _nextCard = (MTCard*)[_cards objectAtIndex:1];
     
     [self updatedCardPositions];
 }
@@ -647,7 +647,9 @@
     
     _isQuickSelect = YES;
     
-    CGRect currentCardFrame = _currentCard.frame;
+    CGRect currentCardFrame = CGRectZero;
+    if(_currentCard != nil)
+        currentCardFrame = _currentCard.frame;
     currentCardFrame.origin.x = _scrollView.frame.size.width * row + (self.frame.size.width / 2) - (kMTCardSize.size.width / 2);
     _currentCard.frame = currentCardFrame;
     
@@ -663,34 +665,6 @@
 
 - (void)bounceQuickView:(id)sender
 {
-#if 0
-    CABasicAnimation *bounceAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
-    bounceAnimation.duration = 1.0;
-    bounceAnimation.fromValue = [NSNumber numberWithInt:0];
-    bounceAnimation.toValue = [NSNumber numberWithInt:kBarHeight];
-    bounceAnimation.repeatCount = 3;
-    bounceAnimation.autoreverses = YES;
-    bounceAnimation.fillMode = kCAFillModeForwards;
-    bounceAnimation.removedOnCompletion = NO;
-        
-    [_quickTable.layer addAnimation:bounceAnimation forKey:@"bounce"];
-
-    [UIView beginAnimations:@"bounce" context:nil];
-    [UIView setAnimationRepeatCount:2];
-    [UIView setAnimationRepeatAutoreverses:YES];
-    _quickTable.center = CGPointMake(_quickTable.center.x, _quickTable.center.y + 10);
-    [UIView commitAnimations];
-    
-    [UIView animateWithDuration:0.25
-                     animations:^{
-                         [UIView setAnimationRepeatCount:2];
-                         [UIView setAnimationRepeatAutoreverses:YES];
-                         _quickTable.center = CGPointMake(_quickTable.center.x, _quickTable.center.y + 5);
-                     } 
-                     completion:^(BOOL finished) {
-                         _quickTable.frame = quickTableFrame;
-                     }];
-#endif 
     CGRect quickTableFrame = _quickTable.frame;
 
     if(quickTableFrame.origin.y >= 0)

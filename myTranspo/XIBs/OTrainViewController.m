@@ -690,8 +690,8 @@
                                                           error:nil];
     NSArray* pointStrings = [fileContents componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-    MKMapPoint north;
-    MKMapPoint south;
+    MKMapPoint north = MKMapPointMake(0, 0);
+    MKMapPoint south = MKMapPointMake(0, 0);
     
     MKMapPoint* pointArr = malloc(sizeof(CLLocationCoordinate2D) * pointStrings.count);
     

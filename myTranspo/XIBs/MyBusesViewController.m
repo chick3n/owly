@@ -90,8 +90,9 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+    
+    _tableView = nil;
+    [self cancelQueues];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -99,6 +100,13 @@
     [super viewWillAppear:animated];
     
     _transpo.delegate = self;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self cancelQueues];
 }
 
 - (void)cancelQueues
@@ -114,6 +122,11 @@
             [cellManager.stop setCancelQueue:YES];
         }
     }
+}
+
+- (void)dealloc
+{
+    [self cancelQueues];
 }
 
 #pragma mark - Generic View 
@@ -192,12 +205,7 @@
     {
         int x = [self findCellManagerForStop:favorite];
         if(x >= 0)
-        {
-            BOOL singleCellEdit = NO;
-            
-            if(_editedIndividualCell != nil)
-                singleCellEdit = YES;
-            
+        {            
             [_favorites removeObjectAtIndex:x];
             [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:x inSection:0]]
                               withRowAnimation:UITableViewRowAnimationLeft];
