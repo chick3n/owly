@@ -75,7 +75,6 @@
     [_tableView addPullToRefreshHeader];
     [_tableView setRefreshDelegate:self];
     [_tableView setRefreshExtendedDurationText:NSLocalizedString(@"EXTENDEDLOADING", nil)];
-    [_tableView setEmptyTableText:NSLocalizedString(@"EMPTYTABLEFORFAVORITES", nil)];
     UISwipeGestureRecognizer *gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
     gesture.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight;
     [_tableView addGestureRecognizer:gesture];
@@ -126,6 +125,8 @@
 
 - (void)myTranspo:(MTResultState)state receivedFavorites:(NSMutableArray*)favorites
 {
+    [_tableView setEmptyTableText:NSLocalizedString(@"EMPTYTABLEFORFAVORITES", nil)];
+    
     if(state == MTRESULTSTATE_SUCCESS)
     {
         [self generateFavorites:favorites WithUpdate:YES];
@@ -140,6 +141,7 @@
     }
     
     [self updateNavigationController];
+    
 }
 
 - (void)myTranspo:(MTResultState)state UpdateType:(MTUpdateType)updateType updatedFavorite:(MTStop*)favorite

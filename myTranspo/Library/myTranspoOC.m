@@ -760,7 +760,7 @@ static myTranspoOC *gInstance = NULL;
 - (BOOL)updateFavorite:(MTStop *)favorite FullUpdate:(BOOL)fullUpdate
 {
     dispatch_async(_queue, ^{
-#if 1
+#if 0
         int r = arc4random() % 25;
         sleep(r);
 #endif

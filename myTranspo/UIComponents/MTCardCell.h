@@ -72,6 +72,8 @@
     IBOutlet UILabel*               _directionHeading;
     IBOutlet UIButton*              _delete;
     IBOutlet MTCellAlert*           _timesAlert;
+    UILabel*                        _refreshLabel;
+    
     //page 1
     NSMutableArray*                 _nextTimes;
     //page 2

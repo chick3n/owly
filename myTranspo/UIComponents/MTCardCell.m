@@ -189,6 +189,20 @@
     _timesAlert.hasButtons = NO;
     [self addSubview:_timesAlert];
 #endif
+    
+    //add scroll to refresh
+    _refreshLabel = [[UILabel alloc] initWithFrame:_prevHeading.frame];
+    _refreshLabel.backgroundColor = _prevHeading.backgroundColor;
+    _refreshLabel.font = _prevHeading.font;
+    _refreshLabel.textColor = _prevHeading.textColor;
+    _refreshLabel.shadowColor = _prevHeading.shadowColor;
+    _refreshLabel.shadowOffset = _prevHeading.shadowOffset;
+    _refreshLabel.text = NSLocalizedString(@"SHORTFORMPULLTOREFRESH", nil);
+    
+    CGRect refreshLabelFrame = _refreshLabel.frame;
+    refreshLabelFrame.origin.x = kScrollToRefreshPoint;
+    _refreshLabel.frame = refreshLabelFrame;
+    [_dataScrollView addSubview:_refreshLabel];
 }
 
 - (NSInteger)getCellHeight
@@ -518,6 +532,10 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {    
+    if(kScrollToRefreshPoint > scrollView.contentOffset.x)
+        _refreshLabel.text = NSLocalizedString(@"SHORTFORMPULLTOREFRESH", nil);
+    else _refreshLabel.text = NSLocalizedString(@"SHORTFORMPULLTOREFRESH", nil);
+    
     if(!_isScrollingAutomatically)
         [_timesAlert hideAlertWithSelfInvoke:YES];
 }

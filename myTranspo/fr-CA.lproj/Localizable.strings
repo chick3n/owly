@@ -137,3 +137,4 @@
 
 //MYBUSES
 "EMPTYTABLEFORFAVORITES" = "You have no favorites set. You can add them from the Stops page.";
+"SHORTFORMPULLTOREFRESH" = "rafraîchir";
