@@ -52,7 +52,7 @@
 "MTDEF_DONE" = "Done";
 "MTDEF_PULLDOWNTOREFRESH" = "Pull down to refresh.";
 "MTDEF_RELEASETOREFRESH" = "Release to refresh.";  
-"MTDEF_LOADING" = "Loading...";
+"MTDEF_LOADING" = "Gathering your times.";
 "MTDEF_STOPS" = "Stops";
 "MTDEF_SEARCHPLANCEHOLDER" = "Search for a bus, stop number or street.";
 "MTDEF_SCHEDULEDTIME" = "Scheduled Time at";
@@ -139,3 +139,9 @@
 
 //NOTICES
 "EMPTYNOTICES" = "No results found for today.";
+
+//TABLE REFRES
+"EXTENDEDLOADING" = "Still gathering data.";
+
+//MYBUSES
+"EMPTYTABLEFORFAVORITES" = "You have no favorites set. You can add them from the Stops page.";

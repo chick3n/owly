@@ -24,6 +24,7 @@
 {
     UIView          *refreshHeaderView;
     UILabel         *refreshLabel;
+    UILabel         *emptyTable;
     UIImageView     *refreshArrow;
     UIImageView     *loadingAnimation;
     BOOL            isDragging;
@@ -34,12 +35,14 @@
     NSArray         *animationArray;
     NSArray         *loadingArray;
     int             incrementalCounter;
+    NSTimer         *longLoadingTimer;
     
     UIActivityIndicatorView *refreshSpinner;
 }
 
 @property (nonatomic, strong)   UIView                  *refreshHeaderView;
 @property (nonatomic, strong)   UILabel                 *refreshLabel;
+@property (nonatomic, strong)   NSString                *refreshExtendedDurationText;
 @property (nonatomic, strong)   UIImageView             *refreshArrow;
 @property (nonatomic, strong)   UIActivityIndicatorView *refreshSpinner;
 @property (nonatomic, strong)   NSString                *textPull;
@@ -56,6 +59,7 @@
 - (void)refresh;
 - (void)automaticallyStartLoading:(BOOL)animated;
 - (void)startLoadingWithoutDelegate;
+- (void)setEmptyTableText:(NSString*)emptyText;
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;

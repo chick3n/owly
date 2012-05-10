@@ -18,6 +18,7 @@
 - (void)didSwipe:(UIGestureRecognizer*)gestureRecognizer;
 - (void)singleCellTapOveride:(UIGestureRecognizer*)gestureRecognizer;
 - (void)doneUpdatingFavorites;
+- (void)updateNavigationController;
 @end
 
 @implementation MyBuses2ViewController
@@ -56,7 +57,7 @@
     [editButton setTitle:NSLocalizedString(@"MTDEF_EDIT", nil) forState:UIControlStateNormal];
     [editButton addTarget:self action:@selector(editFavorites:) forControlEvents:UIControlEventTouchUpInside];
     _editButton = [[UIBarButtonItem alloc] initWithCustomView:editButton];
-    self.navigationItem.rightBarButtonItem = _editButton;
+    //self.navigationItem.rightBarButtonItem = _editButton;
     
     MTRightButton* doneButton = [[MTRightButton alloc] initWithType:kRightButtonTypeAction];
     [doneButton setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
@@ -68,9 +69,13 @@
     [_tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]]];
     [_tableView setTableHeaderView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)]];
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)]];
+    [_tableView setDelegate:self];
+    [_tableView setDataSource:self];
     [_tableView setupRefresh:_language];
     [_tableView addPullToRefreshHeader];
     [_tableView setRefreshDelegate:self];
+    [_tableView setRefreshExtendedDurationText:NSLocalizedString(@"EXTENDEDLOADING", nil)];
+    [_tableView setEmptyTableText:NSLocalizedString(@"EMPTYTABLEFORFAVORITES", nil)];
     UISwipeGestureRecognizer *gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
     gesture.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight;
     [_tableView addGestureRecognizer:gesture];
@@ -97,6 +102,26 @@
     _transpo.delegate = self;
 }
 
+#pragma mark - Generic View 
+
+- (void)updateNavigationController
+{
+    UIBarButtonItem* currentButton = self.navigationItem.rightBarButtonItem;
+    
+    if(_favorites == nil)
+    {
+        self.navigationItem.rightBarButtonItem = nil;
+    }
+    else if(_favorites.count <= 0)
+    {
+        self.navigationItem.rightBarButtonItem = nil;
+    }
+    else 
+    {
+        self.navigationItem.rightBarButtonItem = currentButton;
+    }
+}
+
 #pragma mark - My Transpo Delegate
 
 - (void)myTranspo:(MTResultState)state receivedFavorites:(NSMutableArray*)favorites
@@ -113,6 +138,8 @@
         MTLog(@"Failed to get Favorites...");
         [self doneUpdatingFavorites];
     }
+    
+    [self updateNavigationController];
 }
 
 - (void)myTranspo:(MTResultState)state UpdateType:(MTUpdateType)updateType updatedFavorite:(MTStop*)favorite
@@ -166,6 +193,8 @@
         MTLog(@"Failed to remove Favorite...");
         [_tableView reloadData];
     }
+    
+    [self updateNavigationController];
 }
 
 #pragma mark - Managing Favorites

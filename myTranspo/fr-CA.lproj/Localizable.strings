@@ -44,7 +44,7 @@
 "MTDEF_DONE" = "fait";
 "MTDEF_PULLDOWNTOREFRESH" = "Tirez pour rafraîchir";
 "MTDEF_RELEASETOREFRESH" = "Relâchez pour rafraîchir";
-"MTDEF_LOADING" = "Chargement...";
+"MTDEF_LOADING" = "Rassembler vos temps.";
 "MTDEF_STOPS" = "Arrêts de Bus";
 "MTDEF_SEARCHPLANCEHOLDER" = "Rechercher un autobus, arrêtez le nombre ou la rue.";
 "MTDEF_SCHEDULEDTIME" = "heure prévue à";
@@ -131,3 +131,9 @@
 
 //NOTICES
 "EMPTYNOTICES" = "Aucun résultat trouvé pour aujourd'hui.";
+
+//TABLE REFRES
+"EXTENDEDLOADING" = "Encore au travail...";
+
+//MYBUSES
+"EMPTYTABLEFORFAVORITES" = "You have no favorites set. You can add them from the Stops page.";

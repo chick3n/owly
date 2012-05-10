@@ -8,11 +8,19 @@
 
 #import "MTRefreshTableView.h"
 
+@interface MTRefreshTableView()
+- (void)longLoadingTimerTick:(id)sender;
+- (void)initializeTimer;
+- (void)disableTimer;
+- (void)displayEmptyText;
+@end
+
 @implementation MTRefreshTableView
 @synthesize textPull, textRelease, textLoading, refreshHeaderView, refreshLabel, refreshArrow, refreshSpinner;
 @synthesize isLoading;
 @synthesize isDragging;
-@synthesize refreshDelegate                = _refreshDelegate;
+@synthesize refreshDelegate                 = _refreshDelegate;
+@synthesize refreshExtendedDurationText     = _refreshExtendedDurationText;
 
 - (void)setupRefresh:(MTLanguage)language
 {
@@ -127,6 +135,8 @@
         self.contentInset = UIEdgeInsetsMake(REFRESH_HEADER_HEIGHT, 0, 0, 0);
     }];    
 	[loadingAnimation startAnimating];
+    
+    [self initializeTimer];
 }
 
 - (void)startLoading {
@@ -140,6 +150,7 @@
         self.contentInset = UIEdgeInsetsMake(REFRESH_HEADER_HEIGHT, 0, 0, 0);
     }];    
 	[loadingAnimation startAnimating];
+    [self initializeTimer];
     
     [self refresh];
 }
@@ -158,6 +169,8 @@
     self.contentInset = tableContentInset;
     refreshArrow.image = [animationArray objectAtIndex:0];
     [UIView commitAnimations];
+    
+    [self disableTimer];
 }
 
 - (void)stopLoadingComplete:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
@@ -170,6 +183,106 @@
 - (void)refresh {
     if([_refreshDelegate conformsToProtocol:@protocol(MTRefreshDelegate)])
         [_refreshDelegate refreshTableViewNeedsRefresh];
+}
+
+#pragma mark - Extending Loading timer
+
+- (void)initializeTimer
+{
+    
+    if(_refreshExtendedDurationText == nil)
+    {
+        return;
+    }
+    else if(longLoadingTimer != nil)
+    {
+        [self disableTimer];
+    }
+    
+    longLoadingTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(longLoadingTimerTick:) userInfo:nil repeats:NO];
+}
+
+- (void)disableTimer
+{
+    if(longLoadingTimer == nil)
+        return;
+    [longLoadingTimer invalidate];
+    longLoadingTimer = nil;
+}
+
+- (void)longLoadingTimerTick:(id)sender
+{
+    if(_refreshExtendedDurationText == nil)
+        return;
+    
+    refreshLabel.text = _refreshExtendedDurationText;
+}
+
+#pragma mark - View modifications
+
+- (void)setEmptyTableText:(NSString*)emptyText
+{
+    if(emptyText == nil) return;
+    
+    if(emptyTable == nil)
+    {
+        emptyTable = [[UILabel alloc] init];
+        emptyTable.textColor = [UIColor colorWithRed:89./255. green:89./255. blue:89./255. alpha:1.0];
+        emptyTable.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:16.0];
+        emptyTable.numberOfLines = 0;
+        emptyTable.lineBreakMode = UILineBreakModeWordWrap;
+        emptyTable.backgroundColor = [UIColor clearColor];
+        emptyTable.shadowColor = [UIColor whiteColor];
+        emptyTable.shadowOffset = CGSizeMake(0, 1);
+    }
+    
+    CGSize textSize = [emptyText sizeWithFont:emptyTable.font
+                            constrainedToSize:CGSizeMake(310, 9000) lineBreakMode:UILineBreakModeWordWrap];
+    
+    CGRect emptyTableFrame = emptyTable.frame;
+    emptyTableFrame.origin.x = 10;
+    emptyTableFrame.origin.y = 10;
+    emptyTableFrame.size.height = textSize.height;
+    emptyTableFrame.size.width = textSize.width;
+    emptyTable.frame = emptyTableFrame;
+    
+    emptyTable.text = emptyText;
+}
+
+#pragma mark - Table View Delegate
+
+- (void)reloadData
+{
+    [super reloadData];
+    
+    if(emptyTable != nil && self.dataSource != nil)
+        [self displayEmptyText];
+}
+
+- (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
+{
+    [super deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+    
+    if(emptyTable != nil && self.dataSource != nil)
+        [self displayEmptyText];
+}
+
+- (void)displayEmptyText
+{
+    int rows = 0;
+    for(int x=0; x<self.numberOfSections; x++)
+    {
+        if([self numberOfRowsInSection:x] > 0)
+        {
+            rows = 1;
+            break;
+        }
+    }
+    
+    if(rows <= 0)
+    {
+        [self addSubview:emptyTable];
+    } else [emptyTable removeFromSuperview];
 }
 
 @end
