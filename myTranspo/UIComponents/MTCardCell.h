@@ -49,6 +49,7 @@
     CGPoint                         _lastContentOffset;
     BOOL                            _isAnimating;
     BOOL                            _isScrollingAutomatically;
+    BOOL                            _singleCellAnimating;
     
     //UI Components
     IBOutlet UILabel*               _busNumber;
@@ -73,6 +74,7 @@
     IBOutlet UIButton*              _delete;
     IBOutlet MTCellAlert*           _timesAlert;
     UILabel*                        _refreshLabel;
+    UIImageView*                    _refreshArrow;
     
     //page 1
     NSMutableArray*                 _nextTimes;

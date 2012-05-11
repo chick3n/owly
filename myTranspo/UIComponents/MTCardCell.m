@@ -14,6 +14,8 @@
 - (void)nextTimesClicked:(id)sender;
 - (void)updateNextTimes:(NSArray*)nextTimes;
 - (void)updateSpeed:(NSString*)speed;
+- (void)beginSingleCellLoading;
+- (void)endSingleCellLoading;
 @end
 
 @implementation MTCardCell
@@ -45,6 +47,7 @@
 
 - (void)initializeUI
 {       
+    _singleCellAnimating = YES;
     _isExpanding = NO;
     _hasExpanded = NO;
     _detailsView.hidden = NO;
@@ -203,6 +206,21 @@
     refreshLabelFrame.origin.x = kScrollToRefreshPoint;
     _refreshLabel.frame = refreshLabelFrame;
     [_dataScrollView addSubview:_refreshLabel];
+    
+    UIImageView *refreshBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_refresh_bg.png"]];
+    CGRect refreshBGFrame = refreshBackground.frame;
+    refreshBGFrame.origin.x = _refreshLabel.frame.origin.x + 20;
+    refreshBGFrame.origin.y = 10;
+    refreshBackground.frame = refreshBGFrame;
+    [_dataScrollView addSubview:refreshBackground];
+    
+    _refreshArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_refresh_arrow.png"]];
+    CGRect refreshArrowFrame = _refreshArrow.frame;
+    refreshArrowFrame.origin.x = refreshBackground.frame.origin.x + 4;// + ((_refreshLabel.frame.size.width / 2) - (_refreshArrow.frame.size.width / 2));
+    refreshArrowFrame.origin.y = 14;
+    _refreshArrow.frame = refreshArrowFrame;
+    [_dataScrollView addSubview:_refreshArrow];
+    
 }
 
 - (NSInteger)getCellHeight
@@ -361,6 +379,8 @@
     }
     else {
         edgeInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        if(_singleCellAnimating)
+            [self endSingleCellLoading];
     }
     
     [UIView animateWithDuration:0.25
@@ -551,6 +571,7 @@
                 scrollView.contentInset = UIEdgeInsetsMake(0, (kScrollToRefreshPoint*-1), 0, 0);
             }];
         
+            [self beginSingleCellLoading];
             [_delegate cardCellRefreshRequestedForDisplayedData:self];
         }
     }
@@ -817,6 +838,27 @@
 {
     if([_delegate conformsToProtocol:@protocol(MTCardCellDelegate)])
         [_delegate mtCardcellDeleteClicked:self];
+}
+
+#pragma mark - Single Cell Loading
+
+- (void)beginSingleCellLoading
+{
+    _singleCellAnimating = YES;
+    CABasicAnimation* rotationAnimation;
+    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 * 1]; //use -1 for clockwise instead of 1
+    rotationAnimation.duration = 0;
+    rotationAnimation.speed = 0.5;
+    rotationAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    rotationAnimation.repeatCount = HUGE_VALF;
+    [_refreshArrow.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
+}
+
+- (void)endSingleCellLoading
+{
+    _singleCellAnimating = NO;
+    [_refreshArrow.layer removeAnimationForKey:@"rotationAnimation"];
 }
 
 @end
