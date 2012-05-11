@@ -77,7 +77,7 @@
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:postData];
-    [request setTimeoutInterval:MTDEF_CONNECTIONTIMEOUT];
+    [request setTimeoutInterval:MTDEF_CONNECTIONTIMEOUT]; //ToDo: Make Async with Timer to cancel, post methods ignore timeouts less than 240secs
     [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     
     NSURLResponse* response;

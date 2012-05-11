@@ -295,7 +295,7 @@
     _lastDate = [_transpo getLastSupportedDate];
     
     [_transpo addWebDBPath:@"http://www.vicestudios.com/apps/owly/oc/"];
-    //[_transpo addAPI];
+    [_transpo addAPI];
     [_transpo addOfflineTimes];
 }
 
@@ -451,7 +451,7 @@
 	NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
 	
 	NetworkStatus netStatus = [curReach currentReachabilityStatus];
-    BOOL connectionRequired= [curReach connectionRequired];
+    BOOL connectionRequired = [curReach connectionRequired];
     switch (netStatus)
     {
         case NotReachable:
@@ -477,6 +477,7 @@
         case ReachableViaWWAN:
 		case ReachableViaWiFi:
         {
+            connectionRequired = NO; 
             if(_transpo)
                 [_transpo turnOnNetworkMethods];
             break;
@@ -493,10 +494,10 @@
 			[av show];
             
             [MTSettings networkNotificationStatus:YES];
+        }
             
-            if(_transpo)
-                [_transpo turnOffNetworkMethods];
-		}
+        if(_transpo)
+            [_transpo turnOffNetworkMethods];
 	}
 	
 }

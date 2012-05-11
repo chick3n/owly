@@ -29,6 +29,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _updateInProgress = NO;
+        _updateCount = 0;
     }
     return self;
 }
@@ -157,9 +158,9 @@
     
     if(state == MTRESULTSTATE_SUCCESS)
     {
-        [self generateFavorites:favorites WithUpdate:YES];
-        [_tableView reloadData]; //add all cells to page   
         [_tableView startLoadingWithoutDelegate]; //show loading on first view
+        [self generateFavorites:favorites WithUpdate:YES];
+        [_tableView reloadData]; //add all cells to page  
         [self performSelector:@selector(updateAllFavorites) withObject:nil afterDelay:0.25];
     }
     else
@@ -191,11 +192,11 @@
         }
         
         _updateCount -= 1;
-        
-        if(_updateCount <= 0)
-        {
-            [self doneUpdatingFavorites];
-        }
+    }
+    
+    if(_updateCount <= 0)
+    {
+        [self doneUpdatingFavorites];
     }
 }
 
@@ -249,8 +250,9 @@
 
 - (void)updateAllFavorites
 {
-    for(CardCellManager* cellManager in _favorites)
+    for(int x=0; x<_favorites.count; x++)
     {
+        CardCellManager *cellManager = [_favorites objectAtIndex:x];
         [self updateFavorite:cellManager];
     }
     
@@ -275,8 +277,9 @@
         return; //already updating this one
     
     cellManager.status = CMS_UPDATING;
-    [_transpo updateFavorite:cellManager.stop FullUpdate:NO];
-    _updateCount += 1;
+    if([_transpo updateFavorite:cellManager.stop FullUpdate:NO])
+        _updateCount += 1;
+    else cellManager.status = CMS_IDLE;
 }
 
 - (void)doneUpdatingFavorites
@@ -284,8 +287,6 @@
     _updateCount = 0;
     _updateInProgress = NO;
     [_tableView stopLoading];
-    
-    NSLog(@"Done Updating Favorite(s)");
 }
 
 - (int)findCellManagerForStop:(MTStop*)stop

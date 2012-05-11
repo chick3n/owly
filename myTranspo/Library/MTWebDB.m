@@ -416,6 +416,9 @@
     if(stop == nil || bus == nil)
         return NO;
     
+    static double ticksToNanoseconds = 0.0;
+    uint64_t startTime = mach_absolute_time();
+    
     [bus.Times clearTimes];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -468,6 +471,17 @@
         
     if(results)
         [(NSMutableDictionary*)results addEntriesFromDictionary:json];
+    
+    uint64_t endTime = mach_absolute_time();
+    uint64_t elapsedTime = endTime - startTime;
+    if(0.0 == ticksToNanoseconds)
+    {
+        mach_timebase_info_data_t timebase;
+        mach_timebase_info(&timebase);
+        ticksToNanoseconds = (double)timebase.numer / timebase.denom;
+    }
+    
+    NSLog(@"Time Elapsed: %f", elapsedTime * ticksToNanoseconds);
     
     return YES;
 }

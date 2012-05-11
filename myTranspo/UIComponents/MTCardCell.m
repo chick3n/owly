@@ -358,11 +358,9 @@
     if(update)
     {
         edgeInset = UIEdgeInsetsMake(0, (kScrollToRefreshPoint*-1), 0, 0);
-        NSLog(@"EDGEINSET FOR UPDATE");
     }
     else {
         edgeInset = UIEdgeInsetsMake(0, 0, 0, 0);
-        NSLog(@"EDGEINSET FOR DONE");
     }
     
     [UIView animateWithDuration:0.25

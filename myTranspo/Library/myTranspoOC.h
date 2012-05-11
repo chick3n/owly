@@ -71,6 +71,7 @@
 @end
 
 #define kDefaultCoordinatesOttawa CLLocationCoordinate2DMake(45.42158812329091, -75.69442749023438)
+#define kAsyncLimit 5
 
 @interface myTranspoOC : NSObject <CLLocationManagerDelegate>
 {
@@ -93,6 +94,7 @@
     
 //    NSOperationQueue*       _queue;
     dispatch_queue_t                _queue;
+    dispatch_semaphore_t            _semaphore;
     id<MyTranspoDelegate> __weak    _delegate;
 }
 

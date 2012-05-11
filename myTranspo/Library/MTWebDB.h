@@ -14,6 +14,9 @@
 #import <sqlite3.h>
 #import "sqlite3_distance.c"
 
+#include <mach/mach_time.h>
+#include <stdint.h>
+
 @interface MTWebDB : NSObject <MTInteraction>
 {
     NSString*           _urlPath;

@@ -71,6 +71,7 @@ static myTranspoOC *gInstance = NULL;
         //_queue = [[NSOperationQueue alloc] init];
         //_queue = dispatch_queue_create("com.vice.ocqueue", NULL); //serial queue (FIFO)
         _queue = MTLDEF_BGQUEUE; //concurrent queue
+        _semaphore = dispatch_semaphore_create((long)kAsyncLimit);
         
         [self initializeLocationManager];
         
@@ -84,6 +85,7 @@ static myTranspoOC *gInstance = NULL;
 - (void)dealloc
 {
     dispatch_release(_queue);
+    dispatch_release(_semaphore);
 }
 
 #pragma mark - INTERNAL METHOD CHECKS
@@ -208,6 +210,7 @@ static myTranspoOC *gInstance = NULL;
     
     dispatch_suspend(_queue);
     dispatch_release(_queue);
+    dispatch_release(_semaphore);
 }
 
 - (void)turnOffNetworkMethods
@@ -764,6 +767,9 @@ static myTranspoOC *gInstance = NULL;
         int r = arc4random() % 25;
         sleep(r);
 #endif
+        dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
+        dispatch_semaphore_signal(_semaphore);
+        
         if(!favorite.isUpdating)
         {
             favorite.isUpdating = YES;

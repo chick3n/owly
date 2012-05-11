@@ -18,6 +18,7 @@
 #import "MTRightButton.h"
 #import "CardCellManager.h"
 
+
 @interface MyBusesViewController : MTBaseViewController <MyTranspoDelegate, UITableViewDataSource, UITableViewDelegate, MTCardCellDelegate, MTRefreshDelegate, MTQueueSafe>
 {
     NSMutableArray*         _favorites; //cardcellmanager

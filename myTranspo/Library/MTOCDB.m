@@ -1179,18 +1179,7 @@
                                   @"insert into stored_times \
                                   (day_of_week, arrival_time_ori, arrival_time, stop_id, trip_id, stop_sequence, start_date, end_date, next_update, route_id, end_stop) \
                                   VALUES \
-                                  ('%@', '%@', '%@', '%@', '%@', %@, '%@', '%@', '%@', '%@', '%@')"
-                                  , [dic valueForKey:@"dayOfWeek"]
-                                  , [dic valueForKey:@"arrival_time"]
-                                  , [dic valueForKey:@"arrival_time"]
-                                  , [dic valueForKey:@"stop_id"]
-                                  , [dic valueForKey:@"trip_id"]
-                                  , [dic valueForKey:@"stop_sequence"]
-                                  , [dic valueForKey:@"start_date"]
-                                  , [dic valueForKey:@"end_date"]
-                                  , [dic valueForKey:@"next_update"]
-                                  , bus.BusId
-                                  , [dic valueForKey:@"end_stop"]];
+                                  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"];
             
             if(sqlite3_prepare_v2(_db
                                   , [sqlStmt UTF8String]
@@ -1198,6 +1187,18 @@
                                   , &_cmpStmt
                                   , NULL) == SQLITE_OK)
             {
+                sqlite3_bind_text(_cmpStmt, 1, [[dic valueForKey:@"dayOfWeek"] UTF8String], -1, SQLITE_TRANSIENT);
+                sqlite3_bind_text(_cmpStmt, 2, [[dic valueForKey:@"arrival_time"] UTF8String], -1, SQLITE_TRANSIENT);
+                sqlite3_bind_text(_cmpStmt, 3, [[dic valueForKey:@"arrival_time"] UTF8String], -1, SQLITE_TRANSIENT);
+                sqlite3_bind_text(_cmpStmt, 4, [[dic valueForKey:@"stop_id"] UTF8String], -1, SQLITE_TRANSIENT);
+                sqlite3_bind_text(_cmpStmt, 5, [[dic valueForKey:@"trip_id"] UTF8String], -1, SQLITE_TRANSIENT);
+                sqlite3_bind_int(_cmpStmt, 6, [(NSNumber*)[dic valueForKey:@"stop_sequence"] intValue]);
+                sqlite3_bind_text(_cmpStmt, 7, [[dic valueForKey:@"start_date"] UTF8String], -1, SQLITE_TRANSIENT);
+                sqlite3_bind_text(_cmpStmt, 8, [[dic valueForKey:@"end_date"] UTF8String], -1, SQLITE_TRANSIENT);
+                sqlite3_bind_text(_cmpStmt, 9, [[dic valueForKey:@"next_update"] UTF8String], -1, SQLITE_TRANSIENT);
+                sqlite3_bind_text(_cmpStmt, 10, [bus.BusId UTF8String], -1, SQLITE_TRANSIENT);
+                sqlite3_bind_text(_cmpStmt, 11, [[dic valueForKey:@"end_stop"] UTF8String], -1, SQLITE_TRANSIENT);
+                
                 int result = sqlite3_step(_cmpStmt);
                 if(result != SQLITE_DONE)
                 {
