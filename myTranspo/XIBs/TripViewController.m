@@ -81,8 +81,8 @@
 	//_backgroundImage2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
     _backgroundImage = [[UIView alloc] initWithFrame:self.view.frame];
     _backgroundImage2 = [[UIView alloc] initWithFrame:self.view.frame];
-    _backgroundImage.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.png"]];
-    _backgroundImage2.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.png"]];
+    _backgroundImage.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.jpg"]];
+    _backgroundImage2.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.jpg"]];
     
     //MTTimeTable
     CGRect timeTableFrame = _tableView.frame;
@@ -125,7 +125,7 @@
     
     //setup tableview header
     _tableViewHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, kMTTRIPHEADERHEIGHT)];
-    [_tableViewHeader addSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_category_bar.png"]]];
+    [_tableViewHeader addSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_category_bar.jpg"]]];
     UILabel *tableViewHeadlerLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, 3, 312, 17)];
     tableViewHeadlerLabel.tag = 100;
     tableViewHeadlerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0];

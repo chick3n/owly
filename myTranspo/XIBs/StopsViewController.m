@@ -66,8 +66,8 @@
     [navButton2 setFrame:CGRectMake(0, 0, 40, 29)];
     _cardManagerFavoriteAlready = [[UIBarButtonItem alloc] initWithCustomView:navButton2];
     UIButton* timesButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [timesButton setImage:[UIImage imageNamed:@"global_time_btn.png"] forState:UIControlStateNormal];
-    [timesButton addTarget:self action:@selector(changeTripScheduleTime:) forControlEvents:UIControlEventTouchUpInside];
+    [timesButton setImage:[UIImage imageNamed:@"global_findme_btn.png"] forState:UIControlStateNormal];
+    [timesButton addTarget:self action:@selector(findMe:) forControlEvents:UIControlEventTouchUpInside];
     [timesButton setFrame:CGRectMake(0, 0, 41, 29)];
     _resetMapLocationButton = [[UIBarButtonItem alloc] initWithCustomView:timesButton];
     [self.navigationItem setRightBarButtonItem:_resetMapLocationButton];
@@ -80,8 +80,8 @@
     [_searchBar setSelectedScopeButtonIndex:0];
     [_searchBar sizeToFit];
     //[[_searchBar.subviews objectAtIndex:0] setAlpha:0.0];
-    [_searchBar setBackgroundImage:[UIImage imageNamed:@"search_background.png"]];
-    [_searchBar setScopeBarBackgroundImage:[UIImage imageNamed:@"global_searchfilter_bg.png"]];
+    [_searchBar setBackgroundImage:[UIImage imageNamed:@"search_background.jpg"]];
+    [_searchBar setScopeBarBackgroundImage:[UIImage imageNamed:@"global_searchfilter_bg.jpg"]];
     [_searchBar setScopeBarButtonBackgroundImage:[UIImage imageNamed:@"global_searchfilter_selected_btn.png"] forState:UIControlStateNormal];
     [_searchBar setScopeBarButtonBackgroundImage:[UIImage imageNamed:@"global_searchfilter_default_btn.png"] forState:UIControlStateSelected];
     [_searchBar setScopeBarButtonTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor
@@ -96,7 +96,7 @@
                                                       , [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0], UITextAttributeFont
                                                       , nil] 
                                             forState:UIControlStateSelected];
-    [_searchBar setScopeBarButtonDividerImage:[UIImage imageNamed:@"global_searchfilter_line.png"]
+    [_searchBar setScopeBarButtonDividerImage:[UIImage imageNamed:@"global_searchfilter_line.jpg"]
                           forLeftSegmentState:UIControlStateNormal
                             rightSegmentState:UIControlStateSelected];
     //[self.searchDisplayController.searchResultsTableView addSubview:_searchLoading];
@@ -111,7 +111,7 @@
     
     //searchTableView[self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_bg2.png"]]];
     //[self.searchDisplayController.searchResultsTableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]]];
-    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.png"]]];
+    [self.searchDisplayController.searchResultsTableView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.jpg"]]];
     [self.searchDisplayController.searchResultsTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 #endif
 }
@@ -353,7 +353,7 @@
     }
     
     UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 23)];
-    [header addSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_category_bar.png"]]];
+    [header addSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_category_bar.jpg"]]];
     UILabel *tableViewHeadlerLabel = [[UILabel alloc] initWithFrame:CGRectMake(6, 2, 312, 17)];
     tableViewHeadlerLabel.tag = 100;
     tableViewHeadlerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0];

@@ -57,7 +57,7 @@
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 										<object class="NSCustomResource" key="IBUIImage">
 											<string key="NSClassName">NSImage</string>
-											<string key="NSResourceName">trip_cell_bg.png</string>
+											<string key="NSResourceName">trip_cell_bg.jpg</string>
 										</object>
 									</object>
 									<object class="IBUIImageView" id="446250092">
@@ -66,6 +66,7 @@
 										<string key="NSFrame">{{0, 42}, {320, 2}}</string>
 										<reference key="NSSuperview" ref="782146381"/>
 										<reference key="NSWindow"/>
+										<reference key="NSNextKeyView"/>
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 										<object class="NSCustomResource" key="IBUIImage">
@@ -79,7 +80,7 @@
 										<string key="NSFrame">{{48, 12}, {206, 21}}</string>
 										<reference key="NSSuperview" ref="782146381"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView"/>
+										<reference key="NSNextKeyView" ref="328977162"/>
 										<object class="NSColor" key="IBUIBackgroundColor" id="984221421">
 											<int key="NSColorSpace">3</int>
 											<bytes key="NSWhite">MCAwAA</bytes>
@@ -423,7 +424,7 @@
 			<string key="route_cell_bus.png">{25, 25}</string>
 			<string key="route_cell_dotfull.png">{31, 44}</string>
 			<string key="route_cell_line.png">{320, 2}</string>
-			<string key="trip_cell_bg.png">{320, 44}</string>
+			<string key="trip_cell_bg.jpg">{16, 16}</string>
 		</dictionary>
 		<string key="IBCocoaTouchPluginVersion">1181</string>
 	</data>

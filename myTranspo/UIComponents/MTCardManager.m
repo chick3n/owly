@@ -52,9 +52,10 @@
 
 - (void)initializeCardManager
 {
+    //!!!!!!!!!!!!!!this is also set is [self resetPositions];
     CGRect frame = kMTCardSize;
     frame.origin.x = (self.frame.size.width / 2) - (frame.size.width / 2);
-    frame.origin.y = (self.frame.size.height / 2) - (frame.size.height / 2);
+    frame.origin.y = (self.frame.size.height / 2) - (frame.size.height / 2) + 16;
     
     //add scroller, dim out background
     _scrollView.pagingEnabled  = YES;
@@ -112,14 +113,14 @@
     
     _pageControl.hidden = YES;
     
-    if(_pageControl.numberOfPages >= 3)
+    if(_pageControl.numberOfPages <= 1)
+        _quickTable.hidden = YES;
+    else _quickTable.hidden = NO;
+    
+    if(_pageControl.numberOfPages >= 5)
     {
         [self performSelector:@selector(bounceQuickView:) withObject:nil afterDelay:0.25];
     }
-    
-    if(_pageControl.numberOfPages <= 2)
-        _quickTable.hidden = YES;
-    else _quickTable.hidden = NO;
     
     if(_chosenDate == nil)
         _chosenDate = [NSDate date];
@@ -356,7 +357,7 @@
 {
     CGRect frame = kMTCardSize;
     frame.origin.x = (self.frame.size.width / 2) - (frame.size.width / 2);
-    frame.origin.y = (self.frame.size.height / 2) - (frame.size.height / 2);
+    frame.origin.y = (self.frame.size.height / 2) - (frame.size.height / 2) + 16;
     
     _currentCard.frame = frame;
     _nextCard.frame = frame;

@@ -138,6 +138,7 @@
 
 //MYBUSES
 "EMPTYTABLEFORFAVORITES" = "You have no favorites set. You can add them from the Stops page.";
-"SHORTFORMPULLTOREFRESH" = "rafraîchir";
-"SHORTFORMPULLTORELEASE" = "Relâchez pour rafraîchir";
+"SHORTFORMPULLTOREFRESH" = "tirer";
+"SHORTFORMPULLTORELEASE" = "relâchez";
 "LOADING" = "chargement";
+"UPDATING" = "Mise à jour";

@@ -67,9 +67,10 @@
     [_tableView setBackgroundColor:[UIColor clearColor]];
     //[_tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_dark_background.png"]]];
     [_tableView setBackgroundColor:[UIColor clearColor]];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_darkbackground_tile.png"]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_darkbackground_tile.jpg"]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [_tableView setupRefresh:_language];
+    [_tableView setTextLoading:NSLocalizedString(@"UPDATING", nil)];
     [_tableView addPullToRefreshHeader];
     [_tableView setRefreshDelegate:self];
     

@@ -35,7 +35,7 @@
 
 - (void)initializeUI
 {
-    UIImageView* categoryBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_category_bar.png"]];
+    UIImageView* categoryBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_category_bar.jpg"]];
     categoryBar.frame = CGRectMake(0, 0, 320, kMTNAVHEADERHEIGHT);
     
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, 4, categoryBar.frame.size.width - 24, categoryBar.frame.size.height - 7)];

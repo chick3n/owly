@@ -308,7 +308,7 @@
     if(header == nil)
         return nil;
     
-    UIImageView* categoryBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"card_category_bar.png"]];
+    UIImageView* categoryBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"card_category_bar.jpg"]];
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, 3, categoryBar.frame.size.width - 24, categoryBar.frame.size.height - 7)];
     headerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0];
     headerLabel.textColor = [UIColor whiteColor];

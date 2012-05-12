@@ -16,14 +16,14 @@
     {
         //self.headerBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_pullbar.png"]];
         self.headerBar = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.headerBar setImage:[UIImage imageNamed:@"global_pullbar.png"] forState:UIControlStateNormal];        
+        [self.headerBar setImage:[UIImage imageNamed:@"global_pullbar.jpg"] forState:UIControlStateNormal];        
         self.headerBar.frame = CGRectMake(0, frame.size.height-kBarHeight, 320, kBarHeight);
         
         self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height-self.headerBar.frame.size.height) style:UITableViewStylePlain];
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
         //[self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]]];
-        [self.tableView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.png"]]];
+        [self.tableView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.jpg"]]];
         [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
         
         [self addSubview:self.headerBar];

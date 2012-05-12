@@ -129,7 +129,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 								<string key="NSFrame">{{0, 131}, {320, 2}}</string>
 								<reference key="NSSuperview" ref="186504645"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="1072289223"/>
+								<reference key="NSNextKeyView" ref="862917372"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -254,9 +254,9 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-										<object class="NSCustomResource" key="IBUIImage" id="488098609">
+										<object class="NSCustomResource" key="IBUIImage" id="1018906058">
 											<string key="NSClassName">NSImage</string>
-											<string key="NSResourceName">tripplanner_time_bg.png</string>
+											<string key="NSResourceName">tripplanner_time_bg.jpg</string>
 										</object>
 									</object>
 									<object class="IBUILabel" id="1020981922">
@@ -265,7 +265,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 										<string key="NSFrame">{{61, 11}, {249, 21}}</string>
 										<reference key="NSSuperview" ref="1072289223"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="661647467"/>
+										<reference key="NSNextKeyView" ref="432798387"/>
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClipsSubviews">YES</bool>
@@ -307,7 +307,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 										<string key="NSFrame">{{-5, 3}, {72, 37}}</string>
 										<reference key="NSSuperview" ref="1072289223"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="209075374"/>
+										<reference key="NSNextKeyView" ref="332906345"/>
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="IBUIOpaque">NO</bool>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -330,7 +330,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 								<string key="NSFrameSize">{320, 43}</string>
 								<reference key="NSSuperview" ref="186504645"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="332906345"/>
+								<reference key="NSNextKeyView" ref="661647467"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="169291340"/>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -339,7 +339,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 						<string key="NSFrameSize">{320, 133}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="432798387"/>
+						<reference key="NSNextKeyView" ref="1072289223"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -360,10 +360,11 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 								<string key="NSFrameSize">{320, 43}</string>
 								<reference key="NSSuperview" ref="862917372"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView" ref="209075374"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<reference key="IBUIImage" ref="488098609"/>
+								<reference key="IBUIImage" ref="1018906058"/>
 							</object>
 							<object class="IBUIButton" id="209075374">
 								<reference key="NSNextResponder" ref="862917372"/>
@@ -399,6 +400,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 						<string key="NSFrame">{{0, 133}, {320, 43}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="381659369"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -413,6 +415,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 						<string key="NSFrame">{{142, 242}, {37, 37}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -861,7 +864,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 			<string key="route_cell_line.png">{320, 2}</string>
 			<string key="tripplanner_options_btn.png">{304, 29}</string>
 			<string key="tripplanner_search_bg.png">{257, 30}</string>
-			<string key="tripplanner_time_bg.png">{320, 44}</string>
+			<string key="tripplanner_time_bg.jpg">{16, 16}</string>
 			<string key="tripplanner_timechange_btn.png">{41, 29}</string>
 			<string key="tripplanner_togglesearch_btn.png">{40, 29}</string>
 		</dictionary>

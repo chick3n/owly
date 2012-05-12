@@ -145,6 +145,7 @@
 
 //MYBUSES
 "EMPTYTABLEFORFAVORITES" = "You have no favorites set. You can add them from the Stops page.";
-"SHORTFORMPULLTOREFRESH" = "Pull to refresh";
-"SHORTFORMPULLTORELEASE" = "Release to refresh";
+"SHORTFORMPULLTOREFRESH" = "Pull";
+"SHORTFORMPULLTORELEASE" = "Release";
 "LOADING" = "Loading";
+"UPDATING" = "Updating";

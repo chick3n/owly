@@ -205,21 +205,23 @@
     
     CGRect refreshLabelFrame = _refreshLabel.frame;
     refreshLabelFrame.origin.x = kScrollToRefreshPoint;
-    refreshLabelFrame.size.width += 30;
     _refreshLabel.frame = refreshLabelFrame;
     [_dataScrollView addSubview:_refreshLabel];
     
-    UIImageView *refreshBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_refresh_bg.png"]];
+    UIImageView *refreshBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_refresh_bg@2x.png"]];
+    refreshBackground.contentMode = UIViewContentModeScaleToFill;
     CGRect refreshBGFrame = refreshBackground.frame;
-    refreshBGFrame.origin.x = _refreshLabel.frame.origin.x + ((_refreshLabel.frame.size.width / 2) - (refreshBackground.frame.size.width /2));
+    refreshBGFrame.size.width = 21;
+    refreshBGFrame.size.height = 22;
+    refreshBGFrame.origin.x = _refreshLabel.frame.origin.x + ((_refreshLabel.frame.size.width / 2) - (refreshBGFrame.size.width /2));
     refreshBGFrame.origin.y = 10;
     refreshBackground.frame = refreshBGFrame;
     [_dataScrollView addSubview:refreshBackground];
     
     _refreshArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_refresh_arrow.png"]];
     CGRect refreshArrowFrame = _refreshArrow.frame;
-    refreshArrowFrame.origin.x = refreshBackground.frame.origin.x + 4;// + ((_refreshLabel.frame.size.width / 2) - (_refreshArrow.frame.size.width / 2));
-    refreshArrowFrame.origin.y = 14;
+    refreshArrowFrame.origin.x = refreshBackground.frame.origin.x + 4;
+    refreshArrowFrame.origin.y = ([[UIScreen mainScreen] scale] == 1.0) ? 13 : 14;
     _refreshArrow.frame = refreshArrowFrame;
     [_dataScrollView addSubview:_refreshArrow];
     
@@ -554,7 +556,7 @@
 {    
     if(_singleCellAnimating)
     {
-        _refreshLabel.text = NSLocalizedString(@"LOADING", nil);
+        _refreshLabel.text = NSLocalizedString(@"UPDATING", nil);
     }
     else {        
         if(kScrollToRefreshPoint > scrollView.contentOffset.x)
