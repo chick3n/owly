@@ -52,6 +52,7 @@
     IBOutlet UILabel*                   _distanceHeading;
     IBOutlet UILabel*                   _directionHeading;
     IBOutlet UITableView*               _tableView;
+    IBOutlet UIImageView*               _backgroundImage;
     
 }
 

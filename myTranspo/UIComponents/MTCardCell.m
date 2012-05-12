@@ -198,18 +198,20 @@
     _refreshLabel.backgroundColor = _prevHeading.backgroundColor;
     _refreshLabel.font = _prevHeading.font;
     _refreshLabel.textColor = _prevHeading.textColor;
+    _refreshLabel.textAlignment = UITextAlignmentCenter;
     _refreshLabel.shadowColor = _prevHeading.shadowColor;
     _refreshLabel.shadowOffset = _prevHeading.shadowOffset;
     _refreshLabel.text = NSLocalizedString(@"SHORTFORMPULLTOREFRESH", nil);
     
     CGRect refreshLabelFrame = _refreshLabel.frame;
     refreshLabelFrame.origin.x = kScrollToRefreshPoint;
+    refreshLabelFrame.size.width += 30;
     _refreshLabel.frame = refreshLabelFrame;
     [_dataScrollView addSubview:_refreshLabel];
     
     UIImageView *refreshBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_refresh_bg.png"]];
     CGRect refreshBGFrame = refreshBackground.frame;
-    refreshBGFrame.origin.x = _refreshLabel.frame.origin.x + 20;
+    refreshBGFrame.origin.x = _refreshLabel.frame.origin.x + ((_refreshLabel.frame.size.width / 2) - (refreshBackground.frame.size.width /2));
     refreshBGFrame.origin.y = 10;
     refreshBackground.frame = refreshBGFrame;
     [_dataScrollView addSubview:refreshBackground];
@@ -550,9 +552,15 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {    
-    if(kScrollToRefreshPoint > scrollView.contentOffset.x)
-        _refreshLabel.text = NSLocalizedString(@"SHORTFORMPULLTOREFRESH", nil);
-    else _refreshLabel.text = NSLocalizedString(@"SHORTFORMPULLTOREFRESH", nil);
+    if(_singleCellAnimating)
+    {
+        _refreshLabel.text = NSLocalizedString(@"LOADING", nil);
+    }
+    else {        
+        if(kScrollToRefreshPoint > scrollView.contentOffset.x)
+            _refreshLabel.text = NSLocalizedString(@"SHORTFORMPULLTORELEASE", nil);
+        else _refreshLabel.text = NSLocalizedString(@"SHORTFORMPULLTOREFRESH", nil);
+    }
     
     if(!_isScrollingAutomatically)
         [_timesAlert hideAlertWithSelfInvoke:YES];

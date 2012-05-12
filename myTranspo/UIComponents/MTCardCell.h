@@ -27,7 +27,7 @@
 #define kDetailsViewFrameHeight 57
 #define kDataScrollViewFrameHeight 55
 
-#define kScrollToRefreshPoint -60
+#define kScrollToRefreshPoint -80
 
 @protocol MTCardCellDelegate <NSObject>
 @required

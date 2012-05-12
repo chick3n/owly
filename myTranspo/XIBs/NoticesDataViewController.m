@@ -63,6 +63,8 @@
     _webView.backgroundColor = [UIColor clearColor];
     _webView.opaque = NO;
     
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.png"]];
+    
     [self loadWebViewContent];
 }
 

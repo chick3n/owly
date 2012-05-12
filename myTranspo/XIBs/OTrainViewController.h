@@ -36,7 +36,8 @@
     UIView*                             _tableViewHeader;
     IBOutlet UIActivityIndicatorView*   _loadingIndicator;
     IBOutlet MKMapView*					_mapView;
-    UIImageView*                        _backgroundImage;
+    //UIImageView*                        _backgroundImage;
+    UIView                              *_backgroundImage;
     
     //map components
     MKPolyline*                         _routeLine;

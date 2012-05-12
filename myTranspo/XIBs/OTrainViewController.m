@@ -90,7 +90,9 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:swapButton];
     
     //view
-    _backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
+    //_backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
+    _backgroundImage = [[UIView alloc] initWithFrame:self.view.frame];
+    _backgroundImage.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.png"]];
     self.title = @"O-Train";
     
     //setup tableview header

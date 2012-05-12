@@ -77,8 +77,12 @@
     _timesPickerView.frame = frame;
     
     //view
-    _backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
-	_backgroundImage2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
+    //_backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
+	//_backgroundImage2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
+    _backgroundImage = [[UIView alloc] initWithFrame:self.view.frame];
+    _backgroundImage2 = [[UIView alloc] initWithFrame:self.view.frame];
+    _backgroundImage.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.png"]];
+    _backgroundImage2.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.png"]];
     
     //MTTimeTable
     CGRect timeTableFrame = _tableView.frame;

@@ -45,13 +45,8 @@
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="659325871"/>
-						<int key="IBUIContentMode">4</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<object class="NSCustomResource" key="IBUIImage">
-							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">card_background.png</string>
-						</object>
 					</object>
 					<object class="IBUIView" id="659325871">
 						<reference key="NSNextResponder" ref="191373211"/>
@@ -326,7 +321,7 @@
 								<string key="NSFrame">{{258, 12}, {42, 21}}</string>
 								<reference key="NSSuperview" ref="421849625"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
+								<reference key="NSNextKeyView" ref="71256345"/>
 								<reference key="IBUIBackgroundColor" ref="1008003898"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -564,6 +559,7 @@
 						<string key="NSFrame">{{264, 295}, {31, 37}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
@@ -835,6 +831,14 @@
 						<reference key="destination" ref="71256345"/>
 					</object>
 					<int key="connectionID">71</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">_backgroundImage</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="943082105"/>
+					</object>
+					<int key="connectionID">79</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
@@ -1118,7 +1122,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">77</int>
+			<int key="maxID">79</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1140,6 +1144,7 @@
 						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="_backgroundImage">UIImageView</string>
 						<string key="_busHeading">UILabel</string>
 						<string key="_busNumber">UILabel</string>
 						<string key="_detailsView">UIView</string>
@@ -1153,13 +1158,16 @@
 						<string key="_prevButton">UIButton</string>
 						<string key="_prevHeading">UILabel</string>
 						<string key="_prevTime">UILabel</string>
-						<string key="_scrollView">UIScrollView</string>
 						<string key="_stopStreet">UILabel</string>
 						<string key="_tableView">UITableView</string>
 						<string key="currentPage">UILabel</string>
 						<string key="numOfPages">UILabel</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="_backgroundImage">
+							<string key="name">_backgroundImage</string>
+							<string key="candidateClassName">UIImageView</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="_busHeading">
 							<string key="name">_busHeading</string>
 							<string key="candidateClassName">UILabel</string>
@@ -1212,10 +1220,6 @@
 							<string key="name">_prevTime</string>
 							<string key="candidateClassName">UILabel</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="_scrollView">
-							<string key="name">_scrollView</string>
-							<string key="candidateClassName">UIScrollView</string>
-						</object>
 						<object class="IBToOneOutletInfo" key="_stopStreet">
 							<string key="name">_stopStreet</string>
 							<string key="candidateClassName">UILabel</string>
@@ -1251,7 +1255,6 @@
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="card_arrow_left.png">{25, 25}</string>
 			<string key="card_arrow_right.png">{25, 25}</string>
-			<string key="card_background.png">{308, 343}</string>
 			<string key="cardcell_busnumber_background.png">{52, 52}</string>
 			<string key="cardcell_direction_icon.png">{21, 22}</string>
 			<string key="cardcell_distance_icon.png">{21, 22}</string>

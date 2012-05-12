@@ -54,6 +54,8 @@
 
 - (void)initializeUI
 {
+    _backgroundImage.image = [[UIImage imageNamed:@"card_background_test.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 10, 0, 10)];
+    
     _loader = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     CGRect frame = _loader.frame;
     frame.origin.x = (self.frame.size.width / 2) - (frame.size.width / 2);
@@ -62,27 +64,6 @@
     [_loader startAnimating];
     [self addSubview:_loader];    
     
-#if 0
-    if(_hideDetailsView)
-    {
-        CGRect frame = _scrollView.frame;
-        frame.origin.y -= _detailsView.frame.size.height;
-        frame.size.height += _detailsView.frame.size.height;
-        _scrollView.frame = frame;
-        
-        _detailsView.hidden = YES;
-    }
-    
-    if(_hidePaging)
-    {
-        CGRect frame = _scrollView.frame;
-        frame.size.height += (_hideDetailsView) ? 80 : 40;
-        _scrollView.frame = frame;
-        
-        _prevButton.hidden = YES;
-        _nextButton.hidden = YES;
-    }
-#endif
     _prevHeading.text = NSLocalizedString(@"MTDEF_CARDPREVIOUS", nil);
     _nextHeading.text = NSLocalizedString(@"MTDEF_CARDNEXT", nil);
     _distanceHeading.text = NSLocalizedString(@"MTDEF_CARDDISTANCE", nil);

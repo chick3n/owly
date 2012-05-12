@@ -45,7 +45,9 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
-    [_tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]]];
+    //[_tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]]];
+    [_tableView setBackgroundColor:[UIColor clearColor]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.png"]];
     
     CGRect optionsFrame = _optionsView.frame;
     optionsFrame.origin.y = -optionsFrame.size.height;//-(optionsFrame.size.height + kOptionsIndent);

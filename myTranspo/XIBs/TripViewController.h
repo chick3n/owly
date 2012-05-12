@@ -49,8 +49,10 @@
 	UIBarButtonItem*					_initialLeftButton;
     UIButton*                           _rightButton;
     UIView*                             _tableViewHeader;
-    UIImageView*                        _backgroundImage;
-    UIImageView*                        _backgroundImage2;
+    //UIImageView*                        _backgroundImage;
+    //UIImageView*                        _backgroundImage2;
+    UIView                              *_backgroundImage;
+    UIView                              *_backgroundImage2;
     IBOutlet MTCardTimes*               _timeTable;
 }
 

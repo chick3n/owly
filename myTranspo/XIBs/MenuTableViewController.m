@@ -41,7 +41,9 @@
 {
     [super viewDidLoad];
     
-    [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_background.png"]]];
+    //[self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_background.png"]]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"menu_bg_tile.png"]];
+    [self.tableView setBackgroundColor:[UIColor clearColor]];
     [self.tableView setSeparatorColor:kMTNAVCELLSEPERATORCOLOR];
     [self.tableView setTableFooterView:[[MTNavFooter alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 1)]];
 

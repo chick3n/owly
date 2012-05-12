@@ -61,7 +61,9 @@
     //tableView
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
+    //_tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_light_background.png"]];
+    _tableView.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.png"]];
     
     if(_data == nil)
         _emptyTable.hidden = NO;
