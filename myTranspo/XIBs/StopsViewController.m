@@ -815,6 +815,9 @@
 
 - (void)hideCardManager:(id)sender
 {
+    _cardManagerFavoriteAlready.enabled = YES;
+    _cardManagerFavorite.enabled = YES;
+    
     //cancel all queues
     _cardManager.stop.cancelQueue = YES;
     [_cardManager.stop cancelQueuesForBuses];
@@ -883,6 +886,12 @@
             [_transpo addFavorite:stop WithBus:nil];
         else [_transpo removeFavorite:stop WithBus:nil];
     }
+}
+
+- (void)cardManager:(id)card HideFavoritesButton:(BOOL)hide
+{
+    _cardManagerFavoriteAlready.enabled = !hide;
+    _cardManagerFavorite.enabled = !hide;
 }
 
 #pragma mark - OPTIONS DELEGATE

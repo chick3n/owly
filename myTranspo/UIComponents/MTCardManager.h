@@ -24,6 +24,7 @@
 - (void)cardManager:(id)owner UpdateTimesFor:(MTStop*)stop AndBus:(MTBus*)bus;
 - (void)cardManager:(id)card ChangedToStop:(MTStop*)stop AndBus:(MTBus*)bus;
 - (void)cardManager:(id)card FavoriteStop:(MTStop*)stop;
+- (void)cardManager:(id)card HideFavoritesButton:(BOOL)hide;
 @end
 
 @interface MTCardManager : UIView <UIScrollViewDelegate, MTCardDelegate, MTCardManagerQuickSelectDelegate>

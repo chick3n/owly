@@ -16,6 +16,8 @@
 @required
 - (void)quickSelect:(id)owner receivedClick:(int)row;
 - (void)quickSelectFavoriteStop:(id)quick;
+- (void)quickSelectActive:(id)quick;
+- (void)quickSelectUnactive:(id)quick;
 @end
 
 @interface MTCardManagerQuickSelect : UIView <UITableViewDataSource, UITableViewDelegate>

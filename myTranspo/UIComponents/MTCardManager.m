@@ -605,6 +605,9 @@
     [_swipGesture addTarget:self action:@selector(swipeGesture:)];
     
     _swipeStartedAtBottom = NO;
+    
+    if([_delegate conformsToProtocol:@protocol(MTCardManagerDelegate)])
+        [_delegate cardManager:self HideFavoritesButton:NO];
 }
 
 - (void)revealQuickTable:(id)sender
@@ -621,6 +624,9 @@
     [_swipGesture addTarget:self action:@selector(swipeGestureHide:)];
     
     _swipeStartedAtBottom = NO;
+    
+    if([_delegate conformsToProtocol:@protocol(MTCardManagerDelegate)])
+        [_delegate cardManager:self HideFavoritesButton:YES];
 }
 
 #pragma mark - CHANGES based on parent
@@ -679,6 +685,18 @@
 {
     if([_delegate conformsToProtocol:@protocol(MTCardManagerDelegate)])
         [_delegate cardManager:self FavoriteStop:_stop];
+}
+
+- (void)quickSelectActive:(id)quick
+{
+    if([_delegate conformsToProtocol:@protocol(MTCardManagerDelegate)])
+        [_delegate cardManager:self HideFavoritesButton:YES];
+}
+
+- (void)quickSelectUnactive:(id)quick
+{
+    if([_delegate conformsToProtocol:@protocol(MTCardManagerDelegate)])
+        [_delegate cardManager:self HideFavoritesButton:NO];
 }
 
 - (void)bounceQuickView:(id)sender
