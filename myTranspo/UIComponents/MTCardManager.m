@@ -106,6 +106,9 @@
     //_scrollView.contentSize = CGSizeMake(self.frame.size.width * 3, self.frame.size.height);
     
     _quickTable.data = stop.BusIds;
+    if(stop.isFavorite)
+        _quickTable.stopFavorite = YES;
+    else _quickTable.stopFavorite = NO;
     [_quickTable.tableView reloadData];
     
     _pageControl.currentPage = 0;
@@ -639,6 +642,14 @@
     }
 }
 
+- (void)reloadQuickSelect
+{
+    if(_stop.isFavorite)
+        _quickTable.stopFavorite = YES;
+    else _quickTable.stopFavorite = NO;
+    [_quickTable.tableView reloadData];
+}
+
 #pragma mark - QUICK SELECT DELEGATE
 
 - (void)quickSelect:(id)owner receivedClick:(int)row
@@ -662,6 +673,12 @@
     [self updateCurrentCard:99];
     
     [self hideQuickTable:nil];
+}
+
+- (void)quickSelectFavoriteStop:(id)quick
+{
+    if([_delegate conformsToProtocol:@protocol(MTCardManagerDelegate)])
+        [_delegate cardManager:self FavoriteStop:_stop];
 }
 
 - (void)bounceQuickView:(id)sender

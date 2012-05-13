@@ -22,6 +22,7 @@
 @synthesize EndStopHeader   = _endStopHeader;
 @synthesize Alert           = _alert;
 @synthesize dayOfWeek       = _dayOfWeek;
+@synthesize routeNumber     = _routeNumber;
 
 - (long)getTimeInSeconds
 {

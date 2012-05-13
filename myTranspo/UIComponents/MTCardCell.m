@@ -12,7 +12,7 @@
 - (void)viewForPage:(int)page;
 - (void)pageOneHelperEmptyTimes;
 - (void)nextTimesClicked:(id)sender;
-- (void)updateNextTimes:(NSArray*)nextTimes;
+- (void)updateNextTimes:(NSArray*)nextTimes IsStopFavorite:(BOOL)stopFavorite;
 - (void)updateSpeed:(NSString*)speed;
 - (void)beginSingleCellLoading;
 - (void)endSingleCellLoading;
@@ -224,7 +224,6 @@
     refreshArrowFrame.origin.y = ([[UIScreen mainScreen] scale] == 1.0) ? 13 : 14;
     _refreshArrow.frame = refreshArrowFrame;
     [_dataScrollView addSubview:_refreshArrow];
-    
 }
 
 - (NSInteger)getCellHeight
@@ -245,11 +244,21 @@
     }
 }
 
-- (void)updateCellBusNumber:(NSString*)busNumber AndBusDisplayHeading:(NSString*)busDisplayHeading AndStopStreentName:(NSString*)stopStreetName
+- (void)updateCellBusNumber:(NSString*)busNumber AndBusDisplayHeading:(NSString*)busDisplayHeading AndStopStreentName:(NSString*)stopStreetName IsStopFavorite:(BOOL)stopFavorite
 {
-    _busNumber.text = busNumber;
-    _busHeading.text = busDisplayHeading;
-    _streetName.text = stopStreetName;
+    if(!stopFavorite)
+    {
+        _busNumberBackground.image = [UIImage imageNamed:@"cardcell_busnumber_background.png"];
+        _busNumber.text = busNumber;
+        _busHeading.text = busDisplayHeading;
+        _streetName.text = stopStreetName;
+    }
+    else {
+        _busNumber.text = @"";
+        _busNumberBackground.image = [UIImage imageNamed:@"search_busstop_icon.png"];
+        _busHeading.text = stopStreetName;
+        _streetName.text = busDisplayHeading; //list of the upcoming buses
+    }
 }
 
 - (void)updateCellHeader:(MTStop*)stop
@@ -307,21 +316,33 @@
     }
 }
 
-- (void)updateCellPrevTime:(NSString*)prevTime AndDistance:(NSString*)distance AndDirection:(NSString*)direction AndNextTime:(MTTime*)nextTime AndNextTimes:(NSArray*)nextTimes AndSpeed:(NSString*)speed
+- (void)updateCellPrevTime:(NSString*)prevTime AndDistance:(NSString*)distance AndDirection:(NSString*)direction AndNextTime:(MTTime*)nextTime AndNextTimes:(NSArray*)nextTimes AndSpeed:(NSString*)speed IsStopFavorite:(BOOL)stopFavorite
 {
     [_timesAlert hideAlertWithSelfInvoke:YES];
     
-    _prevTime.text = prevTime;
-    _direction.text = direction;
+    if(!stopFavorite)
+    {
+        _prevTime.text = prevTime;
+        _direction.text = direction;
+    }
+
     _distance.text = distance;
-    
     _nextTimeValue = [nextTime getTimeForDisplay];//stop.Bus.NextTime;
-    _nextTime.originalHeading = _nextTimeValue;
-    _nextTime.helperHeading = nextTime.EndStopHeader;
     [_nextTime setTitle:_nextTimeValue forState:UIControlStateNormal];
+    _nextTime.originalHeading = _nextTimeValue;
     
-    [self updateNextTimes:nextTimes];
-    [self updateSpeed:speed];
+    if(!stopFavorite)
+    {
+        _nextTime.helperHeading = nextTime.EndStopHeader;
+        [self updateSpeed:speed];
+    }
+    else 
+    {
+        _nextTime.helperHeading = [NSString stringWithFormat:@"%@   %@", nextTime.routeNumber, nextTime.EndStopHeader];
+    }
+    
+    [self updateNextTimes:nextTimes IsStopFavorite:(BOOL)stopFavorite];
+    
 }
 
 - (void)updateCellDetailsWithFlash
@@ -369,6 +390,39 @@
         _detailsBackground.frame = detailsBackgroundFrame;
         _dataScrollView.frame = detailsScrollView;
         _hasExpanded = YES;
+        _isExpanding = NO;
+    }
+}
+
+- (void)updateCellDetailsClose:(BOOL)animate
+{
+    CGRect detailsBackgroundFrame = _detailsBackground.frame;
+    CGRect detailsScrollView = _dataScrollView.frame;
+    
+    detailsBackgroundFrame.origin.y = -42;
+    detailsScrollView.origin.y = -42;
+    
+    _isExpanding = YES;
+    
+    if(animate)
+    {
+        [UIView animateWithDuration:0.25
+                         animations:^{
+                             _detailsBackground.frame = detailsBackgroundFrame;
+                             _dataScrollView.frame = detailsScrollView;
+                         } completion:^(BOOL finished) {
+                             if(finished)
+                             {
+                                 _hasExpanded = NO;
+                                 _isExpanding = NO;
+                             }
+                             
+                         }];
+    }
+    else {
+        _detailsBackground.frame = detailsBackgroundFrame;
+        _dataScrollView.frame = detailsScrollView;
+        _hasExpanded = NO;
         _isExpanding = NO;
     }
 }
@@ -664,7 +718,7 @@
     }
 }
 
-- (void)updateNextTimes:(NSArray*)nextTimes
+- (void)updateNextTimes:(NSArray*)nextTimes IsStopFavorite:(BOOL)stopFavorite
 {
     if(nextTimes == nil)
     {
@@ -693,7 +747,7 @@
             continue;
         }
         
-        nextTime.helperHeading = time.EndStopHeader;
+        nextTime.helperHeading = (stopFavorite) ? [NSString stringWithFormat:@"%@   %@", time.routeNumber, time.EndStopHeader] : time.EndStopHeader;
         [nextTime setTitle:[time getTimeForDisplay] forState:UIControlStateNormal];
         [_nextTimes replaceObjectAtIndex:ele+3 withObject:[time getTimeForDisplay]];
     }

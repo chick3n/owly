@@ -48,5 +48,6 @@ typedef enum
 @property (nonatomic)           MTSearchType            type;
 
 - (void)update;
+- (void)hideBusImage:(BOOL)toggle;
 
 @end

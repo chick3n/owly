@@ -157,6 +157,7 @@
 - (BOOL)updateFavoriteData:(MTStop*)stop ForDate:(NSDate*)date StoreTimes:(BOOL)store;
 - (BOOL)addFavorite:(MTStop*)stop WithBus:(MTBus*)bus;
 - (BOOL)removeFavorite:(MTStop*)stop WithBus:(MTBus*)bus; //stop acts as favorite, firstBus in busids = bus for favorite
+- (BOOL)isFavorite:(MTStop*)stop WithBus:(MTBus*)bus;
 
 //notifications
 - (BOOL)removeAllUpdateNotifications;

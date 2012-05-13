@@ -45,7 +45,7 @@
 //View Controller Elements
 "MTDEF_MENUHEADERBUS" = "Menu";
 "MTDEF_VIEWCONTROLLERMYBUSES" = "My Buses";
-"MTDEF_VIEWCONTROLLERNOTICES" = "Noticies";
+"MTDEF_VIEWCONTROLLERNOTICES" = "Notices";
 "MTDEF_VIEWCONTROLLERTRIPPLAN" = "Trip Planner";
 "MTDEF_VIEWCONTROLLERTRAIN" = "Train";
 "MTDEF_EDIT" = "Edit";
@@ -128,6 +128,8 @@
 
 //STOPS
 "AT" = "at";
+"FAVORITESTOP" = "Add stop to favorites";
+"FAVORITESTOPREMOVE" = "Remove stop from favorites";
 
 //ALERT MANAGER
 "BEGINS" = "Begins";
@@ -149,3 +151,5 @@
 "SHORTFORMPULLTORELEASE" = "Release";
 "LOADING" = "Loading";
 "UPDATING" = "Updating";
+"NOUPCOMINGBUSES" = "No buses scheduled to arrive.";
+"UPCOMINGBUSES" = "Next buses   ";

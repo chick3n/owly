@@ -631,6 +631,9 @@
     if(!_isConnected)
         return NO;
     
+    if(bus == nil)
+        return NO;
+    
     sqlite3_stmt* _cmpStmt;
     NSString *sqlStmt = [NSString stringWithFormat:
                          @"select sr.trip_headsign, r.route_short_name, r.route_id \
@@ -879,7 +882,7 @@
                          @"select %@ \
                          from %@ \
                          inner join %@ \
-                         inner join %@ \
+                         left join %@ \
                          order by %@",
                          @"s.stop_id, s.stop_code, s.stop_name, s.stop_lat, s.stop_lon, r.route_id, r.route_short_name, r.route_type, f.route_direction, f.route_tripheading, f.updated, f.display_sequence"
                          , @"favorites f"
@@ -903,6 +906,17 @@
             stop.StopName = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(_cmpStmt, 2)];
             stop.Latitude = sqlite3_column_double(_cmpStmt, 3);
             stop.Longitude = sqlite3_column_double(_cmpStmt, 4);
+            
+            //is stop favorite only?
+            if(sqlite3_column_text(_cmpStmt, 5) == NULL)
+            {
+                stop.isFavorite = YES;
+                
+                [self getRoutesForStop:stop];
+                
+                [favorites addObject:stop];
+                continue;
+            }
             
             MTBus* bus = [[MTBus alloc] initWithLanguage:_language];
             
@@ -944,6 +958,9 @@
     
     for(MTStop* stop in favorites)
     {
+        if(stop.isFavorite) //dont show notices affecting a whole stop
+            continue;
+        
         MTBus* bus = stop.Bus;
         for(int x=0; x<notices.count; x++)
         {
@@ -961,13 +978,17 @@
     if(!_isConnected)
         return NO;
     
+    BOOL favoriteStop = NO;
+    if(bus == nil)
+        favoriteStop = YES;
+    
     NSString *sqlStmt = [NSString stringWithFormat: \
                          @"select %@ \
                          from %@ \
                          where %@",
                          @"f.*"
                          , @"favorites f"
-                         , [NSString stringWithFormat:@"f.route_id = '%@' AND f.stop_id = '%@'", bus.BusId, stop.StopId]];
+                         , [NSString stringWithFormat:@"f.route_id = '%@' AND f.stop_id = '%@'", ((favoriteStop) ? @"" : bus.BusId), stop.StopId]];
     
     sqlite3_stmt* _cmpStmt;
     if(sqlite3_prepare_v2(_db
@@ -978,12 +999,14 @@
     {
         if(sqlite3_step(_cmpStmt) == SQLITE_ROW)
         {
-            bus.isFavorite = YES;
+            if(favoriteStop)
+                stop.isFavorite = YES;
+            else bus.isFavorite = YES;
         }
     }
     sqlite3_reset(_cmpStmt);
         
-    return bus.isFavorite;
+    return (favoriteStop) ? stop.isFavorite : bus.isFavorite;
 }
 
 - (BOOL)addFavoriteUsingStop:(MTStop*)stop
@@ -992,13 +1015,19 @@
     if(!_isConnected)
         return NO;
     
+    BOOL favoriteStop = NO;
+    if(bus == nil) //favoriting the whole stop
+        favoriteStop = YES;
+    
     NSString *sqlStmt = [NSString stringWithFormat: \
                          @"select %@ \
                          from %@ \
                          where %@",
                          @"f.*"
                          , @"favorites f"
-                         , [NSString stringWithFormat:@"f.route_id = '%@' AND f.stop_id = '%@'", bus.BusId, stop.StopId]];
+                         , [NSString stringWithFormat:@"f.route_id = '%@' AND f.stop_id = '%@'"
+                            , ((favoriteStop) ? @"" : bus.BusId)
+                            , stop.StopId]];
 
     sqlite3_stmt* _cmpStmt;
     if(sqlite3_prepare_v2(_db
@@ -1020,9 +1049,9 @@
                    (`stop_id`, `route_id`, `route_direction`, `route_tripheading`, `display_sequence`) \
                    VALUES ('%@','%@',%d,\"%@\",%d);"
                    , stop.StopId
-                   , bus.BusId
-                   , [bus getBusHeadingForFavorites]
-                   , bus.DisplayHeading
+                   , ((favoriteStop) ? @"" : bus.BusId)
+                   , ((favoriteStop) ? -1 : [bus getBusHeadingForFavorites])
+                   , ((favoriteStop) ? @"" : bus.DisplayHeading)
                    , 99];
         
         if(sqlite3_prepare_v2(_db
@@ -1043,7 +1072,9 @@
             if(result == SQLITE_DONE)
             {
                 sqlite3_exec(_db, "COMMIT;", NULL, NULL, NULL);
-                bus.isFavorite = YES;
+                if(favoriteStop)
+                    stop.isFavorite = YES;
+                else bus.isFavorite = YES;
                 return YES;
             }
             else 
@@ -1107,11 +1138,15 @@
     if(!_isConnected)
         return NO;
     
+    BOOL favoriteStop = NO;
+    if(bus == nil)
+        favoriteStop = YES;
+    
     NSString *sqlStmt = [NSString stringWithFormat: \
                          @"delete from favorites \
                          where stop_id = '%@' AND route_id = '%@';"
                          , stop.StopId
-                         , bus.BusId];
+                         , ((favoriteStop) ? @"" : bus.BusId)];
     
     sqlite3_stmt* _cmpStmt;
     if(sqlite3_prepare_v2(_db
@@ -1132,7 +1167,9 @@
         if(result == SQLITE_DONE)
         {
             sqlite3_exec(_db, "COMMIT;", NULL, NULL, NULL);
-            bus.isFavorite = NO;
+            if(favoriteStop)
+                stop.isFavorite = NO;
+            else bus.isFavorite = NO;
             return YES;
         }
         else 

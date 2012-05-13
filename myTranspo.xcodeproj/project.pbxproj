@@ -275,6 +275,8 @@
 		31E3E7E5155F08860022D354 /* trip_cell_bg@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7CD155F08860022D354 /* trip_cell_bg@2x.jpg */; };
 		31E3E7E6155F08860022D354 /* tripplanner_time_bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7CE155F08860022D354 /* tripplanner_time_bg.jpg */; };
 		31E3E7E7155F08860022D354 /* tripplanner_time_bg@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7CF155F08860022D354 /* tripplanner_time_bg@2x.jpg */; };
+		31E3E7EB155F3FB00022D354 /* StopsFavoriteViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31E3E7E9155F3FAE0022D354 /* StopsFavoriteViewControllerViewController.m */; };
+		31E3E7EC155F3FB00022D354 /* StopsFavoriteViewControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7EA155F3FAF0022D354 /* StopsFavoriteViewControllerViewController.xib */; };
 		31EAED751522756200533AC6 /* TripViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31EAED731522756200533AC6 /* TripViewController.m */; };
 		31EAED761522756200533AC6 /* TripViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31EAED741522756200533AC6 /* TripViewController.xib */; };
 		31EE5577153B27D400C83552 /* MTRightButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 31EE5576153B27D400C83552 /* MTRightButton.m */; };
@@ -650,6 +652,9 @@
 		31E3E7CD155F08860022D354 /* trip_cell_bg@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "trip_cell_bg@2x.jpg"; sourceTree = "<group>"; };
 		31E3E7CE155F08860022D354 /* tripplanner_time_bg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tripplanner_time_bg.jpg; sourceTree = "<group>"; };
 		31E3E7CF155F08860022D354 /* tripplanner_time_bg@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "tripplanner_time_bg@2x.jpg"; sourceTree = "<group>"; };
+		31E3E7E8155F3FAD0022D354 /* StopsFavoriteViewControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StopsFavoriteViewControllerViewController.h; path = XIBs/StopsFavoriteViewControllerViewController.h; sourceTree = "<group>"; };
+		31E3E7E9155F3FAE0022D354 /* StopsFavoriteViewControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StopsFavoriteViewControllerViewController.m; path = XIBs/StopsFavoriteViewControllerViewController.m; sourceTree = "<group>"; };
+		31E3E7EA155F3FAF0022D354 /* StopsFavoriteViewControllerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StopsFavoriteViewControllerViewController.xib; path = XIBs/StopsFavoriteViewControllerViewController.xib; sourceTree = "<group>"; };
 		31EAED721522756200533AC6 /* TripViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripViewController.h; path = XIBs/TripViewController.h; sourceTree = "<group>"; };
 		31EAED731522756200533AC6 /* TripViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = TripViewController.m; path = XIBs/TripViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		31EAED741522756200533AC6 /* TripViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TripViewController.xib; path = XIBs/TripViewController.xib; sourceTree = "<group>"; };
@@ -1163,6 +1168,9 @@
 				31ADEA3B151FE9710029C964 /* MyBusesViewController.h */,
 				31ADEA3C151FE9710029C964 /* MyBusesViewController.m */,
 				31ADEA3D151FE9710029C964 /* MyBusesViewController.xib */,
+				31E3E7E8155F3FAD0022D354 /* StopsFavoriteViewControllerViewController.h */,
+				31E3E7E9155F3FAE0022D354 /* StopsFavoriteViewControllerViewController.m */,
+				31E3E7EA155F3FAF0022D354 /* StopsFavoriteViewControllerViewController.xib */,
 				31EAED721522756200533AC6 /* TripViewController.h */,
 				31EAED731522756200533AC6 /* TripViewController.m */,
 				31EAED741522756200533AC6 /* TripViewController.xib */,
@@ -1554,6 +1562,7 @@
 				31E3E7E5155F08860022D354 /* trip_cell_bg@2x.jpg in Resources */,
 				31E3E7E6155F08860022D354 /* tripplanner_time_bg.jpg in Resources */,
 				31E3E7E7155F08860022D354 /* tripplanner_time_bg@2x.jpg in Resources */,
+				31E3E7EC155F3FB00022D354 /* StopsFavoriteViewControllerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1634,6 +1643,7 @@
 				31A773E61556E5D500F59604 /* MTUserAnnotation.m in Sources */,
 				317E3E001559EE48000A3B16 /* OfflineManager.m in Sources */,
 				CECFCD07155AA89A00E28D09 /* CardCellManager.m in Sources */,
+				31E3E7EB155F3FB00022D354 /* StopsFavoriteViewControllerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

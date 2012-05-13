@@ -17,6 +17,7 @@
 //#import "MTOptionsDate.h"
 #import "MTRightButton.h"
 #import "CardCellManager.h"
+#import "StopsFavoriteViewControllerViewController.h"
 
 
 @interface MyBusesViewController : MTBaseViewController <MyTranspoDelegate, UITableViewDataSource, UITableViewDelegate, MTCardCellDelegate, MTRefreshDelegate, MTQueueSafe>

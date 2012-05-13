@@ -18,6 +18,7 @@ static myTranspoOC *gInstance = NULL;
 - (void)initializeLocationManager;
 - (BOOL)updateFavoriteHeader:(MTStop*)stop FullUpdate:(BOOL)fullUpdate;
 - (BOOL)updateFavorite:(MTStop*)stop ForDate:(NSDate*)date StoreTimes:(BOOL)store;
+- (BOOL)updateStopFavorite:(MTStop*)stop;
 @end
 
 @implementation myTranspoOC
@@ -735,6 +736,16 @@ static myTranspoOC *gInstance = NULL;
     return NO;
 }
 
+- (BOOL)isFavorite:(MTStop*)stop WithBus:(MTBus*)bus
+{
+    if(_hasDB)
+    {
+        return [_ocDb isFavoriteForStop:stop AndBus:bus];
+    }
+    
+    return NO;
+}
+
 - (BOOL)updateAllFavorites:(NSArray*)favorites
 {
     return [self updateAllFavorites:favorites FullUpdate:YES];
@@ -773,10 +784,18 @@ static myTranspoOC *gInstance = NULL;
         if(!favorite.isUpdating)
         {
             favorite.isUpdating = YES;
-            
+
             NSDate *today = [NSDate date];
-            [self updateFavoriteHeader:favorite FullUpdate:fullUpdate];
-            [self updateFavorite:favorite ForDate:today StoreTimes:YES];
+            if(favorite.Bus == nil) //stop as favorite
+            {
+                [self updateFavoriteHeader:favorite FullUpdate:fullUpdate];
+                [self updateStopFavorite:favorite];
+            }
+            else
+            {
+                [self updateFavoriteHeader:favorite FullUpdate:fullUpdate];
+                [self updateFavorite:favorite ForDate:today StoreTimes:YES];
+            }
             
             favorite.isUpdating = NO;
         }
@@ -813,6 +832,28 @@ static myTranspoOC *gInstance = NULL;
     return NO;
 }
 
+- (BOOL)updateStopFavorite:(MTStop*)stop
+{
+    if(_hasWebDb)
+    {
+        MTLog(@"GETTING STOP TIMES WEB");
+        [_ocWebDb getStopTimes:stop];
+    }    
+     
+#if 0
+    if(_hasAPI && [MTHelper IsDateToday:date]) //get next times live
+    {
+        MTLog(@"GETTING TIMES API");
+        status = [_ocApi getStop:stop Route:bus Times:date Results:nil];
+        if(status && _hasDB && [bus getBusHeadingForFavorites] != MTDIRECTION_UNKNOWN)
+        {
+            [_ocDb updateFavorite:stop AndBus:nil];
+        }  
+    }     
+#endif
+    return NO;
+}
+
 - (BOOL)updateFavorite:(MTStop *)stop ForDate:(NSDate *)date StoreTimes:(BOOL)store
 {
     [stop.Bus clearLiveTimes];
@@ -841,7 +882,7 @@ static myTranspoOC *gInstance = NULL;
             if(status == YES && _hasDB && store == YES)
             {
                 [_ocDb addTimes:results ToLocalDatabaseForStop:stop AndBus:stop.Bus];
-                if([MTSettings notificationUpdateTime])
+                if([MTSettings notificationUpdateTime] && !_hasOfflineTimes)
                 {
                     NSDate* localNotificationDate = [self stripNextDateFromJson:results];
                     if(localNotificationDate != nil)

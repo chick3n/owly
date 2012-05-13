@@ -24,6 +24,8 @@
 @synthesize UpdateCount             = _updatedCount;
 @synthesize MTCardCellHelper        = _MTCardCellHelper;
 @synthesize MTCardCellIsAnimating   = _MTCardCellIsAnimating;
+@synthesize isFavorite              = _isFavorite;
+@synthesize upcomingBuses           = _upcomingBuses;
 
 - (void)setIsUpdating:(BOOL)IsUpdating
 {
@@ -70,6 +72,8 @@
         _updatedCount = 0;
         _MTCardCellHelper = NO;
         _MTCardCellIsAnimating = NO;
+        _isFavorite = NO;
+        _upcomingBuses = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -94,6 +98,8 @@
         _updatedCount = 0;
         _MTCardCellHelper = NO;
         _MTCardCellIsAnimating = NO;
+        _isFavorite = NO;
+        _upcomingBuses = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -113,6 +119,9 @@
         return nil;
     
     if(_busIds.count <= 0)
+        return nil;
+    
+    if(_isFavorite)
         return nil;
     
     return [_busIds objectAtIndex:0];

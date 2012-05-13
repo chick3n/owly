@@ -23,6 +23,7 @@
 @required
 - (void)cardManager:(id)owner UpdateTimesFor:(MTStop*)stop AndBus:(MTBus*)bus;
 - (void)cardManager:(id)card ChangedToStop:(MTStop*)stop AndBus:(MTBus*)bus;
+- (void)cardManager:(id)card FavoriteStop:(MTStop*)stop;
 @end
 
 @interface MTCardManager : UIView <UIScrollViewDelegate, MTCardDelegate, MTCardManagerQuickSelectDelegate>
@@ -54,6 +55,7 @@
 - (void)updateDetailsForStop:(MTStop*)stop WithRoute:(MTBus*)route;
 - (void)unload;
 - (void)forceUpdate;
+- (void)reloadQuickSelect;
 
 - (MTBus*)getCurrentBus;
 

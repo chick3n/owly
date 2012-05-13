@@ -141,3 +141,5 @@
 "SHORTFORMPULLTORELEASE" = "relâchez";
 "LOADING" = "chargement";
 "UPDATING" = "Mise à jour";
+"NOUPCOMINGBUSES" = "Pas de bus doit arriver.";
+"UPCOMINGBUSES" = "à venir   ";

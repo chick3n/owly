@@ -105,10 +105,11 @@
 - (void)initializeUI;
 
 //NEW for mybuses v2
-- (void)updateCellBusNumber:(NSString*)busNumber AndBusDisplayHeading:(NSString*)busDisplayHeading AndStopStreentName:(NSString*)stopStreetName;
-- (void)updateCellPrevTime:(NSString*)prevTime AndDistance:(NSString*)distance AndDirection:(NSString*)direction AndNextTime:(MTTime*)nextTime AndNextTimes:(NSArray*)nextTimes AndSpeed:(NSString*)speed;
+- (void)updateCellBusNumber:(NSString*)busNumber AndBusDisplayHeading:(NSString*)busDisplayHeading AndStopStreentName:(NSString*)stopStreetName IsStopFavorite:(BOOL)stopFavorite;
+- (void)updateCellPrevTime:(NSString*)prevTime AndDistance:(NSString*)distance AndDirection:(NSString*)direction AndNextTime:(MTTime*)nextTime AndNextTimes:(NSArray*)nextTimes AndSpeed:(NSString*)speed IsStopFavorite:(BOOL)stopFavorite;
 - (void)updateCellDetailsWithFlash;
 - (void)updateCellDetailsAnimation:(BOOL)animate;
+- (void)updateCellDetailsClose:(BOOL)animate;
 - (void)updateCellForIndividualUpdate:(BOOL)update;
 
 - (void)editMode:(id)sender;

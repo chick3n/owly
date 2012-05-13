@@ -24,6 +24,7 @@
 @synthesize additionalNextTimes = _additionalNextTimes;
 @synthesize busSpeed            = _busSpeed;
 @synthesize individualUpdate    = _individualUpdate;
+@synthesize isFavoriteStop      = _isFavoriteStop;
 
 - (id)init
 {
@@ -35,6 +36,7 @@
         _hasAnimated = NO;
         _isAnimating = NO;
         _individualUpdate = NO;
+        _isFavoriteStop = NO;
         
         _busNumber = @"";
         _stopStreetName = @"";
@@ -67,6 +69,52 @@
     _busSpeed = _stop.Bus.BusSpeed;
     
     _state = CCM_FULL;
+    _status = CMS_NEWUPDATE;
+}
+
+- (void)updateDisplayObjectsForStop:(NSArray*)stopTimes
+{
+    if(_stop.isUpdating)
+        return;
+    
+    _stopStreetName = _stop.StopNameDisplay;
+    _distance = [_stop getDistanceOfStop];
+    
+    NSMutableString *upcomingBuses = [[NSMutableString alloc] init];
+    for(MTTime* stop in stopTimes)
+    {
+        [upcomingBuses appendFormat:@"%@   ", stop.routeNumber];
+    }
+    
+    if(upcomingBuses.length <= 0)
+        [upcomingBuses appendString:NSLocalizedString(@"NOUPCOMINGBUSES", nil)];
+    else {
+        [upcomingBuses insertString:NSLocalizedString(@"UPCOMINGBUSES", nil) atIndex:0];
+    }
+    
+    _busHeadingDisplay = upcomingBuses;
+    
+#if 0
+    if(stopTimes == nil)
+        return;
+    
+    if(stopTimes.count > 0)
+        _nextTime = (MTTime*)[stopTimes objectAtIndex:0];
+    
+    if(stopTimes.count >= 1)
+    {
+        int max = stopTimes.count; //we add the first one to mimic the same functionality as MTBus times
+        int inc = 0;
+        
+        if(max < 2)
+            inc = max;
+        else inc = 2;
+        
+        _additionalNextTimes = [stopTimes subarrayWithRange:NSMakeRange(0, inc)];
+    }
+#endif
+    
+    _state = CCM_EMPTY; //keep stop favorites on empty for now so not to rearange all the icons below the card cell
     _status = CMS_NEWUPDATE;
 }
 

@@ -30,6 +30,7 @@ typedef enum
 @property (nonatomic)           BOOL                            isAnimating;
 @property (nonatomic)           BOOL                            hasAnimated;
 @property (nonatomic)           BOOL                            individualUpdate;
+@property (nonatomic)           BOOL                            isFavoriteStop;
 @property (nonatomic, strong)   MTStop                          *stop;
 
 //ui values
@@ -44,5 +45,6 @@ typedef enum
 @property (nonatomic, strong)   NSString                        *busSpeed;
 
 - (void)updateDisplayObjects;
+- (void)updateDisplayObjectsForStop:(NSArray*)stopTimes;
 
 @end

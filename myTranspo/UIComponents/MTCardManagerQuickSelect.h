@@ -15,13 +15,15 @@
 @protocol MTCardManagerQuickSelectDelegate <NSObject>
 @required
 - (void)quickSelect:(id)owner receivedClick:(int)row;
+- (void)quickSelectFavoriteStop:(id)quick;
 @end
 
 @interface MTCardManagerQuickSelect : UIView <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) UIButton* headerBar;
-@property (nonatomic, strong) UITableView* tableView;
-@property (nonatomic, weak) NSArray* data;
-@property (nonatomic, weak) id<MTCardManagerQuickSelectDelegate> delegateQuick;
+@property (nonatomic, strong)   UIButton*       headerBar;
+@property (nonatomic, strong)   UITableView*    tableView;
+@property (nonatomic, weak)     NSArray*        data;
+@property (nonatomic)           BOOL            stopFavorite;
+@property (nonatomic, weak)     id<MTCardManagerQuickSelectDelegate> delegateQuick;
 
 @end

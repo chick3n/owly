@@ -27,6 +27,7 @@
 @property (nonatomic, strong)   NSString*       EndStopHeader;
 @property (nonatomic, weak)     UILocalNotification* Alert;
 @property (nonatomic)           int             dayOfWeek;
+@property (nonatomic, strong)   NSString*       routeNumber;
 
 - (long)getTimeInSeconds;
 - (long)getStartTimeInSeconds;

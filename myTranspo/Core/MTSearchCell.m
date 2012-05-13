@@ -39,9 +39,8 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
+
 
 #define kDefaultLabelFrame CGRectMake(kOffSetOriginX, kOffSetOriginY, kMTSEARCHCELLSHAPEWIDTH, 16)
 #define kSubtitleLabelFrame CGRectMake(kOffSetSubtitleOriginX, kOffSetOriginY, 320 - kOffSetSubtitleOriginX, 16)
@@ -77,6 +76,10 @@
     _subtitleLabel.textAlignment = UITextAlignmentLeft;
     _subtitleLabel.backgroundColor = [UIColor clearColor];
     [self.contentView addSubview:_subtitleLabel];
+    
+    UIView * selection = [[UIView alloc] initWithFrame:self.frame];
+    selection.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.04];
+    self.selectedBackgroundView = selection;
 }
 
 - (void)update
@@ -94,6 +97,17 @@
         [self drawNotice];
     
     //[_titleBackground setNeedsDisplay];
+}
+
+- (void)hideBusImage:(BOOL)toggle
+{
+    _cellImage.hidden = toggle;
+    
+    CGRect frame = _subtitleLabel.frame;
+    if(toggle == YES)
+        frame.origin.x = 8;
+    else frame.origin.x = kSubtitleLabelFrame.origin.x;
+    _subtitleLabel.frame = frame;
 }
 
 - (void)drawBus

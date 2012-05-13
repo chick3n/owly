@@ -407,6 +407,43 @@
 
 
 #pragma mark - TIMES
+
+- (BOOL)getStopTimes:(MTStop*)stop
+{
+    if(stop == nil)
+        return NO;
+    
+    NSData *data = [self webData:[self appendUrlQuery:@"oc_stopTimes.php?stop=%@"
+                                  , stop.StopId]];
+    
+    NSArray *json = (NSArray*)[self jsonData:data WithClassType:[NSArray class]];
+    
+    if(json == nil)
+        return NO;
+    
+    [stop.upcomingBuses removeAllObjects];
+
+    for(NSDictionary *dic in json)
+    {
+#if 1
+        MTTime *time = [[MTTime alloc] init];
+        
+        time.TripId = ([dic objectForKey:@"trip_id"] == [NSNull null]) ? @"" : [dic valueForKey:@"trip_id"];
+        time.Time = ([dic objectForKey:@"arrival_time"] == [NSNull null]) ? @"" : [dic valueForKey:@"arrival_time"];
+        time.StopId = ([dic objectForKey:@"stop_id"] == [NSNull null]) ? @"" : [dic valueForKey:@"stop_id"];
+        time.StopSequence = [[dic valueForKey:@"stop_sequence"] intValue];
+        time.EndStopHeader = ([dic objectForKey:@"end_stop"] == [NSNull null]) ? @"" : [dic valueForKey:@"end_stop"];
+        time.routeNumber = ([dic objectForKey:@"route_id"] == [NSNull null]) ? @"" : [dic valueForKey:@"route_id"];
+        
+        time.IsLive = NO;
+        
+        [stop.upcomingBuses addObject:time];
+#endif
+    }
+    
+    return YES;
+}
+
 //ToDo: update all times for the whole week, NSDate date and than determine the week for it.
 - (BOOL)getStop:(MTStop*)stop 
           Route:(MTBus*)bus 

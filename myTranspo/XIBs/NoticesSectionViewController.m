@@ -110,10 +110,6 @@
         cell = [[MTSearchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         UIImageView* emptyCellAccessory = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cardcell_arrow.png"]];
         cell.accessoryView = emptyCellAccessory;
-        
-        UIView * selection = [[UIView alloc] initWithFrame:cell.frame];
-        selection.backgroundColor = [UIColor colorWithRed:177./255. green:177./255. blue:177./255. alpha:1.0];
-        cell.selectedBackgroundView = selection;
     }
     
     NSDictionary* entry = [_data objectAtIndex:indexPath.row];

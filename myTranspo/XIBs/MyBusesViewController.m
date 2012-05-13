@@ -187,7 +187,9 @@
             cellManager.state = CCM_FULL;
             cellManager.status = CMS_IDLE;
             cellManager.individualUpdate = NO;
-            [cellManager updateDisplayObjects];
+            if(cellManager.isFavoriteStop)
+                [cellManager updateDisplayObjectsForStop:cellManager.stop.upcomingBuses];
+            else [cellManager updateDisplayObjects];
             
             [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:0]]
                               withRowAnimation:UITableViewRowAnimationNone];
@@ -241,10 +243,21 @@
         
         CardCellManager* cardCellManager = [[CardCellManager alloc] init];
         cardCellManager.stop = favorite;
-        [cardCellManager updateDisplayObjects]; //sets state = full, reset it back to empty as we havent called a real update
-        cardCellManager.state = CCM_EMPTY;
-        //cardCellManager.status = (update == NO) ? CMS_IDLE : CMS_UPDATING; //will next call be an update
-        cardCellManager.status = CMS_IDLE;
+
+        if(!favorite.isFavorite)
+        {
+            [cardCellManager updateDisplayObjects]; //sets state = full, reset it back to empty as we havent called a real update
+            cardCellManager.state = CCM_EMPTY;
+            cardCellManager.status = CMS_IDLE;
+            cardCellManager.isFavoriteStop = NO;
+        }
+        else
+        {
+            [cardCellManager updateDisplayObjectsForStop:favorite.upcomingBuses];
+            cardCellManager.isFavoriteStop = YES;
+            cardCellManager.state = CCM_EMPTY;
+            cardCellManager.status = CMS_IDLE;
+        }        
         
         [_favorites addObject:cardCellManager];
     }
@@ -343,7 +356,8 @@
     
     [cell updateCellBusNumber:cellManager.busNumber 
          AndBusDisplayHeading:cellManager.busHeadingDisplay 
-           AndStopStreentName:cellManager.stopStreetName];
+           AndStopStreentName:cellManager.stopStreetName 
+               IsStopFavorite:cellManager.isFavoriteStop];
     
     if(cellManager.state == CCM_FULL)
     {
@@ -352,7 +366,8 @@
                     AndDirection:cellManager.heading
                      AndNextTime:cellManager.nextTime
                     AndNextTimes:cellManager.additionalNextTimes
-                        AndSpeed:cellManager.busSpeed];
+                        AndSpeed:cellManager.busSpeed 
+                  IsStopFavorite:cellManager.isFavoriteStop];
         
         if(cellManager.status == CMS_NEWUPDATE && cellManager.state != CCM_EMPTY)
         {
@@ -366,6 +381,9 @@
         cellManager.hasAnimated = YES;
         
         [cell updateCellForIndividualUpdate:cellManager.individualUpdate];
+    }
+    else { //close up
+        [cell updateCellDetailsClose:NO];
     }
     
     if(cellManager.status != CMS_UPDATING)
@@ -385,6 +403,23 @@
     else if(_editedIndividualCell != nil)
     {
         [self singleCellTapOveride:nil];
+    }
+    else {
+        CardCellManager* cellManager = [_favorites objectAtIndex:indexPath.row];
+        
+        if(cellManager.isFavoriteStop)
+        {
+            StopsFavoriteViewControllerViewController* s = [[StopsFavoriteViewControllerViewController alloc] initWithNibName:@"StopsFavoriteViewControllerViewController" bundle:nil];
+            s.data = cellManager.stop.upcomingBuses;
+            s.stop = cellManager.stop;
+            s.transpo = _transpo;
+            s.navPanGesture = _navPanGesture;
+            s.panGesture = _panGesture;
+            s.language = _language;
+            
+            [self.navigationController pushViewController:s animated:YES];
+        }
+        
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];

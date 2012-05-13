@@ -34,6 +34,7 @@
 
 - (BOOL)getNotices:(NSMutableDictionary*)notices ForLanguage:(MTLanguage)language;
 - (BOOL)getRoutesForNotices:(NSMutableArray*)notices;
+- (BOOL)getStopTimes:(MTStop*)stop;
 
 //TRIP PLANNER
 - (BOOL)getOCTripPlanner:(MTTripPlanner*)tripPlanner WithResults:(NSMutableDictionary*)results;

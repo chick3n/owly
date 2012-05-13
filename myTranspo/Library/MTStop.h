@@ -40,6 +40,8 @@
 @property (nonatomic)           uint                UpdateCount;
 @property (nonatomic)           double              CurrentLat;
 @property (nonatomic)           double              CurrentLon;
+@property (nonatomic)           BOOL                isFavorite;
+@property (nonatomic, strong)   NSMutableArray*     upcomingBuses; //used only if isFavorite = YES
 
 @property (nonatomic, readonly, getter = getFirstBus)   MTBus*      Bus;
 @property (nonatomic, readonly)                         NSString*   StopNameDisplay;

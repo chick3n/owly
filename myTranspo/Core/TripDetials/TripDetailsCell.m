@@ -75,6 +75,10 @@
         self.clipsToBounds = YES;
         self.opaque = NO;
         
+        UIView * selection = [[UIView alloc] initWithFrame:self.frame];
+        selection.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.04];
+        self.selectedBackgroundView = selection;
+        
     }
     return self;
 }

@@ -483,6 +483,15 @@
 
 - (void)myTranspo:(MTResultState)state addedFavorite:(MTStop *)favorite AndBus:(MTBus*)bus
 {
+    if(favorite == nil && bus == nil)
+        return;
+    else if(favorite != nil && bus == nil) //add stop only
+    {
+        if(_cardManager != nil)
+            [_cardManager reloadQuickSelect];
+        return;
+    }
+    
     MTBus *busT = [_cardManager getCurrentBus];
         
     if(bus == busT)
@@ -500,6 +509,15 @@
 
 - (void)myTranspo:(MTResultState)state removedFavorite:(MTStop *)favorite WithBus:(MTBus *)bus
 {
+    if(favorite == nil && bus == nil)
+        return;
+    else if(favorite != nil && bus == nil) //removed stop only
+    {
+        if(_cardManager != nil)
+            [_cardManager reloadQuickSelect];
+        return;
+    }
+    
     MTBus *busT = [_cardManager getCurrentBus];
     
     if(bus == busT)
@@ -714,7 +732,10 @@
             stopAnnotation.stop.cancelQueue = NO;
             [stopAnnotation.stop restoreQueuesForBuses];
             
+            BOOL stopFavorite = [_transpo isFavorite:stopAnnotation.stop WithBus:nil];
+            stopAnnotation.stop.isFavorite = stopFavorite;
             [_cardManager updateStop:stopAnnotation.stop UsingLanguage:_language];
+            
         }
         
     }
@@ -851,6 +872,16 @@
     else if(!bus.isFavorite)
     {
         self.navigationItem.rightBarButtonItem = _cardManagerFavorite;
+    }
+}
+
+- (void)cardManager:(id)card FavoriteStop:(MTStop *)stop
+{
+    if(stop != nil)
+    {
+        if(!stop.isFavorite)
+            [_transpo addFavorite:stop WithBus:nil];
+        else [_transpo removeFavorite:stop WithBus:nil];
     }
 }
 

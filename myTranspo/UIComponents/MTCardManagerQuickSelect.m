@@ -8,12 +8,15 @@
 @synthesize delegateQuick = _delegateQuick;
 @synthesize tableView = _tableView;
 @synthesize headerBar = _headerBar;
+@synthesize stopFavorite = _stopFavorite;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if(self)
     {
+        _stopFavorite = NO;
+        
         //self.headerBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_pullbar.png"]];
         self.headerBar = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.headerBar setImage:[UIImage imageNamed:@"global_pullbar.jpg"] forState:UIControlStateNormal];        
@@ -43,7 +46,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return (_data == nil) ? 0 : _data.count;
+    return (_data == nil) ? 0 : _data.count + 1; //+1 is the button for saving a stop 
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -57,12 +60,25 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
         
-    MTBus * bus = [_data objectAtIndex:indexPath.row];
-    
-    cell.title = bus.BusNumberDisplay;
-    cell.subtitle = bus.DisplayHeading;
-    
-    [cell update];
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    if(indexPath.row != 0)
+    {
+        MTBus * bus = [_data objectAtIndex:indexPath.row-1];
+        
+        cell.title = bus.BusNumberDisplay;
+        cell.subtitle = bus.DisplayHeading;
+        [cell hideBusImage:NO];
+        
+        [cell update];
+    }
+    else {
+        cell.title = @"";
+        cell.subtitle = (_stopFavorite) ? NSLocalizedString(@"FAVORITESTOPREMOVE", nil) : NSLocalizedString(@"FAVORITESTOP", nil);
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        [cell hideBusImage:YES];
+        
+        [cell update];
+    }
     
     return cell;
 }
@@ -74,6 +90,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(indexPath.row == 0)
+    {
+        if([_delegateQuick conformsToProtocol:@protocol(MTCardManagerQuickSelectDelegate)])
+            [_delegateQuick quickSelectFavoriteStop:self];
+        return;
+    }
+    
     if([_delegateQuick conformsToProtocol:@protocol(MTCardManagerQuickSelectDelegate)])
         [_delegateQuick quickSelect:self receivedClick:indexPath.row];
     
