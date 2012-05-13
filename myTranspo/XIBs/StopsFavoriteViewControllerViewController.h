@@ -12,6 +12,7 @@
 #import "MTTime.h"
 #import "MTStop.h"
 #import "MTBaseViewController.h"
+#import "MTRightButton.h"
 
 @interface StopsFavoriteViewControllerViewController : MTBaseViewController <UITableViewDataSource, UITableViewDelegate, MyTranspoDelegate, MTRefreshDelegate>
 {

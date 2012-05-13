@@ -112,25 +112,33 @@
     unsigned int unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSDayCalendarUnit | NSMonthCalendarUnit;
     NSDateComponents *conversionInfo = [sysCalendar components:unitFlags fromDate:today  toDate:chosenTime  options:0];
 
+#if 0
     if([conversionInfo day] >= 1)
         timeRemaining = @"1d+";
     else if([conversionInfo hour] > 16 || ([conversionInfo hour] >= 16 && [conversionInfo minute] > 39))
     {
         timeRemaining = [NSString stringWithFormat:@"%dh+", [conversionInfo hour]];
     }
-    else if([conversionInfo hour] > 0 || [conversionInfo minute] > 0)
-    {
-        timeRemaining = [NSString stringWithFormat:@"%dm", ([conversionInfo hour] * 60) + [conversionInfo minute]];
-    }
-    else
+#endif
+    
+    if([conversionInfo minute] == 0 && [conversionInfo hour] == 0 && [conversionInfo day] == 0)
     {
         timeRemaining = NSLocalizedString(@"BUSHERENOW", nil);
     }
-
-    if(timeRemaining == nil)
-        return time;
-
+    else if( [conversionInfo hour] == 0 && [conversionInfo day] == 0 && [conversionInfo minute] <= 15)
+    {
+        timeRemaining = [NSString stringWithFormat:@"%d min", ([conversionInfo hour] * 60) + [conversionInfo minute]];
+    }
+    else {
+        timeRemaining = time;
+    }
+    
     return timeRemaining;
+}
+
++ (NSString*)ShortTime:(NSString*)time
+{
+    return time;
 }
 
 + (NSString*)DateDashesYYYYMMDD:(NSDate*)date

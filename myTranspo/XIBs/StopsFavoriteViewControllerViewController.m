@@ -10,6 +10,7 @@
 
 @interface StopsFavoriteViewControllerViewController ()
 - (void)updateStopTimes;
+- (void)goBack:(id)sender;
 @end
 
 @implementation StopsFavoriteViewControllerViewController
@@ -29,6 +30,9 @@
 {
     [super viewDidLoad];
     
+    if(_data == nil)
+        _data = [NSArray array];
+    
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.jpg"]];
     
     _tableView.backgroundColor = [UIColor clearColor];
@@ -38,19 +42,31 @@
     [_tableView addPullToRefreshHeader];
     [_tableView setRefreshDelegate:self];
     
+    MTRightButton* backButton = [[MTRightButton alloc] initWithType:kRightButtonTypeBack];
+    [backButton setTitle:NSLocalizedString(@"BACKBUTTON", nil) forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    
     _transpo.delegate = self;
+    
+    self.title = [NSString stringWithFormat:@"%d", _stop.StopNumber];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+    
+    _tableView = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)goBack:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - STOP TIMES
@@ -79,13 +95,13 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return (_data != nil) ? 1 : 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [_data count];
+    return (_data.count == 0) ? 1 : [_data count];
 }
 
 #define kAccessoryTimeTag 100
@@ -97,7 +113,7 @@
     if (cell == nil) {
         cell = [[MTSearchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         
-        UILabel *time = [[UILabel alloc] initWithFrame:CGRectMake(262, 11, 48, 21)];
+        UILabel *time = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 58, 21)];
         time.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
         time.textColor = [UIColor colorWithRed:157./255. green:157./255. blue:157./255. alpha:1.0];
         time.backgroundColor = [UIColor clearColor];
@@ -108,14 +124,29 @@
         [cell setAccessoryView:time];
     }
     
+    if(_data.count == 0)
+    {
+        cell.title = @"";
+        cell.subtitle = NSLocalizedString(@"NOUPCOMINGBUSES", nil);
+        cell.type = CELLBUS;
+        
+        [cell hideBusImage:YES];
+        [cell setDisplayAccessoryView:NO];
+        [cell update];
+        
+        return cell;
+    }
+    
     MTTime* route = [_data objectAtIndex:indexPath.row];
     
     cell.title = route.routeNumber;
     cell.subtitle = route.EndStopHeader;
     cell.type = CELLBUS;
     
-    [(UILabel*)[cell.accessoryView viewWithTag:kAccessoryTimeTag] setText:[route getTimeForDisplay]];
+    [(UILabel*)[cell.accessoryView viewWithTag:kAccessoryTimeTag] setText:[MTHelper timeRemaingUntilTime:[route getTimeForDisplay]]];
     
+    [cell hideBusImage:NO];
+    [cell setDisplayAccessoryView:YES];
     [cell update];
     
     return cell;

@@ -32,4 +32,7 @@
 //dates
 + (NSString*)PrettyDate:(NSDate*)date;
 
+//time
++ (NSString*)ShortTime:(NSString*)time;
+
 @end

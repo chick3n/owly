@@ -26,6 +26,7 @@
 @synthesize title               = _title;
 @synthesize subtitle            = _subtitle;
 @synthesize type                = _type;
+@synthesize displayAccessoryView = _displayAccessoryView;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -39,6 +40,18 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    if(_displayAccessoryView == YES)
+    {
+        CGRect frame = self.accessoryView.frame;
+        frame.origin.x += 10;
+        self.accessoryView.frame = frame;
+    }
 }
 
 
@@ -95,6 +108,13 @@
         [self drawStreet];
     else if(_type == CELLNOTICE)
         [self drawNotice];
+    
+    if(_displayAccessoryView && _subtitleLabel.frame.size.width >= kSubtitleLabelFrame.size.width)
+    {
+        CGRect frame = _subtitleLabel.frame;
+        frame.size.width = 206;
+        _subtitleLabel.frame = frame;
+    }
     
     //[_titleBackground setNeedsDisplay];
 }

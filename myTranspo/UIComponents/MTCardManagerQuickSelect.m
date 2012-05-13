@@ -98,7 +98,7 @@
     }
     
     if([_delegateQuick conformsToProtocol:@protocol(MTCardManagerQuickSelectDelegate)])
-        [_delegateQuick quickSelect:self receivedClick:indexPath.row];
+        [_delegateQuick quickSelect:self receivedClick:indexPath.row - 1];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

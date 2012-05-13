@@ -46,6 +46,7 @@ typedef enum
 @property (nonatomic, strong)   NSString*               title;
 @property (nonatomic, strong)   NSString*               subtitle;
 @property (nonatomic)           MTSearchType            type;
+@property (nonatomic)           BOOL                    displayAccessoryView;
 
 - (void)update;
 - (void)hideBusImage:(BOOL)toggle;
