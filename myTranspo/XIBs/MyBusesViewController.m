@@ -423,6 +423,20 @@
             
             [self.navigationController pushViewController:s animated:YES];
         }
+        else
+        {
+            TripViewController *tvc = [[TripViewController alloc] initWithNibName:@"TripViewController" bundle:nil];
+            tvc.stop = cellManager.stop;
+            tvc.bus = cellManager.stop.Bus;
+            tvc.transpo = _transpo;
+            tvc.navPanGesture = _navPanGesture;
+            tvc.panGesture = _panGesture;
+            tvc.language = _language;
+            tvc.chosenDate = [NSDate date];
+            tvc.futureTrip = NO;
+            
+            [self.navigationController pushViewController:tvc animated:YES];
+        }
         
     }
     
