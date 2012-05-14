@@ -154,6 +154,6 @@
 "LOADING" = "Loading";
 "UPDATING" = "Updating";
 "NOUPCOMINGBUSES" = "No buses scheduled to arrive.";
-"UPCOMINGBUSES" = "Next buses   ";
+"UPCOMINGBUSES" = "Next: ";
 "SELECTALL" = "Check All";
 "SELECTNONE" = "Uncheck All";

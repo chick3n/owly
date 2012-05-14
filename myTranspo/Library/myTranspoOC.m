@@ -21,6 +21,7 @@ static myTranspoOC *gInstance = NULL;
 - (BOOL)updateStopFavorite:(MTStop*)stop;
 - (BOOL)startGPSRefresh:(id)sender;
 - (void)gpsRefreshTick:(id)sender;
+- (void)finishedUpdatingStop:(MTStop*)stop;
 @end
 
 @implementation myTranspoOC
@@ -1662,6 +1663,13 @@ static myTranspoOC *gInstance = NULL;
 - (void)gpsRefreshTick:(id)sender
 {
     [self turnOnLocationTracking];
+}
+
+#pragma mark - Asyn Call backs
+
+- (void)finishedUpdatingStop:(MTStop*)stop
+{
+
 }
 
 @end
