@@ -15,7 +15,7 @@ typedef NSComparisonResult(^SortNotifications)(id obj1, id obj2);
 
 @interface SettingsManageNotificationsViewController : MTBaseViewController<UITableViewDataSource, UITableViewDelegate>
 {
-    NSArray*                            _data;
+    NSMutableArray*                     _data;
     NSMutableArray*                     _selectedRows;
     SortNotifications                   _sortNotifications;
     
@@ -28,7 +28,8 @@ typedef NSComparisonResult(^SortNotifications)(id obj1, id obj2);
     UIBarButtonItem*                    _doneButton;
 }
 
-@property (nonatomic, copy) SortNotifications sortNotifications;
+@property (nonatomic, copy)     SortNotifications   sortNotifications;
+@property (nonatomic, strong)   NSMutableArray      *data;
 
 - (IBAction)removeAllNotificationsClicked:(id)sender;
 - (IBAction)removeSelectedNotificationsClicked:(id)sender;

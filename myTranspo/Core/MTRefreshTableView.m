@@ -46,6 +46,8 @@
 	loadingAnimation.animationImages = loadingArray;
 	loadingAnimation.animationDuration = 0.25;
     loadingAnimation.hidden = YES;
+    
+    disabled = NO;
 }
 
 - (void)addPullToRefreshHeader {
@@ -70,11 +72,13 @@
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if(disabled) return;
     if (isLoading) return;
     isDragging = YES;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if(disabled) return;
     if (isLoading) 
     {
         if (scrollView.contentOffset.y > 0)
@@ -108,12 +112,19 @@
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if(disabled) return;
     if (isLoading) return;
     isDragging = NO;
     if (scrollView.contentOffset.y <= -REFRESH_HEADER_HEIGHT) {
         // Released above the header
         [self startLoading];
     }
+}
+
+- (void)disableRefresh:(BOOL)toggle
+{
+    refreshHeaderView.hidden = toggle;
+    disabled = toggle;
 }
 
 - (void)automaticallyStartLoading:(BOOL)animated

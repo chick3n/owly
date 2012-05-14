@@ -20,6 +20,7 @@
 
 @implementation SettingsManageNotificationsViewController
 @synthesize sortNotifications           = _sortNotifications;
+@synthesize data                        = _data;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -56,8 +57,6 @@
         
         return [stop1 compare:stop2];
     };
-    
-    _data = [[_transpo tripNotifications]sortedArrayUsingComparator:_sortNotifications];
     
     //table view
     _tableView.delegate = self;
@@ -140,10 +139,10 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10.0];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         
         cell.textLabel.textColor = [UIColor colorWithRed:89./255. green:89./255. blue:89./255. alpha:1.0];
+        cell.textLabel.highlightedTextColor = cell.textLabel.textColor;
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
         cell.textLabel.shadowColor = [UIColor whiteColor];
         cell.textLabel.shadowOffset = CGSizeMake(0, 1);
@@ -182,47 +181,37 @@
     
     UILocalNotification* notification = [_data objectAtIndex:indexPath.row];
     
-    NSMutableString* repeat = [NSMutableString stringWithFormat:@", %@ ", NSLocalizedString(@"MTDEF_REPEATS", nil)];
+    NSString *title = @"";
     //display notification data properly
     if(notification.repeatInterval == NSWeekCalendarUnit)
     {
         int dayOfWeek = [MTHelper DayOfWeekForDate:notification.fireDate];
         switch (dayOfWeek) {
             case 1://sunday
-                [repeat appendString:NSLocalizedString(@"MTDEF_SUNDAY", nil)];
+                title = NSLocalizedString(@"MTDEF_SUNDAY", nil);
                 break;
             case 2:
-                [repeat appendString:NSLocalizedString(@"MTDEF_MONDAY", nil)];
+                title = NSLocalizedString(@"MTDEF_MONDAY", nil);
                 break;
             case 3:
-                [repeat appendString:NSLocalizedString(@"MTDEF_TUESDAY", nil)];
+                title = NSLocalizedString(@"MTDEF_TUESDAY", nil);
                 break;
             case 4:
-                [repeat appendString:NSLocalizedString(@"MTDEF_WEDNESDAY", nil)];
+                title = NSLocalizedString(@"MTDEF_WEDNESDAY", nil);
                 break;
             case 5:
-                [repeat appendString:NSLocalizedString(@"MTDEF_THURSDAY", nil)];
+                title = NSLocalizedString(@"MTDEF_THURSDAY", nil);
                 break;
             case 6:
-                [repeat appendString:NSLocalizedString(@"MTDEF_FRIDAY", nil)];
+                title = NSLocalizedString(@"MTDEF_FRIDAY", nil);
                 break;
             case 7:
-                [repeat appendString:NSLocalizedString(@"MTDEF_SATURDAY", nil)];
+                title = NSLocalizedString(@"MTDEF_SATURDAY", nil);
                 break;
         }
     }
-
-    NSDictionary *userDic = notification.userInfo;
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ at stop %@, %@ mins before %@"
-                           , [userDic valueForKey:kMTNotificationBusNumberKey]
-                           , [userDic valueForKey:kMTNotificationStopNumberKey]
-                           , [userDic valueForKey:kMTNotificationTripAlertTimeKey]
-                           , [userDic valueForKey:kMTNotificationTripTimeKey]];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@: %@%@"
-                                 , NSLocalizedString(@"BEGINS", nil)
-                                 , [MTHelper PrettyDate:notification.fireDate]
-                                 , [repeat lowercaseString]];
+    cell.textLabel.text = title;
     
     return cell;
 }
@@ -322,16 +311,7 @@
 - (IBAction)removeAllNotificationsClicked:(id)sender
 {
     [_transpo removeAllTripNotifications];
-    _data = [[_transpo tripNotifications] sortedArrayUsingComparator:_sortNotifications];
-    
-    if(_data.count <= 0)
-    {
-        _removeSelectedButton.enabled = NO;
-        _removeAllButton.enabled = NO;
-        [self doneEditTableView:nil];
-    }
-    
-    [_tableView reloadData];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)removeSelectedNotificationsClicked:(id)sender
@@ -340,18 +320,19 @@
         return;
     
     NSMutableArray* notifications = [[NSMutableArray alloc] init];
+    NSMutableIndexSet *indexes = [[NSMutableIndexSet alloc] init];
     
     for(NSIndexPath* path in _selectedRows)
     {
         [notifications addObject:[_data objectAtIndex:path.row]];
+        [indexes addIndex:path.row];
     }
     
     if([_transpo removeNotifications:notifications])
     {
         _removeSelectedButton.enabled = NO;
         
-        _data = nil;
-        _data = [[_transpo tripNotifications] sortedArrayUsingComparator:_sortNotifications];
+        [_data removeObjectsAtIndexes:indexes];
         [_tableView reloadData];
         
         if(_data.count <= 0)
@@ -362,6 +343,7 @@
     }
     
     notifications = nil;
+    indexes = nil;
 }
 
 #pragma  mark - Navigation bar

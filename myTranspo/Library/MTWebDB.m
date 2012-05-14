@@ -413,8 +413,27 @@
     if(stop == nil)
         return NO;
     
-    NSData *data = [self webData:[self appendUrlQuery:@"oc_stopTimes.php?stop=%@"
-                                  , stop.StopId]];
+    //this is not a very good way to do this as we keep generating this after every update request!
+    NSMutableArray* filterList = [[NSMutableArray alloc] init];
+    NSMutableString* filterParameter = [[NSMutableString alloc] init];
+    for(MTStopHelper* helper in stop.upcomingBusesHelper)
+    {
+        if(helper.hideRoute == YES)
+            continue;
+        
+        [filterList addObject:helper.routeNumber];
+        [filterParameter appendFormat:@"%@,", helper.routeNumber];
+    }
+    
+    if(filterList.count != stop.upcomingBusesHelper.count)
+    {
+        if(filterParameter.length > 0)
+            [filterParameter deleteCharactersInRange:NSMakeRange(filterParameter.length - 1, 1)]; 
+    }
+    
+    NSData *data = [self webData:[self appendUrlQuery:@"oc_stopTimes.php?stop=%@%@"
+                                  , stop.StopId
+                                  , ((filterParameter.length > 0) ? [NSString stringWithFormat:@"&routes=%@", (NSString*)filterParameter] : @"")]];
     
     NSArray *json = (NSArray*)[self jsonData:data WithClassType:[NSArray class]];
     

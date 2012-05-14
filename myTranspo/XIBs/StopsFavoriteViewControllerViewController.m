@@ -11,6 +11,10 @@
 @interface StopsFavoriteViewControllerViewController ()
 - (void)updateStopTimes;
 - (void)goBack:(id)sender;
+- (void)filterList:(id)sender;
+- (void)doneFilteringList:(id)sender;
+- (void)revealToolBar:(id)sender;
+- (void)hideToolBar:(id)sender;
 @end
 
 @implementation StopsFavoriteViewControllerViewController
@@ -35,6 +39,13 @@
     
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_lightbackground_tile.jpg"]];
     
+    //toolbar
+    CGRect toolBarFrame = _tabBar.frame;
+    toolBarFrame.origin.y += toolBarFrame.size.height;
+    _tabBar.frame = toolBarFrame; //hide
+    _selectAll.title = NSLocalizedString(@"SELECTALL", nil);
+    _selectNone.title = NSLocalizedString(@"SELECTNONE", nil);
+    
     _tableView.backgroundColor = [UIColor clearColor];
     _tableView.dataSource = self;
     _tableView.delegate = self;
@@ -46,6 +57,17 @@
     [backButton setTitle:NSLocalizedString(@"BACKBUTTON", nil) forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    
+    MTRightButton *filterButton = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+    [filterButton setTitle:@"Filter" forState:UIControlStateNormal];
+    [filterButton addTarget:self action:@selector(filterList:) forControlEvents:UIControlEventTouchUpInside];
+    _filterButton = [[UIBarButtonItem alloc] initWithCustomView:filterButton];
+    self.navigationItem.rightBarButtonItem = _filterButton;
+    
+    MTRightButton *doneButton = [[MTRightButton alloc] initWithType:kRightButtonTypeAction];
+    [doneButton setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
+    [doneButton addTarget:self action:@selector(doneFilteringList:) forControlEvents:UIControlEventTouchUpInside];
+    _doneButton = [[UIBarButtonItem alloc] initWithCustomView:doneButton];
     
     _transpo.delegate = self;
     
@@ -73,6 +95,8 @@
 
 - (void)updateStopTimes
 {
+    _clearing = NO;
+    
     if(_stop == nil)
     {
         [_tableView stopLoading];
@@ -100,7 +124,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
+    if(_clearing)
+        return 0;
+    else if(_filterMode)
+        return (_stop.upcomingBusesHelper == nil) ? 0 : _stop.upcomingBusesHelper.count;
     return (_data.count == 0) ? 1 : [_data count];
 }
 
@@ -121,7 +148,7 @@
         time.shadowOffset = CGSizeMake(0, 1);
         time.tag = kAccessoryTimeTag;
         
-        [cell setAccessoryView:time];
+        [cell setMyAccessoryView:time];
     }
     
     if(_data.count == 0)
@@ -136,14 +163,42 @@
         
         return cell;
     }
+    else if(_filterMode) //filtering data
+    {
+        MTStopHelper* helper = [_stop.upcomingBusesHelper objectAtIndex:indexPath.row];
+        
+        cell.title = helper.routeNumber;
+        cell.subtitle = helper.routeHeading;
+        cell.type = CELLBUS;
+        cell.accessoryView = nil;
+        
+        if(helper.hideRoute)
+        {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.alpha = 0.6;
+        }
+        else 
+        {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            cell.alpha = 1.0;
+        }
+        
+        [cell hideBusImage:NO];
+        [cell setDisplayAccessoryView:NO];
+        [cell update];
+        
+        return cell;
+    }
     
     MTTime* route = [_data objectAtIndex:indexPath.row];
     
     cell.title = route.routeNumber;
     cell.subtitle = route.EndStopHeader;
     cell.type = CELLBUS;
+    if(cell.accessoryView != cell.myAccessoryView)
+        cell.accessoryView = cell.myAccessoryView;
     
-    [(UILabel*)[cell.accessoryView viewWithTag:kAccessoryTimeTag] setText:[MTHelper timeRemaingUntilTime:[route getTimeForDisplay]]];
+    [(UILabel*)cell.myAccessoryView setText:[MTHelper timeRemaingUntilTime:[route getTimeForDisplay]]];
     
     [cell hideBusImage:NO];
     [cell setDisplayAccessoryView:YES];
@@ -154,6 +209,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(_filterMode == YES)
+    {
+        MTStopHelper *helper = [_stop.upcomingBusesHelper objectAtIndex:indexPath.row];
+        helper.hideRoute = !helper.hideRoute;
+        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }
+    
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
@@ -173,6 +235,118 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     [_tableView scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+}
+
+#pragma mark - Filtering
+
+- (void)filterList:(id)sender
+{
+    NSMutableArray *dataIndexPaths = [[NSMutableArray alloc] init];
+    NSMutableArray *routesIndexPaths = [[NSMutableArray alloc] init];
+    for(int x=0; x<_data.count; x++)
+        [dataIndexPaths addObject:[NSIndexPath indexPathForRow:x inSection:0]];
+    for(int x=0; x<_stop.upcomingBusesHelper.count; x++)
+        [routesIndexPaths addObject:[NSIndexPath indexPathForRow:x inSection:0]];
+    
+    [_tableView disableRefresh:YES];
+    
+    [_tableView beginUpdates];
+    [_tableView deleteRowsAtIndexPaths:dataIndexPaths withRowAnimation:UITableViewRowAnimationLeft];
+    _filterMode = YES;
+    [_tableView insertRowsAtIndexPaths:routesIndexPaths withRowAnimation:UITableViewRowAnimationRight];
+    [_tableView endUpdates];
+    
+    [self revealToolBar:nil];
+    
+    self.navigationItem.rightBarButtonItem = _doneButton;
+}
+
+- (void)doneFilteringList:(id)sender
+{
+    NSMutableArray *dataIndexPaths = [[NSMutableArray alloc] init];
+    NSMutableArray *routesIndexPaths = [[NSMutableArray alloc] init];
+    for(int x=0; x<_stop.upcomingBusesHelper.count; x++)
+        [routesIndexPaths addObject:[NSIndexPath indexPathForRow:x inSection:0]];
+    for(int x=0; x<_data.count; x++)
+        [dataIndexPaths addObject:[NSIndexPath indexPathForRow:x inSection:0]];
+    
+    [_tableView disableRefresh:NO];
+    
+    //save filter list
+    NSMutableArray* filterList = [[NSMutableArray alloc] init];
+    for(MTStopHelper* helper in _stop.upcomingBusesHelper)
+    {
+        if(helper.hideRoute == YES)
+            continue;
+        
+        [filterList addObject:helper.routeNumber];
+    }
+    
+    if(filterList.count != _stop.upcomingBusesHelper.count) //we have hidden something
+        [MTSettings favoriteStopFilter:_stop.StopId UpdateWith:filterList];
+    else [MTSettings clearFavoriteStopFilter:_stop.StopId]; //clear it if we have it
+    
+    [self hideToolBar:nil];
+    
+    [_tableView beginUpdates];
+    [_tableView deleteRowsAtIndexPaths:routesIndexPaths withRowAnimation:UITableViewRowAnimationLeft];
+    _filterMode = NO;
+    [_tableView insertRowsAtIndexPaths:dataIndexPaths withRowAnimation:UITableViewRowAnimationRight];
+    [_tableView endUpdates];
+
+    self.navigationItem.rightBarButtonItem = _filterButton;
+    
+    _tableView.contentOffset = CGPointMake(0, 0);
+    [_tableView startLoadingWithoutDelegate];
+    [self performSelector:@selector(updateStopTimes) withObject:nil afterDelay:0.25];
+}
+
+#pragma mark - TOOL BAR
+
+- (IBAction)selectAll:(id)sender
+{
+    for(MTStopHelper *helper in _stop.upcomingBusesHelper)
+        helper.hideRoute = NO;
+    
+    [_tableView reloadData];
+}
+
+- (IBAction)selectNone:(id)sender
+{
+    for(MTStopHelper *helper in _stop.upcomingBusesHelper)
+        helper.hideRoute = YES;
+    
+    [_tableView reloadData];
+}
+
+- (void)revealToolBar:(id)sender
+{
+    CGRect tabBarFrame = _tabBar.frame;
+    CGRect tableViewFrame = _tableView.frame;
+    
+    tabBarFrame.origin.y -= tabBarFrame.size.height;
+    tableViewFrame.size.height -= tabBarFrame.size.height;
+    
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         _tableView.frame = tableViewFrame;
+                         _tabBar.frame = tabBarFrame;
+                     }];
+}
+
+- (void)hideToolBar:(id)sender
+{
+    CGRect tabBarFrame = _tabBar.frame;
+    CGRect tableViewFrame = _tableView.frame;
+    
+    tabBarFrame.origin.y += tabBarFrame.size.height;
+    tableViewFrame.size.height += tabBarFrame.size.height;
+    
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         _tableView.frame = tableViewFrame;
+                         _tabBar.frame = tabBarFrame;
+                     }];
 }
 
 @end

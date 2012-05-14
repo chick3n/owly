@@ -26,6 +26,7 @@
 @synthesize MTCardCellIsAnimating   = _MTCardCellIsAnimating;
 @synthesize isFavorite              = _isFavorite;
 @synthesize upcomingBuses           = _upcomingBuses;
+@synthesize upcomingBusesHelper     = _upcomingBusesHelper;
 
 - (void)setIsUpdating:(BOOL)IsUpdating
 {

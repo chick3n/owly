@@ -32,5 +32,7 @@
 	<true/>
 	<key>StartupView</key>
 	<integer>1</integer>
+	<key>FavoriteStopsFilter</key>
+	<dict/>
 </dict>
 </plist>

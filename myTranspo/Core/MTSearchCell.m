@@ -27,6 +27,7 @@
 @synthesize subtitle            = _subtitle;
 @synthesize type                = _type;
 @synthesize displayAccessoryView = _displayAccessoryView;
+@synthesize myAccessoryView     = _myAccessoryView;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

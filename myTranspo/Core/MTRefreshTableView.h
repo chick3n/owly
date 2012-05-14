@@ -36,6 +36,7 @@
     NSArray         *loadingArray;
     int             incrementalCounter;
     NSTimer         *longLoadingTimer;
+    BOOL            disabled;
     
     UIActivityIndicatorView *refreshSpinner;
 }
@@ -60,6 +61,7 @@
 - (void)automaticallyStartLoading:(BOOL)animated;
 - (void)startLoadingWithoutDelegate;
 - (void)setEmptyTableText:(NSString*)emptyText;
+- (void)disableRefresh:(BOOL)toggle;
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;

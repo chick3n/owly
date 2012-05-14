@@ -16,6 +16,7 @@
 #import "SettingsListViewController.h"
 #import "MTSettingsTableView.h"
 #import "SettingsManageNotificationsViewController.h"
+#import "SettingsManageNotificationPreViewController.h"
 #import "OfflineManager.h"
 
 #define kFullAppRefresh @"MTAPPREFRESH"

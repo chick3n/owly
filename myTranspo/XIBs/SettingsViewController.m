@@ -344,7 +344,7 @@
     }
     else if(setting.type == STOTHER)
     {
-        SettingsManageNotificationsViewController* nvc = [[SettingsManageNotificationsViewController alloc] initWithNibName:@"SettingsManageNotificationsViewController" bundle:nil];
+        SettingsManageNotificationPreViewController* nvc = [[SettingsManageNotificationPreViewController alloc] initWithNibName:@"SettingsManageNotificationPreViewController" bundle:nil];
         nvc.transpo = _transpo;
         nvc.language = _language;
         nvc.panGesture = _panGesture;

@@ -191,8 +191,10 @@
                 [cellManager updateDisplayObjectsForStop:cellManager.stop.upcomingBuses];
             else [cellManager updateDisplayObjects];
             
+            [_tableView beginUpdates];
             [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:0]]
                               withRowAnimation:UITableViewRowAnimationNone];
+            [_tableView endUpdates];
         }
         
         _updateCount -= 1;
@@ -212,8 +214,10 @@
         if(x >= 0)
         {            
             [_favorites removeObjectAtIndex:x];
+            [_tableView beginUpdates];
             [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:x inSection:0]]
                               withRowAnimation:UITableViewRowAnimationLeft];
+            [_tableView endUpdates];
             
             [self singleCellTapOveride:nil];
         }

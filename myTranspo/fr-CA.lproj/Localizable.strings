@@ -123,6 +123,8 @@
 
 //Alert Manager
 "BEGINS" = "commence";
+"OCCURSON" = "se produit sur ";
+"ALERTMANAGERHEADEROUTPUT" = "%@ %@ à %@";
 
 //REACHABILITY
 "NETWORKDOWNTITLE" = "Connexion réseau n'est pas disponible";
@@ -143,3 +145,5 @@
 "UPDATING" = "Mise à jour";
 "NOUPCOMINGBUSES" = "Pas de bus doit arriver.";
 "UPCOMINGBUSES" = "à venir   ";
+"SELECTALL" = "Sélectionner tout";
+"SELECTNONE" = "Sélectionnez Aucun";

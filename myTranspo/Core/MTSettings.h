@@ -35,6 +35,9 @@ static NSString* kMTHelperStops = @"HelperStopsShown";
 static NSString* kMTISettingsVersion = @"Settings Version";
 static NSString* kMTIDatabaseVersion = @"Database Version";
 
+//Stops Favorite
+static NSString *kMTFStopsFavorite = @"FavoriteStopsFilter";
+
 //Reachability
 static NSString* kMTRConnectionWarning = @"ConnectionWarningSent";
 
@@ -105,5 +108,7 @@ static NSString* kMTRConnectionWarning = @"ConnectionWarningSent";
 + (BOOL)networkNotification;
 + (void)networkNotificationStatus:(BOOL)status;
 + (CGFloat)ocOfflineVersion;
++ (NSArray*)favoriteStopFilter:(NSString*)key UpdateWith:(NSArray*)data;
++ (void)clearFavoriteStopFilter:(NSString*)key;
 
 @end

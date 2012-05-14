@@ -11,6 +11,7 @@
 #import "MTDefinitions.h"
 #import "MTBus.h"
 #import "MTBase.h"
+#import "MTStopHelper.h"
 
 @interface MTStop : MTBase
 {
@@ -42,6 +43,7 @@
 @property (nonatomic)           double              CurrentLon;
 @property (nonatomic)           BOOL                isFavorite;
 @property (nonatomic, strong)   NSMutableArray*     upcomingBuses; //used only if isFavorite = YES
+@property (nonatomic, strong)   NSArray*            upcomingBusesHelper; //used only if isFavorite = YES
 
 @property (nonatomic, readonly, getter = getFirstBus)   MTBus*      Bus;
 @property (nonatomic, readonly)                         NSString*   StopNameDisplay;

@@ -109,6 +109,8 @@ static NSString* kMTNotificationBusNumberKey = @"MTNotificationBusNumber";
 static NSString* kMTNotificationStopNumberKey = @"MTNotificationStopNumber";
 
 static NSString* kMTNotificationTripKey = @"MTNotificationTrip";
+static NSString* kMTNotificationBusDisplayHeading = @"MTNotificationBusDisplayHeading";
+static NSString* kMTNotificationStopStreetName = @"MTNotificationStopStreetName";
 static NSString* kMTNotificationTripTimeKey = @"MTNotificationTripTime";
 
 static NSString* kMTNotificationTripAlertTimeKey = @"MTNotificationTripAlertTimeKey";

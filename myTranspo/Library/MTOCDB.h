@@ -19,6 +19,8 @@
 #import <Foundation/Foundation.h>
 #import "MTInteraction.h"
 #import "MTDefinitions.h"
+#import "MTStopHelper.h"
+#import "MTSettings.h"
 #import <sqlite3.h>
 #import "sqlite3_distance.c"
 
@@ -56,6 +58,7 @@
           Route:(MTBus*)bus 
           Times:(NSDate*)date
         Results:(NSDictionary*)results;
+- (BOOL)getRoutesForFavoriteStop:(MTStop*)stop;
 
 //favorites
 - (BOOL)getFavorites:(NSMutableArray*)favorites;

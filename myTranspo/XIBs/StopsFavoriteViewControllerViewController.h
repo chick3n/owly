@@ -16,11 +16,20 @@
 
 @interface StopsFavoriteViewControllerViewController : MTBaseViewController <UITableViewDataSource, UITableViewDelegate, MyTranspoDelegate, MTRefreshDelegate>
 {
+    BOOL                            _clearing;
+    BOOL                            _filterMode;
     //ui components
-    IBOutlet MTRefreshTableView*            _tableView;
+    IBOutlet MTRefreshTableView*    _tableView;
+    UIBarButtonItem                 *_filterButton, *_doneButton;
+    UILabel                         *_accessoryViewTime;
+    IBOutlet UIBarButtonItem        *_selectNone, *_selectAll;
+    IBOutlet UIToolbar              *_tabBar;
 }
 
 @property (nonatomic, strong)       NSArray *data;
 @property (nonatomic, strong)       MTStop *stop;
+
+- (IBAction)selectNone:(id)sender;
+- (IBAction)selectAll:(id)sender;
 
 @end

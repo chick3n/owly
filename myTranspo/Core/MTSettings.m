@@ -626,4 +626,38 @@
     return version;
 }
 
++ (NSArray*)favoriteStopFilter:(NSString*)key UpdateWith:(NSArray*)data
+{
+    NSUserDefaults* userDefaults = [MTSettings settingsUserDefault];
+    NSMutableDictionary* filters = [[userDefaults dictionaryForKey:kMTFStopsFavorite] mutableCopy];
+    
+    if(data != nil && key != nil)
+    {
+        [filters setObject:data forKey:key];
+        
+        [userDefaults setObject:(NSDictionary*)filters forKey:kMTFStopsFavorite];
+        [userDefaults synchronize];
+        return nil;
+    }
+    
+    if(key == nil)
+        return nil;
+    
+    return [filters objectForKey:key];
+}
+
++ (void)clearFavoriteStopFilter:(NSString*)key
+{
+    NSUserDefaults* userDefaults = [MTSettings settingsUserDefault];
+    NSMutableDictionary* filters = [[userDefaults dictionaryForKey:kMTFStopsFavorite] mutableCopy];
+    
+    if(key == nil)
+        return;
+    
+    [filters removeObjectForKey:key];
+    
+    [userDefaults setObject:(NSDictionary*)filters forKey:kMTFStopsFavorite];
+    [userDefaults synchronize];
+}
+
 @end

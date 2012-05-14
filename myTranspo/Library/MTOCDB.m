@@ -130,6 +130,51 @@
     return YES;
 }
 
+- (BOOL)getRoutesForFavoriteStop:(MTStop*)stop
+{
+    if(!_isConnected)
+        return NO;
+    
+    NSArray* filterList = [MTSettings favoriteStopFilter:stop.StopId UpdateWith:nil];
+    
+    NSMutableArray *routesAtStop = [[NSMutableArray alloc] init];
+    sqlite3_stmt* _cmpStmt;
+    NSString *sqlStmt = [NSString stringWithFormat:
+                         @"select %@ \
+                         from %@ \
+                         inner join %@ \
+                         where %@ \
+                         order by %@",
+                         @"r.route_short_name, sr.trip_headsign"
+                         , @"stop_routes sr"
+                         , @"routes r on r.route_id = sr.route_id"
+                         , [NSString stringWithFormat:@"sr.stop_id = '%@'", stop.StopId]
+                         , @"r.route_short_name"];
+    
+    if(sqlite3_prepare_v2(_db, [sqlStmt UTF8String], -1, &_cmpStmt, NULL) == SQLITE_OK)
+    {
+        while(sqlite3_step(_cmpStmt) == SQLITE_ROW)
+        {
+            MTStopHelper *stopHelper = [[MTStopHelper alloc] init];
+            stopHelper.routeNumber = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(_cmpStmt, 0)];
+            stopHelper.routeHeading = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(_cmpStmt, 1)];
+            
+            if(filterList != nil)
+            {
+                if(filterList.count > 0 && ![filterList containsObject:stopHelper.routeNumber])
+                    stopHelper.hideRoute = YES;
+            }
+            
+            [routesAtStop addObject:stopHelper];
+        }
+    }
+    
+    stop.upcomingBusesHelper = routesAtStop;             
+    sqlite3_reset(_cmpStmt);
+    
+    return YES;
+}
+
 //return a stop or update it
 - (BOOL)getStop:(MTStop *)stop
 {
@@ -912,7 +957,8 @@
             {
                 stop.isFavorite = YES;
                 
-                [self getRoutesForStop:stop];
+                //[self getRoutesForStop:stop];
+                [self getRoutesForFavoriteStop:stop];
                 
                 [favorites addObject:stop];
                 continue;

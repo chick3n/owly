@@ -839,18 +839,6 @@ static myTranspoOC *gInstance = NULL;
         MTLog(@"GETTING STOP TIMES WEB");
         [_ocWebDb getStopTimes:stop];
     }    
-     
-#if 0
-    if(_hasAPI && [MTHelper IsDateToday:date]) //get next times live
-    {
-        MTLog(@"GETTING TIMES API");
-        status = [_ocApi getStop:stop Route:bus Times:date Results:nil];
-        if(status && _hasDB && [bus getBusHeadingForFavorites] != MTDIRECTION_UNKNOWN)
-        {
-            [_ocDb updateFavorite:stop AndBus:nil];
-        }  
-    }     
-#endif
     return NO;
 }
 
@@ -1314,6 +1302,8 @@ static myTranspoOC *gInstance = NULL;
                              [time getTimeForDisplay], kMTNotificationTripTimeKey,
                              [NSNumber numberWithInt:[MTSettings notificationAlertTimeInt]], kMTNotificationTripAlertTimeKey,
                              [NSNumber numberWithInt:dayOfWeek], kMTNotificationDayOfWeek,
+                             route.DisplayHeading, kMTNotificationBusDisplayHeading,
+                             stop.StopName, kMTNotificationStopStreetName,
                              nil];
     notification.userInfo = userDic;
     notification.repeatInterval = NSWeekCalendarUnit;

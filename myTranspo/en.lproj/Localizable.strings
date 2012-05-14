@@ -133,6 +133,8 @@
 
 //ALERT MANAGER
 "BEGINS" = "Begins";
+"OCCURSON" = "Occurs on ";
+"ALERTMANAGERHEADEROUTPUT" = "%@ %@ at %@";
 
 //REACHABILITY
 "NETWORKDOWNTITLE" = "Network Connection Unavailable";
@@ -153,3 +155,5 @@
 "UPDATING" = "Updating";
 "NOUPCOMINGBUSES" = "No buses scheduled to arrive.";
 "UPCOMINGBUSES" = "Next buses   ";
+"SELECTALL" = "Check All";
+"SELECTNONE" = "Uncheck All";
