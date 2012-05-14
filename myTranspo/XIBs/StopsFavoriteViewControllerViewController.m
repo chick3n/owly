@@ -47,14 +47,25 @@
     MTRightButton* selectAll = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
     [selectAll setTitle:NSLocalizedString(@"SELECTALL", nil) forState:UIControlStateNormal];
     [selectAll addTarget:self action:@selector(selectAll:) forControlEvents:UIControlEventTouchUpInside];
+    CGRect selectFrame = selectAll.frame;
+    selectFrame.size.width = 100;
+    selectAll.frame = selectFrame;
     _selectAll = [[UIBarButtonItem alloc] initWithCustomView:selectAll];
     
-    _selectNone.title = NSLocalizedString(@"SELECTNONE", nil);
+    
+    MTRightButton* selectNone = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+    [selectNone setTitle:NSLocalizedString(@"SELECTNONE", nil) forState:UIControlStateNormal];
+    [selectNone addTarget:self action:@selector(selectNone:) forControlEvents:UIControlEventTouchUpInside];
+    selectNone.frame = selectFrame;
+    _selectNone = [[UIBarButtonItem alloc] initWithCustomView:selectNone];
+    
+    UIBarButtonItem *flexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                              target:nil action:nil];
     
     [_tabBar setBackgroundImage:[UIImage imageNamed:@"global_options_bar.jpg"]
              forToolbarPosition:UIToolbarPositionBottom
                      barMetrics:UIBarMetricsDefault];
-    [_tabBar setItems:[NSArray arrayWithObject:_selectAll]];
+    [_tabBar setItems:[NSArray arrayWithObjects:_selectAll, flexible, _selectNone, nil]];
     
     _tableView.backgroundColor = [UIColor clearColor];
     _tableView.dataSource = self;

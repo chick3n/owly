@@ -34,7 +34,7 @@
     
     //ui components
     UIView*                             _tableViewHeader;
-    IBOutlet UIActivityIndicatorView*   _loadingIndicator;
+    UIActivityIndicatorView*            _loadingIndicator;
     IBOutlet MKMapView*					_mapView;
     //UIImageView*                        _backgroundImage;
     UIView                              *_backgroundImage;

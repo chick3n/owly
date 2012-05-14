@@ -66,13 +66,29 @@
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_darkbackground_tile.jpg"]];
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)]];
     
+    //toolbar
     [_toolBar setBackgroundImage:[UIImage imageNamed:@"global_options_bar.jpg"]
              forToolbarPosition:UIToolbarPositionBottom
                      barMetrics:UIBarMetricsDefault];
     
-    //toolbar
-    _removeAllButton.title = NSLocalizedString(@"MTDEF_REMOVEALL", nil);
-    _removeSelectedButton.title = NSLocalizedString(@"MTDEF_REMOVESELECTED", nil);
+    MTRightButton* removeAll = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+    [removeAll setTitle:NSLocalizedString(@"MTDEF_REMOVEALL", nil) forState:UIControlStateNormal];
+    [removeAll addTarget:self action:@selector(removeAllNotificationsClicked:) forControlEvents:UIControlEventTouchUpInside];
+    CGRect removeFrame = removeAll.frame;
+    removeFrame.size.width = 100;
+    removeAll.frame = removeFrame;
+    _removeAllButton = [[UIBarButtonItem alloc] initWithCustomView:removeAll];
+    
+    MTRightButton* removeSelected = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+    [removeSelected setTitle:NSLocalizedString(@"MTDEF_REMOVESELECTED", nil) forState:UIControlStateNormal];
+    [removeSelected addTarget:self action:@selector(removeSelectedNotificationsClicked:) forControlEvents:UIControlEventTouchUpInside];
+    removeSelected.frame = removeFrame;
+    _removeSelectedButton = [[UIBarButtonItem alloc] initWithCustomView:removeSelected];
+    
+    [_toolBar setItems:[NSArray arrayWithObjects:_removeAllButton
+                        , [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]
+                        , _removeSelectedButton
+                        , nil]];
     
     //navigationcontroller
     MTRightButton* editButton = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];

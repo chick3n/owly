@@ -81,6 +81,13 @@
     bus2.DisplayHeading = @"Greenboro";
     [_stop2.BusIds addObject:bus2];
 
+    //loading indicator
+    _loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    _loadingIndicator.hidesWhenStopped = YES;
+    CGRect loadingFrame = _loadingIndicator.frame;
+    loadingFrame.origin.x = _tableView.frame.size.width - loadingFrame.size.width - 12;
+    loadingFrame.origin.y = (kMTTRIPHEADERHEIGHT / 2) - (loadingFrame.size.height / 2);
+    _loadingIndicator.frame = loadingFrame;
 
     //navigation controller
     UIButton* swapButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -106,6 +113,7 @@
     tableViewHeadlerLabel.shadowColor = [UIColor colorWithRed:38./255. green:154./255. blue:201./255. alpha:1.0];
     tableViewHeadlerLabel.shadowOffset = CGSizeMake(0, 1);
     [_tableViewHeader addSubview:tableViewHeadlerLabel];
+    [_tableViewHeader addSubview:_loadingIndicator];
     
     //setup tableview
 	[self.tableView setDelaysContentTouches:NO];

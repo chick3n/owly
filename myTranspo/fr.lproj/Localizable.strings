@@ -138,6 +138,9 @@
 //TABLE REFRES
 "EXTENDEDLOADING" = "Encore au travail...";
 
+//TRIP PLANNER
+"EMPTYTRIPPLANNER" = "Entrez une destination de début et de fin pour commencer.";
+
 //MYBUSES
 "EMPTYTABLEFORFAVORITES" = "You have no favorites set. You can add them from the Stops page.";
 "SHORTFORMPULLTOREFRESH" = "tirer";

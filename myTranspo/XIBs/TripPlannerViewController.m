@@ -68,7 +68,7 @@
     self.title = NSLocalizedString(@"TRIPPLANNER", nil);
     
     //datepicker
-    _changeDateViewer.minimumDate = [NSDate date];
+    _changeDateViewer.minimumDate = [NSDate dateWithTimeIntervalSinceNow:300];
     [self toggleChangeDateViewer:nil];
     [self changeTripDate:nil];
     
@@ -170,12 +170,12 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return (_data.count == 0) ? 0 : 1;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data.count;
+    return (_data.count == 0) ? 1 : _data.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -187,46 +187,51 @@
         cell = [[TripDetailsCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     }
     
-    TripDetailsDisplay* display = (TripDetailsDisplay*)[_data objectAtIndex:indexPath.row];
-    
-    cell.text.text = display.details;
-    CGRect textFrame = cell.text.frame;
-    textFrame.size.height = display.detailsSize.height;
-    cell.text.frame = textFrame;
-    
-    cell.rightAccessoryText = display.duration;
-    cell.leftAccessoryImage = display.icon;
-    cell.indent = display.indent;
+    if(_data.count == 0) //empty cell
+    {
+        cell.text.text = NSLocalizedString(@"EMPTYTRIPPLANNER", nil);
+        
+        CGRect textFrame = cell.text.frame;
+        textFrame.size.height = [cell.text.text sizeWithFont:cell.text.font
+                                           constrainedToSize:kTripDetialsDisplaySize 
+                                               lineBreakMode:UILineBreakModeWordWrap].height;
+        cell.text.frame = textFrame;
+        
+        cell.leftAccessoryImage = [UIImage imageNamed:@"tripplanner_attention_icon.png"];
+        cell.rightAccessoryText = nil;
+        cell.indent = NO;
+    }
+    else {
+        TripDetailsDisplay* display = (TripDetailsDisplay*)[_data objectAtIndex:indexPath.row];
+        
+        cell.text.text = display.details;
+        CGRect textFrame = cell.text.frame;
+        textFrame.size.height = display.detailsSize.height;
+        cell.text.frame = textFrame;
+        
+        cell.rightAccessoryText = display.duration;
+        cell.leftAccessoryImage = display.icon;
+        cell.indent = display.indent;
+    }    
     
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#if 1
+    if(_data.count == 0)
+    {
+        CGSize emptySize = [NSLocalizedString(@"EMPTYTRIPPLANNER", nil) sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:16.0] constrainedToSize:kTripDetialsDisplaySize lineBreakMode:UILineBreakModeWordWrap];
+        if(emptySize.height + 12 > kMinTripCellHeight)
+            return emptySize.height + ((kMinTripCellHeight/2) + 8);
+        return kMinTripCellHeight;    
+    }
+    
     TripDetailsDisplay* display = (TripDetailsDisplay*)[_data objectAtIndex:indexPath.row];
 
     if(display.detailsSize.height + 12 > kMinTripCellHeight) //12 is the origin y it is starting at in the cell have to count that or double lines dont work.
         return display.detailsSize.height + ((kMinTripCellHeight/2) + 8); //8 is from font height / 2
     return kMinTripCellHeight;
-#endif
-    
-#if 0
-    TripDetailsDisplay* display = (TripDetailsDisplay*)[_data objectAtIndex:indexPath.row];
-    
-    UILabel *text = [[UILabel alloc] initWithFrame:CGRectMake(38, 12, 216, 16)];
-    text.backgroundColor = [UIColor clearColor];
-    text.numberOfLines = 0;
-    text.lineBreakMode = UILineBreakModeWordWrap;
-    text.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
-    text.text = display.details;
-    [text sizeToFit];
-    
-    
-    if(text.frame.size.height > kMinTripCellHeight)
-        return text.frame.size.height + ((kMinTripCellHeight / 2) + 8);
-    return kMinTripCellHeight;
-#endif
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
