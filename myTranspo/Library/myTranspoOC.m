@@ -19,6 +19,8 @@ static myTranspoOC *gInstance = NULL;
 - (BOOL)updateFavoriteHeader:(MTStop*)stop FullUpdate:(BOOL)fullUpdate;
 - (BOOL)updateFavorite:(MTStop*)stop ForDate:(NSDate*)date StoreTimes:(BOOL)store;
 - (BOOL)updateStopFavorite:(MTStop*)stop;
+- (BOOL)startGPSRefresh:(id)sender;
+- (void)gpsRefreshTick:(id)sender;
 @end
 
 @implementation myTranspoOC
@@ -31,6 +33,17 @@ static myTranspoOC *gInstance = NULL;
 @synthesize coordinates    = _coordinates;
 @synthesize City           = _city;
 @synthesize hasRealCoordinates = _hasRealCoordinates;
+@synthesize gpsRefreshRate = _gpsRefreshRate;
+
+- (void)setGpsRefreshRate:(NSTimeInterval)gpsRefreshRate
+{
+    if(_gpsRefreshRate != gpsRefreshRate)
+    {
+        _gpsRefreshRate = gpsRefreshRate;
+    
+        [self startGPSRefresh:nil];   
+    }
+}
 
 
 - (CLLocation*)clLocation
@@ -73,6 +86,7 @@ static myTranspoOC *gInstance = NULL;
         //_queue = dispatch_queue_create("com.vice.ocqueue", NULL); //serial queue (FIFO)
         _queue = MTLDEF_BGQUEUE; //concurrent queue
         _semaphore = dispatch_semaphore_create((long)kAsyncLimit);
+        _gpsRefreshRate = 300;
         
         [self initializeLocationManager];
         
@@ -87,6 +101,7 @@ static myTranspoOC *gInstance = NULL;
 {
     dispatch_release(_queue);
     dispatch_release(_semaphore);
+    [self endGpsRefresh:nil];
 }
 
 #pragma mark - INTERNAL METHOD CHECKS
@@ -261,6 +276,8 @@ static myTranspoOC *gInstance = NULL;
     _hasRealCoordinates = YES;
     if([_delegate respondsToSelector:@selector(myTranspo:State:updatedUserCoordinates:)])
         [_delegate myTranspo:self State:MTRESULTSTATE_SUCCESS updatedUserCoordinates:newLocation.coordinate];
+    
+    [self turnOffLocationTracking];
 }
 
 - (void)locationManager:(CLLocationManager *)manager 
@@ -1629,6 +1646,32 @@ static myTranspoOC *gInstance = NULL;
     }
     
     return NO;
+}
+
+#pragma mark - GPS TIMER
+
+- (BOOL)startGPSRefresh:(id)sender
+{
+    if(_gpsTimer != nil)
+        [_gpsTimer invalidate];
+    
+    _gpsTimer = [NSTimer scheduledTimerWithTimeInterval:_gpsRefreshRate  target:self selector:@selector(gpsRefreshTick:) userInfo:nil repeats:YES];
+    [_gpsTimer fire];
+    return YES;
+}
+
+- (BOOL)endGpsRefresh:(id)sender
+{
+    if(_gpsTimer != nil)
+        [_gpsTimer invalidate];
+    
+    _gpsTimer = nil;
+    return YES;
+}
+
+- (void)gpsRefreshTick:(id)sender
+{
+    [self turnOnLocationTracking];
 }
 
 @end

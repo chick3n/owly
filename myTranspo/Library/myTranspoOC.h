@@ -91,6 +91,7 @@
     MTWebDB*                _ocWebDb;
     MTOCDB*                 _ocOfflineTimes;
     CLLocationManager*      _locationManager;
+    NSTimer*                _gpsTimer;
     
 //    NSOperationQueue*       _queue;
     dispatch_queue_t                _queue;
@@ -107,6 +108,7 @@
 @property (nonatomic)           CLLocationCoordinate2D  coordinates;
 @property (nonatomic,readonly)  BOOL                    hasRealCoordinates;
 @property (nonatomic, readonly) CLLocation*             clLocation;
+@property (nonatomic)           NSTimeInterval          gpsRefreshRate;
 
 //methods
 + (myTranspoOC*)sharedSingleton;
@@ -123,6 +125,7 @@
 - (void)kill;
 - (void)turnOffNetworkMethods;
 - (void)turnOnNetworkMethods;
+- (BOOL)endGpsRefresh:(id)sender;
 
 //general data
 - (BOOL)getScheduleForStop:(MTStop*)stop WithRoute:(MTBus*)bus;

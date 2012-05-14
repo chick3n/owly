@@ -74,6 +74,7 @@
      */
     if(_transpo)
     {
+        [_transpo endGpsRefresh:nil];
         [_transpo turnOffLocationTracking];
     }
 }
@@ -102,12 +103,11 @@
         {
             MTViewControllers view = ((MTBaseViewController*)viewController).viewControllerType;
             switch (view) {
-                case MTVCMYBUSES:
                 case MTVCSTOPS:
-                case MTVCTRIPPLANNER:
-                    [_transpo turnOnLocationTracking];
+                    _transpo.gpsRefreshRate = 60;
                     break;
                 default:
+                    _transpo.gpsRefreshRate = 300;
                     break;
             }
         }
@@ -157,14 +157,13 @@
     
     MTBaseViewController* newView = nil;
     MTOptionsDate* optionsView = nil;
+    _transpo.gpsRefreshRate = 300;
     switch (view) {
         case MTVCMENU:
             newView = [[MenuTableViewController alloc] initWithNibName:@"MenuTableViewController" bundle:nil];
-            [_transpo turnOffLocationTracking];
             break; //should never happen
         case MTVCMYBUSES:
             newView = [[MyBusesViewController alloc] initWithNibName:@"MyBusesViewController" bundle:nil];
-            [_transpo turnOnLocationTracking];
             /*optionsView = [[MTOptionsDate alloc] initWithNibName:@"MTOptionsDate" bundle:nil];
             optionsView.lastDate = _lastDate;
             optionsView.selectedDate = [NSDate date];
@@ -172,30 +171,21 @@
             break;
         case MTVCSTOPS:
             newView = [[StopsViewController alloc] initWithNibName:@"StopsViewController" bundle:nil];
-            [_transpo turnOnLocationTracking];
-            //optionsView = [[MTOptionsDate alloc] initWithNibName:@"MTOptionsDate" bundle:nil];
-            //optionsView.lastDate = _lastDate;
-            //optionsView.selectedDate = [NSDate date];
-            //optionsView.delegateOptions = (StopsViewController*)newView;
+            _transpo.gpsRefreshRate = 60;
             break;
         case MTVCSETTINGS:
             newView = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil];
-            [_transpo turnOffLocationTracking];
             break;
         case MTVCTRAIN:
             newView = [[OTrainViewController alloc] initWithNibName:@"OTrainViewController" bundle:nil];
-            [_transpo turnOffLocationTracking];
             break;
         case MTVCNOTICIES:
             newView = [[NoticesViewController alloc] initWithNibName:@"NoticesViewController" bundle:nil];
-            [_transpo turnOffLocationTracking];
             break;
         case MTVCTRIPPLANNER:
-            [_transpo turnOnLocationTracking];
             newView = [[TripPlannerViewController alloc] initWithNibName:@"TripPlannerViewController" bundle:nil];
             break;
         case MTVCUNKNOWN:
-            [_transpo turnOffLocationTracking];
             return;
     }
     
