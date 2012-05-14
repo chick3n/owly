@@ -280,6 +280,10 @@
 		31E3E7F015604F630022D354 /* SettingsManageNotificationPreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31E3E7EE15604F600022D354 /* SettingsManageNotificationPreViewController.m */; };
 		31E3E7F115604F630022D354 /* SettingsManageNotificationPreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7EF15604F620022D354 /* SettingsManageNotificationPreViewController.xib */; };
 		31E3E7F4156060FC0022D354 /* MTStopHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 31E3E7F3156060FB0022D354 /* MTStopHelper.m */; };
+		31E3E7F71561BCAB0022D354 /* cell_stop.png in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7F51561BCAB0022D354 /* cell_stop.png */; };
+		31E3E7F81561BCAB0022D354 /* cell_stop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7F61561BCAB0022D354 /* cell_stop@2x.png */; };
+		31E3E7FB1561BEC10022D354 /* global_options_bar@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7F91561BEC10022D354 /* global_options_bar@2x.jpg */; };
+		31E3E7FC1561BEC10022D354 /* global_options_bar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7FA1561BEC10022D354 /* global_options_bar.jpg */; };
 		31EAED751522756200533AC6 /* TripViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31EAED731522756200533AC6 /* TripViewController.m */; };
 		31EAED761522756200533AC6 /* TripViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31EAED741522756200533AC6 /* TripViewController.xib */; };
 		31EE5577153B27D400C83552 /* MTRightButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 31EE5576153B27D400C83552 /* MTRightButton.m */; };
@@ -663,6 +667,10 @@
 		31E3E7EF15604F620022D354 /* SettingsManageNotificationPreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SettingsManageNotificationPreViewController.xib; path = XIBs/SettingsManageNotificationPreViewController.xib; sourceTree = "<group>"; };
 		31E3E7F2156060FA0022D354 /* MTStopHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTStopHelper.h; sourceTree = "<group>"; };
 		31E3E7F3156060FB0022D354 /* MTStopHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTStopHelper.m; sourceTree = "<group>"; };
+		31E3E7F51561BCAB0022D354 /* cell_stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cell_stop.png; sourceTree = "<group>"; };
+		31E3E7F61561BCAB0022D354 /* cell_stop@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell_stop@2x.png"; sourceTree = "<group>"; };
+		31E3E7F91561BEC10022D354 /* global_options_bar@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "global_options_bar@2x.jpg"; sourceTree = "<group>"; };
+		31E3E7FA1561BEC10022D354 /* global_options_bar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = global_options_bar.jpg; sourceTree = "<group>"; };
 		31EAED721522756200533AC6 /* TripViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripViewController.h; path = XIBs/TripViewController.h; sourceTree = "<group>"; };
 		31EAED731522756200533AC6 /* TripViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = TripViewController.m; path = XIBs/TripViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		31EAED741522756200533AC6 /* TripViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TripViewController.xib; path = XIBs/TripViewController.xib; sourceTree = "<group>"; };
@@ -830,6 +838,10 @@
 		319D781115371B5A00542ED3 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				31E3E7F91561BEC10022D354 /* global_options_bar@2x.jpg */,
+				31E3E7FA1561BEC10022D354 /* global_options_bar.jpg */,
+				31E3E7F51561BCAB0022D354 /* cell_stop.png */,
+				31E3E7F61561BCAB0022D354 /* cell_stop@2x.png */,
 				31E3E7B8155F08860022D354 /* card_category_bar.jpg */,
 				31E3E7B9155F08860022D354 /* card_category_bar@2x.jpg */,
 				31E3E7BA155F08860022D354 /* global_darkbackground_tile.jpg */,
@@ -1577,6 +1589,10 @@
 				31E3E7E7155F08860022D354 /* tripplanner_time_bg@2x.jpg in Resources */,
 				31E3E7EC155F3FB00022D354 /* StopsFavoriteViewControllerViewController.xib in Resources */,
 				31E3E7F115604F630022D354 /* SettingsManageNotificationPreViewController.xib in Resources */,
+				31E3E7F71561BCAB0022D354 /* cell_stop.png in Resources */,
+				31E3E7F81561BCAB0022D354 /* cell_stop@2x.png in Resources */,
+				31E3E7FB1561BEC10022D354 /* global_options_bar@2x.jpg in Resources */,
+				31E3E7FC1561BEC10022D354 /* global_options_bar.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1753,14 +1769,14 @@
 		31ADE8D2151FDFA30029C964 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vincent Mancini (HEKC75XJCK)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vincent Mancini";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "myTranspo/myTranspo-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE_BUILD=1";
 				INFOPLIST_FILE = "myTranspo/myTranspo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6940851A-C791-49F4-85B0-CA4DFFDB7020";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "35EB409C-CEC9-4287-BDFE-16F094358A9E";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

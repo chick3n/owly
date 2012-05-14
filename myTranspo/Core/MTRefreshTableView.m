@@ -238,7 +238,7 @@
     if(emptyTable == nil)
     {
         emptyTable = [[UILabel alloc] init];
-        emptyTable.textColor = [UIColor colorWithRed:89./255. green:89./255. blue:89./255. alpha:1.0];
+        emptyTable.textColor = [UIColor colorWithRed:154./255. green:154./255. blue:154./255. alpha:1.0];
         emptyTable.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:16.0];
         emptyTable.numberOfLines = 0;
         emptyTable.lineBreakMode = UILineBreakModeWordWrap;

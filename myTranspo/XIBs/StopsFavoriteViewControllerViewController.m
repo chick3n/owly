@@ -43,8 +43,18 @@
     CGRect toolBarFrame = _tabBar.frame;
     toolBarFrame.origin.y += toolBarFrame.size.height;
     _tabBar.frame = toolBarFrame; //hide
-    _selectAll.title = NSLocalizedString(@"SELECTALL", nil);
+    
+    MTRightButton* selectAll = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
+    [selectAll setTitle:NSLocalizedString(@"SELECTALL", nil) forState:UIControlStateNormal];
+    [selectAll addTarget:self action:@selector(selectAll:) forControlEvents:UIControlEventTouchUpInside];
+    _selectAll = [[UIBarButtonItem alloc] initWithCustomView:selectAll];
+    
     _selectNone.title = NSLocalizedString(@"SELECTNONE", nil);
+    
+    [_tabBar setBackgroundImage:[UIImage imageNamed:@"global_options_bar.jpg"]
+             forToolbarPosition:UIToolbarPositionBottom
+                     barMetrics:UIBarMetricsDefault];
+    [_tabBar setItems:[NSArray arrayWithObject:_selectAll]];
     
     _tableView.backgroundColor = [UIColor clearColor];
     _tableView.dataSource = self;

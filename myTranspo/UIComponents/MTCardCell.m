@@ -255,7 +255,7 @@
     }
     else {
         _busNumber.text = @"";
-        _busNumberBackground.image = [UIImage imageNamed:@"search_busstop_icon.png"];
+        _busNumberBackground.image = [UIImage imageNamed:@"cell_stop.png"];
         _busHeading.text = stopStreetName;
         _streetName.text = busDisplayHeading; //list of the upcoming buses
     }

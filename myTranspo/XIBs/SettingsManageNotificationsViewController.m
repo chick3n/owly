@@ -66,6 +66,10 @@
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_darkbackground_tile.jpg"]];
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)]];
     
+    [_toolBar setBackgroundImage:[UIImage imageNamed:@"global_options_bar.jpg"]
+             forToolbarPosition:UIToolbarPositionBottom
+                     barMetrics:UIBarMetricsDefault];
+    
     //toolbar
     _removeAllButton.title = NSLocalizedString(@"MTDEF_REMOVEALL", nil);
     _removeSelectedButton.title = NSLocalizedString(@"MTDEF_REMOVESELECTED", nil);
