@@ -82,6 +82,7 @@
     MTRightButton* removeSelected = [[MTRightButton alloc] initWithType:kRightButtonTypeSingle];
     [removeSelected setTitle:NSLocalizedString(@"MTDEF_REMOVESELECTED", nil) forState:UIControlStateNormal];
     [removeSelected addTarget:self action:@selector(removeSelectedNotificationsClicked:) forControlEvents:UIControlEventTouchUpInside];
+    removeFrame.size.width = 120;
     removeSelected.frame = removeFrame;
     _removeSelectedButton = [[UIBarButtonItem alloc] initWithCustomView:removeSelected];
     

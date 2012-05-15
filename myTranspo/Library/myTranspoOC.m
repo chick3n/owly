@@ -44,6 +44,8 @@ static myTranspoOC *gInstance = NULL;
     
         [self startGPSRefresh:nil];   
     }
+    else if(_gpsTimer == nil)
+        [self startGPSRefresh:nil];
 }
 
 
