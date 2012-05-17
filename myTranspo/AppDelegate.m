@@ -286,7 +286,7 @@
     
     [_transpo addWebDBPath:@"http://www.vicestudios.com/apps/owly/oc/"];
     [_transpo addAPI];
-    [_transpo addOfflineTimes];
+    //[_transpo addOfflineTimes];
 }
 
 - (void)preLoad
@@ -308,7 +308,7 @@
 	NSString *dbPath = [documentsDir stringByAppendingPathComponent:@"OCTranspo.sqlite"];
     BOOL canMigrateFavorites = NO;
     NSMutableArray* favorites = nil;
-    
+
     if(![manager fileExistsAtPath:dbPath] || [settings currentDatabaseNeedsUpdate])
     {
         MTLog(@"File Exists: %d OR settings need update: %d", [manager fileExistsAtPath:dbPath], [settings currentDatabaseNeedsUpdate]);
@@ -457,9 +457,10 @@
                 
                 [MTSettings networkNotificationStatus:YES];
 			}
-            
+#if 0
             if(_transpo)
                 [_transpo turnOffNetworkMethods];
+#endif
             
             break;
         }
@@ -468,8 +469,10 @@
 		case ReachableViaWiFi:
         {
             connectionRequired = NO; 
+#if 0
             if(_transpo)
                 [_transpo turnOnNetworkMethods];
+#endif
             break;
         }
     }
@@ -485,9 +488,10 @@
             
             [MTSettings networkNotificationStatus:YES];
         }
-            
+#if 0
         if(_transpo)
             [_transpo turnOffNetworkMethods];
+#endif
 	}
 	
 }

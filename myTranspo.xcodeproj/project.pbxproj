@@ -284,6 +284,7 @@
 		31E3E7F81561BCAB0022D354 /* cell_stop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7F61561BCAB0022D354 /* cell_stop@2x.png */; };
 		31E3E7FB1561BEC10022D354 /* global_options_bar@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7F91561BEC10022D354 /* global_options_bar@2x.jpg */; };
 		31E3E7FC1561BEC10022D354 /* global_options_bar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7FA1561BEC10022D354 /* global_options_bar.jpg */; };
+		31E3E7FE15646C630022D354 /* sqlite3queries.sql in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7FD15646C630022D354 /* sqlite3queries.sql */; };
 		31EAED751522756200533AC6 /* TripViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31EAED731522756200533AC6 /* TripViewController.m */; };
 		31EAED761522756200533AC6 /* TripViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31EAED741522756200533AC6 /* TripViewController.xib */; };
 		31EE5577153B27D400C83552 /* MTRightButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 31EE5576153B27D400C83552 /* MTRightButton.m */; };
@@ -671,6 +672,7 @@
 		31E3E7F61561BCAB0022D354 /* cell_stop@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell_stop@2x.png"; sourceTree = "<group>"; };
 		31E3E7F91561BEC10022D354 /* global_options_bar@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "global_options_bar@2x.jpg"; sourceTree = "<group>"; };
 		31E3E7FA1561BEC10022D354 /* global_options_bar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = global_options_bar.jpg; sourceTree = "<group>"; };
+		31E3E7FD15646C630022D354 /* sqlite3queries.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sqlite3queries.sql; sourceTree = "<group>"; };
 		31EAED721522756200533AC6 /* TripViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripViewController.h; path = XIBs/TripViewController.h; sourceTree = "<group>"; };
 		31EAED731522756200533AC6 /* TripViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = TripViewController.m; path = XIBs/TripViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		31EAED741522756200533AC6 /* TripViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TripViewController.xib; path = XIBs/TripViewController.xib; sourceTree = "<group>"; };
@@ -1151,6 +1153,7 @@
 		31ADE8C3151FDFA30029C964 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				31E3E7FD15646C630022D354 /* sqlite3queries.sql */,
 				313866D3154B788D000537F7 /* OCTranspo.sqlite */,
 				315CD6041548074100B6299D /* icon@2x.png */,
 				315CD6051548074100B6299D /* icon.png */,
@@ -1593,6 +1596,7 @@
 				31E3E7F81561BCAB0022D354 /* cell_stop@2x.png in Resources */,
 				31E3E7FB1561BEC10022D354 /* global_options_bar@2x.jpg in Resources */,
 				31E3E7FC1561BEC10022D354 /* global_options_bar.jpg in Resources */,
+				31E3E7FE15646C630022D354 /* sqlite3queries.sql in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

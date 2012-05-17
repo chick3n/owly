@@ -19,6 +19,7 @@
 - (void)singleCellTapOveride:(UIGestureRecognizer*)gestureRecognizer;
 - (void)doneUpdatingFavorites;
 - (void)updateNavigationController;
+- (void)reinstateQueue;
 @end
 
 @implementation MyBusesViewController
@@ -103,6 +104,8 @@
     [super viewWillAppear:animated];
     
     _transpo.delegate = self;
+    
+    [self reinstateQueue];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -110,6 +113,21 @@
     [super viewWillDisappear:animated];
     
     [self cancelQueues];
+}
+
+- (void)reinstateQueue
+{
+    if(_favorites == nil)
+        return;
+    
+    for(CardCellManager* cellManager in _favorites)
+    {
+        if(cellManager.stop != nil)
+        {
+            [cellManager.stop restoreQueuesForBuses];
+            [cellManager.stop setCancelQueue:NO];
+        }
+    }
 }
 
 - (void)cancelQueues

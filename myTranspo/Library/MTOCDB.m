@@ -96,16 +96,12 @@
     
     sqlite3_stmt* _cmpStmt;
     NSString *sqlStmt = [NSString stringWithFormat:
-                         @"select %@ \
-                         from %@ \
-                         inner join %@ \
-                         where %@ \
-                         order by %@",
-                         @"sr.trip_headsign, r.route_short_name, r.route_id, (SELECT COUNT(*) FROM favorites f WHERE f.route_id = sr.route_id AND f.stop_id = sr.stop_id) favorite"
-                         , @"stop_routes sr"
-                         , @"routes r on r.route_id = sr.route_id"
-                         , [NSString stringWithFormat:@"sr.stop_id = '%@'", stop.StopId]
-                         , @"r.route_short_name"];
+                         @"select sr.trip_headsign, sr.route_short_name, sr.route_id, (SELECT COUNT(*) FROM favorites f WHERE f.route_id = sr.route_short_name AND f.stop_id = sr.stop_id) favorite \
+                         from stop_routes sr \
+                         where sr.stop_id = '%@' \
+                         group by sr.route_short_name \
+                         order by sr.route_short_name;"
+                         , stop.StopId];
     
     if(sqlite3_prepare_v2(_db, [sqlStmt UTF8String], -1, &_cmpStmt, NULL) == SQLITE_OK)
     {
@@ -140,16 +136,12 @@
     NSMutableArray *routesAtStop = [[NSMutableArray alloc] init];
     sqlite3_stmt* _cmpStmt;
     NSString *sqlStmt = [NSString stringWithFormat:
-                         @"select %@ \
-                         from %@ \
-                         inner join %@ \
-                         where %@ \
-                         order by %@",
-                         @"r.route_short_name, sr.trip_headsign"
-                         , @"stop_routes sr"
-                         , @"routes r on r.route_id = sr.route_id"
-                         , [NSString stringWithFormat:@"sr.stop_id = '%@'", stop.StopId]
-                         , @"r.route_short_name"];
+                         @"select sr.route_short_name, sr.trip_headsign \
+                         from stop_routes sr \
+                         where sr.stop_id = '%@' \
+                         group by sr.route_short_name \
+                         order by sr.route_short_name"
+                         , stop.StopId];
     
     if(sqlite3_prepare_v2(_db, [sqlStmt UTF8String], -1, &_cmpStmt, NULL) == SQLITE_OK)
     {
@@ -216,16 +208,14 @@
     
     sqlite3_stmt* _cmpStmt;
     NSString *sqlStmt = [NSString stringWithFormat:
-                         @"select %@ \
-                         from %@ \
-                         inner join %@ \
-                         where %@ \
-                         order by %@",
-                         @"s.stop_name, s.stop_lat, s.stop_lon, s.stop_id, s.stop_code"
-                         , @"stop_routes sr"
-                         , @"stops s on s.stop_id = sr.stop_id"
-                         , [NSString stringWithFormat:@"sr.route_id = '%@' AND sr.trip_headsign = '%@'", bus.BusId, bus.DisplayHeading]
-                         , @"s.stop_id"];
+                         @"select s.stop_name, s.stop_lat, s.stop_lon, s.stop_id, s.stop_code \
+                         from stop_routes sr \
+                         inner join stops s on s.stop_id = sr.stop_id \
+                         where sr.route_short_name = '%@' AND sr.trip_headsign = '%@' \
+                         group by s.stop_code  \
+                         order by s.stop_id ASC"
+                         , bus.BusNumber
+                         , bus.DisplayHeading];
     
     if(sqlite3_prepare_v2(_db, [sqlStmt UTF8String], -1, &_cmpStmt, NULL) == SQLITE_OK)
     {
@@ -261,18 +251,14 @@
     
     sqlite3_stmt* _cmpStmt;
     NSString *sqlStmt = [NSString stringWithFormat:
-                         @"select %@ \
-                         from %@ \
-                         inner join %@ \
-                         where %@ \
-                         order by %@"
-                         , [NSString stringWithFormat:
-                            @"s.stop_name, s.stop_lat, s.stop_lon, s.stop_id, s.stop_code, distance(s.stop_lat, s.stop_lon, %f, %f) AS DIST"
-                            , latitude, longitude]
-                         , @"stop_routes sr"
-                         , @"stops s on s.stop_id = sr.stop_id"
-                         , [NSString stringWithFormat:@"sr.route_id = '%@' AND sr.trip_headsign = '%@'", bus.BusId, bus.DisplayHeading]
-                         , @"DIST asc"];
+                         @"select s.stop_name, s.stop_lat, s.stop_lon, s.stop_id, s.stop_code, distance(s.stop_lat, s.stop_lon, %f, %f) AS DIST \
+                         from stop_routes sr \
+                         inner join stops s on s.stop_id = sr.stop_id \
+                         where sr.route_short_name = '%@' AND sr.trip_headsign = '%@' \
+                         group by s.stop_code \
+                         order by DIST asc"
+                         , latitude, longitude
+                         , bus.BusNumber, bus.DisplayHeading];
     
     if(sqlite3_prepare_v2(_db, [sqlStmt UTF8String], -1, &_cmpStmt, NULL) == SQLITE_OK)
     {
@@ -450,7 +436,6 @@
     sqlStmt = [NSString stringWithFormat:
                @"select s.stop_id, s.stop_code, s.stop_name, s.stop_lat, s.stop_lon \
                from stops s \
-               INNER JOIN stop_routes sr ON sr.stop_id = s.stop_id \
                WHERE s.stop_name like '%%%@%%' \
                GROUP BY s.stop_name \
                ORDER BY s.stop_name ASC \
@@ -684,10 +669,10 @@
                          @"select sr.trip_headsign, r.route_short_name, r.route_id \
                          from stop_routes sr \
                          inner join routes r on r.route_id = sr.route_id \
-                         where sr.stop_id = '%@' and sr.route_id = '%@' \
+                         where sr.stop_id = '%@' and sr.route_short_name = '%@' \
                          limit 1"
                          , stop.StopId
-                         , bus.BusId];
+                         , bus.BusNumber];
     
     if(sqlite3_prepare_v2(_db, [sqlStmt UTF8String], -1, &_cmpStmt, NULL) == SQLITE_OK)
     {
@@ -834,17 +819,29 @@
     
     [bus.Times clearTimes];
     
-    NSDateFormatter* dateFormatter = [MTHelper MTDateFormatterDashesYYYYMMDD];
+    NSDateFormatter* dateFormatter = [MTHelper MTDateFormatterNoDashesYYYYMMDD];
     
-    NSString *sqlStmt = [NSString stringWithFormat: \
-                         @"select case ft.day_of_week when 'sunday' then 2 when 'saturday' then 1 else 0 end, ft.trip_id, ft.arrival_time, ft.stop_sequence, s.stop_id, s.stop_name, ft.route_id, ft.end_stop \
-                         from stored_times ft \
-                         inner join stops s on s.stop_id = ft.stop_id \
-                         where ft.stop_id = '%@'  AND ft.route_id = '%@' AND ft.next_update > '%@' \
-                         order by ft.day_of_week asc, ft.id asc"
-                         , stop.StopId
-                         , bus.BusId
-                         , [dateFormatter stringFromDate:date]];
+    NSString *sqlStmt = [NSString stringWithFormat:\
+                          @"select \
+                          case when c.sunday = '1' then 2 when c.saturday = '1' then 1 else 0 end dayOfWeek \
+                          , st.trip_id \
+                          , st.arrival_time \
+                          , st.stop_sequence \
+                          , st.stop_id \
+                          , (select IFNULL(s2.stop_name, '') from stop_times st2 inner join stops s2 on s2.stop_id = st2.stop_id WHERE st2.trip_id = st.trip_id ORDER BY st2.stop_sequence DESC LIMIT 1)  end_stop \
+                         from stop_times st \
+                         inner join trips t on t.trip_id = st.trip_id \
+                         inner join routes r on r.route_id = t.route_id \
+                         inner join calendar c on c.service_id = t.service_id \
+                          where '%@' BETWEEN c.start_date AND c.end_date \
+                          and (r.route_short_name = '%@') \
+                          and st.stop_id = '%@' \
+                          and '%@' NOT IN (SELECT cd.date FROM calendar_dates cd WHERE t.service_id = cd.service_id AND cd.exception_type = 2) \
+                          order by dayOfWeek asc, arrival_time ASC;"
+                          , [dateFormatter stringFromDate:date]
+                          , bus.BusNumber
+                          , stop.StopId
+                          , [dateFormatter stringFromDate:date]];
         
     if(sqlite3_prepare_v2(_db
                           , [sqlStmt UTF8String]
@@ -861,7 +858,7 @@
             time.StopId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 4)];
             time.StopSequence = sqlite3_column_int(cmpStmt, 3);
             time.IsLive = NO;
-            time.EndStopHeader = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 7)];
+            time.EndStopHeader = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 5)];
             
             switch (sqlite3_column_int(cmpStmt, 0)) {
                 case 0:
@@ -893,10 +890,152 @@
     return NO;
 }
 
+- (BOOL)getStopTimes:(MTStop*)stop
+{
+    if(stop == nil)
+        return NO;
+    
+    if(!_isConnected)
+        return NO;
+    
+    sqlite3_stmt* cmpStmt;
+    
+    //this is not a very good way to do this as we keep generating this after every update request!
+    NSMutableArray* filterList = [[NSMutableArray alloc] init];
+    NSMutableString* filterParameter = [[NSMutableString alloc] init];
+    NSString *routeList = @"";
+    for(MTStopHelper* helper in stop.upcomingBusesHelper)
+    {
+        if(helper.hideRoute == YES)
+            continue;
+        
+        [filterList addObject:helper.routeNumber];
+        [filterParameter appendFormat:@"'%@',", helper.routeNumber];
+    }
+    
+    if(filterList.count != stop.upcomingBusesHelper.count)
+    {
+        if(filterParameter.length > 0)
+        {
+            [filterParameter deleteCharactersInRange:NSMakeRange(filterParameter.length - 1, 1)];
+            routeList = [NSString stringWithFormat:@"and r.route_short_name IN (%@) ", filterParameter];
+        }
+    }
+    
+    NSString *dateFilter = @"";
+    switch ([MTHelper DayOfWeek]) {
+        case 1: //sunday
+            dateFilter = @"c.sunday = '1'";
+            break;
+        case 7:
+            dateFilter = @"c.saturday = '1'";
+            break;            
+        default:
+            dateFilter = @"(c.monday = '1' || c.tuesday = '1' || c.wednesday = '1' || c.thursday = '1' || c.friday = '1')";
+            break;
+    }
+    
+    [stop.upcomingBuses removeAllObjects];
+    
+    NSString *sqlStmt = [NSString stringWithFormat:\
+                         @"select \
+                         st.trip_id \
+                         , st.arrival_time \
+                         , st.stop_id \
+                         , st.stop_sequence \
+                         , r.route_short_name \
+                         , (select IFNULL(s2.stop_name, '') from stop_times st2 inner join stops s2 on s2.stop_id = st2.stop_id WHERE st2.trip_id = st.trip_id ORDER BY st2.stop_sequence DESC LIMIT 1) end_stop \
+                         from stop_times st \
+                         inner join trips t on t.trip_id = st.trip_id \
+                         inner join routes r on r.route_id = t.route_id \
+                         inner join calendar c on c.service_id = t.service_id \
+                         where strftime('%%Y%%m%%d') between c.start_date and c.end_date \
+                         %@ \
+                         and st.stop_id = '%@' \
+                         and %@ \
+                         and strftime('%%Y%%m%%d') NOT IN (SELECT cd.date FROM calendar_dates cd WHERE t.service_id = cd.service_id AND cd.exception_type = 2) \
+                         and st.arrival_time > strftime('%%H:%%M:%%S') \
+                         order by st.arrival_time ASC \
+                         LIMIT 40;"
+                         , routeList
+                         , stop.StopId
+                         , dateFilter];
+    
+    if(sqlite3_prepare_v2(_db
+                          , [sqlStmt UTF8String]
+                          , -1
+                          , &cmpStmt
+                          , NULL) == SQLITE_OK)
+    {
+        while(sqlite3_step(cmpStmt) == SQLITE_ROW)
+        {
+            MTTime *time = [[MTTime alloc] init];
+            
+            time.TripId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 0)];
+            time.Time = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 1)];
+            time.StopId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 2)];
+            time.StopSequence = sqlite3_column_int(cmpStmt, 3);
+            time.EndStopHeader = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 5)];
+            time.routeNumber = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 4)];
+            
+            time.IsLive = NO;
+            
+            [stop.upcomingBuses addObject:time];
+        }
+    }
+    
+    sqlite3_reset(cmpStmt);
+    
+    return YES;
+}
+
 - (BOOL)getTrips:(NSMutableArray*)trips 
          ForTrip:(NSString*)trip
 {
-    return NO;
+    if(!_isConnected)
+        return NO;
+    
+    sqlite3_stmt* cmpStmt;
+    
+    NSString *sqlStmt = [NSString stringWithFormat:\
+                         @"select st.trip_id, st.arrival_time, st.stop_id, st.stop_sequence, s.stop_code, s.stop_name, s.stop_lat, s.stop_lon \
+                         from stop_times st \
+                         inner join stops s on s.stop_id = st.stop_id \
+                         where st.trip_id = %@ \
+                         order by st.stop_sequence ASC;"
+                         , trip];
+    
+    if(sqlite3_prepare_v2(_db
+                          , [sqlStmt UTF8String]
+                          , -1
+                          , &cmpStmt
+                          , NULL) == SQLITE_OK)
+    {
+        while(sqlite3_step(cmpStmt) == SQLITE_ROW)
+        {
+            MTTrip *trip = [[MTTrip alloc] initWithLanguage:_language];
+            
+            trip.StopId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 2)];
+            trip.StopNumber = [[NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 4)] intValue];
+            trip.Longitude = [[NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 7)] doubleValue];
+            trip.Latitude = [[NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 6)] doubleValue];
+            trip.StopName = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 5)];
+            trip.Language = _language;
+            trip.TripId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 0)];
+            trip.StopSequence = [[NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 3)] intValue];
+            trip.Time.Time = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 1)];
+            trip.Time.TripId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 0)];
+            trip.Time.StopId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 2)];
+            trip.Time.StopSequence = [[NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 3)] intValue];
+            trip.Time.IsLive = NO;
+            
+            [trips addObject:trip];
+        }
+    }
+    
+    sqlite3_reset(cmpStmt);
+    
+    return YES;
 }
 
 - (BOOL)getNextTrips:(NSMutableArray*)_trips
@@ -924,16 +1063,11 @@
         return NO;
     
     NSString *sqlStmt = [NSString stringWithFormat: \
-                         @"select %@ \
-                         from %@ \
-                         inner join %@ \
-                         left join %@ \
-                         order by %@",
-                         @"s.stop_id, s.stop_code, s.stop_name, s.stop_lat, s.stop_lon, r.route_id, r.route_short_name, r.route_type, f.route_direction, f.route_tripheading, f.updated, f.display_sequence"
-                         , @"favorites f"
-                         , @"stops s on s.stop_id = f.stop_id"
-                         , @"routes r on r.route_id = f.route_id"
-                         , @"f.display_sequence ASC"];
+                         @"select s.stop_id, s.stop_code, s.stop_name, s.stop_lat, s.stop_lon, r.route_id, r.route_short_name, r.route_type, f.route_direction, f.route_tripheading, f.updated, f.display_sequence \
+                         from favorites f \
+                         inner join stops s on s.stop_id = f.stop_id \
+                         left join routes r on r.route_short_name = f.route_id \
+                         order by f.display_sequence ASC"];
     
     sqlite3_stmt* _cmpStmt;
     if(sqlite3_prepare_v2(_db
@@ -1034,7 +1168,7 @@
                          where %@",
                          @"f.*"
                          , @"favorites f"
-                         , [NSString stringWithFormat:@"f.route_id = '%@' AND f.stop_id = '%@'", ((favoriteStop) ? @"" : bus.BusId), stop.StopId]];
+                         , [NSString stringWithFormat:@"f.route_id = '%@' AND f.stop_id = '%@'", ((favoriteStop) ? @"" : bus.BusNumber), stop.StopId]];
     
     sqlite3_stmt* _cmpStmt;
     if(sqlite3_prepare_v2(_db
@@ -1072,7 +1206,7 @@
                          @"f.*"
                          , @"favorites f"
                          , [NSString stringWithFormat:@"f.route_id = '%@' AND f.stop_id = '%@'"
-                            , ((favoriteStop) ? @"" : bus.BusId)
+                            , ((favoriteStop) ? @"" : bus.BusNumber)
                             , stop.StopId]];
 
     sqlite3_stmt* _cmpStmt;
@@ -1095,7 +1229,7 @@
                    (`stop_id`, `route_id`, `route_direction`, `route_tripheading`, `display_sequence`) \
                    VALUES ('%@','%@',%d,\"%@\",%d);"
                    , stop.StopId
-                   , ((favoriteStop) ? @"" : bus.BusId)
+                   , ((favoriteStop) ? @"" : bus.BusNumber)
                    , ((favoriteStop) ? -1 : [bus getBusHeadingForFavorites])
                    , ((favoriteStop) ? @"" : bus.DisplayHeading)
                    , 99];
@@ -1148,7 +1282,7 @@
                          @"UPDATE favorites SET route_direction = %d WHERE stop_id = '%@' and route_id = '%@';"
                          , [bus getBusHeadingForFavorites]
                          , stop.StopId
-                         , bus.BusId];
+                         , bus.BusNumber];
     sqlite3_stmt* _cmpStmt;
     
     if(sqlite3_prepare_v2(_db
@@ -1192,7 +1326,7 @@
                          @"delete from favorites \
                          where stop_id = '%@' AND route_id = '%@';"
                          , stop.StopId
-                         , ((favoriteStop) ? @"" : bus.BusId)];
+                         , ((favoriteStop) ? @"" : bus.BusNumber)];
     
     sqlite3_stmt* _cmpStmt;
     if(sqlite3_prepare_v2(_db
@@ -1239,7 +1373,7 @@
     NSString * sqlStmt = [NSString stringWithFormat: \
                           @"delete from stored_times where stop_id = '%@' and route_id='%@';"
                           , stop.StopId
-                          , bus.BusId];
+                          , bus.BusNumber];
     
     sqlite3_stmt* _cmpStmt;
     if(sqlite3_prepare_v2(_db

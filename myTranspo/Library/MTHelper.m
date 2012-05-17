@@ -35,7 +35,7 @@
     if([MTSettings cityPreference] == MTCITYOTTAWA)
     {
         NSDateComponents *ocDates = [[NSDateComponents alloc] init];
-        ocDates.hour = -4;
+        ocDates.hour = -4; //todo: Should be set to 3:30 for OC end of day
         date = [[NSCalendar currentCalendar] dateByAddingComponents:ocDates toDate:date options:0];
     }
     
@@ -151,6 +151,15 @@
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
+    return dateFormatter;
+}
+
++ (NSDateFormatter*)MTDateFormatterNoDashesYYYYMMDD
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyyMMdd"];
     [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
     [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
     return dateFormatter;

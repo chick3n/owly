@@ -31,6 +31,7 @@
 
 //dates
 + (NSString*)PrettyDate:(NSDate*)date;
++ (NSDateFormatter*)MTDateFormatterNoDashesYYYYMMDD;
 
 //time
 + (NSString*)ShortTime:(NSString*)time;

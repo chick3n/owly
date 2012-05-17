@@ -854,7 +854,15 @@ static myTranspoOC *gInstance = NULL;
 
 - (BOOL)updateStopFavorite:(MTStop*)stop
 {
-    if(_hasWebDb)
+    BOOL status = NO;
+    
+    if(_hasDB)
+    {
+        MTLog(@"GETTING STOP TIMES LOCAL");
+        status = [_ocDb getStopTimes:stop];
+    }
+    
+    if(_hasWebDb && !status)
     {
         MTLog(@"GETTING STOP TIMES WEB");
         [_ocWebDb getStopTimes:stop];
@@ -869,12 +877,13 @@ static myTranspoOC *gInstance = NULL;
     BOOL status = NO;
     if(![MTHelper IsDateToday:stop.Bus.Times.TimesAddedOn])
     {
+#if 0
         if(_hasOfflineTimes)
         {
             MTLog(@"GETTING OFFLINE TIMES");
             status = [_ocOfflineTimes getOfflineStop:stop Route:stop.Bus Times:date Results:nil];
         }
-        
+#endif   
         //get stop information
         if(status == NO && _hasDB)
         {
@@ -885,8 +894,9 @@ static myTranspoOC *gInstance = NULL;
         if(status == NO && _hasWebDb) //couldnt get the full schedule locally try non locally
         {
             MTLog(@"GETTING TIMES WEB");
-            NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
-            status = [_ocWebDb getStop:stop Route:stop.Bus Times:date Results:results];
+            //NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
+            status = [_ocWebDb getStop:stop Route:stop.Bus Times:date Results:nil];
+#if 0 //No longer storing times
             if(status == YES && _hasDB && store == YES)
             {
                 [_ocDb addTimes:results ToLocalDatabaseForStop:stop AndBus:stop.Bus];
@@ -901,6 +911,7 @@ static myTranspoOC *gInstance = NULL;
                 }
             }
             results = nil;
+#endif
         }
     } 
     

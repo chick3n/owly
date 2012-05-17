@@ -59,6 +59,7 @@
           Times:(NSDate*)date
         Results:(NSDictionary*)results;
 - (BOOL)getRoutesForFavoriteStop:(MTStop*)stop;
+- (BOOL)getStopTimes:(MTStop*)stop;
 
 //favorites
 - (BOOL)getFavorites:(NSMutableArray*)favorites;

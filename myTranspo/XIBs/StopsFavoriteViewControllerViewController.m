@@ -172,7 +172,7 @@
         [cell setMyAccessoryView:time];
     }
     
-    if(_data.count == 0)
+    if(_data.count == 0 && !_filterMode)
     {
         cell.title = @"";
         cell.subtitle = NSLocalizedString(@"NOUPCOMINGBUSES", nil);
@@ -264,8 +264,15 @@
 {
     NSMutableArray *dataIndexPaths = [[NSMutableArray alloc] init];
     NSMutableArray *routesIndexPaths = [[NSMutableArray alloc] init];
-    for(int x=0; x<_data.count; x++)
-        [dataIndexPaths addObject:[NSIndexPath indexPathForRow:x inSection:0]];
+    if(_data.count == 0) //empty row
+    {
+        [dataIndexPaths addObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+    }
+    else {
+        for(int x=0; x<_data.count; x++)
+            [dataIndexPaths addObject:[NSIndexPath indexPathForRow:x inSection:0]];
+    }
+    
     for(int x=0; x<_stop.upcomingBusesHelper.count; x++)
         [routesIndexPaths addObject:[NSIndexPath indexPathForRow:x inSection:0]];
     
@@ -288,8 +295,13 @@
     NSMutableArray *routesIndexPaths = [[NSMutableArray alloc] init];
     for(int x=0; x<_stop.upcomingBusesHelper.count; x++)
         [routesIndexPaths addObject:[NSIndexPath indexPathForRow:x inSection:0]];
-    for(int x=0; x<_data.count; x++)
-        [dataIndexPaths addObject:[NSIndexPath indexPathForRow:x inSection:0]];
+    if(_data.count == 0)
+        [dataIndexPaths addObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+    else
+    {
+        for(int x=0; x<_data.count; x++)
+            [dataIndexPaths addObject:[NSIndexPath indexPathForRow:x inSection:0]];
+    }
     
     [_tableView disableRefresh:NO];
     
