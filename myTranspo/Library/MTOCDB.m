@@ -878,6 +878,8 @@
     
     NSDateFormatter* dateFormatter = [MTHelper MTDateFormatterNoDashesYYYYMMDD];
     
+    //, (select IFNULL(s2.stop_name, '') from stop_times st2 inner join stops s2 on s2.stop_id = st2.stop_id WHERE st2.trip_id = st.trip_id ORDER BY st2.stop_sequence DESC LIMIT 1)  end_stop \
+    
     NSString *sqlStmt = [NSString stringWithFormat:\
                           @"select \
                           case when c.sunday = '1' then 2 when c.saturday = '1' then 1 else 0 end dayOfWeek \
@@ -885,20 +887,20 @@
                           , st.arrival_time \
                           , st.stop_sequence \
                           , st.stop_id \
-                          , (select IFNULL(s2.stop_name, '') from stop_times st2 inner join stops s2 on s2.stop_id = st2.stop_id WHERE st2.trip_id = st.trip_id ORDER BY st2.stop_sequence DESC LIMIT 1)  end_stop \
+                         , (select IFNULL(s2.stop_name, '') from stop_times st2 inner join stops s2 on s2.stop_id = st2.stop_id WHERE st2.trip_id = st.trip_id ORDER BY st2.stop_sequence DESC LIMIT 1)  end_stop \
                          from stop_times st \
                          inner join trips t on t.trip_id = st.trip_id \
                          inner join routes r on r.route_id = t.route_id \
                          inner join calendar c on c.service_id = t.service_id \
+                         left join calendar_dates cd on cd.service_id = c.service_id \
                           where '%@' BETWEEN c.start_date AND c.end_date \
                           and (r.route_short_name = '%@') \
                           and st.stop_id = '%@' \
-                          and '%@' NOT IN (SELECT cd.date FROM calendar_dates cd WHERE t.service_id = cd.service_id AND cd.exception_type = 2) \
-                          order by dayOfWeek asc, arrival_time ASC;"
+                          and (cd.exception_type IS NULL OR cd.exception_type <> 2) \
+                          order by dayOfWeek asc, st.arrival_time ASC;"
                           , [dateFormatter stringFromDate:date]
                           , bus.BusNumber
-                          , stop.StopId
-                          , [dateFormatter stringFromDate:date]];
+                          , stop.StopId];
 
     if(sqlite3_prepare_v2(_db
                           , [sqlStmt UTF8String]
