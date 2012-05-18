@@ -23,6 +23,7 @@
 - (void)dateHasChanged:(id)sender;
 - (void)hideSearchBar:(id)sender;
 - (void)showSearchBar:(id)sender;
+- (void)scrollingRefreshTick:(id)sender;
 @end
 
 @implementation StopsViewController
@@ -216,12 +217,33 @@
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
+    if(_searchRefresh != nil)
+    {
+        [_searchRefresh invalidate];
+        _searchRefresh = nil;
+    }
+    
+    if(searchString.length <= 0)
+    {
+        if(_searchRefresh != nil)
+        {
+            [_searchRefresh invalidate];
+            _searchRefresh = nil;
+        }
+        
+        [_searchBar stopAnimating];
+        return NO;
+    }
+    
+    _searchRefresh = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(refreshStopSearch:) userInfo:nil repeats:NO];
+    
+#if 0
     if(!_isSearchInProgress) //set timer to call on it 1 second after
     {
         [_transpo getStopsForQuery:searchString AtPage:0];
         _isSearchInProgress = YES;
         
-        if(_searchRefresh != nil && [_searchRefresh isValid])
+        if(_searchRefresh != nil)
         {
             [_searchRefresh invalidate];
             _searchRefresh = nil;
@@ -229,7 +251,7 @@
     }
     else
     {
-        if(_searchRefresh != nil && [_searchRefresh isValid])
+        if(_searchRefresh != nil)
         {
             [_searchRefresh invalidate];
             _searchRefresh = nil;
@@ -237,6 +259,7 @@
         
         _searchRefresh = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(refreshStopSearch:) userInfo:nil repeats:NO];
     }
+#endif
     
     //[_searchBar sizeToFit];
     [_searchBar startAnimating];
@@ -585,7 +608,6 @@
         stopAnnotation.stopCode = [NSString stringWithFormat:@"%d", stop.StopNumber];
         stopAnnotation.stopStreetName = stop.StopNameDisplay;
         stopAnnotation.stop = stop;
-        stopAnnotation.stopRoutes = stop.BusIds;
         
         [_mapView addAnnotation:stopAnnotation];
     }
@@ -607,6 +629,18 @@
     
 }
 
+- (void)customCalloutClicked:(id)sender
+{
+    CustomCallout* view = (CustomCallout*)sender;
+    
+    if([view.annotation isKindOfClass:[MTStopAnnotation class]])
+    {
+        MTStop* stop = [(MTStopAnnotation*)view.annotation stop];
+        if(stop.BusIds.count == 0)
+            [_transpo getSynchRoutesForStop:stop];
+    }
+}
+
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation 
 {
     if ([annotation isKindOfClass:[MTStopAnnotation class]]) 
@@ -616,6 +650,7 @@
 
 		if (annotationView == nil) {
             annotationView = [[CustomCallout alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView.delegate = self;
         } else {
             annotationView.annotation = annotation;
         }
@@ -758,7 +793,15 @@
 {
     //MKCoordinateSpan span = mapView.region.span;
     if(_searchBar.text.length <= 0)
-        [_transpo getMoreStopsNearBy:mapView.centerCoordinate.latitude Lon:mapView.centerCoordinate.longitude Distance:0];
+    {
+        if(_scrollingRefresh != nil)
+        {
+            [_scrollingRefresh invalidate];
+            _scrollingRefresh = nil;
+        }
+        
+        _searchRefresh = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(scrollingRefreshTick:) userInfo:nil repeats:NO];
+    }
 }
 
 - (void)moveMapBackToLocation:(id)sender
@@ -769,6 +812,11 @@
     mapRegion.span.longitudeDelta = MTDEF_SPANLONGITUDEDELTA;
     [_mapView setRegion:mapRegion animated:YES];
     _mapAutomaticAnimation = YES;
+}
+
+- (void)scrollingRefreshTick:(id)sender
+{
+    [_transpo getMoreStopsNearBy:_mapView.centerCoordinate.latitude Lon:_mapView.centerCoordinate.longitude Distance:0];
 }
 
 - (IBAction)findMe:(id)sender

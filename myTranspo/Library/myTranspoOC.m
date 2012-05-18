@@ -443,13 +443,15 @@ static myTranspoOC *gInstance = NULL;
         }
         if(!status && _hasWebDb) //couldnt get the full schedule locally try non locally
         {
-            NSDictionary *results = [[NSMutableDictionary alloc] init];
-            status = [_ocWebDb getStop:stop Route:bus Times:[NSDate date] Results:results];
+            //NSDictionary *results = [[NSMutableDictionary alloc] init];
+            status = [_ocWebDb getStop:stop Route:bus Times:[NSDate date] Results:nil];
+#if 0
             if(status && _hasDB)
             {
                 [_ocDb addTimes:results ToLocalDatabaseForStop:stop AndBus:bus];
             }
-            results = nil;
+#endif
+            //results = nil;
         }
         
         stop.IsUpdating = NO;
@@ -477,11 +479,12 @@ static myTranspoOC *gInstance = NULL;
 - (BOOL)getNewScheduleForStop:(MTStop *)stop WithRoute:(MTBus *)bus ForDate:(NSDate*)date StoreTimes:(BOOL)store
 {
     dispatch_async(_queue, ^{
-        NSMutableDictionary* results = [[NSMutableDictionary alloc] init];
+        //NSMutableDictionary* results = [[NSMutableDictionary alloc] init];
         BOOL status = NO;
         
         if(_hasDB) //check if full time schedule exists, if so grab it from here
         {
+            MTLog(@"getNewScheduleForStop: GETTING TIMES LOCAL");
             bus.IsUpdating = YES;
             status = [_ocDb getStop:stop Route:bus Times:date Results:nil];
             bus.IsUpdating = NO;
@@ -490,17 +493,19 @@ static myTranspoOC *gInstance = NULL;
         {
             if(_hasWebDb)
             {
+                MTLog(@"getNewScheduleForStop: GETTING TIMES WEB");
                 bus.IsUpdating = YES;
-                status = [_ocWebDb getStop:stop Route:bus Times:date Results:results];
+                status = [_ocWebDb getStop:stop Route:bus Times:date Results:nil];
                 bus.IsUpdating = NO;
-                
+#if 0
                 if(status && _hasDB && store == YES)
                 {
                     [_ocDb addTimes:results ToLocalDatabaseForStop:stop AndBus:bus];
                 }
+#endif
             }
         }
-        results = nil;
+        //results = nil;
         
         dispatch_async(MTLDEF_MAINQUEUE, ^(void){
             if(!stop.cancelQueue && !bus.cancelQueue && [_delegate respondsToSelector:@selector(myTranspo:newScheduleForStop:AndRoute:)])
@@ -638,6 +643,16 @@ static myTranspoOC *gInstance = NULL;
     return NO;
 }
 
+- (BOOL)getSynchRoutesForStop:(MTStop*)stop
+{
+    if(_hasDB)
+    {
+        return [_ocDb getRoutesForStop:stop];
+    }
+    
+    return NO;
+}
+
 
 - (BOOL)getALLStopsNearBy:(double)lat
                       Lon:(double)lon 
@@ -708,21 +723,27 @@ static myTranspoOC *gInstance = NULL;
 
 - (BOOL)getTripDetailsFor:(NSString*)trip
 {
-    if(_hasWebDb && _isConnected && trip != nil)
-    {
-        dispatch_async(_queue, ^{
-            NSMutableArray* trips = [[NSMutableArray alloc] init];
-            BOOL status = [_ocWebDb getTrips:trips ForTrip:trip];
-            dispatch_async(MTLDEF_MAINQUEUE, ^(void){
-                if([_delegate respondsToSelector:@selector(myTranspo:State:finishedGettingTrips:)])
-                    [_delegate myTranspo:self State:[MTHelper QuickResultState:status] finishedGettingTrips:trips];
-            });
-        });
+
+    dispatch_async(_queue, ^{
+        BOOL status = NO;
+        NSMutableArray* trips = [[NSMutableArray alloc] init];
         
-        return YES;
-    }
+        if(_hasDB)
+        {
+            status = [_ocDb getTrips:trips ForTrip:trip];
+        }
+        if(status == NO && _hasWebDb)
+        {
+            status = [_ocWebDb getTrips:trips ForTrip:trip];
+        }
+        
+        dispatch_async(MTLDEF_MAINQUEUE, ^(void){
+            if([_delegate respondsToSelector:@selector(myTranspo:State:finishedGettingTrips:)])
+                [_delegate myTranspo:self State:[MTHelper QuickResultState:status] finishedGettingTrips:trips];
+        });
+    });
     
-    return NO;
+    return (_hasWebDb || _hasDB) ? YES : NO;
 }
 
 #pragma mark - FAVORITES
@@ -980,8 +1001,9 @@ static myTranspoOC *gInstance = NULL;
                 });
                 
                 stop.IsUpdating = YES;
-                NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
-                status = [_ocWebDb getStop:stop Route:stop.Bus Times:date Results:results];
+                //NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
+                status = [_ocWebDb getStop:stop Route:stop.Bus Times:date Results:nil];
+#if 0
                 if(status == YES && _hasDB && store == YES)
                 {
                     [_ocDb addTimes:results ToLocalDatabaseForStop:stop AndBus:stop.Bus];
@@ -995,7 +1017,8 @@ static myTranspoOC *gInstance = NULL;
                         }
                     }
                 }
-                results = nil;
+#endif
+                //results = nil;
                 stop.IsUpdating = NO;
             }
             
@@ -1086,7 +1109,7 @@ static myTranspoOC *gInstance = NULL;
             BOOL status = [_ocDb removeFavoriteForStop:stop AndBus:bus];
             if(status)
             {
-                [_ocDb addTimes:[NSDictionary dictionary] ToLocalDatabaseForStop:stop AndBus:bus]; //will remove times and not add any
+                //[_ocDb addTimes:[NSDictionary dictionary] ToLocalDatabaseForStop:stop AndBus:bus]; //will remove times and not add any
                 [self removeUpdateNotificationForStop:stop AndRoute:bus];
                 [self removeTripNotificationsForStop:stop AndRoute:bus];
             }

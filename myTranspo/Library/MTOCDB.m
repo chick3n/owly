@@ -96,13 +96,11 @@
     
     sqlite3_stmt* _cmpStmt;
     NSString *sqlStmt = [NSString stringWithFormat:
-                         @"select sr.trip_headsign, sr.route_short_name, sr.route_id, (SELECT COUNT(*) FROM favorites f WHERE f.route_id = sr.route_short_name AND f.stop_id = sr.stop_id) favorite \
+                         @"select sr.trip_headsign, sr.route_short_name, (SELECT COUNT(*) FROM favorites f WHERE f.route_id = sr.route_short_name AND f.stop_id = sr.stop_id) favorite \
                          from stop_routes sr \
-                         where sr.stop_id = '%@' \
-                         group by sr.route_short_name \
-                         order by sr.route_short_name;"
+                         where sr.stop_id = '%@' group by sr.route_short_name;"
                          , stop.StopId];
-    
+
     if(sqlite3_prepare_v2(_db, [sqlStmt UTF8String], -1, &_cmpStmt, NULL) == SQLITE_OK)
     {
         while(sqlite3_step(_cmpStmt) == SQLITE_ROW)
@@ -119,6 +117,9 @@
             
             [stop.BusIds addObject:bus];
         }
+    }
+    else {
+        MTLog(@"%s", sqlite3_errmsg(_db));
     }
     
     sqlite3_reset(_cmpStmt);
@@ -346,16 +347,18 @@
         return NO;
     
     //Get Buses 
+    static double ticksToNanoseconds = 0.0;
+    uint64_t startTime = mach_absolute_time();
     
     NSMutableArray* buses = [[NSMutableArray alloc] init];
     
     sqlite3_stmt* _cmpStmt;
     NSString *sqlStmt = [NSString stringWithFormat:
-                         @"select tr.route_id, r.route_short_name, tr.trip_headsign \
-                         from trip_routes tr \
-                         INNER JOIN routes r on r.route_id = tr.route_id \
-                         WHERE r.route_short_name like '%@%%' \
-                         ORDER BY r.route_id ASC \
+                         @"select r.route_id, r.route_short_name, t.trip_headsign \
+                         from trips t \
+                         inner join routes r on r.route_id = t.route_id \
+                         where r.route_short_name like '%@%%' \
+                         group by r.route_short_name, t.trip_headsign \
                          LIMIT %d, %d"
                          , identifier
                          , (page - 1) * _stopsLimit
@@ -385,7 +388,20 @@
     }
     
     [stops addObject:buses];
+    
+    uint64_t endTime = mach_absolute_time();
+    uint64_t elapsedTime = endTime - startTime;
+    if(0.0 == ticksToNanoseconds)
+    {
+        mach_timebase_info_data_t timebase;
+        mach_timebase_info(&timebase);
+        ticksToNanoseconds = (double)timebase.numer / timebase.denom;
+    }
+    
+    NSLog(@"First Search: %f", elapsedTime * ticksToNanoseconds);
 
+    startTime = mach_absolute_time();
+    
     //get bus stops from query
     NSMutableArray* busStops = [[NSMutableArray alloc] init];
     
@@ -428,6 +444,19 @@
     
     [stops addObject:busStops];
     
+     endTime = mach_absolute_time();
+    elapsedTime = endTime - startTime;
+    if(0.0 == ticksToNanoseconds)
+    {
+        mach_timebase_info_data_t timebase;
+        mach_timebase_info(&timebase);
+        ticksToNanoseconds = (double)timebase.numer / timebase.denom;
+    }
+    
+    NSLog(@"Second Search: %f", elapsedTime * ticksToNanoseconds);
+    
+    startTime = mach_absolute_time();
+    
     //get bus stops from query
     NSMutableArray* streetNames = [[NSMutableArray alloc] init];
     
@@ -465,9 +494,21 @@
         
         sqlite3_reset(_cmpStmt);
         
+        
         //get all buses for stops
         //[self getAllBusesForStops:streetNames];
     }
+    
+     endTime = mach_absolute_time();
+     elapsedTime = endTime - startTime;
+    if(0.0 == ticksToNanoseconds)
+    {
+        mach_timebase_info_data_t timebase;
+        mach_timebase_info(&timebase);
+        ticksToNanoseconds = (double)timebase.numer / timebase.denom;
+    }
+    
+    NSLog(@"Final Search: %f", elapsedTime * ticksToNanoseconds);
     
     [stops addObject:streetNames];
     
@@ -557,6 +598,9 @@
     if(!_isConnected)
         return NO;
     
+    static double ticksToNanoseconds = 0.0;
+    uint64_t startTime = mach_absolute_time();
+    
     sqlite3_create_function(_db, "distance", 4, SQLITE_UTF8, NULL, &distanceFunc, NULL, NULL);
     
     NSString * sqlStmt = [NSString stringWithFormat:
@@ -585,7 +629,19 @@
     
     sqlite3_reset(_cmpStmt);
     
-    [self getAllBusesForStops:stops];
+    
+    uint64_t endTime = mach_absolute_time();
+    uint64_t elapsedTime = endTime - startTime;
+    if(0.0 == ticksToNanoseconds)
+    {
+        mach_timebase_info_data_t timebase;
+        mach_timebase_info(&timebase);
+        ticksToNanoseconds = (double)timebase.numer / timebase.denom;
+    }
+    
+    NSLog(@"AllStopsNear: %f", ticksToNanoseconds * elapsedTime);
+    
+    //[self getAllBusesForStops:stops];
     
     return (stops.count > 0) ? YES : NO;
 }
@@ -650,6 +706,7 @@
     {
         if(stop.cancelQueue)
             return NO;
+
         [self getRoutesForStop:stop];
     }
     
@@ -790,7 +847,7 @@
             ticksToNanoseconds = (double)timebase.numer / timebase.denom;
         }
         
-        NSLog(@"Time Elapsed: %f", elapsedTime * ticksToNanoseconds);
+        NSLog(@"Local Time Elapsed: %f", elapsedTime * ticksToNanoseconds);
         
         if(foundTime)
         {
@@ -842,7 +899,7 @@
                           , bus.BusNumber
                           , stop.StopId
                           , [dateFormatter stringFromDate:date]];
-        
+
     if(sqlite3_prepare_v2(_db
                           , [sqlStmt UTF8String]
                           , -1
@@ -931,7 +988,7 @@
             dateFilter = @"c.saturday = '1'";
             break;            
         default:
-            dateFilter = @"(c.monday = '1' || c.tuesday = '1' || c.wednesday = '1' || c.thursday = '1' || c.friday = '1')";
+            dateFilter = @"(c.monday = '1' OR c.tuesday = '1' OR c.wednesday = '1' OR c.thursday = '1' OR c.friday = '1')";
             break;
     }
     
@@ -949,18 +1006,18 @@
                          inner join trips t on t.trip_id = st.trip_id \
                          inner join routes r on r.route_id = t.route_id \
                          inner join calendar c on c.service_id = t.service_id \
-                         where strftime('%%Y%%m%%d') between c.start_date and c.end_date \
+                         where strftime('%%Y%%m%%d', 'now', 'localtime') between c.start_date and c.end_date \
                          %@ \
                          and st.stop_id = '%@' \
                          and %@ \
-                         and strftime('%%Y%%m%%d') NOT IN (SELECT cd.date FROM calendar_dates cd WHERE t.service_id = cd.service_id AND cd.exception_type = 2) \
-                         and st.arrival_time > strftime('%%H:%%M:%%S') \
+                         and strftime('%%Y%%m%%d', 'now', 'localtime') NOT IN (SELECT cd.date FROM calendar_dates cd WHERE t.service_id = cd.service_id AND cd.exception_type = 2) \
+                         and st.arrival_time > strftime('%%H:%%M:%%S', 'now', 'localtime') \
                          order by st.arrival_time ASC \
                          LIMIT 40;"
                          , routeList
                          , stop.StopId
                          , dateFilter];
-    
+
     if(sqlite3_prepare_v2(_db
                           , [sqlStmt UTF8String]
                           , -1
@@ -982,6 +1039,8 @@
             
             [stop.upcomingBuses addObject:time];
         }
+    } else {
+        MTLog(@"ocDb_getStopTimes: %s", sqlite3_errmsg(_db));
     }
     
     sqlite3_reset(cmpStmt);

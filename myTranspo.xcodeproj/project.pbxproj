@@ -21,7 +21,6 @@
 		3122C281153FC0E600019410 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 3122C27F153FC0E600019410 /* Default.png */; };
 		3122C282153FC0E600019410 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3122C280153FC0E600019410 /* Default@2x.png */; };
 		3132AFF3154DF68B00B588A4 /* TripDetailsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3132AFF2154DF68B00B588A4 /* TripDetailsCell.m */; };
-		313866D4154B7BE6000537F7 /* OCTranspo.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 313866D3154B788D000537F7 /* OCTranspo.sqlite */; };
 		313866D7154B7F7B000537F7 /* MTCellButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 313866D6154B7F7B000537F7 /* MTCellButton.m */; };
 		313866DA154C8194000537F7 /* MTCellAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 313866D9154C8193000537F7 /* MTCellAlert.m */; };
 		313866DD154CBCE3000537F7 /* MTCardTimes.m in Sources */ = {isa = PBXBuildFile; fileRef = 313866DC154CBCE3000537F7 /* MTCardTimes.m */; };
@@ -339,7 +338,6 @@
 		3122C280153FC0E600019410 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "UIComponents/Assets/Default@2x.png"; sourceTree = "<group>"; };
 		3132AFF1154DF68B00B588A4 /* TripDetailsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripDetailsCell.h; path = Core/TripDetials/TripDetailsCell.h; sourceTree = "<group>"; };
 		3132AFF2154DF68B00B588A4 /* TripDetailsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TripDetailsCell.m; path = Core/TripDetials/TripDetailsCell.m; sourceTree = "<group>"; };
-		313866D3154B788D000537F7 /* OCTranspo.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = OCTranspo.sqlite; sourceTree = "<group>"; };
 		313866D5154B7F7B000537F7 /* MTCellButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCellButton.h; sourceTree = "<group>"; };
 		313866D6154B7F7B000537F7 /* MTCellButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCellButton.m; sourceTree = "<group>"; };
 		313866D8154C8193000537F7 /* MTCellAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCellAlert.h; sourceTree = "<group>"; };
@@ -391,6 +389,7 @@
 		317369F9154DE8990077011E /* TripTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TripTextField.m; path = Core/TripDetials/TripTextField.m; sourceTree = "<group>"; };
 		317B44DE155DFB740048406E /* card_background_test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = card_background_test.png; sourceTree = "<group>"; };
 		317B44DF155DFB750048406E /* card_background_test@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "card_background_test@2x.png"; sourceTree = "<group>"; };
+		317DDA291565D2CA003B11C9 /* OCTranspo.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = OCTranspo.sqlite; sourceTree = "<group>"; };
 		317E3DFE1559EE48000A3B16 /* OfflineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OfflineManager.h; path = Core/Offline/OfflineManager.h; sourceTree = "<group>"; };
 		317E3DFF1559EE48000A3B16 /* OfflineManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OfflineManager.m; path = Core/Offline/OfflineManager.m; sourceTree = "<group>"; };
 		318095CF1543006500B71188 /* TripDetailsDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripDetailsDisplay.h; path = Core/TripDetials/TripDetailsDisplay.h; sourceTree = "<group>"; };
@@ -1153,8 +1152,8 @@
 		31ADE8C3151FDFA30029C964 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				317DDA291565D2CA003B11C9 /* OCTranspo.sqlite */,
 				31E3E7FD15646C630022D354 /* sqlite3queries.sql */,
-				313866D3154B788D000537F7 /* OCTranspo.sqlite */,
 				315CD6041548074100B6299D /* icon@2x.png */,
 				315CD6051548074100B6299D /* icon.png */,
 				3122C27F153FC0E600019410 /* Default.png */,
@@ -1516,7 +1515,6 @@
 				31B138C015447783002DEB70 /* settings_singlecell.png in Resources */,
 				315CD6061548074100B6299D /* icon@2x.png in Resources */,
 				315CD6071548074100B6299D /* icon.png in Resources */,
-				313866D4154B7BE6000537F7 /* OCTranspo.sqlite in Resources */,
 				3144839C154F7744008CCE37 /* tripplanner_walking_icon.png in Resources */,
 				3144839D154F7744008CCE37 /* tripplanner_route_icon.png in Resources */,
 				3144839E154F7744008CCE37 /* tripplanner_time_icon.png in Resources */,

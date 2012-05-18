@@ -143,6 +143,7 @@
 - (BOOL)getRoutesForStop:(MTStop*)stop;
 - (BOOL)getALLStopsNearBy:(double)lat Lon:(double)lon Distance:(double)kms;
 - (BOOL)getMoreStopsNearBy:(double)lat Lon:(double)lon Distance:(double)kms;
+- (BOOL)getSynchRoutesForStop:(MTStop*)stop;
 
 //searching
 - (BOOL)getStopsForQuery:(NSString *)identifier AtPage:(NSInteger)page;

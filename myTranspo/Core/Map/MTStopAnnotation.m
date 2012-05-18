@@ -33,7 +33,7 @@
 {
     NSMutableString *routes = [[NSMutableString alloc] init];
     
-    for(MTBus* bus in _stopRoutes)
+    for(MTBus* bus in _stop.BusIds)
     {
         [routes appendFormat:@"%@    ", bus.BusNumber];
     }

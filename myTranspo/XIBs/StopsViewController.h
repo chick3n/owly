@@ -21,11 +21,12 @@
 #import "MTRightButton.h"
 //#import "MTOptionsDate.h"
 
-@interface StopsViewController : MTBaseViewController <MyTranspoDelegate, MTQueueSafe, MyTranspoDelegate, MKMapViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDataSource, UITableViewDelegate, MTCardManagerDelegate>//, MTOptionsDateProtocol>
+@interface StopsViewController : MTBaseViewController <MyTranspoDelegate, MTQueueSafe, MKMapViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDataSource, UITableViewDelegate, MTCardManagerDelegate, CustomCalloutDelegate>//, MTOptionsDateProtocol>
 {
     NSArray*                                _searchResults;
     BOOL                                    _isSearchInProgress;
     NSTimer*                                _searchRefresh;
+    NSTimer*                                _scrollingRefresh;
     BOOL                                    _mapAutomaticAnimation;
     CLLocationCoordinate2D                  _mapLastSearchedCoordinate;
     NSDate*                                 _chosenDate;

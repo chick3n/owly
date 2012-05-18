@@ -537,7 +537,7 @@
         ticksToNanoseconds = (double)timebase.numer / timebase.denom;
     }
     
-    NSLog(@"Time Elapsed: %f", elapsedTime * ticksToNanoseconds);
+    NSLog(@"Web Time Elapsed: %f", elapsedTime * ticksToNanoseconds);
     
     return YES;
 }

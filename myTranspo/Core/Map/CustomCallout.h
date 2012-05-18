@@ -10,6 +10,12 @@
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
+@protocol CustomCalloutDelegate <NSObject>
+
+- (void)customCalloutClicked:(id)sender;
+
+@end
+
 @interface CustomCallout : MKAnnotationView
 {
     UIView*         _customView;
@@ -17,4 +23,7 @@
     UILabel*        _subtitle;
     UIButton*       _callBack;
 }
+
+@property (nonatomic, weak) id<CustomCalloutDelegate>delegate;
+
 @end

@@ -177,6 +177,7 @@
         cell.title = @"";
         cell.subtitle = NSLocalizedString(@"NOUPCOMINGBUSES", nil);
         cell.type = CELLBUS;
+        cell.accessoryType = UITableViewCellAccessoryNone;
         
         [cell hideBusImage:YES];
         [cell setDisplayAccessoryView:NO];
@@ -216,6 +217,7 @@
     cell.title = route.routeNumber;
     cell.subtitle = route.EndStopHeader;
     cell.type = CELLBUS;
+    cell.accessoryType = UITableViewCellAccessoryNone;
     if(cell.accessoryView != cell.myAccessoryView)
         cell.accessoryView = cell.myAccessoryView;
     

@@ -41,11 +41,11 @@
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>Database Version</key>
-	<real>1</real>
+	<real>1.03</real>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>Settings Version</key>
-	<real>0.4</real>
+	<real>0.5</real>
 	<key>UIPrerenderedIcon</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>

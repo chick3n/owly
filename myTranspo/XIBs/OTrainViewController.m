@@ -65,7 +65,7 @@
     _stop.Longitude = -75.721931;
     MTBus* bus = [[MTBus alloc] initWithLanguage:_language];
     bus.BusId = @"750-125";
-    bus.BusNumber = @"750";
+    bus.BusNumber = @"OTrn";
     bus.DisplayHeading = @"Bayview";
     [_stop.BusIds addObject:bus];
     
@@ -77,7 +77,7 @@
     _stop2.Longitude = -75.659401;
     MTBus* bus2 = [[MTBus alloc] initWithLanguage:_language];
     bus2.BusId = @"750-125";
-    bus2.BusNumber = @"750";
+    bus2.BusNumber = @"OTrn";
     bus2.DisplayHeading = @"Greenboro";
     [_stop2.BusIds addObject:bus2];
 

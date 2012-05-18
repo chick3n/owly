@@ -13,6 +13,7 @@
 @end
 
 @implementation CustomCallout
+@synthesize delegate;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -67,6 +68,14 @@
     
 }
 #endif
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:animated];
+    
+    if(self.delegate)
+        [self.delegate customCalloutClicked:self];
+}
 
 - (void)layoutSubviews
 {
