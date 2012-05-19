@@ -223,7 +223,7 @@
 		31B9E8471569809400FD24D5 /* Ppmd8Dec.c in Sources */ = {isa = PBXBuildFile; fileRef = 31B9E8301569809400FD24D5 /* Ppmd8Dec.c */; };
 		31B9E8481569809400FD24D5 /* 7zAlloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 31B9E8351569809400FD24D5 /* 7zAlloc.c */; };
 		31B9E8491569809400FD24D5 /* 7zMain.c in Sources */ = {isa = PBXBuildFile; fileRef = 31B9E8371569809400FD24D5 /* 7zMain.c */; };
-		31B9E856156AF80A00FD24D5 /* OCTranspo.7z in Resources */ = {isa = PBXBuildFile; fileRef = 31B9E855156AF80A00FD24D5 /* OCTranspo.7z */; };
+		31B9E858156BB24900FD24D5 /* OCTranspo.7z in Resources */ = {isa = PBXBuildFile; fileRef = 31B9E857156BB24900FD24D5 /* OCTranspo.7z */; };
 		31CAB529154206840040A1E2 /* MTTripPlanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CAB528154206840040A1E2 /* MTTripPlanner.m */; };
 		31CAB52E15420F690040A1E2 /* TripPlannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CAB52C15420F680040A1E2 /* TripPlannerViewController.m */; };
 		31CAB52F15420F690040A1E2 /* TripPlannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31CAB52D15420F680040A1E2 /* TripPlannerViewController.xib */; };
@@ -636,7 +636,7 @@
 		31B9E8371569809400FD24D5 /* 7zMain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = 7zMain.c; sourceTree = "<group>"; };
 		31B9E84F156AE43B00FD24D5 /* 7zMain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 7zMain.h; sourceTree = "<group>"; };
 		31B9E850156AE46B00FD24D5 /* 7zIn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 7zIn.h; sourceTree = "<group>"; };
-		31B9E855156AF80A00FD24D5 /* OCTranspo.7z */ = {isa = PBXFileReference; lastKnownFileType = file; path = OCTranspo.7z; sourceTree = "<group>"; };
+		31B9E857156BB24900FD24D5 /* OCTranspo.7z */ = {isa = PBXFileReference; lastKnownFileType = file; path = OCTranspo.7z; sourceTree = "<group>"; };
 		31CAB527154206830040A1E2 /* MTTripPlanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTripPlanner.h; sourceTree = "<group>"; };
 		31CAB528154206840040A1E2 /* MTTripPlanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTripPlanner.m; sourceTree = "<group>"; };
 		31CAB52B15420F680040A1E2 /* TripPlannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripPlannerViewController.h; path = XIBs/TripPlannerViewController.h; sourceTree = "<group>"; };
@@ -1217,7 +1217,7 @@
 		31ADE8C3151FDFA30029C964 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				31B9E855156AF80A00FD24D5 /* OCTranspo.7z */,
+				31B9E857156BB24900FD24D5 /* OCTranspo.7z */,
 				315CD6041548074100B6299D /* icon@2x.png */,
 				315CD6051548074100B6299D /* icon.png */,
 				3122C27F153FC0E600019410 /* Default.png */,
@@ -1725,7 +1725,7 @@
 				31D1D14815693205008CFC0C /* notice_cell_single@2x.png in Resources */,
 				31D1D14915693205008CFC0C /* notice_cell_single.png in Resources */,
 				31D1D15F15693B72008CFC0C /* LoadingViewController.xib in Resources */,
-				31B9E856156AF80A00FD24D5 /* OCTranspo.7z in Resources */,
+				31B9E858156BB24900FD24D5 /* OCTranspo.7z in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

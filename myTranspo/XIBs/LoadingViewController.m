@@ -113,8 +113,13 @@
     }
 #endif
     
+    if(![_transpo execQuery:@"ANALYZE;" WithVacuum:NO])
+    {
+        [self performSelectorOnMainThread:@selector(finishedInstalling) withObject:nil waitUntilDone:NO];
+    }
+    
     //wait for myTranspoFinishedExecutingQuery to leave
-    [self performSelectorOnMainThread:@selector(finishedInstalling) withObject:nil waitUntilDone:NO];
+    //[self performSelectorOnMainThread:@selector(finishedInstalling) withObject:nil waitUntilDone:NO];
 }
 
 - (void)finishedInstalling
