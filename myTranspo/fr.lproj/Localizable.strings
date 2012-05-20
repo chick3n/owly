@@ -84,6 +84,7 @@
 "MTDEF_HELPERCARDS" = "Afficher des conseils utiles";
 "MTDEF_ALERTSCHOICE" = "M'avertir avant d'...";
 "MTDEF_UPDATEALERT" = "M'avertir des mises à jour";
+"MTDEF_OFFLINEMODE" = "Le mode hors connexion";
 "MTDEF_MANAGENOTIFICATIONS" = "Gérer les alertes";
 "MTDEF_ACCOUNTINFOHEADER" = "intégration compte";
 "MTDEF_APPSETTINGSHEADER" = "Paramètres de l'application";
@@ -124,8 +125,8 @@
 
 //Alert Manager
 "BEGINS" = "commence";
-"OCCURSON" = "se produit sur ";
-"ALERTMANAGERHEADEROUTPUT" = "%@ %@ à %@";
+"OCCURSON" = "";
+"ALERTMANAGERHEADEROUTPUT" = "%@ à %@";
 
 //REACHABILITY
 "NETWORKDOWNTITLE" = "Connexion réseau n'est pas disponible";

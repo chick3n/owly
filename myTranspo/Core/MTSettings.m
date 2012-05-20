@@ -259,6 +259,7 @@
             return NSLocalizedString(@"MTDEF_SETTINGSTITLE", nil);
         case MTVCUNKNOWN:
         case MTVCMENU:
+        case MTVCLOADING:
             return @"";
     }
     
@@ -268,6 +269,11 @@
 - (BOOL)networkNotification
 {
     return [userDefaults boolForKey:kMTRConnectionWarning];
+}
+
+- (BOOL)offlineMode
+{
+    return [userDefaults boolForKey:kMTOfflineMode];
 }
 
 #pragma mark - SETTERS
@@ -394,6 +400,12 @@
 - (void)updateNetworkNotification:(BOOL)toggle
 {
     [userDefaults setBool:toggle forKey:kMTRConnectionWarning];
+    [userDefaults synchronize];
+}
+
+- (void)updateOfflineMode:(BOOL)toggle
+{
+    [userDefaults setBool:toggle forKey:kMTOfflineMode];
     [userDefaults synchronize];
 }
 
@@ -658,6 +670,12 @@
     
     [userDefaults setObject:(NSDictionary*)filters forKey:kMTFStopsFavorite];
     [userDefaults synchronize];
+}
+
++ (BOOL)offlineMode
+{
+    NSUserDefaults* userDefaults = [MTSettings settingsUserDefault];
+    return [userDefaults boolForKey:kMTOfflineMode];
 }
 
 @end

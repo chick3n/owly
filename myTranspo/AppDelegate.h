@@ -14,11 +14,12 @@
 #import "MyBusesViewController.h"
 #import "StopsViewController.h"
 #import "myTranspoOC.h"
-#import "MTOptionsDate.h"
+//#import "MTOptionsDate.h"
 #import "SettingsViewController.h"
 #import "OTrainViewController.h"
 #import "NoticesViewController.h"
 #import "TripPlannerViewController.h"
+#import "LoadingViewController.h"
 
 #import "Reachability.h"
 
@@ -28,7 +29,7 @@
 {
     ZUUIRevealController *          _menuController;
     MenuTableViewController *       _menuTableViewController;
-    MTOptionsDate*                  _menuOptionsDate;
+    //MTOptionsDate*                  _menuOptionsDate;
     UINavigationController *        _navigationController;
     BOOL                            _rearViewControllerHidden;
     UITapGestureRecognizer*         _tap;
@@ -41,6 +42,7 @@
     UIImageView*                    _rainbowBar;
     
     BOOL                            _disableClick;
+    BOOL                            _newDatabase;
     
     Reachability*                   _hostReach;
     Reachability*                   _internetReach;
@@ -49,7 +51,7 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-
 - (void) reachabilityChanged:(NSNotification *)note;
+- (void)finishedLoading;
 
 @end

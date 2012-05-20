@@ -68,6 +68,10 @@
 //trip planner
 @optional
 - (void)myTranspo:(id)transpo State:(MTResultState)state receivedTripPlan:(NSDictionary*)trip;
+
+//GENERIC
+@optional
+- (void)myTranspoFinishedExecutingQuery:(id)transpo;
 @end
 
 #define kDefaultCoordinatesOttawa CLLocationCoordinate2DMake(45.42158812329091, -75.69442749023438)
@@ -116,6 +120,7 @@
 - (void)initialize;
 - (id)initWithLanguage:(MTLanguage)lang AndDBPath:(NSString *)dbpath ForCity:(MTCity)city;
 - (BOOL)addDBPath:(NSString*)dbPath;
+- (BOOL)closeDB;
 - (BOOL)addWebDBPath:(NSString*)urlPath;
 - (BOOL)addAPI;
 - (BOOL)addOfflineTimes;
@@ -126,6 +131,8 @@
 - (void)turnOffNetworkMethods;
 - (void)turnOnNetworkMethods;
 - (BOOL)endGpsRefresh:(id)sender;
+- (void)execQuery:(NSString*)query;
+- (void)execQuery:(NSString*)query WithVacuum:(BOOL)vacuum;
 
 //general data
 - (BOOL)getScheduleForStop:(MTStop*)stop WithRoute:(MTBus*)bus;
@@ -153,6 +160,7 @@
 
 //favorite specific methods
 - (BOOL)getFavorites;
+- (BOOL)getSynchFavorites:(NSMutableArray*)favorites;
 - (BOOL)updateAllFavorites:(NSArray*)favorites;
 - (BOOL)updateAllFavorites:(NSArray*)favorites FullUpdate:(BOOL)fullUpdate;
 - (BOOL)updateFavorite:(MTStop*)favorite FullUpdate:(BOOL)fullUpdate;

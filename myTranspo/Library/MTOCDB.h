@@ -44,6 +44,7 @@
 - (id)initWithDBPath:(NSString *)dbPath And:(MTLanguage)lang;
 - (BOOL)connectToDatabase;
 - (void)killDatabase;
+- (void)execQuery:(NSString*)query WithVacuum:(BOOL)vacuum;
 
 //updates
 - (BOOL)addScheduleForStop:(MTStop*)stop WithRoute:(MTBus*)bus;

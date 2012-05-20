@@ -19,6 +19,7 @@ typedef enum
     , MTVCSETTINGS
     , MTVCUNKNOWN = 20
     , MTVCMENU = 21
+    , MTVCLOADING
 } MTViewControllers;
 
 #endif

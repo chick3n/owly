@@ -59,11 +59,18 @@
 - (void)killDatabase
 {
     if(_isConnected)
+    {
+        _isWritable = NO;
+        _isConnected = NO;
         sqlite3_close(_db);
+    }
 }
 
 - (BOOL)connectToDatabase
 {
+    if(_dbPath == nil)
+        return NO;
+    
     sqlite3_config(SQLITE_CONFIG_SERIALIZED);
     
     if(sqlite3_open_v2([_dbPath UTF8String], &_db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_SHAREDCACHE, nil) != SQLITE_OK)
@@ -72,6 +79,20 @@
     _isConnected = YES;
     _isWritable = YES;
     return YES;
+}
+
+- (void)execQuery:(NSString *)query WithVacuum:(BOOL)vacuum
+{
+    if(!_isConnected)
+        return;
+    
+    sqlite3_exec(_db, "BEGIN;", NULL, NULL, NULL);
+    sqlite3_exec(_db, [query UTF8String], NULL, NULL, NULL);
+    sqlite3_exec(_db, "COMMIT;", NULL, NULL, NULL);
+    MTLog(@"query results: %s", sqlite3_errmsg(_db));
+    
+    if(vacuum)
+        sqlite3_exec(_db, "VACUUM;", NULL, NULL, NULL);
 }
 
 #pragma mark - UPDATES
@@ -881,23 +902,26 @@
     //, (select IFNULL(s2.stop_name, '') from stop_times st2 inner join stops s2 on s2.stop_id = st2.stop_id WHERE st2.trip_id = st.trip_id ORDER BY st2.stop_sequence DESC LIMIT 1)  end_stop \
     
     NSString *sqlStmt = [NSString stringWithFormat:\
-                          @"select \
-                          case when c.sunday = '1' then 2 when c.saturday = '1' then 1 else 0 end dayOfWeek \
-                          , st.trip_id \
-                          , st.arrival_time \
-                          , st.stop_sequence \
-                          , st.stop_id \
-                         , (select IFNULL(s2.stop_name, '') from stop_times st2 inner join stops s2 on s2.stop_id = st2.stop_id WHERE st2.trip_id = st.trip_id ORDER BY st2.stop_sequence DESC LIMIT 1)  end_stop \
+                         @"select \
+                         case when c.sunday = '1' then 2 when c.saturday = '1' then 1 else 0 end dayOfWeek \
+                         , st.trip_id \
+                         , s.stop_id \
+                         , (h.hour || ':' || m.minute || ':00') arrival_time \
+                         , st.stop_sequence \
+                         , t.end_stop \
                          from stop_times st \
+                         inner join stops s on s.id = st.stop_id \
                          inner join trips t on t.trip_id = st.trip_id \
                          inner join routes r on r.route_id = t.route_id \
                          inner join calendar c on c.service_id = t.service_id \
                          left join calendar_dates cd on cd.service_id = c.service_id \
-                          where '%@' BETWEEN c.start_date AND c.end_date \
-                          and (r.route_short_name = '%@') \
-                          and st.stop_id = '%@' \
-                          and (cd.exception_type IS NULL OR cd.exception_type <> 2) \
-                          order by dayOfWeek asc, st.arrival_time ASC;"
+                         inner join hours h on h.id = st.hour \
+                         inner join minutes m on m.id = st.minute \
+                         where '%@' BETWEEN c.start_date AND c.end_date \
+                         and (r.route_short_name = '%@') \
+                         and s.stop_id = '%@' \
+                         and (cd.exception_type IS NULL OR cd.exception_type <> 2) \
+                         order by dayOfWeek asc, arrival_time asc;"
                           , [dateFormatter stringFromDate:date]
                           , bus.BusNumber
                           , stop.StopId];
@@ -913,9 +937,9 @@
             MTTime *time = [[MTTime alloc] init];
             
             time.TripId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 1)];
-            time.Time = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 2)];
-            time.StopId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 4)];
-            time.StopSequence = sqlite3_column_int(cmpStmt, 3);
+            time.Time = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 3)];
+            time.StopId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 2)];
+            time.StopSequence = sqlite3_column_int(cmpStmt, 4);
             time.IsLive = NO;
             time.EndStopHeader = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(cmpStmt, 5)];
             
@@ -999,22 +1023,26 @@
     NSString *sqlStmt = [NSString stringWithFormat:\
                          @"select \
                          st.trip_id \
-                         , st.arrival_time \
-                         , st.stop_id \
+                         , (h.hour || ':' || m.minute || ':00') arrival_time \
+                         , s.stop_id \
                          , st.stop_sequence \
                          , r.route_short_name \
-                         , (select IFNULL(s2.stop_name, '') from stop_times st2 inner join stops s2 on s2.stop_id = st2.stop_id WHERE st2.trip_id = st.trip_id ORDER BY st2.stop_sequence DESC LIMIT 1) end_stop \
+                         , t.end_stop \
                          from stop_times st \
+                         inner join stops s on s.id = st.stop_id \
                          inner join trips t on t.trip_id = st.trip_id \
                          inner join routes r on r.route_id = t.route_id \
                          inner join calendar c on c.service_id = t.service_id \
+                         left join calendar_dates cd on cd.service_id = c.service_id \
+                         inner join hours h on h.id = st.hour \
+                         inner join minutes m on m.id = st.minute \
                          where strftime('%%Y%%m%%d', 'now', 'localtime') between c.start_date and c.end_date \
                          %@ \
-                         and st.stop_id = '%@' \
+                         and s.stop_id = '%@' \
                          and %@ \
-                         and strftime('%%Y%%m%%d', 'now', 'localtime') NOT IN (SELECT cd.date FROM calendar_dates cd WHERE t.service_id = cd.service_id AND cd.exception_type = 2) \
-                         and st.arrival_time > strftime('%%H:%%M:%%S', 'now', 'localtime') \
-                         order by st.arrival_time ASC \
+                         and (cd.exception_type IS NULL OR cd.exception_type <> 2) \
+                         and arrival_time > strftime('%%H:%%M:%%S', 'now', 'localtime') \
+                         order by arrival_time ASC \
                          LIMIT 40;"
                          , routeList
                          , stop.StopId
@@ -1059,9 +1087,11 @@
     sqlite3_stmt* cmpStmt;
     
     NSString *sqlStmt = [NSString stringWithFormat:\
-                         @"select st.trip_id, st.arrival_time, st.stop_id, st.stop_sequence, s.stop_code, s.stop_name, s.stop_lat, s.stop_lon \
+                         @"select st.trip_id, (h.hour || ':' || m.minute || ':00') arrival_time, s.stop_id, st.stop_sequence, s.stop_code, s.stop_name, s.stop_lat, s.stop_lon  \
                          from stop_times st \
-                         inner join stops s on s.stop_id = st.stop_id \
+                         inner join stops s on s.id = st.stop_id \
+                         inner join hours h on h.id = st.hour \
+                         inner join minutes m on m.id = st.minute \
                          where st.trip_id = %@ \
                          order by st.stop_sequence ASC;"
                          , trip];

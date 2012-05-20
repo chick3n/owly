@@ -12,7 +12,6 @@
 #import "MTTime.h"
 #import "MTHelper.h"
 #import "MTBase.h"
-#import "myTranspoOC.h"
 
 @interface MTBus : MTBase <NSCopying>
 {

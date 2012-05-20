@@ -25,6 +25,7 @@ static NSString* kMTNotificationTime = @"NotificationTime";
 static NSString* kMTNotificationUpdate = @"NotificationUpdate";
 static NSString* kMTNotificationStartupView = @"kMTNotificationStartupView";
 static NSString* kMTOCOfflineVersion = @"OCOfflineVersion";
+static NSString* kMTOfflineMode = @"OfflineMode";
 
 //helper cards
 static NSString* kMTHelperMyBuses = @"HelperMyBusesShown";
@@ -79,6 +80,7 @@ static NSString* kMTRConnectionWarning = @"ConnectionWarningSent";
 - (NSString*)notificationAlertTimeString;
 - (NSString*)startupScreenString;
 - (BOOL)networkNotification;
+- (BOOL)offlineMode;
 
 //setters
 - (void)updateDatabaseVersionToBundle;
@@ -92,6 +94,7 @@ static NSString* kMTRConnectionWarning = @"ConnectionWarningSent";
 - (void)updateNotificationUpdateTimes:(BOOL)choice;
 - (void)updateStartupScreen:(MTViewControllers)choice;
 - (void)updateNetworkNotification:(BOOL)toggle;
+- (void)updateOfflineMode:(BOOL)toggle;
 
 //quick calls - TODO doesnt work
 + (BOOL)showMyBusesHelper;
@@ -110,5 +113,6 @@ static NSString* kMTRConnectionWarning = @"ConnectionWarningSent";
 + (CGFloat)ocOfflineVersion;
 + (NSArray*)favoriteStopFilter:(NSString*)key UpdateWith:(NSArray*)data;
 + (void)clearFavoriteStopFilter:(NSString*)key;
++ (BOOL)offlineMode;
 
 @end

@@ -13,6 +13,8 @@
 #import "MTRightButton.h"
 #import "SettingsManageNotificationsViewController.h"
 
+#define kAlertsCellHeight 72
+
 typedef NSComparisonResult(^SortNotificationsDayOfWeek)(id obj1, id obj2);
 typedef NSComparisonResult(^SortNotificationsBusNumber)(id obj1, id obj2);
 

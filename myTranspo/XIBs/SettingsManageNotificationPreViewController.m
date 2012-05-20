@@ -11,6 +11,7 @@
 @interface SettingsManageNotificationPreViewController ()
 - (void)goBack:(id)sender;
 - (void)parseTrips:(NSArray*)trips;
+- (NSString*)parseBusNumber:(NSArray*)notifications;
 - (NSString*)parseRepeatDays:(NSArray*)notifications;
 - (NSString*)parseHeaderInfo:(NSArray*)notifications;
 @end
@@ -39,6 +40,7 @@
     _tableView.backgroundColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"global_darkbackground_tile.jpg"]];
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)]];
+    [_tableView setTableHeaderView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 10)]];
     
     //navigationcontroller
     MTRightButton* backButton = [[MTRightButton alloc] initWithType:kRightButtonTypeBack];        
@@ -179,6 +181,20 @@
     return repeatedDays;
 }
 
+- (NSString*)parseBusNumber:(NSArray*)notifications
+{
+    if(notifications == nil)
+        return @"";
+    
+    if(notifications.count == 0)
+        return @"";
+    
+    UILocalNotification *notification = [notifications objectAtIndex:0];
+    NSDictionary *userInfo = notification.userInfo;
+    
+    return (NSString*)[userInfo valueForKey:kMTNotificationBusNumberKey];
+}
+
 - (NSString*)parseHeaderInfo:(NSArray*)notifications
 {
     if(notifications == nil)
@@ -191,9 +207,7 @@
     NSDictionary *userInfo = notification.userInfo;
     
     return [NSString stringWithFormat:NSLocalizedString(@"ALERTMANAGERHEADEROUTPUT", nil)
-            , [userInfo valueForKey:kMTNotificationBusNumberKey]
             , [userInfo valueForKey:kMTNotificationBusDisplayHeading]
-            //, [userDic valueForKey:kMTNotificationTripAlertTimeKey]
             , [userInfo valueForKey:kMTNotificationTripTimeKey]];
 }
 
@@ -209,66 +223,96 @@
     return (_data == nil) ? 0 : _data.count;
 }
 
+#define kNoticesCellImageTag 101
+#define kNoticesCellTitleTag 102
+#define kNoticesCellSubTitleTag 103
 #define kNoticesCellBackgroundTag 104
+#define kAlertsCellBusNumberTag 105
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10.0];
-        cell.detailTextLabel.textColor = [UIColor colorWithRed:140./255. green:139./255. blue:139./255. alpha:1.0];
-        cell.detailTextLabel.shadowColor = [UIColor whiteColor];
-        cell.detailTextLabel.shadowOffset = CGSizeMake(0, 1);
-        cell.detailTextLabel.highlightedTextColor = cell.detailTextLabel.textColor;
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell.backgroundColor = [UIColor clearColor];
+        cell.textLabel.hidden = YES;
         
-        cell.textLabel.textColor = [UIColor colorWithRed:89./255. green:89./255. blue:89./255. alpha:1.0];
-        cell.textLabel.highlightedTextColor = cell.textLabel.textColor;
-        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
-        cell.textLabel.shadowColor = [UIColor whiteColor];
-        cell.textLabel.shadowOffset = CGSizeMake(0, 1);
+        UILabel* cellTitle = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 200, 20)];
+        cellTitle.tag = kNoticesCellTitleTag;
+        cellTitle.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
+        cellTitle.textColor = [UIColor colorWithRed:89./255. green:89./255. blue:89./255. alpha:1.0];
+        cellTitle.backgroundColor = [UIColor clearColor];
+        cellTitle.shadowColor = [UIColor whiteColor];
+        cellTitle.shadowOffset = CGSizeMake(0, 1);
         
-        UIImageView* cellBackground = [[UIImageView alloc] initWithFrame:CGRectMake(-4, 0, 308, 44)];
+        UILabel* cellSubTitle = [[UILabel alloc] initWithFrame:CGRectMake(70, 38, 200, 16)];
+        cellSubTitle.tag = kNoticesCellSubTitleTag;
+        cellSubTitle.backgroundColor = [UIColor clearColor];
+        cellSubTitle.font = [UIFont fontWithName:@"HelveticaNeue" size:12.0];
+        cellSubTitle.textColor = [UIColor colorWithRed:140./255. green:139./255. blue:139./255. alpha:1.0];
+        cellSubTitle.shadowColor = [UIColor whiteColor];
+        cellSubTitle.shadowOffset = CGSizeMake(0, 1);
+        
+        UIImageView* cellIcon = [[UIImageView alloc] initWithFrame:CGRectMake(15, 8, 52, 52)];
+        cellIcon.contentMode = UIViewContentModeCenter;
+        cellIcon.image = [UIImage imageNamed:@"cardcell_busnumber_background.png"];
+        cellIcon.tag = kNoticesCellImageTag;
+        
+        UILabel* cellBusNumber = [[UILabel alloc] initWithFrame:CGRectMake(20, 11, 42, 47)];
+        cellBusNumber.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:20.0];
+        cellBusNumber.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:0.10];
+        cellBusNumber.shadowOffset = CGSizeMake(0, 1);
+        cellBusNumber.textColor = [UIColor whiteColor];
+        cellBusNumber.textAlignment = UITextAlignmentCenter;
+        cellBusNumber.backgroundColor = [UIColor clearColor];
+        cellBusNumber.tag = kAlertsCellBusNumberTag;
+        
+        UIImageView* cellBackground = [[UIImageView alloc] initWithFrame:CGRectMake(6, 0, 308, 72)];
         cellBackground.tag = kNoticesCellBackgroundTag;
         
-        cell.backgroundColor = [UIColor clearColor];
+        [cell setBackgroundColor:[UIColor clearColor]];
         
-        [cell.contentView insertSubview:cellBackground atIndex:0];
+        [cell.contentView addSubview:cellBackground];
+        [cell.contentView addSubview:cellTitle];
+        [cell.contentView addSubview:cellSubTitle];
+        [cell.contentView addSubview:cellIcon];
+        [cell.contentView addSubview:cellBusNumber];
         
-        UIImageView* emptyCellAccessory = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cardcell_arrow.png"]];
-        cell.accessoryView = emptyCellAccessory;
-        
-        cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
-        [cell.selectedBackgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.04]];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     UIImageView* cellBackground = (UIImageView*)[cell.contentView viewWithTag:kNoticesCellBackgroundTag];
     if(indexPath.row == 0 && _data.count == 1)
     {
         //draw single cell
-        cellBackground.image = [UIImage imageNamed:@"settings_singlecell.png"];
+        cellBackground.image = [UIImage imageNamed:@"notice_cell_single.png"];
     }
     else if(indexPath.row == 0)
     {
-        cellBackground.image = [UIImage imageNamed:@"settings_topcell.png"];
+        cellBackground.image = [UIImage imageNamed:@"notice_cell_top.png"];
     }
     else if(indexPath.row == _data.count-1)
     {
         //draw end cell
-        cellBackground.image = [UIImage imageNamed:@"settings_bottomcell.png"];
+        cellBackground.image = [UIImage imageNamed:@"notice_cell_bottom.png"];
     }
     else
     {
         //draw medium cell
-        cellBackground.image = [UIImage imageNamed:@"settings_middlecell.png"];
+        cellBackground.image = [UIImage imageNamed:@"notice_cell_middle.png"];
     }
     
     NSString *key = [_data objectAtIndex:indexPath.row];
     NSArray *entries = [_tripData objectForKey:key];
+        
+    UILabel *title = (UILabel*)[cell.contentView viewWithTag:kNoticesCellTitleTag];
+    UILabel *subtitle = (UILabel*)[cell.contentView viewWithTag:kNoticesCellSubTitleTag];
+    UILabel *busNumber = (UILabel*)[cell.contentView viewWithTag:kAlertsCellBusNumberTag];
     
-    cell.textLabel.text = [self parseHeaderInfo:entries];
-    cell.detailTextLabel.text = [self parseRepeatDays:entries];
+    busNumber.text = [self parseBusNumber:entries];
+    title.text = [self parseHeaderInfo:entries];
+    subtitle.text = [self parseRepeatDays:entries];
     
     return cell;
 }
@@ -288,6 +332,15 @@
     [self.navigationController pushViewController:nvc animated:YES];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES]; 
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.row == 0 && _data.count == 1)
+        return 81;
+    else if(indexPath.row == _data.count - 1)
+        return kAlertsCellHeight - (81 - kAlertsCellHeight);
+    return kAlertsCellHeight;
 }
 
 @end

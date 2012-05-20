@@ -41,7 +41,7 @@
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>Database Version</key>
-	<real>1.05</real>
+	<real>1.06</real>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>Settings Version</key>

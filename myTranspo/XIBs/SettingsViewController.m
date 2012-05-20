@@ -115,17 +115,19 @@
     [groupApplication addObject:[SettingsType settingsTypeForGroup:SGAPPLICATION Type:STLIST Title:NSLocalizedString(@"MTDEF_LANGUAGE", nil) SubTitle:nil Data:kMTDLanguage Selected:_language ModificationCaller:@selector(updateLanguage:) Delegate:self]];
 #endif
     [groupApplication addObject:[SettingsType settingsTypeForGroup:SGAPPLICATION Type:STLIST Title:NSLocalizedString(@"MTDEF_CITY", nil) SubTitle:[_settings cityString] Data:kMTDCity Selected:[_settings cityPreference] ModificationCaller:@selector(updateCity:) Delegate:self]];
+#if 0
     [groupApplication addObject:[SettingsType settingsTypeForGroup:SGAPPLICATION Type:STCHECKBOX Title:NSLocalizedString(@"MTDEF_HELPERCARDS", nil) SubTitle:nil Data:nil Selected:![_settings helperCards] ModificationCaller:@selector(updateAllHelperPages:) Delegate:self]];
+#endif
     [groupApplication addObject:[SettingsType settingsTypeForGroup:SGAPPLICATION Type:STLIST Title:NSLocalizedString(@"MTDEF_FIRSTLAUNCHSCREEN", nil) SubTitle:[_settings startupScreenString] Data:kMTDStartScreen(_language) Selected:[_settings startupScreen] ModificationCaller:@selector(updateStartupScreen:) Delegate:self]];
     [groupApplication addObject:[SettingsType settingsTypeForGroup:SGAPPLICATION Type:STLIST Title:NSLocalizedString(@"MTDEF_ALERTSCHOICE", nil) SubTitle:[_settings notificationAlertTimeString] Data:kMTDAlerts Selected:[_settings notificationAlertTime] ModificationCaller:@selector(updateNotificationAlertTime:) Delegate:self]];
     [groupApplication addObject:[SettingsType settingsTypeForGroup:SGAPPLICATION Type:STCHOICE Title:NSLocalizedString(@"MTDEF_UPDATEALERT", nil) SubTitle:nil Data:nil Selected:[_settings notificationUpdateTime] ModificationCaller:@selector(updateNotificationUpdateTimes:) Delegate:self]];
+    [groupApplication addObject:[SettingsType settingsTypeForGroup:SGAPPLICATION Type:STCHOICE Title:NSLocalizedString(@"MTDEF_OFFLINEMODE", nil) SubTitle:nil Data:nil Selected:[_settings offlineMode] ModificationCaller:@selector(updateOfflineMode:) Delegate:self]];
     
     [_data addObject:groupApplication];
     
     //data management access
     NSMutableArray* groupManagement = [[NSMutableArray alloc] init];
     [groupManagement addObject:[SettingsType settingsTypeForGroup:SGDATA Type:STOTHER Title:NSLocalizedString(@"MTDEF_MANAGENOTIFICATIONS", nil) SubTitle:nil Data:nil Selected:0 ModificationCaller:nil Delegate:self]];
-    [groupManagement addObject:[SettingsType settingsTypeForGroup:SGDATA Type:STDOWNLOAD Title:@"DOWNLOAD" SubTitle:nil Data:nil Selected:0 ModificationCaller:nil Delegate:self]];
     
     [_data addObject:groupManagement];
 }
@@ -437,6 +439,12 @@
             {
                 [_transpo removeAllUpdateNotifications];
             }
+        }
+        else if(settingType.modificationCaller == @selector(updateOfflineMode:))
+        {
+            if(!settingType.selected)
+                [_transpo turnOnNetworkMethods];
+            else [_transpo turnOffNetworkMethods];
         }
     }
     

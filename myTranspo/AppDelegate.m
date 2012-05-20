@@ -25,6 +25,8 @@
     self = [super init];
     if(self)
     {
+        _newDatabase = NO;
+        
         _menuController = [[ZUUIRevealController alloc] init];
         _menuController.delegate = self;
         _menuTableViewController = [[MenuTableViewController alloc] initWithNibName:@"MenuTableViewController" bundle:nil];
@@ -54,8 +56,11 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor blackColor];
     
+    
     //auto goto favorites if we need an update or notified of upcoming bus
-    [self launchNewView:(localNotification == nil) ? [MTSettings startupScreen] : MTVCMYBUSES]; 
+    if(!_newDatabase)
+        [self launchNewView:(localNotification == nil) ? [MTSettings startupScreen] : MTVCMYBUSES]; 
+    else [self launchNewView:MTVCLOADING];
     
     [_menuController.view addSubview:_rainbowBar];
     self.window.rootViewController = _menuController;
@@ -134,6 +139,12 @@
     application.applicationIconBadgeNumber = 0;
 }
 
+- (void)finishedLoading
+{
+    _menuController.currentFrontViewPosition = FrontViewPositionRight;
+    [self launchNewView:[MTSettings startupScreen]];
+}
+
 - (void)launchNewView:(MTViewControllers)view
 {
     if(_navigationController.visibleViewController != nil)
@@ -153,10 +164,11 @@
         [_navigationController.visibleViewController.view removeGestureRecognizer:_tap];
         [_navigationController.navigationBar removeGestureRecognizer:_panGesture];
     }
+    
     _navigationController = nil;
     
     MTBaseViewController* newView = nil;
-    MTOptionsDate* optionsView = nil;
+    //MTOptionsDate* optionsView = nil;
     _transpo.gpsRefreshRate = 300;
     switch (view) {
         case MTVCMENU:
@@ -184,6 +196,9 @@
             break;
         case MTVCTRIPPLANNER:
             newView = [[TripPlannerViewController alloc] initWithNibName:@"TripPlannerViewController" bundle:nil];
+            break;
+        case MTVCLOADING:
+            newView = [[LoadingViewController alloc] initWithNibName:@"LoadingViewController" bundle:nil];
             break;
         case MTVCUNKNOWN:
             return;
@@ -222,8 +237,8 @@
     if(_menuController.rearViewController != _menuTableViewController)
         _menuController.rearViewController = _menuTableViewController;
     
-    if(optionsView != nil)
-        [_menuController setRightViewController:optionsView];
+    //if(optionsView != nil)
+    //    [_menuController setRightViewController:optionsView];
 }
 
 - (void)revealController:(ZUUIRevealController *)revealController didRevealRearViewController:(UIViewController *)rearViewController
@@ -285,7 +300,7 @@
     _lastDate = [_transpo getLastSupportedDate];
     
     [_transpo addWebDBPath:@"http://www.vicestudios.com/apps/owly/oc/"];
-    //[_transpo addAPI];
+    [_transpo addAPI];
     //[_transpo addOfflineTimes];
 }
 
@@ -306,49 +321,20 @@
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDir = [paths objectAtIndex:0];
 	NSString *dbPath = [documentsDir stringByAppendingPathComponent:@"OCTranspo.sqlite"];
-    BOOL canMigrateFavorites = NO;
-    NSMutableArray* favorites = nil;
 
     if(![manager fileExistsAtPath:dbPath] || [settings currentDatabaseNeedsUpdate])
     {
         MTLog(@"File Exists: %d OR settings need update: %d", [manager fileExistsAtPath:dbPath], [settings currentDatabaseNeedsUpdate]);
         MTLog(@"ABOUT TO REPLACE DATABASE");
-        NSString* sourcePath = [[NSBundle mainBundle] pathForResource:@"OCTranspo.sqlite" ofType:nil];
         
-        //migrate favorites
-        favorites = [[NSMutableArray alloc] init];
-        MTOCDB* tempDB = [[MTOCDB alloc] initWithDBPath:dbPath And:MTLANGUAGE_ENGLISH];
-        if(tempDB != nil && [tempDB connectToDatabase])
-        {
-            if([tempDB getFavorites:favorites])
-            {
-                canMigrateFavorites = YES;
-            }
-        }
-        
-        [tempDB killDatabase];
-        
-        if (sourcePath != nil) {
-            [manager removeItemAtPath:dbPath error:nil];
-            [manager copyItemAtPath:sourcePath
-                             toPath:dbPath
-                              error:nil];
-            
-            [settings updateDatabaseVersionToBundle];
-        }
-                
+        _newDatabase = YES;        
     }
+    _newDatabase = YES;
     
     [self setupMyTranspo];
+    if([settings offlineMode])
+        [_transpo turnOffNetworkMethods];
     
-    if(canMigrateFavorites && favorites != nil)
-    {
-        for(MTStop* favStop in favorites)
-        {
-            [_transpo addFavorite:favStop WithBus:favStop.Bus];
-        }
-    }
-    favorites = nil;
     
     if(_menuTableViewController)
     {
@@ -359,6 +345,8 @@
 
 - (void)postLoad
 {
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
     
     _hostReach = [Reachability reachabilityWithHostName: @"www.google.com"];
@@ -437,6 +425,9 @@
 
 - (void) reachabilityChanged:(NSNotification *)note
 {
+    if([MTSettings offlineMode])
+        return;
+    
 	Reachability* curReach = [note object];
 	NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
 	

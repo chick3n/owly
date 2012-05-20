@@ -92,6 +92,7 @@
 "MTDEF_HELPERCARDS" = "Display helpful hints";
 "MTDEF_ALERTSCHOICE" = "Alert me before...";
 "MTDEF_UPDATEALERT" = "Warn me about updates";
+"MTDEF_OFFLINEMODE" = "Offline mode";
 "MTDEF_MANAGENOTIFICATIONS" = "Manage alerts";
 "MTDEF_ACCOUNTINFOHEADER" = "Account Integration";
 "MTDEF_APPSETTINGSHEADER" = "Application Settings";
@@ -133,8 +134,8 @@
 
 //ALERT MANAGER
 "BEGINS" = "Begins";
-"OCCURSON" = "Occurs on ";
-"ALERTMANAGERHEADEROUTPUT" = "%@ %@ at %@";
+"OCCURSON" = "";
+"ALERTMANAGERHEADEROUTPUT" = "%@ at %@";
 
 //REACHABILITY
 "NETWORKDOWNTITLE" = "Network Connection Unavailable";

@@ -34,5 +34,7 @@
 	<integer>1</integer>
 	<key>FavoriteStopsFilter</key>
 	<dict/>
+	<key>OfflineMode</key>
+	<false/>
 </dict>
 </plist>

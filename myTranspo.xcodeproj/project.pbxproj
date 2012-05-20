@@ -209,6 +209,12 @@
 		31CAB52E15420F690040A1E2 /* TripPlannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CAB52C15420F680040A1E2 /* TripPlannerViewController.m */; };
 		31CAB52F15420F690040A1E2 /* TripPlannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31CAB52D15420F680040A1E2 /* TripPlannerViewController.xib */; };
 		31CAB5321542146B0040A1E2 /* NSString+URLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CAB5311542146B0040A1E2 /* NSString+URLEncoding.m */; };
+		31D1D13F1569241D008CFC0C /* OCTranspo.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 31D1D13E15692416008CFC0C /* OCTranspo.sqlite */; };
+		31D1D1411569242A008CFC0C /* sqlite3queries.sql in Resources */ = {isa = PBXBuildFile; fileRef = 31D1D1401569242A008CFC0C /* sqlite3queries.sql */; };
+		31D1D14815693205008CFC0C /* notice_cell_single@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31D1D14615693205008CFC0C /* notice_cell_single@2x.png */; };
+		31D1D14915693205008CFC0C /* notice_cell_single.png in Resources */ = {isa = PBXBuildFile; fileRef = 31D1D14715693205008CFC0C /* notice_cell_single.png */; };
+		31D1D15E15693B72008CFC0C /* LoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31D1D15C15693B72008CFC0C /* LoadingViewController.m */; };
+		31D1D15F15693B72008CFC0C /* LoadingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31D1D15D15693B72008CFC0C /* LoadingViewController.xib */; };
 		31D64D681554A605001B0B2D /* flyout_plain_top.png in Resources */ = {isa = PBXBuildFile; fileRef = 31D64D641554A605001B0B2D /* flyout_plain_top.png */; };
 		31D64D691554A605001B0B2D /* flyout_plain_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31D64D651554A605001B0B2D /* flyout_plain_top@2x.png */; };
 		31D64D6A1554A605001B0B2D /* flyout_plain_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 31D64D661554A605001B0B2D /* flyout_plain_arrow.png */; };
@@ -283,7 +289,6 @@
 		31E3E7F81561BCAB0022D354 /* cell_stop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7F61561BCAB0022D354 /* cell_stop@2x.png */; };
 		31E3E7FB1561BEC10022D354 /* global_options_bar@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7F91561BEC10022D354 /* global_options_bar@2x.jpg */; };
 		31E3E7FC1561BEC10022D354 /* global_options_bar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7FA1561BEC10022D354 /* global_options_bar.jpg */; };
-		31E3E7FE15646C630022D354 /* sqlite3queries.sql in Resources */ = {isa = PBXBuildFile; fileRef = 31E3E7FD15646C630022D354 /* sqlite3queries.sql */; };
 		31EAED751522756200533AC6 /* TripViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31EAED731522756200533AC6 /* TripViewController.m */; };
 		31EAED761522756200533AC6 /* TripViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31EAED741522756200533AC6 /* TripViewController.xib */; };
 		31EE5577153B27D400C83552 /* MTRightButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 31EE5576153B27D400C83552 /* MTRightButton.m */; };
@@ -313,7 +318,6 @@
 		CE85944D155D738E00C89727 /* global_refresh_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = CE859449155D738E00C89727 /* global_refresh_arrow.png */; };
 		CE85944E155D738E00C89727 /* global_refresh_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE85944A155D738E00C89727 /* global_refresh_arrow@2x.png */; };
 		CE859450155D738E00C89727 /* global_refresh_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE85944C155D738E00C89727 /* global_refresh_bg@2x.png */; };
-		CE92B03D1566A6C1007CDEB7 /* OCTranspo.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = CE92B03C1566A6C1007CDEB7 /* OCTranspo.sqlite */; };
 		CECFCD07155AA89A00E28D09 /* CardCellManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CECFCD06155AA89A00E28D09 /* CardCellManager.m */; };
 /* End PBXBuildFile section */
 
@@ -585,6 +589,13 @@
 		31CAB52D15420F680040A1E2 /* TripPlannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TripPlannerViewController.xib; path = XIBs/TripPlannerViewController.xib; sourceTree = "<group>"; };
 		31CAB5301542146A0040A1E2 /* NSString+URLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+URLEncoding.h"; sourceTree = "<group>"; };
 		31CAB5311542146B0040A1E2 /* NSString+URLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+URLEncoding.m"; sourceTree = "<group>"; };
+		31D1D13E15692416008CFC0C /* OCTranspo.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = OCTranspo.sqlite; sourceTree = "<group>"; };
+		31D1D1401569242A008CFC0C /* sqlite3queries.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sqlite3queries.sql; sourceTree = "<group>"; };
+		31D1D14615693205008CFC0C /* notice_cell_single@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notice_cell_single@2x.png"; sourceTree = "<group>"; };
+		31D1D14715693205008CFC0C /* notice_cell_single.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notice_cell_single.png; sourceTree = "<group>"; };
+		31D1D15B15693B71008CFC0C /* LoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingViewController.h; path = XIBs/LoadingViewController.h; sourceTree = "<group>"; };
+		31D1D15C15693B72008CFC0C /* LoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingViewController.m; path = XIBs/LoadingViewController.m; sourceTree = "<group>"; };
+		31D1D15D15693B72008CFC0C /* LoadingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LoadingViewController.xib; path = XIBs/LoadingViewController.xib; sourceTree = "<group>"; };
 		31D64D641554A605001B0B2D /* flyout_plain_top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flyout_plain_top.png; sourceTree = "<group>"; };
 		31D64D651554A605001B0B2D /* flyout_plain_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flyout_plain_top@2x.png"; sourceTree = "<group>"; };
 		31D64D661554A605001B0B2D /* flyout_plain_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flyout_plain_arrow.png; sourceTree = "<group>"; };
@@ -671,7 +682,6 @@
 		31E3E7F61561BCAB0022D354 /* cell_stop@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell_stop@2x.png"; sourceTree = "<group>"; };
 		31E3E7F91561BEC10022D354 /* global_options_bar@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "global_options_bar@2x.jpg"; sourceTree = "<group>"; };
 		31E3E7FA1561BEC10022D354 /* global_options_bar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = global_options_bar.jpg; sourceTree = "<group>"; };
-		31E3E7FD15646C630022D354 /* sqlite3queries.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sqlite3queries.sql; sourceTree = "<group>"; };
 		31EAED721522756200533AC6 /* TripViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripViewController.h; path = XIBs/TripViewController.h; sourceTree = "<group>"; };
 		31EAED731522756200533AC6 /* TripViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = TripViewController.m; path = XIBs/TripViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		31EAED741522756200533AC6 /* TripViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TripViewController.xib; path = XIBs/TripViewController.xib; sourceTree = "<group>"; };
@@ -706,7 +716,6 @@
 		CE859449155D738E00C89727 /* global_refresh_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = global_refresh_arrow.png; sourceTree = "<group>"; };
 		CE85944A155D738E00C89727 /* global_refresh_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "global_refresh_arrow@2x.png"; sourceTree = "<group>"; };
 		CE85944C155D738E00C89727 /* global_refresh_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "global_refresh_bg@2x.png"; sourceTree = "<group>"; };
-		CE92B03C1566A6C1007CDEB7 /* OCTranspo.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = OCTranspo.sqlite; sourceTree = "<group>"; };
 		CECFCD05155AA89A00E28D09 /* CardCellManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardCellManager.h; path = Core/CardCellManager.h; sourceTree = "<group>"; };
 		CECFCD06155AA89A00E28D09 /* CardCellManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CardCellManager.m; path = Core/CardCellManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -953,6 +962,8 @@
 				3195B014153E45A700E30DB8 /* notice_cell_middle.png */,
 				3139F5E01556CCAA0019B8AF /* notice_cell_bottom@2x.png */,
 				3139F5E11556CCAA0019B8AF /* notice_cell_bottom.png */,
+				31D1D14615693205008CFC0C /* notice_cell_single@2x.png */,
+				31D1D14715693205008CFC0C /* notice_cell_single.png */,
 				31EE55A6153B5B6500C83552 /* cardcell_speed_icon.png */,
 				31EE55A7153B5B6500C83552 /* cardcell_speed_icon@2x.png */,
 				31EE559A153B56B600C83552 /* bus_location_pin.png */,
@@ -1153,8 +1164,8 @@
 		31ADE8C3151FDFA30029C964 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				CE92B03C1566A6C1007CDEB7 /* OCTranspo.sqlite */,
-				31E3E7FD15646C630022D354 /* sqlite3queries.sql */,
+				31D1D13E15692416008CFC0C /* OCTranspo.sqlite */,
+				31D1D1401569242A008CFC0C /* sqlite3queries.sql */,
 				315CD6041548074100B6299D /* icon@2x.png */,
 				315CD6051548074100B6299D /* icon.png */,
 				3122C27F153FC0E600019410 /* Default.png */,
@@ -1235,6 +1246,9 @@
 				31CAB52B15420F680040A1E2 /* TripPlannerViewController.h */,
 				31CAB52C15420F680040A1E2 /* TripPlannerViewController.m */,
 				31CAB52D15420F680040A1E2 /* TripPlannerViewController.xib */,
+				31D1D15B15693B71008CFC0C /* LoadingViewController.h */,
+				31D1D15C15693B72008CFC0C /* LoadingViewController.m */,
+				31D1D15D15693B72008CFC0C /* LoadingViewController.xib */,
 			);
 			name = XIBs;
 			sourceTree = "<group>";
@@ -1595,8 +1609,11 @@
 				31E3E7F81561BCAB0022D354 /* cell_stop@2x.png in Resources */,
 				31E3E7FB1561BEC10022D354 /* global_options_bar@2x.jpg in Resources */,
 				31E3E7FC1561BEC10022D354 /* global_options_bar.jpg in Resources */,
-				31E3E7FE15646C630022D354 /* sqlite3queries.sql in Resources */,
-				CE92B03D1566A6C1007CDEB7 /* OCTranspo.sqlite in Resources */,
+				31D1D13F1569241D008CFC0C /* OCTranspo.sqlite in Resources */,
+				31D1D1411569242A008CFC0C /* sqlite3queries.sql in Resources */,
+				31D1D14815693205008CFC0C /* notice_cell_single@2x.png in Resources */,
+				31D1D14915693205008CFC0C /* notice_cell_single.png in Resources */,
+				31D1D15F15693B72008CFC0C /* LoadingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1680,6 +1697,7 @@
 				31E3E7EB155F3FB00022D354 /* StopsFavoriteViewControllerViewController.m in Sources */,
 				31E3E7F015604F630022D354 /* SettingsManageNotificationPreViewController.m in Sources */,
 				31E3E7F4156060FC0022D354 /* MTStopHelper.m in Sources */,
+				31D1D15E15693B72008CFC0C /* LoadingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

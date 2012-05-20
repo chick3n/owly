@@ -148,10 +148,26 @@ static myTranspoOC *gInstance = NULL;
     }
     else
     {
+        if(_ocDb != nil)
+        {
+            [_ocDb killDatabase];
+            _ocDb = nil;
+        }
+        
         _ocDb = [[MTOCDB alloc] initWithDBPath:_dbPath And:_language];
         _hasDB = YES;
     }
     
+    return YES;
+}
+
+- (BOOL)closeDB
+{
+    if(_ocDb != nil)
+    {
+        _hasDB = NO;
+        [_ocDb killDatabase];
+    }
     return YES;
 }
 
@@ -245,6 +261,24 @@ static myTranspoOC *gInstance = NULL;
     
     if(_ocWebDb && _ocWebDb.isSet)
         _hasWebDb = YES;
+}
+
+- (void)execQuery:(NSString*)query
+{
+    [self execQuery:query WithVacuum:NO];
+}
+
+- (void)execQuery:(NSString*)query WithVacuum:(BOOL)vacuum
+{
+    if(_hasDB)
+    {
+        dispatch_async(_queue
+                       , ^{
+                           [_ocDb execQuery:query WithVacuum:vacuum];
+                           if([_delegate respondsToSelector:@selector(myTranspoFinishedExecutingQuery:)])
+                              [_delegate myTranspoFinishedExecutingQuery:self];
+                       });
+    }
 }
 
 #pragma mark - LOCATION MANAGER
@@ -774,6 +808,13 @@ static myTranspoOC *gInstance = NULL;
         return YES;
     }
         
+    return NO;
+}
+
+- (BOOL)getSynchFavorites:(NSMutableArray*)favorites;
+{
+    if([_ocDb getFavorites:favorites])
+        return YES;
     return NO;
 }
 
