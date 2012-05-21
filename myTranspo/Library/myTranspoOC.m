@@ -35,6 +35,7 @@ static myTranspoOC *gInstance = NULL;
 @synthesize City           = _city;
 @synthesize hasRealCoordinates = _hasRealCoordinates;
 @synthesize gpsRefreshRate = _gpsRefreshRate;
+@synthesize ocDb           = _ocDb;
 
 - (void)setGpsRefreshRate:(NSTimeInterval)gpsRefreshRate
 {
@@ -268,7 +269,7 @@ static myTranspoOC *gInstance = NULL;
     [self execQuery:query WithVacuum:NO];
 }
 
-- (void)execQuery:(NSString*)query WithVacuum:(BOOL)vacuum
+- (BOOL)execQuery:(NSString*)query WithVacuum:(BOOL)vacuum
 {
     if(_hasDB)
     {
@@ -278,7 +279,9 @@ static myTranspoOC *gInstance = NULL;
                            if([_delegate respondsToSelector:@selector(myTranspoFinishedExecutingQuery:)])
                               [_delegate myTranspoFinishedExecutingQuery:self];
                        });
+        return YES;
     }
+    return NO;
 }
 
 #pragma mark - LOCATION MANAGER

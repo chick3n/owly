@@ -43,6 +43,7 @@
 
 - (id)initWithDBPath:(NSString *)dbPath And:(MTLanguage)lang;
 - (BOOL)connectToDatabase;
+- (BOOL)connectToDatabaseForInstall;
 - (void)killDatabase;
 - (void)execQuery:(NSString*)query WithVacuum:(BOOL)vacuum;
 

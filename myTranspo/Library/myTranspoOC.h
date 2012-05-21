@@ -113,6 +113,7 @@
 @property (nonatomic,readonly)  BOOL                    hasRealCoordinates;
 @property (nonatomic, readonly) CLLocation*             clLocation;
 @property (nonatomic)           NSTimeInterval          gpsRefreshRate;
+@property (nonatomic, strong)   MTOCDB*                 ocDb;
 
 //methods
 + (myTranspoOC*)sharedSingleton;
@@ -132,7 +133,7 @@
 - (void)turnOnNetworkMethods;
 - (BOOL)endGpsRefresh:(id)sender;
 - (void)execQuery:(NSString*)query;
-- (void)execQuery:(NSString*)query WithVacuum:(BOOL)vacuum;
+- (BOOL)execQuery:(NSString*)query WithVacuum:(BOOL)vacuum;
 
 //general data
 - (BOOL)getScheduleForStop:(MTStop*)stop WithRoute:(MTBus*)bus;

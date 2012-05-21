@@ -329,7 +329,6 @@
         
         _newDatabase = YES;        
     }
-    _newDatabase = YES;
     
     [self setupMyTranspo];
     if([settings offlineMode])

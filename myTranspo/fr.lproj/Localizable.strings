@@ -152,3 +152,9 @@
 "UPCOMINGBUSES" = "Suivant: ";
 "SELECTALL" = "Sélectionner tout";
 "SELECTNONE" = "Sélectionnez Aucun";
+
+//LOADING - INSTALLING DB
+"BEGINNINGINSTALL" = "Installation...";
+"EXTRACTINGDATABASE" = "Extraire la base de données...";
+"INSTALLINGNEWDATABASE" = "Installation nouvelle base de données...";
+"FINISHINGINSTALL" = "Finalisation...";

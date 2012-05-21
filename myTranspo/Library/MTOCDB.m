@@ -73,7 +73,24 @@
     
     sqlite3_config(SQLITE_CONFIG_SERIALIZED);
     
+    //SQLITE_OPEN_READWRITE | SQLITE_OPEN_SHAREDCACHE
     if(sqlite3_open_v2([_dbPath UTF8String], &_db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_SHAREDCACHE, nil) != SQLITE_OK)
+        return NO;
+    
+    _isConnected = YES;
+    _isWritable = YES;
+    return YES;
+}
+
+- (BOOL)connectToDatabaseForInstall
+{
+    if(_dbPath == nil)
+        return NO;
+    
+    sqlite3_config(SQLITE_CONFIG_SERIALIZED);
+    
+    //SQLITE_OPEN_READWRITE | SQLITE_OPEN_SHAREDCACHE
+    if(sqlite3_open_v2([_dbPath UTF8String], &_db, SQLITE_OPEN_READWRITE, nil) != SQLITE_OK)
         return NO;
     
     _isConnected = YES;
@@ -86,13 +103,18 @@
     if(!_isConnected)
         return;
     
-    sqlite3_exec(_db, "BEGIN;", NULL, NULL, NULL);
+    //sqlite3_exec(_db, "BEGIN;", NULL, NULL, NULL);
+    //MTLog(@"BEGIN: %s", sqlite3_errmsg(_db));
     sqlite3_exec(_db, [query UTF8String], NULL, NULL, NULL);
-    sqlite3_exec(_db, "COMMIT;", NULL, NULL, NULL);
     MTLog(@"query results: %s", sqlite3_errmsg(_db));
+    //sqlite3_exec(_db, "COMMIT;", NULL, NULL, NULL);
+    //MTLog(@"COMMIT: %s", sqlite3_errmsg(_db));
     
     if(vacuum)
+    {
         sqlite3_exec(_db, "VACUUM;", NULL, NULL, NULL);
+        MTLog(@"VACUUM: %s", sqlite3_errmsg(_db));
+    }
 }
 
 #pragma mark - UPDATES

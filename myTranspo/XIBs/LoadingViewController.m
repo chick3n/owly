@@ -11,6 +11,7 @@
 @interface LoadingViewController ()
 - (void)finishedInstalling;
 - (void)migrateDatabase;
+- (void)updateProgress:(NSNumber*)status;
 @end
 
 @implementation LoadingViewController
@@ -29,9 +30,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    _transpo.delegate = self;
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    [self performSelector:@selector(finishedInstalling) withObject:nil afterDelay:4.0];
+    [self performSelectorInBackground:@selector(migrateDatabase) withObject:nil];
 }
 
 - (void)viewDidUnload
@@ -56,7 +58,7 @@
 	NSString *dbPath = [documentsDir stringByAppendingPathComponent:@"OCTranspo.sqlite"];
     BOOL canMigrateFavorites = NO;
     NSMutableArray* favorites = [[NSMutableArray alloc] init];
-    NSString* sourcePath = [[NSBundle mainBundle] pathForResource:@"OCTranspo.zip" ofType:nil];
+    NSString* sourcePath = [[NSBundle mainBundle] pathForResource:@"OCTranspo.7z" ofType:nil];
     
     //migrate favorites
     if([_transpo getSynchFavorites:favorites])
@@ -68,21 +70,30 @@
     [manager removeItemAtPath:dbPath error:nil];
     
     //move the new database 
-    [manager copyItemAtPath:sourcePath toPath:documentsDir error:nil];
+    //[manager copyItemAtPath:sourcePath toPath:documentsDir error:nil];
     
+    [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithInt:BEGINNING_INSTALL] waitUntilDone:NO];
     //extract new database
-    
-    
+    BOOL status = [LZMAExtractor extractArchiveEntry:sourcePath archiveEntry:@"OCTranspo.sqlite" outPath:dbPath];
+    if(status == NO)
+        MTLog(@"Failed to extract database.");
+        
     //delete zipped new database
-    [manager removeItemAtPath:[documentsDir stringByAppendingPathComponent:@"OCTranspo.zip"] error:nil];
+    //[manager removeItemAtPath:[documentsDir stringByAppendingPathComponent:@"OCTranspo.zip"] error:nil];
     
     //update that we have a new database in settings
     [settings updateDatabaseVersionToBundle];
     
     //reconnect to the  new database
-    [_transpo addDBPath:sourcePath]; 
-    
-    //add old favorites to new database
+    if(![_transpo addDBPath:dbPath])
+        MTLog(@"Failed attaching new database.");
+
+#if WITH_INDEXING //not doing indexeing as it is way tooooo slow on phone approx 6 mins
+    //reconnect using install parameters
+    [_transpo.ocDb killDatabase];
+    [_transpo.ocDb connectToDatabaseForInstall];
+#endif 
+    //add old favorites
     if(canMigrateFavorites && favorites != nil)
     {
         for(MTStop* favStop in favorites)
@@ -91,17 +102,30 @@
         }
     }
     favorites = nil;
-    
+
+#if WITH_INDEXING //not doing indexeing as it is way tooooo slow on phone approx 6 mins
     //run final commands on database
-    [_transpo execQuery:@"CREATE INDEX \"stop_timesTripId\" ON \"stop_times\" (\"trip_id\" ASC);"
-     "CREATE INDEX \"stop_timesStopId\" ON \"stop_times\" (\"stop_id\" ASC);"
-     "ANALYZE;" WithVacuum:YES];
+    if(![_transpo execQuery:@"CREATE INDEX `main`.`stop_timesTripId` ON `stop_times` (`trip_id` ASC);"
+     "CREATE INDEX `main`.`stop_timesStopId` ON `stop_times` (`stop_id` ASC);"
+     "ANALYZE;" WithVacuum:YES])
+    {
+        [self performSelectorOnMainThread:@selector(finishedInstalling) withObject:nil waitUntilDone:NO];
+    }
+#endif
     
     //wait for myTranspoFinishedExecutingQuery to leave
+    [self performSelectorOnMainThread:@selector(finishedInstalling) withObject:nil waitUntilDone:NO];
 }
 
 - (void)finishedInstalling
 {
+    [self updateProgress:[NSNumber numberWithInt:FINISHINGUP]];
+    
+#if WITH_INDEXING //not doing indexeing as it is way tooooo slow on phone approx 6 mins
+    [_transpo.ocDb killDatabase];
+    [_transpo.ocDb connectToDatabase];
+#endif    
+    
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate finishedLoading];
 }
@@ -109,6 +133,24 @@
 - (void)myTranspoFinishedExecutingQuery:(id)transpo
 {
     [self finishedInstalling];
+}
+
+- (void)updateProgress:(NSNumber*)status
+{
+    switch ([status intValue]) {
+        case BEGINNING_INSTALL:
+            _notifier.text = NSLocalizedString(@"BEGINNINGINSTALL", nil);
+            break;
+        case EXTRACTING:
+            _notifier.text = NSLocalizedString(@"EXTRACTINGDATABASE", nil);
+            break;
+        case RUNNINGQUERIES:
+            _notifier.text = NSLocalizedString(@"INSTALLINGNEWDATABASE", nil);
+            break;
+        case FINISHINGUP:
+            _notifier.text = NSLocalizedString(@"FINISHINGINSTALL", nil);
+            break;
+    }
 }
 
 @end

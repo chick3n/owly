@@ -161,3 +161,9 @@
 "UPCOMINGBUSES" = "Next: ";
 "SELECTALL" = "Check All";
 "SELECTNONE" = "Uncheck All";
+
+//LOADING - INSTALLING DB
+"BEGINNINGINSTALL" = "Installing...";
+"EXTRACTINGDATABASE" = "Extracting database...";
+"INSTALLINGNEWDATABASE" = "Installing new database...";
+"FINISHINGINSTALL" = "Finalizing...";
