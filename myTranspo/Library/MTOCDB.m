@@ -1106,6 +1106,12 @@
     if(!_isConnected)
         return NO;
     
+    if(trip == nil)
+        return NO;
+    
+    if(trips == nil)
+        return NO;
+    
     sqlite3_stmt* cmpStmt;
     
     NSString *sqlStmt = [NSString stringWithFormat:\
@@ -1148,7 +1154,7 @@
     
     sqlite3_reset(cmpStmt);
     
-    return YES;
+    return (trips.count > 0);
 }
 
 - (BOOL)getNextTrips:(NSMutableArray*)_trips
