@@ -13,6 +13,8 @@
 
 #include "../Core/ViewControllers.h"
 
+#define kMTMENUHEADERHEIGHT 23
+
 @protocol MenuTableViewDelegate <NSObject>
 @required
 - (void)menuTable:(id)menuView selectedNewOption:(MTViewControllers)view;
@@ -23,6 +25,7 @@
     NSTimer*                        _actionUpdates;
     NSMutableArray*                 _menu;
     IBOutlet UIButton*              _accountButton;
+     UIView*                             _tableViewHeader;
 }
 
 @property (nonatomic, weak)     IBOutlet UITableView*       tableView;

@@ -15,7 +15,7 @@
 
 #define kOffSetOriginX 0
 #define kOffSetOriginY 13
-#define kOffSetSubtitleOriginX kOffSetOriginX + 45
+#define kOffSetSubtitleOriginX kOffSetOriginX + 48
 #define kOffSetSubtitleOriginY kOffSetOriginY
 
 #define kOffSetBusDrawOriginX 0

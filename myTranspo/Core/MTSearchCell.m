@@ -82,7 +82,7 @@
     
     _titleLabel = [[UILabel alloc] initWithFrame:kDefaultLabelFrame];
     _titleLabel.textColor = [UIColor whiteColor];
-    _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
+    _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:15.0];
     _titleLabel.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.10];
     _titleLabel.shadowOffset = CGSizeMake(0, 1);
     _titleLabel.textAlignment = UITextAlignmentCenter;

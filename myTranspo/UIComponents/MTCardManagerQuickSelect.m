@@ -58,7 +58,7 @@
         cell = [[MTSearchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.type = CELLBUS;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.backgroundImage.image = [UIImage imageNamed:@"global_searchfilter_bg.jpg"];
+        cell.backgroundImage.image = [UIImage imageNamed:@"search_background.jpg"];
     }
         
     cell.accessoryType = UITableViewCellAccessoryNone;
