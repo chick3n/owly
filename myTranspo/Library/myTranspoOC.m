@@ -1387,7 +1387,6 @@ static myTranspoOC *gInstance = NULL;
     notification.alertBody = [NSString stringWithFormat:NSLocalizedString(@"MTDEF_ALERTTIMEMESSAGE", nil)
                               , route.BusNumber
                               , route.DisplayHeading
-                              , stop.StopNumber
                               , alertTime];
     
     NSDictionary *userDic = [NSDictionary dictionaryWithObjectsAndKeys:

@@ -85,10 +85,10 @@
     _filterButton = [[UIBarButtonItem alloc] initWithCustomView:filterButton];
     self.navigationItem.rightBarButtonItem = _filterButton;
     
-    MTRightButton *doneButton = [[MTRightButton alloc] initWithType:kRightButtonTypeAction];
-    [doneButton setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
-    [doneButton addTarget:self action:@selector(doneFilteringList:) forControlEvents:UIControlEventTouchUpInside];
-    _doneButton = [[UIBarButtonItem alloc] initWithCustomView:doneButton];
+    _doneButtonView = [[MTRightButton alloc] initWithType:kRightButtonTypeAction];
+    [_doneButtonView setTitle:NSLocalizedString(@"MTDEF_DONE", nil) forState:UIControlStateNormal];
+    [_doneButtonView addTarget:self action:@selector(doneFilteringList:) forControlEvents:UIControlEventTouchUpInside];
+    _doneButton = [[UIBarButtonItem alloc] initWithCustomView:_doneButtonView];
     
     _transpo.delegate = self;
     
@@ -168,6 +168,7 @@
         time.shadowColor = [UIColor whiteColor];
         time.shadowOffset = CGSizeMake(0, 1);
         time.tag = kAccessoryTimeTag;
+        time.textAlignment = UITextAlignmentRight;
         
         [cell setMyAccessoryView:time];
     }
@@ -221,7 +222,8 @@
     if(cell.accessoryView != cell.myAccessoryView)
         cell.accessoryView = cell.myAccessoryView;
     
-    [(UILabel*)cell.myAccessoryView setText:[MTHelper timeRemaingUntilTime:[route getTimeForDisplay]]];
+    NSString* time = [MTHelper timeRemaingUntilTime:[route getTimeForDisplay]];
+    [(UILabel*)cell.myAccessoryView setText:[NSString stringWithFormat:@"%@  ", time]];
     
     [cell hideBusImage:NO];
     [cell setDisplayAccessoryView:YES];
@@ -237,6 +239,19 @@
         MTStopHelper *helper = [_stop.upcomingBusesHelper objectAtIndex:indexPath.row];
         helper.hideRoute = !helper.hideRoute;
         [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        
+        BOOL empty = YES;
+        for(MTStopHelper *tmp in _stop.upcomingBusesHelper)
+        {
+            if(tmp.hideRoute == NO)
+            {
+                empty = NO;
+                break;
+            }
+        }
+        if(empty)
+            _doneButtonView.enabled = NO;
+        else _doneButtonView.enabled = YES;
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
@@ -317,6 +332,9 @@
         [filterList addObject:helper.routeNumber];
     }
     
+    if(filterList.count == 0)
+        return;
+    
     if(filterList.count != _stop.upcomingBusesHelper.count) //we have hidden something
         [MTSettings favoriteStopFilter:_stop.StopId UpdateWith:filterList];
     else [MTSettings clearFavoriteStopFilter:_stop.StopId]; //clear it if we have it
@@ -344,6 +362,8 @@
         helper.hideRoute = NO;
     
     [_tableView reloadData];
+    
+    _doneButtonView.enabled = YES;
 }
 
 - (IBAction)selectNone:(id)sender
@@ -352,6 +372,8 @@
         helper.hideRoute = YES;
     
     [_tableView reloadData];
+    
+    _doneButtonView.enabled = NO;
 }
 
 - (void)revealToolBar:(id)sender

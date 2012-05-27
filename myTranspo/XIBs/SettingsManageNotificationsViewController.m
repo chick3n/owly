@@ -86,8 +86,7 @@
     removeSelected.frame = removeFrame;
     _removeSelectedButton = [[UIBarButtonItem alloc] initWithCustomView:removeSelected];
     
-    [_toolBar setItems:[NSArray arrayWithObjects:_removeAllButton
-                        , [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]
+    [_toolBar setItems:[NSArray arrayWithObjects:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]
                         , _removeSelectedButton
                         , nil]];
     

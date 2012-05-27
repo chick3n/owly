@@ -20,6 +20,7 @@
 - (void)drawStop;
 - (void)drawStreet;
 - (void)drawNotice;
+- (void)drawFavorite;
 @end
 
 @implementation MTSearchCell
@@ -28,6 +29,7 @@
 @synthesize type                = _type;
 @synthesize displayAccessoryView = _displayAccessoryView;
 @synthesize myAccessoryView     = _myAccessoryView;
+@synthesize backgroundImage     = _newBackground;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -63,21 +65,24 @@
 {
     self.textLabel.hidden = YES;
     self.detailTextLabel.hidden = YES;
-        
+    
+    _newBackground = [[UIImageView alloc] initWithFrame:self.frame];
+    [self.contentView addSubview:_newBackground];
+    
     _backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"route_cell_line.png"]];
     CGRect frame = _backgroundImage.frame;
     frame.origin.y = self.frame.size.height - 2;
     _backgroundImage.frame = frame;
     [_backgroundImage setFrame:frame];
     [self.contentView addSubview:_backgroundImage];
-    
+        
     _cellImage = [[UIImageView alloc] initWithFrame:CGRectMake(kOffSetBusDrawOriginX, kOffSetBusDrawOriginY, 20, 20)];
     _cellImage.contentMode = UIViewContentModeScaleToFill;
     [self.contentView addSubview:_cellImage];
     
     _titleLabel = [[UILabel alloc] initWithFrame:kDefaultLabelFrame];
     _titleLabel.textColor = [UIColor whiteColor];
-    _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:16.0];
+    _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
     _titleLabel.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.10];
     _titleLabel.shadowOffset = CGSizeMake(0, 1);
     _titleLabel.textAlignment = UITextAlignmentCenter;
@@ -85,11 +90,21 @@
     [self.contentView addSubview:_titleLabel];
     
     _subtitleLabel = [[UILabel alloc] initWithFrame:kSubtitleLabelFrame];
-    _subtitleLabel.textColor = [UIColor colorWithRed:59./255. green:59./255. blue:59./255. alpha:1.0];
-    _subtitleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:16.0];
+    _subtitleLabel.textColor = [UIColor colorWithRed:89./255. green:89./255. blue:89./255. alpha:1.0];
+    _subtitleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
     _subtitleLabel.textAlignment = UITextAlignmentLeft;
     _subtitleLabel.backgroundColor = [UIColor clearColor];
     [self.contentView addSubview:_subtitleLabel];
+    
+    _subtitleLabel2 = [[UILabel alloc] initWithFrame:kSubtitleLabelFrame];
+    _subtitleLabel2.textColor = [UIColor colorWithRed:89./255. green:89./255. blue:89./255. alpha:1.0];
+    _subtitleLabel2.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:16.0];
+    _subtitleLabel2.textAlignment = UITextAlignmentLeft;
+    _subtitleLabel2.backgroundColor = [UIColor clearColor];
+    _subtitleLabel2.shadowColor = [UIColor whiteColor];
+    _subtitleLabel2.shadowOffset = CGSizeMake(0, 1);
+    _subtitleLabel2.hidden = YES;
+    [self.contentView addSubview:_subtitleLabel2]; 
     
     UIView * selection = [[UIView alloc] initWithFrame:self.frame];
     selection.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.04];
@@ -109,6 +124,8 @@
         [self drawStreet];
     else if(_type == CELLNOTICE)
         [self drawNotice];
+    else if(_type == CELLFAVORITE)
+        [self drawFavorite];
     
     if(_displayAccessoryView && _subtitleLabel.frame.size.width >= kSubtitleLabelFrame.size.width)
     {
@@ -129,6 +146,19 @@
         frame.origin.x = 8;
     else frame.origin.x = kSubtitleLabelFrame.origin.x;
     _subtitleLabel.frame = frame;
+}
+
+- (void)updateBusImage:(NSString*)image
+{
+    _cellImage.image = [UIImage imageNamed:image];
+}
+
+- (void)toggleSubtitle2:(BOOL)toggle
+{
+    _subtitleLabel2.hidden = toggle;
+    _subtitleLabel.hidden = !toggle;
+    if(toggle == NO)
+        _subtitleLabel2.text = _subtitle;
 }
 
 - (void)drawBus
@@ -188,6 +218,20 @@
     _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16.0];
     _titleLabel.text = _title;
    // _subtitleLabel.text = [f2 stringFromDate:[f dateFromString:_subtitle]];
+}
+
+- (void)drawFavorite
+{
+    _titleLabel.text = _title;
+    _titleLabel.frame = kDefaultLabelFrame;
+    
+    _subtitleLabel.text = _subtitle;
+    
+    CGRect imageFrame = _cellImage.frame;
+    imageFrame.size.width = kMTSEARCHCELLSHAPEHEIGHT;
+    imageFrame.size.height = kMTSEARCHCELLSHAPEHEIGHT;
+    _cellImage.frame = imageFrame;
+    _cellImage.image = [UIImage imageNamed:@"stop_heart_default.png"];
 }
 
 @end

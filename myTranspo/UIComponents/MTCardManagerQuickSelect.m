@@ -58,6 +58,7 @@
         cell = [[MTSearchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.type = CELLBUS;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.backgroundImage.image = [UIImage imageNamed:@"global_searchfilter_bg.jpg"];
     }
         
     cell.accessoryType = UITableViewCellAccessoryNone;
@@ -67,17 +68,28 @@
         
         cell.title = bus.BusNumberDisplay;
         cell.subtitle = bus.DisplayHeading;
-        [cell hideBusImage:NO];
+        cell.type = CELLBUS;
+        cell.backgroundImage.hidden = YES;
+        
+        [cell toggleSubtitle2:YES];
         
         [cell update];
     }
     else {
         cell.title = @"";
         cell.subtitle = (_stopFavorite) ? NSLocalizedString(@"FAVORITESTOPREMOVE", nil) : NSLocalizedString(@"FAVORITESTOP", nil);
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        [cell hideBusImage:YES];
+        
+        cell.backgroundImage.hidden = NO;
+        cell.type = CELLFAVORITE;
+        //[cell hideBusImage:YES];
+        
+        [cell toggleSubtitle2:NO];
         
         [cell update];
+        
+        if(_stopFavorite)
+            [cell updateBusImage:@"stop_heart_selected.png"];
+        
     }
     
     return cell;

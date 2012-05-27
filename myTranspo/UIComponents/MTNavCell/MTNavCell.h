@@ -13,7 +13,7 @@
 #define kMTNAVCELLSEPERATORCOLOR [UIColor clearColor]
 #define kMTNAVCELLNOTIFIERCOORDS CGRectMake(244, 11, 0, 0)
 #define kMTNAVCELLNOTIFIERCOLOR [UIColor colorWithRed:144./255. green:205./255 blue:26./255. alpha:1.0]
-#define kMTNAVCELLNOTIFIERNORMALCOLOR [UIColor colorWithRed:39./255. green:46./255 blue:49./255. alpha:1.0]
+#define kMTNAVCELLNOTIFIERNORMALCOLOR [[UIColor blackColor] colorWithAlphaComponent:0.3]
 
 typedef enum
 {

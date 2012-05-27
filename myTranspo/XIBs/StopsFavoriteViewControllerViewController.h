@@ -24,6 +24,7 @@
     UILabel                         *_accessoryViewTime;
     IBOutlet UIBarButtonItem        *_selectNone, *_selectAll;
     IBOutlet UIToolbar              *_tabBar;
+    MTRightButton                   *_doneButtonView;
 }
 
 @property (nonatomic, strong)       NSArray *data;

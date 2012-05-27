@@ -22,6 +22,17 @@
 - (void)setRightAccessoryText:(NSString *)rightAccessoryText
 {
     _rightAccessory.text = rightAccessoryText;
+    if(rightAccessoryText != nil)
+    {
+        CGRect textFrame = _text.frame;
+        textFrame.size.width = 216;
+        _text.frame = textFrame;
+    }
+    else {
+        CGRect textFrame = _text.frame;
+        textFrame.size.width = 280;
+        _text.frame = textFrame;
+    }
 }
 
 - (void)setIndent:(BOOL)indent
@@ -33,7 +44,6 @@
     else self.backgroundView.backgroundColor = [UIColor clearColor];
 #endif
 }
-
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

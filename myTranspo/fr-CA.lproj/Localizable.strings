@@ -101,7 +101,7 @@
 //ALERTS
 "MTDEF_ALERTUPDATETITLE" = "Route mise à jour";
 "MTDEF_ALERTUPDATEMESSAGE" = "Le %@, le à l'arrêt de %d, les temps doivent être mis à jour. Assurez-vous que vous êtes connecté en ligne pour le faire.";
-"MTDEF_ALERTTIMEMESSAGE" = "Le %@, en direction de %@, est programmé pour arriver à l'arrêt %d à %@.";
+"MTDEF_ALERTTIMEMESSAGE" = "%@ %@ est réglé pour arriver à %@.";
 
 //TRIPS
 "HEADING" = "Destination";
@@ -121,6 +121,8 @@
 
 //STOPS
 "AT" = "à";
+"FAVORITESTOP" = "Ajouter aux favoris arrêter";
+"FAVORITESTOPREMOVE" = "Retirer des favoris arrêter";
 
 //Alert Manager
 "BEGINS" = "commence";

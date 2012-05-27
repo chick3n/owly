@@ -27,6 +27,7 @@ typedef enum
     , CELLSTOP
     , CELLSTREET
     , CELLNOTICE
+    , CELLFAVORITE
 } MTSearchType;
 
 @interface MTSearchCellShape : UIView
@@ -38,9 +39,11 @@ typedef enum
 {
     UILabel*                _titleLabel;
     UILabel*                _subtitleLabel;
+    UILabel*                _subtitleLabel2;
     MTSearchCellShape*      _titleBackground;
     UIImageView*            _backgroundImage;
     UIImageView*            _cellImage;
+    UIImageView*            _newBackground;
 }
 
 @property (nonatomic, strong)   NSString*               title;
@@ -48,8 +51,11 @@ typedef enum
 @property (nonatomic)           MTSearchType            type;
 @property (nonatomic)           BOOL                    displayAccessoryView;
 @property (nonatomic, strong)   UIView                  *myAccessoryView;
+@property (nonatomic, strong)   UIImageView*            backgroundImage;
 
 - (void)update;
 - (void)hideBusImage:(BOOL)toggle;
+- (void)updateBusImage:(NSString*)image;
+- (void)toggleSubtitle2:(BOOL)toggle;
 
 @end

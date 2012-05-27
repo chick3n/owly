@@ -116,9 +116,11 @@
     
     _pageControl.hidden = YES;
     
+#if 0
     if(_pageControl.numberOfPages <= 1)
         _quickTable.hidden = YES;
     else _quickTable.hidden = NO;
+#endif
     
     if(_pageControl.numberOfPages >= 5)
     {
