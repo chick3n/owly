@@ -209,10 +209,8 @@
     [_dataScrollView addSubview:_refreshLabel];
     
     UIImageView *refreshBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"global_refresh_bg.png"]];
-    refreshBackground.contentMode = UIViewContentModeCenter;
+    //refreshBackground.contentMode = UIViewContentModeCenter;
     CGRect refreshBGFrame = refreshBackground.frame;
-    refreshBGFrame.size.width = 21;
-    refreshBGFrame.size.height = 22;
     refreshBGFrame.origin.x = _refreshLabel.frame.origin.x + ((_refreshLabel.frame.size.width / 2) - (refreshBGFrame.size.width /2));
     refreshBGFrame.origin.y = 10;
     refreshBackground.frame = refreshBGFrame;
