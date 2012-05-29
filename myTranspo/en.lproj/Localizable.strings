@@ -109,7 +109,7 @@
 //ALERTS
 "MTDEF_ALERTUPDATETITLE" = "Route Update";
 "MTDEF_ALERTUPDATEMESSAGE" = "The %@'s, at stop %d, times need to be updated. Make sure your are connected online to do so.";
-"MTDEF_ALERTTIMEMESSAGE" = "%@ %@ is set to arrive in %@.";
+"MTDEF_ALERTTIMEMESSAGE" = "%@ %@ is scheduled to arrive in %@.";
 
 //TRIPS
 "HEADING" = "Heading";
