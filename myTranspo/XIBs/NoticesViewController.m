@@ -98,21 +98,35 @@
     [self stopLoading:nil];
     _data = nil;
     _data = notices;
+    
+    if(_data.count == 0)
+    {
+        //prefill data so not empty
+        NSMutableDictionary *emptyNotices = [[NSMutableDictionary alloc] initWithCapacity:4];
+        [emptyNotices setObject:[NSArray array] forKey:@"cantrips"];
+        [emptyNotices setObject:[NSArray array] forKey:@"detours"];
+        [emptyNotices setObject:[NSArray array] forKey:@"genmsg"];
+        [emptyNotices setObject:[NSArray array] forKey:@"genserchange"];
+        
+        _data = emptyNotices;
+    }
+    
     _keys = [[_data allKeys] sortedArrayUsingSelector:@selector(compare:)];
     
     NSMutableArray* keys = [[NSMutableArray alloc] initWithArray:[[_data allKeys] sortedArrayUsingSelector:@selector(compare:)]];
-    [keys exchangeObjectAtIndex:2 withObjectAtIndex:3];
+    if(keys.count >= 3)
+        [keys exchangeObjectAtIndex:2 withObjectAtIndex:3];
     _keys = (NSArray*)keys;
     
     UIView *headerSpacing = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
-#if 0    
+#if 0   
     //update tableview header to adjust height
     UIView* headerSpacing = [[UIView alloc] init];
     CGRect headerSpacingFrame = headerSpacing.frame;
     headerSpacingFrame.size.height = (self.view.frame.size.height / 2) - ((_keys.count * kNoticesCellHeight) / 2);
     headerSpacing.frame = headerSpacingFrame;
     
-#endif        
+#endif       
     [_tableView setTableHeaderView:headerSpacing];
     
     [_tableView reloadData];
