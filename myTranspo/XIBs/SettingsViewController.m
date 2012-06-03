@@ -455,12 +455,12 @@
 
 - (void)offlineManager:(id)offlineMgr didFinishWithResult:(BOOL)result ForState:(OfflineState)state
 {
-    NSLog(@"Manager finished with result %d for state %d", result, state);
+    MTLog(@"Manager finished with result %d for state %d", result, state);
 }
 
 - (void)offlineManagerTotalReceived:(CGFloat)received ForSize:(CGFloat)size
 {
-    NSLog(@"Manager received %f of %f", received, size);
+    MTLog(@"Manager received %f of %f", received, size);
 }
 
 @end

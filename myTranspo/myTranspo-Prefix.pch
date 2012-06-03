@@ -13,4 +13,6 @@
     #import <Foundation/Foundation.h>
 #endif
 
+//#define MTDEBUG_LOGGING
+
 #import "MTLoggin.h"

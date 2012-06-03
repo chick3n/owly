@@ -471,10 +471,10 @@
 {
     if(stop == nil || bus == nil)
         return NO;
-    
+#if 0
     static double ticksToNanoseconds = 0.0;
     uint64_t startTime = mach_absolute_time();
-    
+#endif
     [bus.Times clearTimes];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -527,7 +527,7 @@
         
     if(results)
         [(NSMutableDictionary*)results addEntriesFromDictionary:json];
-    
+#if 0
     uint64_t endTime = mach_absolute_time();
     uint64_t elapsedTime = endTime - startTime;
     if(0.0 == ticksToNanoseconds)
@@ -537,8 +537,8 @@
         ticksToNanoseconds = (double)timebase.numer / timebase.denom;
     }
     
-    NSLog(@"Web Time Elapsed: %f", elapsedTime * ticksToNanoseconds);
-    
+    MTLog(@"Web Time Elapsed: %f", elapsedTime * ticksToNanoseconds);
+#endif
     return YES;
 }
 

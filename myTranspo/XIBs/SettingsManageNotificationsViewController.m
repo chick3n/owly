@@ -200,7 +200,7 @@
     }
     
     UILocalNotification* notification = [_data objectAtIndex:indexPath.row];
-    NSLog(@"%@", notification.fireDate);
+    MTLog(@"%@", notification.fireDate);
     
     NSString *title = @"";
     //display notification data properly

@@ -83,9 +83,9 @@
 #if 0
     NSArray *syms = [NSThread  callStackSymbols]; 
     if ([syms count] > 1) { 
-        NSLog(@"Update Card: %@ - caller: %@ ", _bus.BusNumberDisplay,[syms objectAtIndex:1]);
+        MTLog(@"Update Card: %@ - caller: %@ ", _bus.BusNumberDisplay,[syms objectAtIndex:1]);
     } else {
-        NSLog(@"Update Card: %@ - %@", _bus.BusNumberDisplay, NSStringFromSelector(_cmd)); 
+        MTLog(@"Update Card: %@ - %@", _bus.BusNumberDisplay, NSStringFromSelector(_cmd)); 
     }
 #endif
     [_loader stopAnimating];

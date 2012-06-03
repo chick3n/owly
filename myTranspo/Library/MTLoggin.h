@@ -10,7 +10,7 @@
 #define myTranspoOC_MTLoggin_h
 
 #ifndef MTDEBUG_LOGGING
-#define MTLog(format, args...) NSLog(format, ## args)
+#define MTLog(format, args...) 
 #else
 #define MTLog(format, args...) NSLog(format, ## args)
 #endif

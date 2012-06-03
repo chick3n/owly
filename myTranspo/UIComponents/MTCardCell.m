@@ -352,11 +352,14 @@
     _prevTime.alpha = 0.0;
     _nextTime.alpha = 0.0;
     _distance.alpha = 0.0;
+    CGPoint dataScrollOffset = _dataScrollView.contentOffset;
+    dataScrollOffset.x = 0;
     
     [UIView animateWithDuration:0.25 animations:^{
         _prevTime.alpha = 1.0;
         _nextTime.alpha = 1.0;
         _distance.alpha = 1.0;
+        _dataScrollView.contentOffset = dataScrollOffset;
     }];
 }
 
@@ -472,13 +475,13 @@
     
     [UIView animateWithDuration:10.25
                      animations:^{
-                         NSLog(@"Animating Cell Frame");
+                         MTLog(@"Animating Cell Frame");
                          _detailsBackground.frame = detailsBackgroundFrame;
                          _dataScrollView.frame = detailsScrollView;
                      } completion:^(BOOL finished) {
                          if(finished)
                          {
-                             NSLog(@"Animating Cell Frame Finished");
+                             MTLog(@"Animating Cell Frame Finished");
                              _hasExpanded = YES;
                          }
                          
@@ -636,7 +639,7 @@
     {
         if([_delegate conformsToProtocol:@protocol(MTCardCellDelegate)])
         {
-            NSLog(@"Refreshing Cell");
+            MTLog(@"Refreshing Cell");
             [UIView animateWithDuration:0.25 animations:^(void){
                 scrollView.contentInset = UIEdgeInsetsMake(0, (kScrollToRefreshPoint*-1), 0, 0);
             }];

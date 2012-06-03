@@ -441,7 +441,7 @@
         ticksToNanoseconds = (double)timebase.numer / timebase.denom;
     }
     
-    NSLog(@"First Search: %f", elapsedTime * ticksToNanoseconds);
+    MTLog(@"First Search: %f", elapsedTime * ticksToNanoseconds);
 
     startTime = mach_absolute_time();
     
@@ -496,7 +496,7 @@
         ticksToNanoseconds = (double)timebase.numer / timebase.denom;
     }
     
-    NSLog(@"Second Search: %f", elapsedTime * ticksToNanoseconds);
+    MTLog(@"Second Search: %f", elapsedTime * ticksToNanoseconds);
     
     startTime = mach_absolute_time();
     
@@ -551,7 +551,7 @@
         ticksToNanoseconds = (double)timebase.numer / timebase.denom;
     }
     
-    NSLog(@"Final Search: %f", elapsedTime * ticksToNanoseconds);
+    MTLog(@"Final Search: %f", elapsedTime * ticksToNanoseconds);
     
     [stops addObject:streetNames];
     
@@ -640,10 +640,10 @@
 {
     if(!_isConnected)
         return NO;
-    
+#if 0
     static double ticksToNanoseconds = 0.0;
     uint64_t startTime = mach_absolute_time();
-    
+#endif
     sqlite3_create_function(_db, "distance", 4, SQLITE_UTF8, NULL, &distanceFunc, NULL, NULL);
     
     NSString * sqlStmt = [NSString stringWithFormat:
@@ -672,7 +672,7 @@
     
     sqlite3_reset(_cmpStmt);
     
-    
+#if 0
     uint64_t endTime = mach_absolute_time();
     uint64_t elapsedTime = endTime - startTime;
     if(0.0 == ticksToNanoseconds)
@@ -682,8 +682,8 @@
         ticksToNanoseconds = (double)timebase.numer / timebase.denom;
     }
     
-    NSLog(@"AllStopsNear: %f", ticksToNanoseconds * elapsedTime);
-    
+    MTLog(@"AllStopsNear: %f", ticksToNanoseconds * elapsedTime);
+#endif
     //[self getAllBusesForStops:stops];
     
     return (stops.count > 0) ? YES : NO;
@@ -798,10 +798,10 @@
 {
     if(!_isConnected)
         return NO;
-    
+#if 0
     static double ticksToNanoseconds = 0.0;
     uint64_t startTime = mach_absolute_time();
-    
+#endif
     
     sqlite3_stmt* cmpStmt;
     BOOL foundTime = NO;
@@ -880,7 +880,7 @@
         }
         
         sqlite3_reset(cmpStmt);
-        
+#if 0 //TIMER COUNT
         uint64_t endTime = mach_absolute_time();
         uint64_t elapsedTime = endTime - startTime;
         if(0.0 == ticksToNanoseconds)
@@ -890,15 +890,15 @@
             ticksToNanoseconds = (double)timebase.numer / timebase.denom;
         }
         
-        NSLog(@"Local Time Elapsed: %f", elapsedTime * ticksToNanoseconds);
-        
+        MTLog(@"Local Time Elapsed: %f", elapsedTime * ticksToNanoseconds);
+#endif
         if(foundTime)
         {
             bus.Times.TimesAdded = YES;
             return YES;
         }
     }
-    NSLog(@"%s", sqlite3_errmsg(_db));
+    MTLog(@"%s", sqlite3_errmsg(_db));
     sqlite3_reset(cmpStmt);
     return NO;
 }
