@@ -325,7 +325,7 @@ static myTranspoOC *gInstance = NULL;
 {
     //_coordinates = kDefaultCoordinatesOttawa;
     //retain old coordinates
-    _hasRealCoordinates = YES;
+    _hasRealCoordinates = NO;
 }
 
 - (void)turnOnLocationTracking
@@ -1441,6 +1441,7 @@ static myTranspoOC *gInstance = NULL;
     else if(dayOfWeek == 1) //saturday
     {
         [dateComp setDay:7 - currentWeekday];
+        [dateComp setDay:-7];
         fireDate = [[NSCalendar currentCalendar] dateByAddingComponents:weekdayComponents toDate:startDate options:0];
         if(fireDate == nil)
             return nil;
@@ -1455,15 +1456,16 @@ static myTranspoOC *gInstance = NULL;
     else //sunday
     {
         [dateComp setDay:8 - currentWeekday];
+        [dateComp setDay:-7];
         
         fireDate = [[NSCalendar currentCalendar] dateByAddingComponents:dateComp toDate:startDate options:0];
         if(fireDate == nil)
             return nil;
-        
+
         fireDate = [self addTime:[time getTimeForDisplay] toDate:fireDate withInterval:[MTSettings notificationAlertTimeInt]];
         if(fireDate == nil)
             return nil;
-        
+
         notification.fireDate = fireDate;        
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }

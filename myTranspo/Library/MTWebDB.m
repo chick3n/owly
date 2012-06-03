@@ -488,7 +488,7 @@
                                                   , [dateFormatter stringFromDate:date]]];*/
     
     NSData *data = [self webData:[self appendUrlQuery:@"oc_stopRouteTimes.php?route=%@&stop=%@&date=%@"
-                   , bus.BusId
+                   , bus.BusNumber
                    , stop.StopId
                    , [dateFormatter stringFromDate:date]]];
 

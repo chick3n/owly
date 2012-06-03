@@ -135,7 +135,7 @@
                  [_alertTimer invalidate];
                  _alertTimer = nil;
              }
-             _alertTimer = [NSTimer scheduledTimerWithTimeInterval:2.5 target:self selector:@selector(alertTimerTick) userInfo:nil repeats:YES];
+             _alertTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(alertTimerTick) userInfo:nil repeats:YES];
          }
      }];
 }
