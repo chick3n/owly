@@ -220,6 +220,10 @@
 		31B9E8481569809400FD24D5 /* 7zAlloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 31B9E8351569809400FD24D5 /* 7zAlloc.c */; };
 		31B9E8491569809400FD24D5 /* 7zMain.c in Sources */ = {isa = PBXBuildFile; fileRef = 31B9E8371569809400FD24D5 /* 7zMain.c */; };
 		31B9E858156BB24900FD24D5 /* OCTranspo.7z in Resources */ = {isa = PBXBuildFile; fileRef = 31B9E857156BB24900FD24D5 /* OCTranspo.7z */; };
+		31BC2808157BA08000838DD2 /* Alert.m in Sources */ = {isa = PBXBuildFile; fileRef = 31BC2807157BA08000838DD2 /* Alert.m */; };
+		31BC280B157BA0B800838DD2 /* AlertsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 31BC280A157BA0B800838DD2 /* AlertsManager.m */; };
+		31BC280E157BA49C00838DD2 /* global_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 31BC280C157BA49C00838DD2 /* global_alert.png */; };
+		31BC280F157BA49C00838DD2 /* global_alert@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 31BC280D157BA49C00838DD2 /* global_alert@2x.png */; };
 		31CAB529154206840040A1E2 /* MTTripPlanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CAB528154206840040A1E2 /* MTTripPlanner.m */; };
 		31CAB52E15420F690040A1E2 /* TripPlannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31CAB52C15420F680040A1E2 /* TripPlannerViewController.m */; };
 		31CAB52F15420F690040A1E2 /* TripPlannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31CAB52D15420F680040A1E2 /* TripPlannerViewController.xib */; };
@@ -638,6 +642,12 @@
 		31B9E84F156AE43B00FD24D5 /* 7zMain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 7zMain.h; sourceTree = "<group>"; };
 		31B9E850156AE46B00FD24D5 /* 7zIn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 7zIn.h; sourceTree = "<group>"; };
 		31B9E857156BB24900FD24D5 /* OCTranspo.7z */ = {isa = PBXFileReference; lastKnownFileType = file; path = OCTranspo.7z; sourceTree = "<group>"; };
+		31BC2806157BA08000838DD2 /* Alert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alert.h; sourceTree = "<group>"; };
+		31BC2807157BA08000838DD2 /* Alert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Alert.m; sourceTree = "<group>"; };
+		31BC2809157BA0B800838DD2 /* AlertsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertsManager.h; sourceTree = "<group>"; };
+		31BC280A157BA0B800838DD2 /* AlertsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertsManager.m; sourceTree = "<group>"; };
+		31BC280C157BA49C00838DD2 /* global_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = global_alert.png; sourceTree = "<group>"; };
+		31BC280D157BA49C00838DD2 /* global_alert@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "global_alert@2x.png"; sourceTree = "<group>"; };
 		31CAB527154206830040A1E2 /* MTTripPlanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTripPlanner.h; sourceTree = "<group>"; };
 		31CAB528154206840040A1E2 /* MTTripPlanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTripPlanner.m; sourceTree = "<group>"; };
 		31CAB52B15420F680040A1E2 /* TripPlannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripPlannerViewController.h; path = XIBs/TripPlannerViewController.h; sourceTree = "<group>"; };
@@ -912,6 +922,8 @@
 		319D781115371B5A00542ED3 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				31BC280C157BA49C00838DD2 /* global_alert.png */,
+				31BC280D157BA49C00838DD2 /* global_alert@2x.png */,
 				31EA33471572624B00562582 /* menu_dividers.png */,
 				31EA33481572624B00562582 /* menu_dividers@2x.png */,
 				31EA33451572609200562582 /* global_refresh_bg.png */,
@@ -1324,6 +1336,7 @@
 		31ADEA31151FE3220029C964 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				31BC2804157BA06A00838DD2 /* Alerts */,
 				317E3DFC1559EE2A000A3B16 /* Offline */,
 				318095CD1543004000B71188 /* TripDetails */,
 				31DF2E291523C7120035BE2F /* Map */,
@@ -1420,6 +1433,18 @@
 				31B9E84F156AE43B00FD24D5 /* 7zMain.h */,
 			);
 			path = 7z;
+			sourceTree = "<group>";
+		};
+		31BC2804157BA06A00838DD2 /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				31BC2806157BA08000838DD2 /* Alert.h */,
+				31BC2807157BA08000838DD2 /* Alert.m */,
+				31BC2809157BA0B800838DD2 /* AlertsManager.h */,
+				31BC280A157BA0B800838DD2 /* AlertsManager.m */,
+			);
+			name = Alerts;
+			path = Core/Alerts;
 			sourceTree = "<group>";
 		};
 		31D64D731554D4D5001B0B2D /* DCRoundSwitch */ = {
@@ -1746,6 +1771,8 @@
 				31EA335215726DD700562582 /* stop_heart_default.png in Resources */,
 				31EA33561575A43F00562582 /* icon@2x.png in Resources */,
 				31EA33581575A92400562582 /* icon.png in Resources */,
+				31BC280E157BA49C00838DD2 /* global_alert.png in Resources */,
+				31BC280F157BA49C00838DD2 /* global_alert@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1848,6 +1875,8 @@
 				31B9E8471569809400FD24D5 /* Ppmd8Dec.c in Sources */,
 				31B9E8481569809400FD24D5 /* 7zAlloc.c in Sources */,
 				31B9E8491569809400FD24D5 /* 7zMain.c in Sources */,
+				31BC2808157BA08000838DD2 /* Alert.m in Sources */,
+				31BC280B157BA0B800838DD2 /* AlertsManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

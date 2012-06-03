@@ -61,10 +61,6 @@
 								<reference key="NSSuperview" ref="383783267"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="267287778"/>
-								<object class="NSColor" key="IBUIBackgroundColor" id="417994135">
-									<int key="NSColorSpace">3</int>
-									<bytes key="NSWhite">MCAwAA</bytes>
-								</object>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
@@ -75,7 +71,10 @@
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MSAxIDEgMC42NQA</bytes>
 								</object>
-								<reference key="IBUIHighlightedColor" ref="417994135"/>
+								<object class="NSColor" key="IBUIHighlightedColor">
+									<int key="NSColorSpace">3</int>
+									<bytes key="NSWhite">MSAwLjY1AA</bytes>
+								</object>
 								<object class="NSColor" key="IBUIShadowColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MC4wOTgwMzkyMTcyOSAwLjA5ODAzOTIxNzI5IDAuMDk4MDM5MjE3MjkgMC43NQA</bytes>
@@ -117,7 +116,10 @@
 										<reference key="NSSuperview" ref="267287778"/>
 										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="938545477"/>
-										<reference key="IBUIBackgroundColor" ref="417994135"/>
+										<object class="NSColor" key="IBUIBackgroundColor" id="417994135">
+											<int key="NSColorSpace">3</int>
+											<bytes key="NSWhite">MCAwAA</bytes>
+										</object>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClipsSubviews">YES</bool>
 										<int key="IBUIContentMode">7</int>

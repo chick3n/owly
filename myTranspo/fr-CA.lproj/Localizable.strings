@@ -102,6 +102,7 @@
 "MTDEF_ALERTUPDATETITLE" = "Route mise à jour";
 "MTDEF_ALERTUPDATEMESSAGE" = "Le %@, le à l'arrêt de %d, les temps doivent être mis à jour. Assurez-vous que vous êtes connecté en ligne pour le faire.";
 "MTDEF_ALERTTIMEMESSAGE" = "%@ %@ est réglé pour arriver à %@.";
+"MTDEF_NEWALERTTIMEMESSAGE" = "est réglé pour arriver à %@.";
 
 //TRIPS
 "HEADING" = "Destination";

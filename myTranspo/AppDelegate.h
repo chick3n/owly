@@ -20,6 +20,7 @@
 #import "NoticesViewController.h"
 #import "TripPlannerViewController.h"
 #import "LoadingViewController.h"
+#import "AlertsManager.h"
 
 #import "Reachability.h"
 
@@ -47,6 +48,8 @@
     Reachability*                   _hostReach;
     Reachability*                   _internetReach;
     Reachability*                   _wifiReach;
+    
+    AlertsManager*                  _alertManager;
 }
 
 @property (strong, nonatomic) UIWindow *window;

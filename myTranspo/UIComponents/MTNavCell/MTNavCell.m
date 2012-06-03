@@ -32,6 +32,7 @@
     UIView * background = [[UIView alloc] initWithFrame:self.frame];
     background.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
     self.selectedBackgroundView = background;
+    
 }
 
 - (void)initializeUI

@@ -41,6 +41,8 @@
         CGRect rainbowFrame = _rainbowBar.frame;
         rainbowFrame.origin.y = 0;
         _rainbowBar.frame = rainbowFrame;
+        
+        _alertManager = [[AlertsManager alloc] initWithFrame:CGRectMake(0, 0, 320, kAlertManagerHeight)];
     }
     
     return self;
@@ -59,14 +61,18 @@
     
     //auto goto favorites if we need an update or notified of upcoming bus
     if(!_newDatabase)
-        [self launchNewView:(localNotification == nil) ? [MTSettings startupScreen] : MTVCMYBUSES]; 
+        [self launchNewView:[MTSettings startupScreen]]; 
     else [self launchNewView:MTVCLOADING];
     
     [_menuController.view addSubview:_rainbowBar];
+    [_menuController.view addSubview:_alertManager];
     self.window.rootViewController = _menuController;
     [self.window makeKeyAndVisible];
     
     [self postLoad];
+    
+    if(localNotification != nil)
+        [_alertManager addAlert:localNotification];
     
     return YES;
 }
@@ -133,8 +139,7 @@
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification 
 {
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:notification.alertBody delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert show];
+    [_alertManager addAlert:notification];
     
     application.applicationIconBadgeNumber = 0;
 }
@@ -344,8 +349,6 @@
 
 - (void)postLoad
 {
-    
-    
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
     
     _hostReach = [Reachability reachabilityWithHostName: @"www.google.com"];
@@ -354,6 +357,10 @@
 	[_hostReach startNotifier];
 	[_internetReach startNotifier];
 	[_wifiReach startNotifier];
+    
+    CGRect alertFrame = _alertManager.frame;
+    alertFrame.origin.y = _menuController.view.frame.size.height;
+    _alertManager.frame = alertFrame;
 }
 
 #pragma mark - MENUVIEWCONTROLLER DELEGATE
