@@ -20,6 +20,8 @@
 - (void)doneUpdatingFavorites;
 - (void)updateNavigationController;
 - (void)reinstateQueue;
+//resizing fix
+- (void)updatefavoriteTick;
 @end
 
 @implementation MyBusesViewController
@@ -31,6 +33,7 @@
     if (self) {
         _updateInProgress = NO;
         _updateCount = 0;
+        _updateFavorite = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -148,6 +151,12 @@
 - (void)dealloc
 {
     [self cancelQueues];
+    
+    if(_updateFavoriteTimer != nil)
+    {
+        [_updateFavoriteTimer invalidate];
+        _updateFavoriteTimer = nil;
+    }
 }
 
 #pragma mark - Generic View 
@@ -202,17 +211,27 @@
         {
             CardCellManager* cellManager = [_favorites objectAtIndex:index];
             
-            cellManager.state = CCM_FULL;
-            cellManager.status = CMS_IDLE;
-            cellManager.individualUpdate = NO;
-            if(cellManager.isFavoriteStop)
-                [cellManager updateDisplayObjectsForStop:cellManager.stop.upcomingBuses];
-            else [cellManager updateDisplayObjects];
-            
-            [_tableView beginUpdates];
-            [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:0]]
-                              withRowAnimation:UITableViewRowAnimationNone];
-            [_tableView endUpdates];
+            if(!cellManager.hasAnimated)
+            {
+                [_updateFavorite addObject:[NSNumber numberWithInt:index]];
+            }
+            else {
+#if 1
+                cellManager.state = CCM_FULL;
+                cellManager.status = CMS_IDLE;
+                cellManager.individualUpdate = NO;
+                
+                if(cellManager.isFavoriteStop)
+                    [cellManager updateDisplayObjectsForStop:cellManager.stop.upcomingBuses];
+                else [cellManager updateDisplayObjects];
+                
+                [_tableView beginUpdates];
+                [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:0]]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+                [_tableView endUpdates];
+#endif
+            }
+
         }
         
         _updateCount -= 1;
@@ -287,6 +306,9 @@
 
 - (void)updateAllFavorites
 {
+    if(_updateFavoriteTimer == nil)
+        _updateFavoriteTimer = [NSTimer scheduledTimerWithTimeInterval:0.25 target:self selector:@selector(updatefavoriteTick) userInfo:nil repeats:YES];
+    
     for(int x=0; x<_favorites.count; x++)
     {
         CardCellManager *cellManager = [_favorites objectAtIndex:x];
@@ -324,6 +346,20 @@
     _updateCount = 0;
     _updateInProgress = NO;
     [_tableView stopLoading];
+    
+#if 0
+    if(_updateFavoriteTimer != nil)
+    {
+        [_updateFavoriteTimer invalidate];
+        _updateFavoriteTimer = nil;
+        
+        //redraw remaining
+        while(_updateFavorite.count > 0)
+        {
+            [self updatefavoriteTick];
+        }
+    }
+#endif
 }
 
 - (int)findCellManagerForStop:(MTStop*)stop
@@ -336,6 +372,30 @@
     }
     
     return -1;
+}
+
+- (void)updatefavoriteTick
+{
+    if(_updateFavorite.count > 0)
+    {
+        NSNumber *index = [_updateFavorite objectAtIndex:0];
+        
+        CardCellManager* cellManager = [_favorites objectAtIndex:index.intValue];
+        
+        cellManager.state = CCM_FULL;
+        cellManager.status = CMS_IDLE;
+        cellManager.individualUpdate = NO;
+        
+        if(cellManager.isFavoriteStop)
+            [cellManager updateDisplayObjectsForStop:cellManager.stop.upcomingBuses];
+        else [cellManager updateDisplayObjects];
+        
+        [_tableView beginUpdates];
+        [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index.intValue inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        [_tableView endUpdates];
+        
+        [_updateFavorite removeObjectAtIndex:0];
+    }
 }
 
 #pragma mark - Table View DataSource
@@ -355,7 +415,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CardCellManager* cellManager = [_favorites objectAtIndex:indexPath.row];
-    
+
     if(cellManager.state == CCM_EMPTY)
         return kHiddenHeight;
     

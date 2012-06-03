@@ -68,7 +68,7 @@
     _additionalNextTimes = _stop.Bus.NextThreeTimesDisplay;
     _busSpeed = _stop.Bus.BusSpeed;
     
-    _state = CCM_FULL;
+    //_state = CCM_FULL;
     _status = CMS_NEWUPDATE;
 }
 

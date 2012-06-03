@@ -25,6 +25,9 @@
     NSMutableArray*         _favorites; //cardcellmanager
     BOOL                    _updateInProgress;
     int                     _updateCount;
+    NSMutableArray*         _updateFavorite;
+    BOOL                    _updateFavoriteExpanding;
+    NSTimer*                _updateFavoriteTimer;
     
     //UI Components
     IBOutlet 

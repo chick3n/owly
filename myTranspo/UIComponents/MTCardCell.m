@@ -222,6 +222,8 @@
     refreshArrowFrame.origin.y = ([[UIScreen mainScreen] scale] == 1.0) ? 13 : 14;
     _refreshArrow.frame = refreshArrowFrame;
     [_dataScrollView addSubview:_refreshArrow];
+    
+    //fix the issue with glitching
 }
 
 - (NSInteger)getCellHeight
@@ -356,6 +358,7 @@
     }];
 }
 
+//animates here
 - (void)updateCellDetailsAnimation:(BOOL)animate
 {
     CGRect detailsBackgroundFrame = _detailsBackground.frame;
@@ -363,7 +366,7 @@
     
     if(detailsScrollView.origin.y == 0 || detailsBackgroundFrame.origin.y == 0)
         return;
-    
+
     detailsBackgroundFrame.origin.y = 0;
     detailsScrollView.origin.y = 0;
     
@@ -425,6 +428,7 @@
     }
 }
 
+//animates here
 - (void)updateCellForIndividualUpdate:(BOOL)update
 {
     UIEdgeInsets edgeInset = UIEdgeInsetsZero;
@@ -445,6 +449,7 @@
                      }];
 }
 
+#if 1
 - (void)setFrame:(CGRect)frame
 {
     [super setFrame:frame];
@@ -478,6 +483,7 @@
                      }];
 #endif
 }
+#endif
 
 - (void)expandCellWithAnimation:(BOOL)animate
 {
@@ -875,6 +881,7 @@
                      }];
 }
 
+//animates here
 - (void)defaultMode:(id)sender
 {
     if(_isAnimatingEdit)

@@ -325,7 +325,7 @@ static myTranspoOC *gInstance = NULL;
 {
     //_coordinates = kDefaultCoordinatesOttawa;
     //retain old coordinates
-    _hasRealCoordinates = NO;
+    _hasRealCoordinates = YES;
 }
 
 - (void)turnOnLocationTracking
