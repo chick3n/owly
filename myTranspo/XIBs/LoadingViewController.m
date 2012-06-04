@@ -168,7 +168,7 @@
 {
     [self updateProgress:[NSNumber numberWithInt:FINISHINGUP]];
     
-#if 1 
+#if 0
     [_transpo.ocDb killDatabase];
     [_transpo.ocDb connectToDatabase];
 #endif    

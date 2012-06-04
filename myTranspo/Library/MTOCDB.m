@@ -71,7 +71,13 @@
     if(_dbPath == nil)
         return NO;
     
-    sqlite3_config(SQLITE_CONFIG_SERIALIZED);
+    sqlite3_shutdown();
+    if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) == SQLITE_OK) {
+        MTLog(@"sqlite configured to be threadsafe");
+    }
+    sqlite3_initialize();
+
+    //sqlite3_config(SQLITE_CONFIG_SERIALIZED);
     
     //SQLITE_OPEN_READWRITE | SQLITE_OPEN_SHAREDCACHE
     if(sqlite3_open_v2([_dbPath UTF8String], &_db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_SHAREDCACHE, nil) != SQLITE_OK)
@@ -390,9 +396,10 @@
         return NO;
     
     //Get Buses 
+#if 0
     static double ticksToNanoseconds = 0.0;
     uint64_t startTime = mach_absolute_time();
-    
+#endif
     NSMutableArray* buses = [[NSMutableArray alloc] init];
     
     sqlite3_stmt* _cmpStmt;
@@ -431,7 +438,7 @@
     }
     
     [stops addObject:buses];
-    
+#if 0
     uint64_t endTime = mach_absolute_time();
     uint64_t elapsedTime = endTime - startTime;
     if(0.0 == ticksToNanoseconds)
@@ -440,11 +447,11 @@
         mach_timebase_info(&timebase);
         ticksToNanoseconds = (double)timebase.numer / timebase.denom;
     }
-    
+
     MTLog(@"First Search: %f", elapsedTime * ticksToNanoseconds);
 
     startTime = mach_absolute_time();
-    
+#endif    
     //get bus stops from query
     NSMutableArray* busStops = [[NSMutableArray alloc] init];
     
@@ -486,7 +493,7 @@
     }
     
     [stops addObject:busStops];
-    
+#if 0
      endTime = mach_absolute_time();
     elapsedTime = endTime - startTime;
     if(0.0 == ticksToNanoseconds)
@@ -499,7 +506,7 @@
     MTLog(@"Second Search: %f", elapsedTime * ticksToNanoseconds);
     
     startTime = mach_absolute_time();
-    
+#endif
     //get bus stops from query
     NSMutableArray* streetNames = [[NSMutableArray alloc] init];
     
@@ -541,7 +548,7 @@
         //get all buses for stops
         //[self getAllBusesForStops:streetNames];
     }
-    
+#if 0
      endTime = mach_absolute_time();
      elapsedTime = endTime - startTime;
     if(0.0 == ticksToNanoseconds)
@@ -552,7 +559,7 @@
     }
     
     MTLog(@"Final Search: %f", elapsedTime * ticksToNanoseconds);
-    
+#endif
     [stops addObject:streetNames];
     
     return (stops.count > 0) ? YES : NO;
@@ -947,7 +954,7 @@
                           , [dateFormatter stringFromDate:date]
                           , bus.BusNumber
                           , stop.StopId];
-
+    
     if(sqlite3_prepare_v2(_db
                           , [sqlStmt UTF8String]
                           , -1
