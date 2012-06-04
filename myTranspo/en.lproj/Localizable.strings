@@ -164,7 +164,7 @@
 "SELECTNONE" = "Uncheck All";
 
 //LOADING - INSTALLING DB
-"BEGINNINGINSTALL" = "Installing, please hold.";
+"BEGINNINGINSTALL" = "Installing, please wait.";
 "EXTRACTINGDATABASE" = "Extracting database...";
 "INSTALLINGNEWDATABASE" = "Installing new database...";
 "FINISHINGINSTALL" = "Finalizing...";
