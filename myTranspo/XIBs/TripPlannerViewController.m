@@ -191,11 +191,13 @@
     {
         cell.text.text = NSLocalizedString(@"EMPTYTRIPPLANNER", nil);
         
+#if 0
         CGRect textFrame = cell.text.frame;
         textFrame.size.height = [cell.text.text sizeWithFont:cell.text.font
                                            constrainedToSize:kTripDetialsDisplaySize 
                                                lineBreakMode:UILineBreakModeWordWrap].height;
         cell.text.frame = textFrame;
+#endif
         
         cell.leftAccessoryImage = [UIImage imageNamed:@"tripplanner_attention_icon.png"];
         cell.rightAccessoryText = nil;
@@ -221,9 +223,11 @@
 {
     if(_data.count == 0)
     {
+#if 0
         CGSize emptySize = [NSLocalizedString(@"EMPTYTRIPPLANNER", nil) sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:16.0] constrainedToSize:kTripDetialsDisplaySize lineBreakMode:UILineBreakModeWordWrap];
         if(emptySize.height + 12 > kMinTripCellHeight)
             return emptySize.height + ((kMinTripCellHeight/2) + 8);
+#endif
         return kMinTripCellHeight;    
     }
     

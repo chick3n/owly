@@ -58,8 +58,11 @@
 	NSString *dbPath = [documentsDir stringByAppendingPathComponent:@"OCTranspo.sqlite"];
     BOOL canMigrateFavorites = NO;
     NSMutableArray* favorites = [[NSMutableArray alloc] init];
+#if USE7ZIP
     NSString* sourcePath = [[NSBundle mainBundle] pathForResource:@"OCTranspo.7z" ofType:nil];
-    
+#else
+    NSString* sourcePath = [[NSBundle mainBundle] pathForResource:@"OCTranspo.zip" ofType:nil];
+#endif
     //migrate favorites
     if([_transpo getSynchFavorites:favorites])
         canMigrateFavorites = YES;
@@ -74,10 +77,15 @@
     
     [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithInt:BEGINNING_INSTALL] waitUntilDone:NO];
     //extract new database
+#if USE7ZIP
     BOOL status = [LZMAExtractor extractArchiveEntry:sourcePath archiveEntry:@"OCTranspo.sqlite" outPath:dbPath];
     if(status == NO)
         MTLog(@"Failed to extract database.");
-        
+#else
+    BOOL status = [SSZipArchive unzipFileAtPath:sourcePath toDestination:documentsDir];
+    if(status == NO)
+        MTLog(@"Failed to extract database.");
+#endif
     //delete zipped new database
     //[manager removeItemAtPath:[documentsDir stringByAppendingPathComponent:@"OCTranspo.zip"] error:nil];
     
@@ -107,17 +115,19 @@
     //run final commands on database
     if(![_transpo execQuery:@"CREATE INDEX `main`.`stop_timesTripId` ON `stop_times` (`trip_id` ASC);"
      "CREATE INDEX `main`.`stop_timesStopId` ON `stop_times` (`stop_id` ASC);"
-     "ANALYZE;" WithVacuum:YES])
+     "ANALYZE;" WithVacuum:NO])
     {
         [self performSelectorOnMainThread:@selector(finishedInstalling) withObject:nil waitUntilDone:NO];
     }
-#endif
-    
+#else
+#if 0
     if(![_transpo execQuery:@"ANALYZE;" WithVacuum:NO])
     {
         [self performSelectorOnMainThread:@selector(finishedInstalling) withObject:nil waitUntilDone:NO];
     }
-    
+#endif 
+    [self performSelectorOnMainThread:@selector(finishedInstalling) withObject:nil waitUntilDone:NO];
+#endif
     //wait for myTranspoFinishedExecutingQuery to leave
     //[self performSelectorOnMainThread:@selector(finishedInstalling) withObject:nil waitUntilDone:NO];
 }
@@ -126,7 +136,7 @@
 {
     [self updateProgress:[NSNumber numberWithInt:FINISHINGUP]];
     
-#if WITH_INDEXING //not doing indexeing as it is way tooooo slow on phone approx 6 mins
+#if 1 
     [_transpo.ocDb killDatabase];
     [_transpo.ocDb connectToDatabase];
 #endif    

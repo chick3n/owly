@@ -10,9 +10,11 @@
 #import "MTBaseViewController.h"
 #import "AppDelegate.h"
 #import "LZMAExtractor.h"
+#import "SSZipArchive.h"
 
 
 #define WITH_INDEXING 0
+#define USE7ZIP 1
 
 typedef enum
 {

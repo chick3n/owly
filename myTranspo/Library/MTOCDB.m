@@ -152,8 +152,8 @@
             
             bus.DisplayHeading = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(_cmpStmt, 0)];
             bus.BusNumber = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(_cmpStmt, 1)];
-            bus.BusId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(_cmpStmt, 2)];
-            if(sqlite3_column_int(_cmpStmt, 3) > 0)
+            //bus.BusId = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(_cmpStmt, 2)];
+            if(sqlite3_column_int(_cmpStmt, 2) > 0)
                 bus.isFavorite = YES;            
             
             [bus.StopIds addObject:stop];
@@ -1288,7 +1288,7 @@
                          @"f.*"
                          , @"favorites f"
                          , [NSString stringWithFormat:@"f.route_id = '%@' AND f.stop_id = '%@'", ((favoriteStop) ? @"" : bus.BusNumber), stop.StopId]];
-    
+        
     sqlite3_stmt* _cmpStmt;
     if(sqlite3_prepare_v2(_db
                           , [sqlStmt UTF8String]

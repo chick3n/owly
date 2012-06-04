@@ -822,7 +822,8 @@
 - (IBAction)findMe:(id)sender
 {
     MKCoordinateRegion mapRegion;
-    mapRegion.center = CLLocationCoordinate2DMake(_transpo.coordinates.latitude, _transpo.coordinates.longitude);
+    //mapRegion.center = CLLocationCoordinate2DMake(_transpo.coordinates.latitude, _transpo.coordinates.longitude);
+    mapRegion.center = CLLocationCoordinate2DMake(_mapView.userLocation.location.coordinate.latitude, _mapView.userLocation.location.coordinate.longitude);
     mapRegion.span.latitudeDelta = MTDEF_SPANLATITUDEDELTA;
     mapRegion.span.longitudeDelta = MTDEF_SPANLONGITUDEDELTA;
     [_mapView setRegion:mapRegion animated:YES];

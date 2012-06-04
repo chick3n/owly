@@ -169,7 +169,7 @@
     }
     
     UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    [header addSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_header_bar.png"]]];
+    [header addSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_header_bar.jpg"]]];
     //(header.frame.size.width - REVEAL_OPTIONS_EDGE) + 8
     UILabel *tableViewHeadlerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 310, 17)];
     tableViewHeadlerLabel.tag = 100;

@@ -150,7 +150,7 @@
 "EXTENDEDLOADING" = "Still gathering data.";
 
 //TRIP PLANNER
-"EMPTYTRIPPLANNER" = "Enter a start & end destination to begin.";
+"EMPTYTRIPPLANNER" = "Enter a start & end destination.";
 
 //MYBUSES
 "EMPTYTABLEFORFAVORITES" = "You have no favorites set. You can add them from the Stops page.";
@@ -164,7 +164,7 @@
 "SELECTNONE" = "Uncheck All";
 
 //LOADING - INSTALLING DB
-"BEGINNINGINSTALL" = "Getting you set up.";
+"BEGINNINGINSTALL" = "Installing, please hold.";
 "EXTRACTINGDATABASE" = "Extracting database...";
 "INSTALLINGNEWDATABASE" = "Installing new database...";
 "FINISHINGINSTALL" = "Finalizing...";

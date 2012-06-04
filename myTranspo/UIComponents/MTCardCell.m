@@ -576,6 +576,7 @@
     {
         _arrowImage.hidden = NO;
         [_loadingAnimation stopAnimating];   
+        _dataScrollView.contentOffset = CGPointMake(0, 0);
     }
 }
 
