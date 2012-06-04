@@ -81,10 +81,42 @@
     BOOL status = [LZMAExtractor extractArchiveEntry:sourcePath archiveEntry:@"OCTranspo.sqlite" outPath:dbPath];
     if(status == NO)
         MTLog(@"Failed to extract database.");
-#else
+#elif USESSARCHIVE
     BOOL status = [SSZipArchive unzipFileAtPath:sourcePath toDestination:documentsDir];
     if(status == NO)
         MTLog(@"Failed to extract database.");
+#elif USEOBJECTIVEZIP
+#define BUFFER_SIZE 1000
+    ZipFile *unzipFile= [[ZipFile alloc] initWithFileName:sourcePath mode:ZipFileModeUnzip];
+    [unzipFile goToFirstFileInZip];
+    
+    NSFileHandle *file= [NSFileHandle fileHandleForWritingAtPath:dbPath];
+    NSMutableData *buffer= [[NSMutableData alloc] initWithLength:BUFFER_SIZE];
+    ZipReadStream *read= [unzipFile readCurrentFileInZip];
+    
+    // Read-then-write buffered loop
+    do {
+        
+        // Reset buffer length
+        [buffer setLength:BUFFER_SIZE];
+        
+        // Expand next chunk of bytes
+        int bytesRead= [read readDataWithBuffer:buffer];
+        if (bytesRead > 0) {
+            
+            // Write what we have read
+            [buffer setLength:bytesRead];
+            [file writeData:buffer];
+            
+        } else
+            break;
+        
+    } while (YES);
+    
+    // Clean up
+    [file closeFile];
+    [read finishedReading];
+    buffer = nil;
 #endif
     //delete zipped new database
     //[manager removeItemAtPath:[documentsDir stringByAppendingPathComponent:@"OCTranspo.zip"] error:nil];

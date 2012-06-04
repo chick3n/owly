@@ -32,6 +32,7 @@
 		3139F5E71556CCF40019B8AF /* settings_bottomcell.png in Resources */ = {isa = PBXBuildFile; fileRef = 3139F5E51556CCF30019B8AF /* settings_bottomcell.png */; };
 		3139F5EA1556D0D90019B8AF /* alarm_dark_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 3139F5E81556D0D90019B8AF /* alarm_dark_btn.png */; };
 		3139F5EB1556D0D90019B8AF /* alarm_dark_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3139F5E91556D0D90019B8AF /* alarm_dark_btn@2x.png */; };
+		313D10CC157D29D4001FF33C /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 313D10CB157D29D4001FF33C /* libz.1.2.5.dylib */; };
 		3144839C154F7744008CCE37 /* tripplanner_walking_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3144838A154F7744008CCE37 /* tripplanner_walking_icon.png */; };
 		3144839D154F7744008CCE37 /* tripplanner_route_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3144838B154F7744008CCE37 /* tripplanner_route_icon.png */; };
 		3144839E154F7744008CCE37 /* tripplanner_time_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3144838C154F7744008CCE37 /* tripplanner_time_icon.png */; };
@@ -57,6 +58,12 @@
 		314483CE15521AFC008CCE37 /* global_alt_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 314483CC15521AFC008CCE37 /* global_alt_btn.png */; };
 		314483CF15521AFC008CCE37 /* global_alt_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 314483CD15521AFC008CCE37 /* global_alt_btn@2x.png */; };
 		3155124E1549F2640071F186 /* MTCardRowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3155124D1549F2640071F186 /* MTCardRowCell.m */; };
+		317304F9157D280F00B31C7A /* OCTranspo.zip in Resources */ = {isa = PBXBuildFile; fileRef = 317304F8157D280F00B31C7A /* OCTranspo.zip */; };
+		31730507157D28AA00B31C7A /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 317304FD157D28AA00B31C7A /* ioapi.c */; };
+		31730508157D28AA00B31C7A /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 317304FF157D28AA00B31C7A /* mztools.c */; };
+		31730509157D28AA00B31C7A /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 31730501157D28AA00B31C7A /* unzip.c */; };
+		3173050A157D28AA00B31C7A /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 31730503157D28AA00B31C7A /* zip.c */; };
+		3173050B157D28AA00B31C7A /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 31730506157D28AA00B31C7A /* SSZipArchive.m */; };
 		317369F6154CCECC0077011E /* MTCardCellButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 317369F5154CCECC0077011E /* MTCardCellButton.m */; };
 		317369FA154DE8990077011E /* TripTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 317369F9154DE8990077011E /* TripTextField.m */; };
 		317B44E0155DFB760048406E /* card_background_test.png in Resources */ = {isa = PBXBuildFile; fileRef = 317B44DE155DFB740048406E /* card_background_test.png */; };
@@ -89,13 +96,6 @@
 		3195B01D153E45A700E30DB8 /* notice_cell_middle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3195B013153E45A600E30DB8 /* notice_cell_middle@2x.png */; };
 		3195B01E153E45A700E30DB8 /* notice_cell_middle.png in Resources */ = {isa = PBXBuildFile; fileRef = 3195B014153E45A700E30DB8 /* notice_cell_middle.png */; };
 		3195FEA31540504100343691 /* cardcell_bottom_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 3195FEA21540504100343691 /* cardcell_bottom_background.png */; };
-		3197E5BB157CF384009D7F84 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3197E5B1157CF384009D7F84 /* ioapi.c */; };
-		3197E5BC157CF384009D7F84 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 3197E5B3157CF384009D7F84 /* mztools.c */; };
-		3197E5BD157CF384009D7F84 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 3197E5B5157CF384009D7F84 /* unzip.c */; };
-		3197E5BE157CF384009D7F84 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 3197E5B7157CF384009D7F84 /* zip.c */; };
-		3197E5BF157CF384009D7F84 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 3197E5BA157CF384009D7F84 /* SSZipArchive.m */; };
-		3197E5C2157CF3A1009D7F84 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3197E5C1157CF3A1009D7F84 /* libz.1.2.5.dylib */; };
-		3197E5CA157CFB22009D7F84 /* OCTranspo.7z in Resources */ = {isa = PBXBuildFile; fileRef = 3197E5C9157CFB11009D7F84 /* OCTranspo.7z */; };
 		319D779B1534E1E400542ED3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 319D779D1534E1E400542ED3 /* Localizable.strings */; };
 		319D77A315365C4200542ED3 /* OTrainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319D77A115365C4100542ED3 /* OTrainViewController.m */; };
 		319D77A415365C4200542ED3 /* OTrainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 319D77A215365C4200542ED3 /* OTrainViewController.xib */; };
@@ -392,6 +392,7 @@
 		3139F5E51556CCF30019B8AF /* settings_bottomcell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_bottomcell.png; sourceTree = "<group>"; };
 		3139F5E81556D0D90019B8AF /* alarm_dark_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alarm_dark_btn.png; sourceTree = "<group>"; };
 		3139F5E91556D0D90019B8AF /* alarm_dark_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alarm_dark_btn@2x.png"; sourceTree = "<group>"; };
+		313D10CB157D29D4001FF33C /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		3144838A154F7744008CCE37 /* tripplanner_walking_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_walking_icon.png; sourceTree = "<group>"; };
 		3144838B154F7744008CCE37 /* tripplanner_route_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_route_icon.png; sourceTree = "<group>"; };
 		3144838C154F7744008CCE37 /* tripplanner_time_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tripplanner_time_icon.png; sourceTree = "<group>"; };
@@ -420,6 +421,18 @@
 		314483CD15521AFC008CCE37 /* global_alt_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "global_alt_btn@2x.png"; sourceTree = "<group>"; };
 		3155124C1549F2640071F186 /* MTCardRowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCardRowCell.h; sourceTree = "<group>"; };
 		3155124D1549F2640071F186 /* MTCardRowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCardRowCell.m; sourceTree = "<group>"; };
+		317304F8157D280F00B31C7A /* OCTranspo.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = OCTranspo.zip; sourceTree = "<group>"; };
+		317304FC157D28AA00B31C7A /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		317304FD157D28AA00B31C7A /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		317304FE157D28AA00B31C7A /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		317304FF157D28AA00B31C7A /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		31730500157D28AA00B31C7A /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		31730501157D28AA00B31C7A /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		31730502157D28AA00B31C7A /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		31730503157D28AA00B31C7A /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		31730504157D28AA00B31C7A /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		31730505157D28AA00B31C7A /* SSZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipArchive.h; sourceTree = "<group>"; };
+		31730506157D28AA00B31C7A /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
 		317369F4154CCECC0077011E /* MTCardCellButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCardCellButton.h; sourceTree = "<group>"; };
 		317369F5154CCECC0077011E /* MTCardCellButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCardCellButton.m; sourceTree = "<group>"; };
 		317369F8154DE8990077011E /* TripTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TripTextField.h; path = Core/TripDetials/TripTextField.h; sourceTree = "<group>"; };
@@ -459,19 +472,6 @@
 		3195B013153E45A600E30DB8 /* notice_cell_middle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notice_cell_middle@2x.png"; sourceTree = "<group>"; };
 		3195B014153E45A700E30DB8 /* notice_cell_middle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notice_cell_middle.png; sourceTree = "<group>"; };
 		3195FEA21540504100343691 /* cardcell_bottom_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cardcell_bottom_background.png; sourceTree = "<group>"; };
-		3197E5B0157CF384009D7F84 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
-		3197E5B1157CF384009D7F84 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
-		3197E5B2157CF384009D7F84 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
-		3197E5B3157CF384009D7F84 /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
-		3197E5B4157CF384009D7F84 /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
-		3197E5B5157CF384009D7F84 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
-		3197E5B6157CF384009D7F84 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
-		3197E5B7157CF384009D7F84 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
-		3197E5B8157CF384009D7F84 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
-		3197E5B9157CF384009D7F84 /* SSZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipArchive.h; sourceTree = "<group>"; };
-		3197E5BA157CF384009D7F84 /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
-		3197E5C1157CF3A1009D7F84 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
-		3197E5C9157CFB11009D7F84 /* OCTranspo.7z */ = {isa = PBXFileReference; lastKnownFileType = file; path = OCTranspo.7z; sourceTree = "<group>"; };
 		319D779C1534E1E400542ED3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		319D779E1534E1F800542ED3 /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "fr-CA"; path = "fr-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		319D779F1534E1FD00542ED3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -820,7 +820,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3197E5C2157CF3A1009D7F84 /* libz.1.2.5.dylib in Frameworks */,
+				313D10CC157D29D4001FF33C /* libz.1.2.5.dylib in Frameworks */,
 				3139F5D71556B6030019B8AF /* SystemConfiguration.framework in Frameworks */,
 				3180960C15437AD400B71188 /* CoreImage.framework in Frameworks */,
 				31101F6B1530D14A001D220A /* Security.framework in Frameworks */,
@@ -837,6 +837,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		317304FA157D28AA00B31C7A /* SSZipArchive */ = {
+			isa = PBXGroup;
+			children = (
+				317304FB157D28AA00B31C7A /* minizip */,
+				31730505157D28AA00B31C7A /* SSZipArchive.h */,
+				31730506157D28AA00B31C7A /* SSZipArchive.m */,
+			);
+			path = SSZipArchive;
+			sourceTree = "<group>";
+		};
+		317304FB157D28AA00B31C7A /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				317304FC157D28AA00B31C7A /* crypt.h */,
+				317304FD157D28AA00B31C7A /* ioapi.c */,
+				317304FE157D28AA00B31C7A /* ioapi.h */,
+				317304FF157D28AA00B31C7A /* mztools.c */,
+				31730500157D28AA00B31C7A /* mztools.h */,
+				31730501157D28AA00B31C7A /* unzip.c */,
+				31730502157D28AA00B31C7A /* unzip.h */,
+				31730503157D28AA00B31C7A /* zip.c */,
+				31730504157D28AA00B31C7A /* zip.h */,
+			);
+			path = minizip;
+			sourceTree = "<group>";
+		};
 		317E3DFC1559EE2A000A3B16 /* Offline */ = {
 			isa = PBXGroup;
 			children = (
@@ -857,32 +883,6 @@
 				3132AFF2154DF68B00B588A4 /* TripDetailsCell.m */,
 			);
 			name = TripDetails;
-			sourceTree = "<group>";
-		};
-		3197E5AE157CF384009D7F84 /* SSZipArchive */ = {
-			isa = PBXGroup;
-			children = (
-				3197E5AF157CF384009D7F84 /* minizip */,
-				3197E5B9157CF384009D7F84 /* SSZipArchive.h */,
-				3197E5BA157CF384009D7F84 /* SSZipArchive.m */,
-			);
-			path = SSZipArchive;
-			sourceTree = "<group>";
-		};
-		3197E5AF157CF384009D7F84 /* minizip */ = {
-			isa = PBXGroup;
-			children = (
-				3197E5B0157CF384009D7F84 /* crypt.h */,
-				3197E5B1157CF384009D7F84 /* ioapi.c */,
-				3197E5B2157CF384009D7F84 /* ioapi.h */,
-				3197E5B3157CF384009D7F84 /* mztools.c */,
-				3197E5B4157CF384009D7F84 /* mztools.h */,
-				3197E5B5157CF384009D7F84 /* unzip.c */,
-				3197E5B6157CF384009D7F84 /* unzip.h */,
-				3197E5B7157CF384009D7F84 /* zip.c */,
-				3197E5B8157CF384009D7F84 /* zip.h */,
-			);
-			path = minizip;
 			sourceTree = "<group>";
 		};
 		319D77B515371A6B00542ED3 /* KeychainWrapper */ = {
@@ -1263,7 +1263,7 @@
 		31ADE8BB151FDFA30029C964 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3197E5C1157CF3A1009D7F84 /* libz.1.2.5.dylib */,
+				313D10CB157D29D4001FF33C /* libz.1.2.5.dylib */,
 				3139F5D61556B6030019B8AF /* SystemConfiguration.framework */,
 				3180960B15437AD300B71188 /* CoreImage.framework */,
 				31ADE8D5151FDFD20029C964 /* libsqlite3.0.dylib */,
@@ -1296,7 +1296,7 @@
 		31ADE8C3151FDFA30029C964 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				3197E5C9157CFB11009D7F84 /* OCTranspo.7z */,
+				317304F8157D280F00B31C7A /* OCTranspo.zip */,
 				31EA33571575A92300562582 /* icon.png */,
 				31EA33541575A43E00562582 /* icon@2x.png */,
 				3122C27F153FC0E600019410 /* Default.png */,
@@ -1317,7 +1317,7 @@
 		31ADE9ED151FE07B0029C964 /* ExternalLibs */ = {
 			isa = PBXGroup;
 			children = (
-				3197E5AE157CF384009D7F84 /* SSZipArchive */,
+				317304FA157D28AA00B31C7A /* SSZipArchive */,
 				31B9E8121569809400FD24D5 /* LZMASDK */,
 				31D807B11556AADC00B5A8B5 /* Reachability */,
 				31D64D731554D4D5001B0B2D /* DCRoundSwitch */,
@@ -1827,7 +1827,7 @@
 				31BC2815157C4CBC00838DD2 /* menu_header_bar@2x.jpg in Resources */,
 				31BC2818157C4F5C00838DD2 /* global_header_background.png in Resources */,
 				31BC2819157C4F5C00838DD2 /* global_header_background@2x.png in Resources */,
-				3197E5CA157CFB22009D7F84 /* OCTranspo.7z in Resources */,
+				317304F9157D280F00B31C7A /* OCTranspo.zip in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1932,11 +1932,11 @@
 				31B9E8491569809400FD24D5 /* 7zMain.c in Sources */,
 				31BC2808157BA08000838DD2 /* Alert.m in Sources */,
 				31BC280B157BA0B800838DD2 /* AlertsManager.m in Sources */,
-				3197E5BB157CF384009D7F84 /* ioapi.c in Sources */,
-				3197E5BC157CF384009D7F84 /* mztools.c in Sources */,
-				3197E5BD157CF384009D7F84 /* unzip.c in Sources */,
-				3197E5BE157CF384009D7F84 /* zip.c in Sources */,
-				3197E5BF157CF384009D7F84 /* SSZipArchive.m in Sources */,
+				31730507157D28AA00B31C7A /* ioapi.c in Sources */,
+				31730508157D28AA00B31C7A /* mztools.c in Sources */,
+				31730509157D28AA00B31C7A /* unzip.c in Sources */,
+				3173050A157D28AA00B31C7A /* zip.c in Sources */,
+				3173050B157D28AA00B31C7A /* SSZipArchive.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
