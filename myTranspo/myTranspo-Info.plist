@@ -35,13 +35,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.2</string>
 	<key>Database Version</key>
-	<real>1.101</real>
+	<real>1.3</real>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>Settings Version</key>

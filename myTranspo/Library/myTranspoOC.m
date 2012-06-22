@@ -168,6 +168,7 @@ static myTranspoOC *gInstance = NULL;
     {
         _hasDB = NO;
         [_ocDb killDatabase];
+        _ocDb = nil;
     }
     return YES;
 }

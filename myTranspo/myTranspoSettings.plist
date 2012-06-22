@@ -31,7 +31,7 @@
 	<key>NotificationUpdate</key>
 	<true/>
 	<key>StartupView</key>
-	<integer>1</integer>
+	<integer>2</integer>
 	<key>FavoriteStopsFilter</key>
 	<dict/>
 	<key>OfflineMode</key>

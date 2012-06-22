@@ -62,7 +62,8 @@
     {
         _isWritable = NO;
         _isConnected = NO;
-        sqlite3_close(_db);
+        if(!sqlite3_close(_db) == SQLITE_OK)
+            MTLog(@"sqlite not closed, busy.");
     }
 }
 
@@ -74,7 +75,7 @@
     sqlite3_shutdown();
     if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) == SQLITE_OK) {
         MTLog(@"sqlite configured to be threadsafe");
-    }
+    }    
     sqlite3_initialize();
 
     //sqlite3_config(SQLITE_CONFIG_SERIALIZED);
@@ -172,6 +173,7 @@
     }
     
     sqlite3_reset(_cmpStmt);
+    sqlite3_finalize(_cmpStmt);
     
     return YES;
 }
@@ -213,6 +215,7 @@
     
     stop.upcomingBusesHelper = routesAtStop;             
     sqlite3_reset(_cmpStmt);
+    sqlite3_finalize(_cmpStmt);
     
     return YES;
 }
@@ -247,6 +250,7 @@
     }
     
     sqlite3_reset(cmpStmt);
+    sqlite3_finalize(cmpStmt);
     
     return YES;
 }
@@ -286,6 +290,7 @@
     }
     
     sqlite3_reset(_cmpStmt);
+    sqlite3_finalize(_cmpStmt);
     
     return YES;
 }
@@ -329,6 +334,7 @@
     }
     
     sqlite3_reset(_cmpStmt);
+    sqlite3_finalize(_cmpStmt);
     
     return YES;
 }
@@ -364,6 +370,7 @@
         }
         
         sqlite3_reset(_cmpStmt);
+        sqlite3_finalize(_cmpStmt);
         
         return YES;
     }
@@ -432,6 +439,7 @@
         }
         
         sqlite3_reset(_cmpStmt);
+        sqlite3_finalize(_cmpStmt);
         
         //get all buses for stops
         //[self getAllBusesForStops:stops];
@@ -456,6 +464,7 @@
     NSMutableArray* busStops = [[NSMutableArray alloc] init];
     
     sqlite3_reset(_cmpStmt);
+    sqlite3_finalize(_cmpStmt);
     
     sqlStmt = [NSString stringWithFormat:
                @"select s.stop_id, s.stop_code, s.stop_name, s.stop_lat, s.stop_lon \
@@ -487,6 +496,7 @@
         }
         
         sqlite3_reset(_cmpStmt);
+        sqlite3_finalize(_cmpStmt);
         
         //get all buses for stops
         //[self getAllBusesForStops:busStops];
@@ -511,6 +521,7 @@
     NSMutableArray* streetNames = [[NSMutableArray alloc] init];
     
     sqlite3_reset(_cmpStmt);
+    sqlite3_finalize(_cmpStmt);
     
     sqlStmt = [NSString stringWithFormat:
                @"select s.stop_id, s.stop_code, s.stop_name, s.stop_lat, s.stop_lon \
@@ -543,6 +554,7 @@
         }
         
         sqlite3_reset(_cmpStmt);
+        sqlite3_finalize(_cmpStmt);
         
         
         //get all buses for stops
@@ -603,6 +615,7 @@
         }
         
         sqlite3_reset(_cmpStmt);
+        sqlite3_finalize(_cmpStmt);
         
         //get all buses for stops
         [self getAllBusesForStops:stops];
@@ -634,6 +647,7 @@
             stop.DistanceFromOrigin = sqlite3_column_double(_cmpStmt, 0);
         }
         sqlite3_reset(_cmpStmt);
+        sqlite3_finalize(_cmpStmt);
         return YES;
     }
     
@@ -678,6 +692,7 @@
     }
     
     sqlite3_reset(_cmpStmt);
+    sqlite3_finalize(_cmpStmt);
     
 #if 0
     uint64_t endTime = mach_absolute_time();
@@ -733,12 +748,14 @@
             trip.Longitude = sqlite3_column_double(_cmpStmt, 4);
             
             sqlite3_reset(_cmpStmt);
+            sqlite3_finalize(_cmpStmt);
             
             return trip;
         }
     }
     
     sqlite3_reset(_cmpStmt);
+    sqlite3_finalize(_cmpStmt);
     
     return nil;
 }
@@ -792,6 +809,7 @@
     }
     
     sqlite3_reset(_cmpStmt);
+    sqlite3_finalize(_cmpStmt);
     
     return YES;
 }
@@ -837,6 +855,7 @@
         }
     }
     sqlite3_reset(cmpStmt);
+    sqlite3_finalize(cmpStmt);
         
     if(current_next_update == nil)
         return NO;
@@ -887,6 +906,7 @@
         }
         
         sqlite3_reset(cmpStmt);
+        sqlite3_finalize(cmpStmt);
 #if 0 //TIMER COUNT
         uint64_t endTime = mach_absolute_time();
         uint64_t elapsedTime = endTime - startTime;
@@ -907,6 +927,7 @@
     }
     MTLog(@"%s", sqlite3_errmsg(_db));
     sqlite3_reset(cmpStmt);
+    sqlite3_finalize(cmpStmt);
     return NO;
 }
 
@@ -991,6 +1012,7 @@
         }
         
         sqlite3_reset(cmpStmt);
+        sqlite3_finalize(cmpStmt);
         
         if(foundTime)
         {
@@ -1103,6 +1125,7 @@
     }
     
     sqlite3_reset(cmpStmt);
+    sqlite3_finalize(cmpStmt);
     
     return YES;
 }
@@ -1160,6 +1183,7 @@
     }
     
     sqlite3_reset(cmpStmt);
+    sqlite3_finalize(cmpStmt);
     
     return (trips.count > 0);
 }
@@ -1189,7 +1213,7 @@
         return NO;
     
     NSString *sqlStmt = [NSString stringWithFormat: \
-                         @"select s.stop_id, s.stop_code, s.stop_name, s.stop_lat, s.stop_lon, r.route_id, r.route_short_name, r.route_type, f.route_direction, f.route_tripheading, f.updated, f.display_sequence \
+                         @"select distinct s.stop_id, s.stop_code, s.stop_name, s.stop_lat, s.stop_lon, (select min(r2.route_id) from routes r2 where r2.route_short_name = f.route_id), r.route_short_name, r.route_type, f.route_direction, f.route_tripheading, f.updated, f.display_sequence \
                          from favorites f \
                          inner join stops s on s.stop_id = f.stop_id \
                          left join routes r on r.route_short_name = f.route_id \
@@ -1238,6 +1262,7 @@
         }
         
         sqlite3_reset(_cmpStmt);
+        sqlite3_finalize(_cmpStmt);
         
         return YES;
     }
@@ -1311,6 +1336,7 @@
         }
     }
     sqlite3_reset(_cmpStmt);
+    sqlite3_finalize(_cmpStmt);
         
     return (favoriteStop) ? stop.isFavorite : bus.isFavorite;
 }
@@ -1345,10 +1371,12 @@
         if(sqlite3_step(_cmpStmt) == SQLITE_ROW)
         {
             sqlite3_reset(_cmpStmt);
+            sqlite3_finalize(_cmpStmt);
             return NO;
         }
         
         sqlite3_reset(_cmpStmt);
+        sqlite3_finalize(_cmpStmt);
         
         sqlStmt = [NSString stringWithFormat: \
                    @"INSERT INTO `favorites` \
@@ -1373,7 +1401,8 @@
             {
                 MTLog(@"Add Favorite Error: %s", sqlite3_errmsg(_db));
             }
-            sqlite3_reset(_cmpStmt);		
+            sqlite3_reset(_cmpStmt);	
+            sqlite3_finalize(_cmpStmt);
             
             if(result == SQLITE_DONE)
             {
@@ -1424,7 +1453,8 @@
         {
             MTLog(@"Update Favorite Error: %s", sqlite3_errmsg(_db));
         }
-        sqlite3_reset(_cmpStmt);		
+        sqlite3_reset(_cmpStmt);	
+        sqlite3_finalize(_cmpStmt);
         
         if(result == SQLITE_DONE)
         {
@@ -1468,7 +1498,8 @@
         {
             MTLog(@"Remove Favorite Error: %s", sqlite3_errmsg(_db));
         }
-        sqlite3_reset(_cmpStmt);		
+        sqlite3_reset(_cmpStmt);	
+        sqlite3_finalize(_cmpStmt);
         
         if(result == SQLITE_DONE)
         {
@@ -1510,6 +1541,7 @@
     {
         sqlite3_step(_cmpStmt);
         sqlite3_reset(_cmpStmt);
+        sqlite3_finalize(_cmpStmt);
     }
     
     
@@ -1547,15 +1579,18 @@
                 {
                     MTLog(@"Add Times Error: %s", sqlite3_errmsg(_db));
                     sqlite3_reset(_cmpStmt);
+                    sqlite3_finalize(_cmpStmt);
                     sqlite3_exec(_db, "ROLLBACK;", NULL, NULL, NULL);   
                     return NO;
                 }
                 sqlite3_reset(_cmpStmt);
+                sqlite3_finalize(_cmpStmt);
             }
             else
             {
                 MTLog(@"Add Times Error: %s", sqlite3_errmsg(_db));
                 sqlite3_reset(_cmpStmt);
+                sqlite3_finalize(_cmpStmt);
                 sqlite3_exec(_db, "ROLLBACK;", NULL, NULL, NULL);   
                 return NO;
             }
@@ -1593,6 +1628,7 @@
         }
         
         sqlite3_reset(_cmpStmt);
+        sqlite3_finalize(_cmpStmt);
     }
     
     if(dateString != nil)
