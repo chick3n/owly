@@ -470,10 +470,15 @@
     //attach scrolling background
     CGRect backgroundImageFrame = _backgroundImage.frame;
     backgroundImageFrame.origin.y = _tableView.contentSize.height;
-    _backgroundImage.frame = backgroundImageFrame;    
+    _backgroundImage.frame = backgroundImageFrame;  
+    
+    CGRect mapView = _mapView.frame;
+    mapView.size.height = newTableFrame.origin.y;
+    
     
     [UIView animateWithDuration:0.5 animations:^(void){
         // _mapView.frame = newMapFrame;
+        _mapView.frame = mapView;
         _tableView.frame = newTableFrame; 
     }];
 }

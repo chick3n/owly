@@ -19,7 +19,7 @@
 #define kMTTrainTimerInterval 60
 #define kMTTrainDeltaLat 0.004
 #define kMTTrainDeltaLon 0.004
-#define kMTTrainDeltaOffset 0.002
+#define kMTTrainDeltaOffset 0.000
 
 @interface OTrainViewController : MTBaseViewController<UITableViewDelegate, UITableViewDataSource, MTQueueSafe, MyTranspoDelegate, MKMapViewDelegate>
 {

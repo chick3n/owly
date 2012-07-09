@@ -436,11 +436,7 @@
             bus.DisplayHeading = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(_cmpStmt, 2)];
             
             [buses addObject:bus];
-        }
-        
-        sqlite3_reset(_cmpStmt);
-        sqlite3_finalize(_cmpStmt);
-        
+        }        
         //get all buses for stops
         //[self getAllBusesForStops:stops];
     }
@@ -464,7 +460,6 @@
     NSMutableArray* busStops = [[NSMutableArray alloc] init];
     
     sqlite3_reset(_cmpStmt);
-    sqlite3_finalize(_cmpStmt);
     
     sqlStmt = [NSString stringWithFormat:
                @"select s.stop_id, s.stop_code, s.stop_name, s.stop_lat, s.stop_lon \
@@ -495,9 +490,6 @@
             [busStops addObject:stop];
         }
         
-        sqlite3_reset(_cmpStmt);
-        sqlite3_finalize(_cmpStmt);
-        
         //get all buses for stops
         //[self getAllBusesForStops:busStops];
     }
@@ -521,7 +513,6 @@
     NSMutableArray* streetNames = [[NSMutableArray alloc] init];
     
     sqlite3_reset(_cmpStmt);
-    sqlite3_finalize(_cmpStmt);
     
     sqlStmt = [NSString stringWithFormat:
                @"select s.stop_id, s.stop_code, s.stop_name, s.stop_lat, s.stop_lon \
@@ -552,11 +543,6 @@
             
             [streetNames addObject:stop];
         }
-        
-        sqlite3_reset(_cmpStmt);
-        sqlite3_finalize(_cmpStmt);
-        
-        
         //get all buses for stops
         //[self getAllBusesForStops:streetNames];
     }
@@ -573,6 +559,9 @@
     MTLog(@"Final Search: %f", elapsedTime * ticksToNanoseconds);
 #endif
     [stops addObject:streetNames];
+    
+    sqlite3_reset(_cmpStmt);
+    sqlite3_finalize(_cmpStmt);
     
     return (stops.count > 0) ? YES : NO;
 }
@@ -952,7 +941,7 @@
     //, (select IFNULL(s2.stop_name, '') from stop_times st2 inner join stops s2 on s2.stop_id = st2.stop_id WHERE st2.trip_id = st.trip_id ORDER BY st2.stop_sequence DESC LIMIT 1)  end_stop \
     
     NSString *sqlStmt = [NSString stringWithFormat:\
-                         @"select \
+                         @"select distinct\
                          case when c.sunday = '1' then 2 when c.saturday = '1' then 1 else 0 end dayOfWeek \
                          , st.trip_id \
                          , s.stop_id \

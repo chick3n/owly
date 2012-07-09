@@ -513,7 +513,7 @@ numberOfRowsInComponent:(NSInteger)component;
     }
     else
     {
-        mapRegion.center = CLLocationCoordinate2DMake(trip.Latitude - 0.002, trip.Longitude);
+        mapRegion.center = CLLocationCoordinate2DMake(trip.Latitude/* - 0.002*/, trip.Longitude);
     }
     
     mapRegion.span.latitudeDelta = 0.004;
@@ -738,7 +738,7 @@ numberOfRowsInComponent:(NSInteger)component;
     [_mapView addAnnotation:_mapView.userLocation];
     
     MKCoordinateRegion mapRegion;
-    mapRegion.center = CLLocationCoordinate2DMake(_stop.Latitude - 0.002, _stop.Longitude);
+    mapRegion.center = CLLocationCoordinate2DMake(_stop.Latitude/* - 0.002*/, _stop.Longitude);
     mapRegion.span.latitudeDelta = 0.004;
     mapRegion.span.longitudeDelta = 0.004;
 
@@ -944,7 +944,7 @@ numberOfRowsInComponent:(NSInteger)component;
         {
             int newHeight = 3*kMTTRIPCELLHEIGHT + kMTTRIPHEADERHEIGHT;
             newTableFrame = CGRectMake(_tripFrame.x, self.view.frame.size.height - newHeight, 320, newHeight);
-            newMapFrame = CGRectMake(0, 0, 320, self.view.frame.size.height - newHeight);
+            newMapFrame = CGRectMake(0, 0, 320, newTableFrame.origin.y);
             
             newTimeTableFrame = CGRectMake(_timeTableFrame.x
                                            , self.view.frame.size.height - [_timeTable heightForTablesData]
@@ -956,7 +956,7 @@ numberOfRowsInComponent:(NSInteger)component;
             int newHeight = 6*kMTTRIPCELLHEIGHT + kMTTRIPHEADERHEIGHT;
             
             newTableFrame = CGRectMake(_tripFrame.x, self.view.frame.size.height - newHeight, 320, newHeight);
-            newMapFrame = CGRectMake(0, 0, 320, self.view.frame.size.height - newHeight);
+            newMapFrame = CGRectMake(0, 0, 320, newTableFrame.origin.y);
             newTimeTableFrame = CGRectMake(_timeTableFrame.x, self.view.frame.size.height - newHeight, 320, newHeight);
         }
     }
@@ -970,7 +970,7 @@ numberOfRowsInComponent:(NSInteger)component;
     _backgroundImage2.frame = backgroundImageFrame;
     
     [UIView animateWithDuration:0.5 animations:^(void){
-       // _mapView.frame = newMapFrame;
+        _mapView.frame = newMapFrame;
         _tableView.frame = newTableFrame; 
     }];
     
